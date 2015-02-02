@@ -1,4 +1,6 @@
-﻿namespace NZazu.Contracts
+﻿using System.Windows.Controls;
+
+namespace NZazu
 {
     public interface INZazuField
     {
@@ -6,5 +8,6 @@
         string Type { get; }
         string Prompt { get; }
         string Description { get; }
+        Control Control { get; }
     }
 }

@@ -61,8 +61,6 @@
     <Compile Include="FieldDefinition_Should.cs" />
     <Compile Include="FormDefinition.cs" />
     <Compile Include="FormDefinition_Should.cs" />
-    <Compile Include="INZazuField.cs" />
-    <Compile Include="INZazuView.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

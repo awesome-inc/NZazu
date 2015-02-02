@@ -21,11 +21,6 @@ namespace NZazu
             public TestField(string key, string prompt, string description) : base(key, prompt, description)
             {
             }
-
-            public override string Type
-            {
-                get { throw new NotImplementedException(); }
-            }
         }
     }
 }

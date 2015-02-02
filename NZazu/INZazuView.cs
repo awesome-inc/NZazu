@@ -1,4 +1,6 @@
-﻿namespace NZazu.Contracts
+﻿using NZazu.Contracts;
+
+namespace NZazu
 {
     public interface INZazuView
     {

@@ -1,14 +1,12 @@
 using System;
-using System.Windows;
-using NZazu.Contracts;
+using System.Windows.Controls;
 
 namespace NZazu
 {
     abstract class NZazuField : INZazuField
     {
-        internal protected FrameworkElement Control { get; set; }
-
-        public abstract string Type { get; }
+        public string Type { get; protected set; }
+        public Control Control { get; protected set; }
 
         internal protected NZazuField(string key, string prompt, string description)
         {
