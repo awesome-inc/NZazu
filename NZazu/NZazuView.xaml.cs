@@ -40,7 +40,6 @@ namespace NZazu
         private void UpdateFields(FormDefinition formDefinition)
         {
             _fields.Clear();
-            // todo clear item in content control
 
             formDefinition.Fields.ToList().ForEach(f => _fields.Add(f.Key, FieldFactory.CreateField(f)));
             LayoutStrategy.DoLayout(Layout, _fields.Values);

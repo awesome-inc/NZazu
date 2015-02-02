@@ -10,5 +10,6 @@
   <FrameworkUtilisationTypeForXUnitV2>UseStaticAnalysis</FrameworkUtilisationTypeForXUnitV2>
   <AdditionalFilesToInclude>.build\**.*;packages\**.*</AdditionalFilesToInclude>
   <MetricsExclusionList>
+Sample\Sample.csproj
 </MetricsExclusionList>
 </SolutionConfiguration>
