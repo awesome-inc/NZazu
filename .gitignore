@@ -37,7 +37,6 @@ packages/*
 #*.ncrunchsolution
 
 .sonar*/
-LightCore.xsd
 
 /Build.proj
 
