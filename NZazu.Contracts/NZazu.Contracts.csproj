@@ -57,6 +57,8 @@
     <Compile Include="..\VersionInfo.g.cs">
       <Link>Properties\VersionInfo.g.cs</Link>
     </Compile>
+    <Compile Include="FieldDefinition.cs" />
+    <Compile Include="FieldDefinition_Should.cs" />
     <Compile Include="FormDefinition.cs" />
     <Compile Include="FormDefinition_Should.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

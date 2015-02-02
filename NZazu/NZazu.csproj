@@ -59,7 +59,7 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="UserControl1.xaml">
+    <Page Include="NZazuView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -69,8 +69,18 @@
     <Compile Include="..\VersionInfo.g.cs">
       <Link>Properties\VersionInfo.g.cs</Link>
     </Compile>
-    <Compile Include="UserControl1.xaml.cs">
-      <DependentUpon>UserControl1.xaml</DependentUpon>
+    <Compile Include="INZazuField.cs" />
+    <Compile Include="INZazuFieldFactory.cs" />
+    <Compile Include="INZazuView.cs" />
+    <Compile Include="NZazuBoolField.cs" />
+    <Compile Include="NZazuField.cs" />
+    <Compile Include="NZazuFieldFactory.cs" />
+    <Compile Include="NZazuField_Should.cs" />
+    <Compile Include="NZazuLabelField.cs" />
+    <Compile Include="NZazuTextField.cs" />
+    <Compile Include="NZazuView_Should.cs" />
+    <Compile Include="NZazuView.xaml.cs">
+      <DependentUpon>NZazuView.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
@@ -80,6 +90,12 @@
     </Compile>
     <None Include="packages.config" />
     <AppDesigner Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\NZazu.Contracts\NZazu.Contracts.csproj">
+      <Project>{4D469864-C26E-483E-99DB-DE7305EAAA4F}</Project>
+      <Name>NZazu.Contracts</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.build\build.targets" />
