@@ -69,15 +69,16 @@
     <Compile Include="..\VersionInfo.g.cs">
       <Link>Properties\VersionInfo.g.cs</Link>
     </Compile>
+    <Compile Include="Fields\NZazuBoolField_Should.cs" />
+    <Compile Include="GridLayoutStrategy.cs" />
     <Compile Include="INZazuField.cs" />
     <Compile Include="INZazuFieldFactory.cs" />
     <Compile Include="INZazuView.cs" />
-    <Compile Include="NZazuBoolField.cs" />
-    <Compile Include="NZazuField.cs" />
+    <Compile Include="Fields\NZazuBoolField.cs" />
+    <Compile Include="Fields\NZazuField.cs" />
     <Compile Include="NZazuFieldFactory.cs" />
-    <Compile Include="NZazuField_Should.cs" />
-    <Compile Include="NZazuLabelField.cs" />
-    <Compile Include="NZazuTextField.cs" />
+    <Compile Include="Fields\NZazuField_Should.cs" />
+    <Compile Include="Fields\NZazuTextField.cs" />
     <Compile Include="NZazuView_Should.cs" />
     <Compile Include="NZazuView.xaml.cs">
       <DependentUpon>NZazuView.xaml</DependentUpon>
