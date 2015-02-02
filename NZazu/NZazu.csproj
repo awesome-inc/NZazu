@@ -78,6 +78,7 @@
     <Compile Include="NZazuFieldFactory.cs" />
     <Compile Include="Fields\NZazuField_Should.cs" />
     <Compile Include="Fields\NZazuTextField.cs" />
+    <Compile Include="NZazuFieldFactory_Should.cs" />
     <Compile Include="NZazuView_Should.cs" />
     <Compile Include="NZazuView.xaml.cs">
       <DependentUpon>NZazuView.xaml</DependentUpon>
