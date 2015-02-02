@@ -24,6 +24,7 @@ namespace NZazu
         }
 
         [Test]
+        [TestCase("fallback", null, "Heading", null, "fallback text", typeof(Label))]
         [TestCase("heading", "label", "Settings", null, "You can manage your account here. Use TAB ...", typeof(Label))]
         [TestCase("userName", "string", "User", "Enter your name", "Your name", typeof(TextBox))]
         [TestCase("gender", "bool", "Admin", "Is Admin", "Check if you are an admin", typeof(CheckBox))]
@@ -55,7 +56,7 @@ namespace NZazu
 
             field.Should().NotBeNull();
             field.Key.Should().Be(key);
-            field.Type.Should().Be(type);
+            field.Type.Should().Be(type ?? "label"); // to make sure fallback is used
             field.Prompt.Should().Be(prompt);
             field.Hint.Should().Be(hint);
             field.Description.Should().Be(description);

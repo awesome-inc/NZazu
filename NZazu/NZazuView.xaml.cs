@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
-using System.Windows.Controls;
 using NZazu.Contracts;
 
 namespace NZazu
@@ -62,10 +61,5 @@ namespace NZazu
         {
             InitializeComponent();
         }
-    }
-
-    public interface INZazuLayoutStrategy
-    {
-        void DoLayout(ContentControl container, IEnumerable<INZazuField> fields);
     }
 }
