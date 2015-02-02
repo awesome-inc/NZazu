@@ -26,7 +26,7 @@ namespace NZazu.Fields
         public Control LabelControl { get { return _label.Value; } }
         public Control ValueControl { get { return _value.Value; } }
 
-        protected virtual Control GetLabel() { return String.IsNullOrWhiteSpace(Prompt) ? null : new Label { Content = Prompt }; }
-        protected virtual Control GetValue() { return String.IsNullOrWhiteSpace(Description) ? null : new Label { Content = Description }; }
+        protected virtual Control GetLabel() { return !String.IsNullOrWhiteSpace(Prompt) ? new Label { Content = Prompt } : null; }
+        protected virtual Control GetValue() { return !String.IsNullOrWhiteSpace(Description) ? new Label { Content = Description } : null; }
     }
 }

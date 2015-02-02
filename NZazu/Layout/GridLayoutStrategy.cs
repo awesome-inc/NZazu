@@ -1,13 +1,17 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 
-namespace NZazu
+namespace NZazu.Layout
 {
     public class GridLayoutStrategy : INZazuLayoutStrategy
     {
         public void DoLayout(ContentControl container, IEnumerable<INZazuField> fields)
         {
+            if (container == null) throw new ArgumentNullException("container");
+            if (fields == null) throw new ArgumentNullException("fields");
+
             var grid = new Grid();
 
             grid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
@@ -46,7 +50,5 @@ namespace NZazu
 
             container.Content = grid;
         }
-
-
     }
 }

@@ -1,9 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Media;
 using FluentAssertions;
+using NSubstitute;
 using NUnit.Framework;
 using NZazu.Contracts;
 using NZazu.Fields;
@@ -65,6 +66,47 @@ namespace NZazu
             control.Should().BeOfType(controlType);
 
             VerifyControl(sut, field);
+        }
+
+        [Test]
+        public void Update_when_FormDefinition_changed()
+        {
+            var sut = new NZazuView();
+
+            var layout = Substitute.For<INZazuLayoutStrategy>();
+            sut.LayoutStrategy = layout;
+            layout.ClearReceivedCalls();
+
+            sut.FormDefinition = new FormDefinition { Fields = new FieldDefinition[]{}};
+
+            layout.Received().DoLayout(sut.Layout, Arg.Any<IEnumerable<INZazuField>>());
+        }
+
+        [Test]
+        public void Update_when_FieldFactory_changed()
+        {
+            var sut = new NZazuView();
+
+            var layout = Substitute.For<INZazuLayoutStrategy>();
+            sut.LayoutStrategy = layout;
+            layout.ClearReceivedCalls();
+
+            var fieldFactory = Substitute.For<INZazuFieldFactory>();
+            sut.FieldFactory = fieldFactory;
+
+            layout.Received().DoLayout(sut.Layout, Arg.Any<IEnumerable<INZazuField>>());
+        }
+
+
+        [Test]
+        public void Update_when_LayoutStrategy_changed()
+        {
+            var sut = new NZazuView();
+
+            var layout = Substitute.For<INZazuLayoutStrategy>();
+            sut.LayoutStrategy = layout;
+
+            layout.Received().DoLayout(sut.Layout, Arg.Any<IEnumerable<INZazuField>>());
         }
 
         private static void VerifyControl(NZazuView sut, NZazuField field)

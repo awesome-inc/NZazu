@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Windows;
 using NZazu.Contracts;
+using NZazu.Layout;
 
 namespace NZazu
 {
@@ -16,16 +17,32 @@ namespace NZazu
         public static readonly DependencyProperty LayoutStrategyProperty = DependencyProperty.Register(
             "LayoutStrategy", typeof(INZazuLayoutStrategy), typeof(NZazuView), new PropertyMetadata(new GridLayoutStrategy()));
 
-        public INZazuLayoutStrategy LayoutStrategy
+        public NZazuView()
         {
-            get { return (INZazuLayoutStrategy)GetValue(LayoutStrategyProperty); }
-            set { SetValue(LayoutStrategyProperty, value); }
+            InitializeComponent();
+        }
+
+        public FormDefinition FormDefinition
+        {
+            get { return (FormDefinition)GetValue(FormDefinitionProperty); }
+            set { SetValue(FormDefinitionProperty, value); }
         }
 
         public INZazuFieldFactory FieldFactory
         {
             get { return (INZazuFieldFactory)GetValue(FieldFactoryProperty); }
             set { SetValue(FieldFactoryProperty, value); }
+        }
+
+        public INZazuLayoutStrategy LayoutStrategy
+        {
+            get { return (INZazuLayoutStrategy)GetValue(LayoutStrategyProperty); }
+            set { SetValue(LayoutStrategyProperty, value); }
+        }
+
+        public INZazuField GetField(string fieldKey)
+        {
+            return _fields[fieldKey];
         }
 
         private readonly IDictionary<string, INZazuField> _fields = new Dictionary<string, INZazuField>();
@@ -40,25 +57,8 @@ namespace NZazu
         private void UpdateFields(FormDefinition formDefinition)
         {
             _fields.Clear();
-
             formDefinition.Fields.ToList().ForEach(f => _fields.Add(f.Key, FieldFactory.CreateField(f)));
             LayoutStrategy.DoLayout(Layout, _fields.Values);
-        }
-
-        public FormDefinition FormDefinition
-        {
-            get { return (FormDefinition)GetValue(FormDefinitionProperty); }
-            set { SetValue(FormDefinitionProperty, value); }
-        }
-
-        public INZazuField GetField(string fieldKey)
-        {
-            return _fields[fieldKey];
-        }
-
-        public NZazuView()
-        {
-            InitializeComponent();
         }
     }
 }

@@ -68,13 +68,14 @@
     </Compile>
     <Compile Include="Fields\NZazuBoolField_Should.cs" />
     <Compile Include="Fields\NZazuTextField_Should.cs" />
-    <Compile Include="GridLayoutStrategy.cs" />
+    <Compile Include="Layout\GridLayoutStrategy.cs" />
     <Compile Include="INZazuField.cs" />
     <Compile Include="INZazuFieldFactory.cs" />
     <Compile Include="INZazuLayoutStrategy.cs" />
     <Compile Include="INZazuView.cs" />
     <Compile Include="Fields\NZazuBoolField.cs" />
     <Compile Include="Fields\NZazuField.cs" />
+    <Compile Include="Layout\GridLayoutStrategy_Should.cs" />
     <Compile Include="NZazuFieldFactory.cs" />
     <Compile Include="Fields\NZazuField_Should.cs" />
     <Compile Include="Fields\NZazuTextField.cs" />
