@@ -78,6 +78,25 @@ namespace NZazu
             return layoutStrategy ?? view.LayoutStrategy;
         }
 
+        // ############# FormData
+
+        public static readonly DependencyProperty FormDataProperty = DependencyProperty.Register(
+            "FormData", typeof (IDictionary<string,string>), typeof (NZazuView), 
+            new PropertyMetadata(new Dictionary<string,string>(), FormDataChanged));
+
+        private static void FormDataChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var view = (INZazuView) d;
+            var fieldValues = (IDictionary<string, string>) e.NewValue;
+            view.SetFieldValues(fieldValues);
+        }
+
+        public IDictionary<string, string> FormData
+        {
+            get { return (IDictionary<string,string>)GetValue(FormDataProperty); }
+            set { SetValue(FormDataProperty, value); }
+        }
+
         #endregion
 
         public NZazuView()
@@ -88,6 +107,11 @@ namespace NZazu
         public INZazuField GetField(string fieldKey)
         {
             return _fields[fieldKey];
+        }
+
+        public void ApplyChanges()
+        {
+            FormData = this.GetFieldValues();
         }
 
         private readonly IDictionary<string, INZazuField> _fields = new Dictionary<string, INZazuField>();
