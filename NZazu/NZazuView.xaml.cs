@@ -8,19 +8,12 @@ namespace NZazu
 {
     public partial class NZazuView : INZazuView
     {
+        #region dependency properties
+
+        // ############# FormDefinition
+
         public static readonly DependencyProperty FormDefinitionProperty = DependencyProperty.Register(
             "FormDefinition", typeof(FormDefinition), typeof(NZazuView), new PropertyMetadata(default(FormDefinition), FormDefinitionChanged));
-
-        public static readonly DependencyProperty FieldFactoryProperty = DependencyProperty.Register(
-            "FieldFactory", typeof(INZazuFieldFactory), typeof(NZazuView), new PropertyMetadata(new NZazuFieldFactory()));
-
-        public static readonly DependencyProperty LayoutStrategyProperty = DependencyProperty.Register(
-            "LayoutStrategy", typeof(INZazuLayoutStrategy), typeof(NZazuView), new PropertyMetadata(new GridLayoutStrategy()));
-
-        public NZazuView()
-        {
-            InitializeComponent();
-        }
 
         public FormDefinition FormDefinition
         {
@@ -28,16 +21,68 @@ namespace NZazu
             set { SetValue(FormDefinitionProperty, value); }
         }
 
+        private static void FormDefinitionChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var view = (NZazuView)d;
+            var formDefinition = (FormDefinition)e.NewValue;
+            view.UpdateFields(formDefinition, view.FieldFactory, view.LayoutStrategy);
+        }
+
+        // ############# FieldFactory
+
+        public static readonly DependencyProperty FieldFactoryProperty = DependencyProperty.Register(
+           "FieldFactory", typeof(INZazuFieldFactory), typeof(NZazuView), new PropertyMetadata(new NZazuFieldFactory(), FieldFactoryChanged, FieldFactoryCoerceCallback));
+
         public INZazuFieldFactory FieldFactory
         {
             get { return (INZazuFieldFactory)GetValue(FieldFactoryProperty); }
             set { SetValue(FieldFactoryProperty, value); }
         }
 
+        private static void FieldFactoryChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var view = (NZazuView)d;
+            var fieldFactory = (INZazuFieldFactory)e.NewValue;
+            view.UpdateFields(view.FormDefinition, fieldFactory, view.LayoutStrategy);
+        }
+
+        private static object FieldFactoryCoerceCallback(DependencyObject d, object basevalue)
+        {
+            var view = (NZazuView)d;
+            var fieldFactory = (INZazuFieldFactory)basevalue;
+            return fieldFactory ?? view.FieldFactory;
+        }
+
+        // ############# LayoutStrategy
+
+        public static readonly DependencyProperty LayoutStrategyProperty = DependencyProperty.Register(
+           "LayoutStrategy", typeof(INZazuLayoutStrategy), typeof(NZazuView), new PropertyMetadata(new GridLayoutStrategy(), LayoutStrategyChanged, LayoutStrategyCoerceCallback));
+
         public INZazuLayoutStrategy LayoutStrategy
         {
             get { return (INZazuLayoutStrategy)GetValue(LayoutStrategyProperty); }
             set { SetValue(LayoutStrategyProperty, value); }
+        }
+
+        private static void LayoutStrategyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var view = (NZazuView)d;
+            var layoutStrategy = (INZazuLayoutStrategy)e.NewValue;
+            view.UpdateFields(view.FormDefinition, view.FieldFactory, layoutStrategy);
+        }
+
+        private static object LayoutStrategyCoerceCallback(DependencyObject d, object basevalue)
+        {
+            var view = (NZazuView)d;
+            var layoutStrategy = (INZazuLayoutStrategy)basevalue;
+            return layoutStrategy ?? view.LayoutStrategy;
+        }
+
+        #endregion
+
+        public NZazuView()
+        {
+            InitializeComponent();
         }
 
         public INZazuField GetField(string fieldKey)
@@ -47,18 +92,16 @@ namespace NZazu
 
         private readonly IDictionary<string, INZazuField> _fields = new Dictionary<string, INZazuField>();
 
-        private static void FormDefinitionChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            var view = (NZazuView)d;
-            var formDefinition = (FormDefinition)e.NewValue;
-            view.UpdateFields(formDefinition);
-        }
-
-        private void UpdateFields(FormDefinition formDefinition)
+        private void UpdateFields(FormDefinition formDefinition, INZazuFieldFactory fieldFactory, INZazuLayoutStrategy layoutStrategy)
         {
             _fields.Clear();
-            formDefinition.Fields.ToList().ForEach(f => _fields.Add(f.Key, FieldFactory.CreateField(f)));
-            LayoutStrategy.DoLayout(Layout, _fields.Values);
+
+            // make sure at least the minimum is set for render the layout
+            if (formDefinition == null) return;
+            if (formDefinition.Fields == null) return;
+
+            formDefinition.Fields.ToList().ForEach(f => _fields.Add(f.Key, fieldFactory.CreateField(f)));
+            layoutStrategy.DoLayout(Layout, _fields.Values);
         }
     }
 }

@@ -77,7 +77,7 @@ namespace NZazu
             sut.LayoutStrategy = layout;
             layout.ClearReceivedCalls();
 
-            sut.FormDefinition = new FormDefinition { Fields = new FieldDefinition[]{}};
+            sut.FormDefinition = new FormDefinition { Fields = new FieldDefinition[] { } };
 
             layout.Received().DoLayout(sut.Layout, Arg.Any<IEnumerable<INZazuField>>());
         }
@@ -85,12 +85,14 @@ namespace NZazu
         [Test]
         public void Update_when_FieldFactory_changed()
         {
-            var sut = new NZazuView();
-
             var layout = Substitute.For<INZazuLayoutStrategy>();
+            var sut = new NZazuView();
             sut.LayoutStrategy = layout;
-            layout.ClearReceivedCalls();
+            sut.FieldFactory = Substitute.For<INZazuFieldFactory>();
+            sut.FormDefinition = new FormDefinition { Fields = new FieldDefinition[] { } };
 
+
+            layout.ClearReceivedCalls();
             var fieldFactory = Substitute.For<INZazuFieldFactory>();
             sut.FieldFactory = fieldFactory;
 
@@ -102,12 +104,39 @@ namespace NZazu
         public void Update_when_LayoutStrategy_changed()
         {
             var sut = new NZazuView();
+            sut.FieldFactory = Substitute.For<INZazuFieldFactory>();
+            sut.FormDefinition = new FormDefinition { Fields = new FieldDefinition[] { } };
 
-            var layout = Substitute.For<INZazuLayoutStrategy>();
-            sut.LayoutStrategy = layout;
+            var layoutStrategy = Substitute.For<INZazuLayoutStrategy>();
 
-            layout.Received().DoLayout(sut.Layout, Arg.Any<IEnumerable<INZazuField>>());
+            // change strategy
+            sut.LayoutStrategy = layoutStrategy;
+
+            layoutStrategy.Received().DoLayout(sut.Layout, Arg.Any<IEnumerable<INZazuField>>());
         }
+
+        [Test]
+        public void Disallow_null_FieldFactory()
+        {
+            var sut = new NZazuView();
+            sut.FieldFactory.Should().NotBeNull();
+
+            sut.FieldFactory = null;
+
+            sut.FieldFactory.Should().NotBeNull();
+        }
+
+        [Test]
+        public void Disallow_null_LayoutStrategy()
+        {
+            var sut = new NZazuView();
+            sut.LayoutStrategy.Should().NotBeNull();
+
+            sut.LayoutStrategy = null;
+
+            sut.LayoutStrategy.Should().NotBeNull();
+        }
+
 
         private static void VerifyControl(NZazuView sut, NZazuField field)
         {
@@ -121,7 +150,7 @@ namespace NZazu
             if (parent == null) return null;
 
             var children = LogicalTreeHelper.GetChildren(parent).OfType<DependencyObject>();
-            foreach(var child in children)
+            foreach (var child in children)
             {
                 if (matches(child))
                     return child;
