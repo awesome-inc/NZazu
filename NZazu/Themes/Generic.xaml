@@ -1,0 +1,16 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <ControlTemplate x:Key="NZazuErrorTemplate">
+        <DockPanel>
+            <Border BorderThickness="1" BorderBrush="Red">
+                <AdornedElementPlaceholder x:Name="placeholder" />
+            </Border>
+            <Image DockPanel.Dock="Right"
+                       Source="Images/error.png"
+                       Stretch="Fill"
+                       Height="16"
+                       Width="16"
+                       ToolTip="{Binding ElementName=placeholder, Path=AdornedElement.(Validation.Errors)[0].ErrorContent}" />
+        </DockPanel>
+    </ControlTemplate>
+</ResourceDictionary>

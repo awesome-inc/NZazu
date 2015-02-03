@@ -14,7 +14,7 @@ namespace NZazu.Layout
         {
             var sut = new GridLayoutStrategy();
 
-            var container = new ContentControl();
+            var container = new NZazuView().Layout;
             var fields = new[]
             {
                 new NZazuField("label1") { Prompt="label prompt", Description = "label text"}, 

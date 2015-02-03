@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -7,6 +8,26 @@ namespace NZazu.Layout
 {
     public class GridLayoutStrategy : INZazuLayoutStrategy
     {
+        private readonly ControlTemplate _errorTemplate;
+
+        public GridLayoutStrategy(ControlTemplate errorTemplate = null)
+        {
+            _errorTemplate = errorTemplate ?? GetDefaultErrorTemplate();
+        }
+
+        private static ControlTemplate GetDefaultErrorTemplate()
+        {
+            if (Application.Current == null)
+            {
+                Trace.TraceWarning("No application");
+                return null;
+            }
+
+            var uri = new Uri("pack://application:,,,/NZazu;component/Themes/Generic.xaml", UriKind.Absolute);
+            var resources = new ResourceDictionary {Source = uri};
+            return (ControlTemplate)resources["NZazuErrorTemplate"];
+        }
+
         public void DoLayout(ContentControl container, IEnumerable<INZazuField> fields)
         {
             if (container == null) throw new ArgumentNullException("container");
@@ -43,6 +64,7 @@ namespace NZazu.Layout
                     Grid.SetRow(valueElement, row);
                     grid.Children.Add(valueElement);
 
+                    Validation.SetErrorTemplate(valueElement, _errorTemplate);
                 }
 
                 row++;
