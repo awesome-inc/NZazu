@@ -48,9 +48,6 @@ factories are implemented.
 - [x] NZazuFieldFactory (main package)
 - [ ] XceedFieldFactory (xceed package)
 
-_Legend:_
-[x]: _Implemented_
-[ ]: _Planned_
 
 ## INZazuLayoutStrategy
 
@@ -59,7 +56,4 @@ The layout strategy provides the mechanism to render the generated fields into t
 - [x] GridLayoutStrategy (main package)
 - [ ] StackedLayoutStrategy (main package)
 
-_Legend:_
-[x]: _Implemented_
-[ ]: _Planned_
 
