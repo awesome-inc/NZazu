@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>NZazu.Contracts</id>
+    <version>$Version$</version>
+    <title>NZazu.Contracts</title>
+    <authors>tmentzel, mkoertgen</authors>
+    <owners>tmentzel, mkoertgen</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Contracts for NZazu, a form templating engine.</description>
+    <summary>Contracts for NZazu, a form templating engine.</summary>
+    <copyright/>
+    <releaseNotes>Revision: $Revision$</releaseNotes>
+    <projectUrl>https://github.com/ThomasMentzel/NZazu</projectUrl>
+    <frameworkAssemblies>
+      <frameworkAssembly assemblyName="System.Xaml" targetFramework="" />
+    </frameworkAssemblies>
+  </metadata>
+  <files>
+    <file src="bin\Release\NZazu.Contracts.dll" target="lib"/>
+  </files>
+</package>
