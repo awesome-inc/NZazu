@@ -1,3 +1,5 @@
+using System.Threading;
+using System.Windows;
 using System.Windows.Controls;
 using FluentAssertions;
 using NUnit.Framework;
@@ -9,6 +11,27 @@ namespace NZazu.Layout
     // ReSharper disable InconsistentNaming
     class GridLayoutStrategy_Should
     {
+        private Application application;
+
+        //[SetUp]
+        //public void CreateApplicationForResources()
+        //{
+        //    if (Application.Current != null) return;
+
+        //    application = new Application();
+        //}
+
+        //[TearDown]
+        //public void RemoveApplicationForResources()
+        //{
+        //    if (application == null) return;
+
+        //    application.ShutdownMode = ShutdownMode.OnExplicitShutdown;
+        //    application.MainWindow = null;
+        //    application.Shutdown(0);
+        //    application = null;
+        //}
+
         [Test]
         public void Layout_fields_in_a_two_column_grid()
         {
@@ -34,11 +57,11 @@ namespace NZazu.Layout
             var rowDefs = grid.RowDefinitions;
             rowDefs.Should().HaveCount(3);
 
-            grid.Children.Should().HaveCount(2*fields.Length);
+            grid.Children.Should().HaveCount(2 * fields.Length);
             for (int i = 0; i < fields.Length; i++)
             {
-                grid.Children[2*i].Should().Be(fields[i].LabelControl);
-                grid.Children[2*i + 1].Should().Be(fields[i].ValueControl);
+                grid.Children[2 * i].Should().Be(fields[i].LabelControl);
+                grid.Children[2 * i + 1].Should().Be(fields[i].ValueControl);
             }
         }
 
@@ -57,7 +80,7 @@ namespace NZazu.Layout
 
             sut.DoLayout(container, fields);
 
-            var grid = (Grid) container.Content;
+            var grid = (Grid)container.Content;
             grid.Should().NotBeNull();
 
             grid.Children.Should().HaveCount(2);

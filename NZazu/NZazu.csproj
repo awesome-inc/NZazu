@@ -80,6 +80,7 @@
     <Compile Include="Fields\NZazuField_Should.cs" />
     <Compile Include="Fields\NZazuTextField.cs" />
     <Compile Include="Factory\NZazuFieldFactory_Should.cs" />
+    <Compile Include="Layout\GridLayoutStrategy_Without_Application_Should.cs" />
     <Compile Include="NZazuViewExtensions.cs" />
     <Compile Include="NZazuViewExtensions_Should.cs" />
     <Compile Include="NZazuView_Should.cs" />
