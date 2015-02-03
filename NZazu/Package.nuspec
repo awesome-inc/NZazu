@@ -18,9 +18,11 @@
       <frameworkAssembly assemblyName="PresentationFramework" targetFramework="" />
       <frameworkAssembly assemblyName="System.Xaml" targetFramework="" />
     </frameworkAssemblies>
+    <dependencies>
+      <dependency id="NZazu.Contracts" version="$Version$" />
+    </dependencies>
   </metadata>
   <files>
     <file src="bin\Release\NZazu.dll" target="lib"/>
-    <file src="bin\Release\NZazu.Contracts.dll" target="lib"/>
   </files>
 </package>
