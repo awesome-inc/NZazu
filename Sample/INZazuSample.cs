@@ -1,4 +1,5 @@
-﻿using NZazu.Contracts;
+﻿using System.Collections.Generic;
+using NZazu.Contracts;
 
 namespace Sample
 {
@@ -7,5 +8,8 @@ namespace Sample
         string Name { get; }
         string Description { get; }
         FormDefinition FormDefinition { get; }
+
+        IDictionary<string, string> FormData { get; set; }
+        void ApplyChanges();
     }
 }

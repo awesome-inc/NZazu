@@ -6,7 +6,7 @@ using NZazu.Contracts;
 namespace Sample
 {
     // ReSharper disable once ClassNeverInstantiated.Global
-    public class ShellViewModel : PropertyChangedBase, IShell
+    public class ShellViewModel : Screen, IShell
     {
         private readonly BindableCollection<INZazuSample> _samples = new BindableCollection<INZazuSample>();
         private INZazuSample _selectedSample;
@@ -15,7 +15,7 @@ namespace Sample
         {
             Samples = new[]
             {
-                new NZazuSample
+                new NZazuSampleViewModel
                 {
                     Name = "Primitives",
                     Description = "",
@@ -38,6 +38,27 @@ namespace Sample
                                 Hint = "Enter name",
                                 Description = "Your account name. Only alpha-numeric ..."
                             },
+                            new FieldDefinition
+                            {
+                                Key = "isAdmin", 
+                                Type = "bool",
+                                //Prompt = "Is Admin",
+                                Hint = "Is Admin",
+                                Description = "Check to grant administrator permissions"
+                            }
+                        }
+                    },
+                    FormData = new Dictionary<string,string> { {"name", "John"},{"isAdmin", "true"}}
+                },
+
+                new NZazuSampleViewModel
+                {
+                    Name = "Second",
+                    Description = "A 2nd sample",
+                    FormDefinition = new FormDefinition
+                    {
+                        Fields = new[]
+                        {
                             new FieldDefinition
                             {
                                 Key = "isAdmin", 
@@ -71,6 +92,7 @@ namespace Sample
             set
             {
                 if (Equals(value, _selectedSample)) return;
+                if (_selectedSample != null) _selectedSample.ApplyChanges();
                 _selectedSample = value;
                 NotifyOfPropertyChange();
             }

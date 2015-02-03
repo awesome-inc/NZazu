@@ -12,6 +12,6 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <ListBox x:Name="Samples" ItemsSource="{Binding Samples}" SelectedItem="{Binding SelectedSample}" />
-        <nZazu:NZazuView Grid.Column="1" FormDefinition="{Binding SelectedSample.FormDefinition}"/>
+        <ContentControl Grid.Column="1" x:Name="SelectedSample"/>
     </Grid>
 </Window>

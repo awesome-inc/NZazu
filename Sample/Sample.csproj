@@ -83,8 +83,15 @@
     </ApplicationDefinition>
     <Compile Include="INZazuSample.cs" />
     <Compile Include="IShell.cs" />
-    <Compile Include="NZazuSample.cs" />
+    <Compile Include="NZazuSampleView.xaml.cs">
+      <DependentUpon>NZazuSampleView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="NZazuSampleViewModel.cs" />
     <Compile Include="ShellViewModel.cs" />
+    <Page Include="NZazuSampleView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="ShellView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
