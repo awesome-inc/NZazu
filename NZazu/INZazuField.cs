@@ -7,7 +7,9 @@ namespace NZazu
         string Key { get; }
         string Type { get; }
         string Prompt { get; }
+        string Hint { get; }
         string Description { get; }
-        Control Control { get; }
+        Control LabelControl { get; }
+        Control ValueControl { get; }
     }
 }
