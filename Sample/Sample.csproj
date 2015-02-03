@@ -87,6 +87,7 @@
       <DependentUpon>NZazuSampleView.xaml</DependentUpon>
     </Compile>
     <Compile Include="NZazuSampleViewModel.cs" />
+    <Compile Include="NZazuSampleViewModel_Should.cs" />
     <Compile Include="ShellViewModel.cs" />
     <Page Include="NZazuSampleView.xaml">
       <SubType>Designer</SubType>

@@ -137,6 +137,44 @@ namespace NZazu
             sut.LayoutStrategy.Should().NotBeNull();
         }
 
+        [Test]
+        public void Set_Field_Values_If_FormData_Changes()
+        {
+            var view = new NZazuView();
+
+            const string key = "name";
+            const string value = "John";
+
+            var formDefinition = new FormDefinition { Fields = new[] { new FieldDefinition { Key = key, Type = "string" } } };
+            view.FormDefinition = formDefinition;
+
+            view.FormData = new Dictionary<string, string> { { key, value } };
+
+            var actual = view.GetFieldValues();
+            actual.Keys.Single().Should().Be(key);
+            actual[key].Should().Be(value);
+        }
+
+        [Test]
+        public void Update_FormData_On_ApplyChanges()
+        {
+            var view = new NZazuView();
+
+            const string key = "name";
+            const string value = "John";
+
+            var formDefinition = new FormDefinition { Fields = new[] { new FieldDefinition { Key = key, Type = "string"} } };
+            view.FormDefinition = formDefinition;
+
+            var input = new Dictionary<string, string> { { key, value } };
+            view.SetFieldValues(input);
+
+            view.FormData.Should().BeEmpty();
+            view.ApplyChanges();
+            view.FormData.ShouldBeEquivalentTo(input);
+        }
+
+
         private static void VerifyControl(NZazuView sut, NZazuField field)
         {
             var control = field.ValueControl;
