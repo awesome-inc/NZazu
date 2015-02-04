@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Windows;
 using NZazu.Contracts;
+using NZazu.Factory;
 using NZazu.Layout;
 
 namespace NZazu

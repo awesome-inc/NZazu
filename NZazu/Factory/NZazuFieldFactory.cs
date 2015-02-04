@@ -3,7 +3,7 @@ using System.Diagnostics;
 using NZazu.Contracts;
 using NZazu.Fields;
 
-namespace NZazu
+namespace NZazu.Factory
 {
     class NZazuFieldFactory : INZazuFieldFactory
     {

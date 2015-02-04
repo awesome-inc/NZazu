@@ -15,8 +15,6 @@ namespace NZazu.Contracts.Checks
 
         public void Validate(string value, CultureInfo cultureInfo)
         {
-            if (_checks == null)
-                return;
             _checks.ForEach(c => c.Validate(value, cultureInfo));
         }
     }

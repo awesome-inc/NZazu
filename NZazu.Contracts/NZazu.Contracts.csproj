@@ -62,6 +62,7 @@
     <Compile Include="Checks\StringRegExCheck_Should.cs" />
     <Compile Include="Checks\AggregateCheck.cs" />
     <Compile Include="Checks\ValidationException.cs" />
+    <Compile Include="Checks\ValidationException_Should.cs" />
     <Compile Include="FieldDefinition.cs" />
     <Compile Include="FieldDefinition_Should.cs" />
     <Compile Include="FormDefinition.cs" />

@@ -2,7 +2,7 @@ using FluentAssertions;
 using NUnit.Framework;
 using NZazu.Contracts;
 
-namespace NZazu
+namespace NZazu.Factory
 {
     [TestFixture]
     // ReSharper disable InconsistentNaming

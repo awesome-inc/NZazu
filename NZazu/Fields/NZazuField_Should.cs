@@ -106,7 +106,12 @@ namespace NZazu.Fields
 
             var sut = new NZazuField("test") { Description="description", Checks = new[] { check } };
 
+
             var expectedRule = new CheckValidationRule(check);
+            sut.ValueControl.Should().NotBeNull();
+            //sut.ValueControl.GetBindingExpression(sut.ContentProperty);
+
+
             //sut.Binding.Should().NotBeNull();
 
 
