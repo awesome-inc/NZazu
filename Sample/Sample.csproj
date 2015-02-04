@@ -88,7 +88,12 @@
     </Compile>
     <Compile Include="NZazuSampleViewModel.cs" />
     <Compile Include="NZazuSampleViewModel_Should.cs" />
+    <Compile Include="NZazu_Should.cs" />
+    <Compile Include="Samples\IHaveSample.cs" />
+    <Compile Include="Samples\PrimitivesSample.cs" />
+    <Compile Include="Samples\SecondSample.cs" />
     <Compile Include="ShellViewModel.cs" />
+    <Compile Include="Samples\ValidationSample.cs" />
     <Page Include="NZazuSampleView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

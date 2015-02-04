@@ -19,6 +19,5 @@ namespace NZazu
             foreach (var kvp in fieldValues)
                 view.GetField(kvp.Key).Value = kvp.Value;
         }
-
     }
 }

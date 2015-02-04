@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using FluentAssertions;
@@ -35,7 +36,7 @@ namespace NZazu.Layout
         {
             var sut = new GridLayoutStrategy();
 
-            var container = new NZazuView().Layout;
+            var container = new ContentControl();
             var fields = new[]
             {
                 new NZazuField("label1") { Prompt="label prompt", Description = "label text"}, 
@@ -84,6 +85,34 @@ namespace NZazu.Layout
             grid.Children.Should().HaveCount(2);
             grid.Children[0].Should().Be(fields[1].ValueControl, "label should be skipped");
             grid.Children[1].Should().Be(fields[2].ValueControl, "label should be skipped");
+        }
+
+        [Test]
+        public void Set_Validation_Error_Template()
+        {
+            var expectedTemplate = new ControlTemplate();
+            var sut = new GridLayoutStrategy(expectedTemplate);
+
+            var container = new ContentControl();
+            var fields = new[]
+            {
+                new NZazuField("label1"),
+                new NZazuTextField("string1"),
+                new NZazuBoolField("bool1")
+            };
+
+            fields
+                .Where(f => f.ValueControl != null)
+                .All(f => Validation.GetErrorTemplate(f.ValueControl) != expectedTemplate)
+                .Should().BeTrue();
+
+
+            sut.DoLayout(container, fields);
+
+            fields
+                .Where(f => f.ValueControl != null)
+                .All(f => Validation.GetErrorTemplate(f.ValueControl) == expectedTemplate)
+                .Should().BeTrue();
         }
     }
 }

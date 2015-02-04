@@ -66,8 +66,10 @@
     <Compile Include="..\VersionInfo.g.cs">
       <Link>Properties\VersionInfo.g.cs</Link>
     </Compile>
+    <Compile Include="CheckValidationRule_Should.cs" />
     <Compile Include="Fields\NZazuBoolField_Should.cs" />
     <Compile Include="Fields\NZazuTextField_Should.cs" />
+    <Compile Include="CheckValidationRule.cs" />
     <Compile Include="Layout\GridLayoutStrategy.cs" />
     <Compile Include="INZazuField.cs" />
     <Compile Include="INZazuFieldFactory.cs" />
@@ -107,9 +109,7 @@
       <Name>NZazu.Contracts</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="DataProvider\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Resource Include="Images\error.png" />
   </ItemGroup>

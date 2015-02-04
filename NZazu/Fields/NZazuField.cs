@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.Windows.Controls;
+using NZazu.Contracts.Checks;
 
 namespace NZazu.Fields
 {
@@ -7,6 +9,8 @@ namespace NZazu.Fields
     {
         private readonly Lazy<Control> _label;
         private readonly Lazy<Control> _value;
+        //private readonly Lazy<Binding> _binding;
+ 
         public string Type { get; protected set; }
         public NZazuField(string key)
         {
@@ -16,6 +20,7 @@ namespace NZazu.Fields
 
             _label = new Lazy<Control>(GetLabel);
             _value = new Lazy<Control>(GetValue);
+            //_binding = new Lazy<Binding>(GetBinding);
         }
 
         public string Key { get; private set; }
@@ -29,10 +34,24 @@ namespace NZazu.Fields
             set { }
         }
 
+
         public Control LabelControl { get { return _label.Value; } }
         public Control ValueControl { get { return _value.Value; } }
 
         protected virtual Control GetLabel() { return !String.IsNullOrWhiteSpace(Prompt) ? new Label { Content = Prompt } : null; }
         protected virtual Control GetValue() { return !String.IsNullOrWhiteSpace(Description) ? new Label { Content = Description } : null; }
+
+        protected internal IEnumerable<IValueCheck> Checks { get; set; }
+
+        //protected virtual Binding GetBinding()
+        //{
+        //    var contentControl = ValueControl as ContentControl;
+        //    if (contentControl == null) return null;
+
+        //    var bindingExpression = contentControl.GetBindingExpression(ContentControl.ContentProperty);
+        //    return bindingExpression != null 
+        //        ? bindingExpression.ParentBinding 
+        //        : null;
+        //}
     }
 }

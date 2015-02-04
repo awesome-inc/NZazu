@@ -11,6 +11,8 @@ namespace NZazu
         string Description { get; }
 
         string Value { get; set; }
+
+        // WPF specific
         Control LabelControl { get; }
         Control ValueControl { get; }
     }

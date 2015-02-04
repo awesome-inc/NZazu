@@ -1,7 +1,9 @@
 using System;
 using System.Windows.Controls;
 using FluentAssertions;
+using NSubstitute;
 using NUnit.Framework;
+using NZazu.Contracts.Checks;
 
 namespace NZazu.Fields
 {
@@ -69,6 +71,49 @@ namespace NZazu.Fields
             sut.Value = "test";
 
             sut.Value.Should().BeEmpty();
+        }
+
+        /*
+        [Test]
+        public void IsValid_should_run_check()
+        {
+            const bool expected = false;
+            var check = Substitute.For<IValueCheck>();
+            check.Validate(Arg.Any<string>()).Returns(expected);
+
+            var sut = new NZazuField("test") {Checks = new[] {check}};
+
+            sut.IsValid.Should().Be(expected);
+
+            check.Received().Validate(sut.Value);
+        }
+
+
+
+        [Test]
+        public void IsValid_no_checks_should_return_true()
+        {
+            var sut = new NZazuField("test");
+            sut.Checks.Should().BeNullOrEmpty();
+            sut.IsValid.Should().BeTrue("no checks");
+        }*/
+
+        [Test]
+        public void Attach_FieldValidationRule_according_to_checks()
+        {
+            var check = Substitute.For<IValueCheck>();
+            check.When(x => x.Validate(Arg.Any<string>())).Do(x => { throw new ValidationException("test"); });
+
+            var sut = new NZazuField("test") { Description="description", Checks = new[] { check } };
+
+            var expectedRule = new CheckValidationRule(check);
+            //sut.Binding.Should().NotBeNull();
+
+
+            //var ()control = sut.ValueControl;
+            //control.Should().NotBeNull();
+
+            //control.GetBindingExpression()
         }
     }
 }
