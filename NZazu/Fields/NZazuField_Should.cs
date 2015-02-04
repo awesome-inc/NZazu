@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Windows.Controls;
 using FluentAssertions;
 using NSubstitute;
@@ -73,52 +74,62 @@ namespace NZazu.Fields
             sut.Value.Should().BeEmpty();
         }
 
-        /*
         [Test]
-        public void IsValid_should_run_check()
-        {
-            const bool expected = false;
-            var check = Substitute.For<IValueCheck>();
-            check.Validate(Arg.Any<string>()).Returns(expected);
-
-            var sut = new NZazuField("test") {Checks = new[] {check}};
-
-            sut.IsValid.Should().Be(expected);
-
-            check.Received().Validate(sut.Value);
-        }
-
-
-
-        [Test]
-        public void IsValid_no_checks_should_return_true()
-        {
-            var sut = new NZazuField("test");
-            sut.Checks.Should().BeNullOrEmpty();
-            sut.IsValid.Should().BeTrue("no checks");
-        }*/
-
-        [Test]
-        public void Attach_FieldValidationRule_according_to_checks()
+        public void Not_Attach_FieldValidationRule_if_no_ContentProperty_set()
         {
             var check = Substitute.For<IValueCheck>();
             check.When(x => x.Validate(Arg.Any<string>())).Do(x => { throw new ValidationException("test"); });
 
-            var sut = new NZazuField("test") { Description="description", Checks = new[] { check } };
+            var sut = new NZazuField("test") { Description = "description", Checks = new[] { check } };
+            sut.ContentProperty.Should().BeNull();
+            sut.ValueControl.Should().NotBeNull();
+        }
 
+        [Test]
+        public void Attach_FieldValidationRule_according_to_checks()
+        {
+            // but we need a dummy content enabled field -> no content, no validation
+            var check = Substitute.For<IValueCheck>();
+            check.When(x => x.Validate(Arg.Any<string>())).Do(x => { throw new ValidationException("test"); });
+
+            var sut = new NZazuField_With_Description_As_Content_Property("test") { Description = "description", Checks = new[] { check } };
 
             var expectedRule = new CheckValidationRule(check);
             sut.ValueControl.Should().NotBeNull();
-            //sut.ValueControl.GetBindingExpression(sut.ContentProperty);
 
+            var expression = sut.ValueControl.GetBindingExpression(sut.ContentProperty);
+            expression.Should().NotBeNull();
 
-            //sut.Binding.Should().NotBeNull();
+            // ReSharper disable once PossibleNullReferenceException
+            var binding = expression.ParentBinding;
+            binding.Should().NotBeNull();
 
-
-            //var ()control = sut.ValueControl;
-            //control.Should().NotBeNull();
-
-            //control.GetBindingExpression()
+            binding.ValidationRules.Single().ShouldBeEquivalentTo(expectedRule);
         }
+
+        #region test NZazuField with bi-directional content property
+
+        [Test]
+        public void Get_Set_Value_should_set_content_if_content_property_set()
+        {
+            var sut = new NZazuField_With_Description_As_Content_Property("test") { Description = "hello there" };
+            sut.Value.Should().Be("hello there");
+
+            sut.Value = "test";
+
+            sut.Value.Should().Be("test");
+        }
+
+
+        private class NZazuField_With_Description_As_Content_Property : NZazuField
+        {
+            public NZazuField_With_Description_As_Content_Property(string key)
+                : base(key)
+            {
+                ContentProperty = ContentControl.ContentProperty;
+            }
+        }
+
+        #endregion
     }
 }

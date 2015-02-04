@@ -31,6 +31,7 @@ namespace NZazu.Factory
             field.Prompt = fieldDefinition.Prompt;
             field.Hint = fieldDefinition.Hint;
             field.Description = fieldDefinition.Description;
+            field.Checks = fieldDefinition.Checks;
 
             return field;
         }

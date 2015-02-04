@@ -7,6 +7,7 @@ namespace NZazu.Fields
         public NZazuTextField(string key) : base(key)
         {
             Type = "string";
+            ContentProperty = TextBox.TextProperty;
         }
 
         protected override Control GetValue()
@@ -16,12 +17,6 @@ namespace NZazu.Fields
                 //Text = Hint, 
                 ToolTip = Description
             };
-        }
-
-        public override string Value
-        {
-            get { return ((TextBox) ValueControl).Text; }
-            set { ((TextBox) ValueControl).Text = value; }
         }
     }
 }
