@@ -1,4 +1,3 @@
-using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using FluentAssertions;
@@ -13,24 +12,23 @@ namespace NZazu.Layout
     {
         private Application application;
 
-        //[SetUp]
-        //public void CreateApplicationForResources()
-        //{
-        //    if (Application.Current != null) return;
+        [SetUp]
+        public void CreateApplicationForResources()
+        {
+            if (Application.Current != null) return;
 
-        //    application = new Application();
-        //}
+            application = new Application();
+        }
 
-        //[TearDown]
-        //public void RemoveApplicationForResources()
-        //{
-        //    if (application == null) return;
+        [TearDown]
+        public void RemoveApplicationForResources()
+        {
+            if (application == null) return;
 
-        //    application.ShutdownMode = ShutdownMode.OnExplicitShutdown;
-        //    application.MainWindow = null;
-        //    application.Shutdown(0);
-        //    application = null;
-        //}
+            application.ShutdownMode = ShutdownMode.OnExplicitShutdown;
+            application.Dispatcher.InvokeShutdown();
+            application = null;
+        }
 
         [Test]
         public void Layout_fields_in_a_two_column_grid()

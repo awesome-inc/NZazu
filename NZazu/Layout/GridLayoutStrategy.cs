@@ -17,14 +17,14 @@ namespace NZazu.Layout
 
         private static ControlTemplate GetDefaultErrorTemplate()
         {
-            if (Application.Current == null)
+            if (Application.Current == null || Application.Current.Dispatcher.HasShutdownStarted)
             {
                 Trace.TraceWarning("No application");
                 return null;
             }
 
             var uri = new Uri("pack://application:,,,/NZazu;component/Themes/Generic.xaml", UriKind.Absolute);
-            var resources = new ResourceDictionary {Source = uri};
+            var resources = new ResourceDictionary { Source = uri };
             return (ControlTemplate)resources["NZazuErrorTemplate"];
         }
 
@@ -46,7 +46,7 @@ namespace NZazu.Layout
                 if (labelElement == null && valueElement == null) continue;
 
                 grid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(28) });
-                
+
                 if (labelElement != null)
                 {
                     Grid.SetColumn(labelElement, 0);
