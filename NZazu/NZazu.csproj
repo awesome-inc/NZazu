@@ -70,6 +70,8 @@
     <Compile Include="Fields\NZazuBoolField_Should.cs" />
     <Compile Include="Fields\NZazuField.cs" />
     <Compile Include="Fields\NZazuField_Should.cs" />
+    <Compile Include="Fields\NZazuIntegerField.cs" />
+    <Compile Include="Fields\NZazuIntegerField_Should.cs" />
     <Compile Include="Fields\NZazuTextField_Should.cs" />
     <Compile Include="CheckValidationRule.cs" />
     <Compile Include="Layout\GridLayoutStrategy.cs" />

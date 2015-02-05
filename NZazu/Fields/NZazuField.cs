@@ -39,6 +39,8 @@ namespace NZazu.Fields
 
         public void Validate()
         {
+            var bindingExpression = ContentProperty == null ? null : ValueControl.GetBindingExpression(ContentProperty);
+            if (bindingExpression != null && bindingExpression.HasError) throw new ValidationException("UI has errors. Value could not be converted");
             var safeChecks = Checks == null ? new IValueCheck[] { } : Checks.ToArray();
             new AggregateCheck(safeChecks).Validate(StringValue, CultureInfo.CurrentUICulture);
         }
@@ -95,7 +97,8 @@ namespace NZazu.Fields
     {
         private T _value;
 
-        protected NZazuField(string key) : base(key)
+        protected NZazuField(string key)
+            : base(key)
         {
         }
 
