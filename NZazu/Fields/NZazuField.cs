@@ -115,11 +115,6 @@ namespace NZazu.Fields
             return control;
         }
 
-        protected virtual IValueConverter GetCconverter()
-        {
-            return null;
-        }
-
         public event PropertyChangedEventHandler PropertyChanged = (sender, e) => { };
 
         // ReSharper disable once MemberCanBePrivate.Global
