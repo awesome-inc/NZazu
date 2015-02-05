@@ -3,7 +3,7 @@ using System.Diagnostics;
 using NZazu.Contracts;
 using NZazu.Fields;
 
-namespace NZazu
+namespace NZazu.Factory
 {
     class NZazuFieldFactory : INZazuFieldFactory
     {
@@ -11,27 +11,26 @@ namespace NZazu
         {
             if (fieldDefinition == null) throw new ArgumentNullException("fieldDefinition");
 
-            NZazuField field = null;
-            
             switch (fieldDefinition.Type)
             {
-                case "string": field = new NZazuTextField(fieldDefinition.Key);
-                    break;
-                case "bool": field = new NZazuBoolField(fieldDefinition.Key);
-                    break;
+                case "string": return Decorate(new NZazuTextField(fieldDefinition.Key), fieldDefinition);
+                case "bool": return Decorate(new NZazuBoolField(fieldDefinition.Key), fieldDefinition);
                 case "label":
                 default:
-                    field = new NZazuField(fieldDefinition.Key);
+                    var field = Decorate(new NZazuField(fieldDefinition.Key), fieldDefinition);
                     if (fieldDefinition.Type != "label")
                         //throw new NotSupportedException("The specified field type is not supported: " + fieldDefinition.Type);
                         Trace.TraceWarning("The specified field type is not supported: " + fieldDefinition.Type);
-                    break;
+                    return field;
             }
+        }
 
+        private static NZazuField<T> Decorate<T>(NZazuField<T> field, FieldDefinition fieldDefinition)
+        {
             field.Prompt = fieldDefinition.Prompt;
             field.Hint = fieldDefinition.Hint;
             field.Description = fieldDefinition.Description;
-
+            field.Checks = fieldDefinition.Checks;
             return field;
         }
     }

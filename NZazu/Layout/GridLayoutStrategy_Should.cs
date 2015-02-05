@@ -1,3 +1,5 @@
+using System.Linq;
+using System.Windows;
 using System.Windows.Controls;
 using FluentAssertions;
 using NUnit.Framework;
@@ -9,13 +11,33 @@ namespace NZazu.Layout
     // ReSharper disable InconsistentNaming
     class GridLayoutStrategy_Should
     {
+        private Application application;
+
+        [SetUp]
+        public void CreateApplicationForResources()
+        {
+            if (Application.Current != null) return;
+
+            application = new Application();
+        }
+
+        [TearDown]
+        public void RemoveApplicationForResources()
+        {
+            if (application == null) return;
+
+            application.ShutdownMode = ShutdownMode.OnExplicitShutdown;
+            application.Dispatcher.InvokeShutdown();
+            application = null;
+        }
+
         [Test]
         public void Layout_fields_in_a_two_column_grid()
         {
             var sut = new GridLayoutStrategy();
 
             var container = new ContentControl();
-            var fields = new[]
+            var fields = new INZazuField[]
             {
                 new NZazuField("label1") { Prompt="label prompt", Description = "label text"}, 
                 new NZazuTextField("string1") { Prompt="text prompt", Description = "text tooltip"}, 
@@ -34,11 +56,11 @@ namespace NZazu.Layout
             var rowDefs = grid.RowDefinitions;
             rowDefs.Should().HaveCount(3);
 
-            grid.Children.Should().HaveCount(2*fields.Length);
+            grid.Children.Should().HaveCount(2 * fields.Length);
             for (int i = 0; i < fields.Length; i++)
             {
-                grid.Children[2*i].Should().Be(fields[i].LabelControl);
-                grid.Children[2*i + 1].Should().Be(fields[i].ValueControl);
+                grid.Children[2 * i].Should().Be(fields[i].LabelControl);
+                grid.Children[2 * i + 1].Should().Be(fields[i].ValueControl);
             }
         }
 
@@ -48,7 +70,7 @@ namespace NZazu.Layout
             var sut = new GridLayoutStrategy();
 
             var container = new ContentControl();
-            var fields = new[]
+            var fields = new INZazuField[]
             {
                 new NZazuField("label1"),
                 new NZazuTextField("string1"),
@@ -57,12 +79,48 @@ namespace NZazu.Layout
 
             sut.DoLayout(container, fields);
 
-            var grid = (Grid) container.Content;
+            var grid = (Grid)container.Content;
             grid.Should().NotBeNull();
 
             grid.Children.Should().HaveCount(2);
             grid.Children[0].Should().Be(fields[1].ValueControl, "label should be skipped");
             grid.Children[1].Should().Be(fields[2].ValueControl, "label should be skipped");
+        }
+
+        [Test]
+        public void Set_Validation_Error_Template()
+        {
+            var expectedTemplate = new ControlTemplate();
+            var sut = new GridLayoutStrategy(expectedTemplate);
+
+            var container = new ContentControl();
+            var fields = new INZazuField[]
+            {
+                new NZazuField("label1"),
+                new NZazuTextField("string1"),
+                new NZazuBoolField("bool1")
+            };
+
+            fields
+                .Where(f => f.ValueControl != null)
+                .All(f => Validation.GetErrorTemplate(f.ValueControl) != expectedTemplate)
+                .Should().BeTrue();
+
+
+            sut.DoLayout(container, fields);
+
+            fields
+                .Where(f => f.ValueControl != null)
+                .All(f => Validation.GetErrorTemplate(f.ValueControl) == expectedTemplate)
+                .Should().BeTrue();
+        }
+
+        [Test]
+        public void Should_support_ThreeState_by_default()
+        {
+            var sut = new NZazuBoolField("test");
+
+            ((CheckBox) sut.ValueControl).IsThreeState.Should().BeTrue();
         }
     }
 }

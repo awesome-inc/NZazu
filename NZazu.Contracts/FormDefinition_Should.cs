@@ -13,6 +13,7 @@ namespace NZazu.Contracts
             var sut = new FormDefinition();
 
             sut.Should().NotBeNull();
+            sut.Fields.Should().BeNull();
         }
     }
 }

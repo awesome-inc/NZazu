@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Windows;
 using NZazu.Contracts;
+using NZazu.Factory;
 using NZazu.Layout;
 
 namespace NZazu
@@ -81,19 +82,19 @@ namespace NZazu
         // ############# FormData
 
         public static readonly DependencyProperty FormDataProperty = DependencyProperty.Register(
-            "FormData", typeof (IDictionary<string,string>), typeof (NZazuView), 
-            new PropertyMetadata(new Dictionary<string,string>(), FormDataChanged));
+            "FormData", typeof(IDictionary<string, string>), typeof(NZazuView),
+            new PropertyMetadata(new Dictionary<string, string>(), FormDataChanged));
 
         private static void FormDataChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            var view = (INZazuView) d;
-            var fieldValues = (IDictionary<string, string>) e.NewValue;
+            var view = (INZazuView)d;
+            var fieldValues = (IDictionary<string, string>)e.NewValue;
             view.SetFieldValues(fieldValues);
         }
 
         public IDictionary<string, string> FormData
         {
-            get { return (IDictionary<string,string>)GetValue(FormDataProperty); }
+            get { return (IDictionary<string, string>)GetValue(FormDataProperty); }
             set { SetValue(FormDataProperty, value); }
         }
 
@@ -112,6 +113,11 @@ namespace NZazu
         public void ApplyChanges()
         {
             FormData = this.GetFieldValues();
+        }
+
+        public void Validate()
+        {
+            _fields.Values.ToList().ForEach(f => f.Validate());
         }
 
         private readonly IDictionary<string, INZazuField> _fields = new Dictionary<string, INZazuField>();

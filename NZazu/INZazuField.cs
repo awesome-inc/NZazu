@@ -10,8 +10,16 @@ namespace NZazu
         string Hint { get; }
         string Description { get; }
 
-        string Value { get; set; }
+        string StringValue { get; set; }
+        void Validate();
+
+        // WPF specific
         Control LabelControl { get; }
         Control ValueControl { get; }
+    }
+
+    public interface INZazuField<T> : INZazuField
+    {
+        T Value { get; set; }
     }
 }

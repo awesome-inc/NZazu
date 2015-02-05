@@ -1,8 +1,11 @@
 using FluentAssertions;
+using NSubstitute;
 using NUnit.Framework;
 using NZazu.Contracts;
+using NZazu.Contracts.Checks;
+using NZazu.Fields;
 
-namespace NZazu
+namespace NZazu.Factory
 {
     [TestFixture]
     // ReSharper disable InconsistentNaming
@@ -30,6 +33,18 @@ namespace NZazu
 
             field.Should().NotBeNull();
             field.Type.Should().Be(fieldType ?? "label"); // because of the fallback in case of null
+        }
+
+        [Test]
+        public void Set_Checks()
+        {
+            var sut = new NZazuFieldFactory();
+            var check = Substitute.For<IValueCheck>();
+            var checks = new[] { check };
+            var field = (NZazuField)sut.CreateField(new FieldDefinition { Key = "test", Type = "string", Checks = checks });
+
+            field.Should().NotBeNull();
+            field.Checks.Should().BeSameAs(checks);
         }
     }
 }

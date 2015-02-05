@@ -1,9 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
+using System.Runtime.InteropServices;
 using FluentAssertions;
 using NSubstitute;
 using NUnit.Framework;
 using NZazu.Contracts;
+using NZazu.Contracts.Checks;
 
 namespace NZazu
 {
@@ -23,7 +26,7 @@ namespace NZazu
             view.FormDefinition = formDefinition;
 
             var field = Substitute.For<INZazuField>();
-            field.Value = value;
+            field.StringValue = value;
             view.GetField(key).Returns(field);
 
             var actual = view.GetFieldValues();
@@ -45,11 +48,32 @@ namespace NZazu
             var field = Substitute.For<INZazuField>();
             view.GetField(key).Returns(field);
 
-            var input = new Dictionary<string, string> {{key, value}};
+            var input = new Dictionary<string, string> { { key, value } };
 
             view.SetFieldValues(input);
 
-            field.Value.Should().Be(value);
+            field.StringValue.Should().Be(value);
+        }
+
+        [Test]
+        public void Return_False_If_Validate_Has_Exception()
+        {
+            var view = Substitute.For<INZazuView>();
+            view.WhenForAnyArgs(zazuView => zazuView.Validate()).Do(info => { throw new ValidationException("I am invalid"); });
+
+            view.IsValid().Should().BeFalse();
+
+            view.ReceivedWithAnyArgs().Validate();
+        }
+
+        [Test]
+        public void Return_True_If_Validate()
+        {
+            var view = Substitute.For<INZazuView>();
+
+            view.IsValid().Should().BeTrue();
+
+            view.ReceivedWithAnyArgs().Validate();
         }
     }
 }

@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Windows;
-using System.Windows.Controls;
 using FluentAssertions;
 using NSubstitute;
 using NUnit.Framework;
 using NZazu.Contracts;
-using NZazu.Fields;
+using NZazu.Contracts.Checks;
 
 namespace NZazu
 {
@@ -22,50 +19,7 @@ namespace NZazu
             var sut = new NZazuView();
 
             sut.Should().NotBeNull();
-        }
-
-        [Test]
-        [TestCase("fallback", null, "Heading", null, "fallback text", typeof(Label))]
-        [TestCase("heading", "label", "Settings", null, "You can manage your account here. Use TAB ...", typeof(Label))]
-        [TestCase("userName", "string", "User", "Enter your name", "Your name", typeof(TextBox))]
-        [TestCase("gender", "bool", "Admin", "Is Admin", "Check if you are an admin", typeof(CheckBox))]
-        //[TestCase("birthday", "dateTime", "Birthday", "Choose birthday", "Your birthday", typeof (DatePicker))]
-        //[TestCase("weight", "double", "Weight", "Enter body weight (kg)", "Your weight", typeof(TextBox))]
-        // ReSharper disable once TooManyArguments
-        public void Support_field(string key, string type, string prompt, string hint, string description, Type controlType)
-        {
-            var sut = new NZazuView();
-
-            var formDefinition = new FormDefinition
-            {
-                Fields = new[]
-                {
-                    new FieldDefinition
-                    {
-                        Key = key, 
-                        Type = type,
-                        Prompt = prompt,
-                        Hint = hint,
-                        Description = description
-                    }
-                }
-            };
-
-            sut.FormDefinition = formDefinition;
-
-            var field = (NZazuField)sut.GetField(key);
-
-            field.Should().NotBeNull();
-            field.Key.Should().Be(key);
-            field.Type.Should().Be(type ?? "label"); // to make sure fallback is used
-            field.Prompt.Should().Be(prompt);
-            field.Hint.Should().Be(hint);
-            field.Description.Should().Be(description);
-
-            var control = field.ValueControl;
-            control.Should().BeOfType(controlType);
-
-            VerifyControl(sut, field);
+            sut.Should().BeAssignableTo<INZazuView>();
         }
 
         [Test]
@@ -163,7 +117,7 @@ namespace NZazu
             const string key = "name";
             const string value = "John";
 
-            var formDefinition = new FormDefinition { Fields = new[] { new FieldDefinition { Key = key, Type = "string"} } };
+            var formDefinition = new FormDefinition { Fields = new[] { new FieldDefinition { Key = key, Type = "string" } } };
             view.FormDefinition = formDefinition;
 
             var input = new Dictionary<string, string> { { key, value } };
@@ -174,28 +128,24 @@ namespace NZazu
             view.FormData.ShouldBeEquivalentTo(input);
         }
 
-
-        private static void VerifyControl(NZazuView sut, NZazuField field)
+        [Test]
+        public void Validate_By_Calling_INZazuField_Validate()
         {
-            var control = field.ValueControl;
-            var child = FindChild(sut, ctrl => Equals(ctrl, control));
-            child.Should().NotBeNull();
-        }
+            var field = Substitute.For<INZazuField>();
+            field.Key.ReturnsForAnyArgs("test");
+            var fieldFactory = Substitute.For<INZazuFieldFactory>();
+            var layoutStrategy = Substitute.For<INZazuLayoutStrategy>();
+            fieldFactory.CreateField(Arg.Any<FieldDefinition>()).Returns(field);
 
-        private static DependencyObject FindChild(DependencyObject parent, Predicate<DependencyObject> matches)
-        {
-            if (parent == null) return null;
-
-            var children = LogicalTreeHelper.GetChildren(parent).OfType<DependencyObject>();
-            foreach (var child in children)
+            var sut = new NZazuView
             {
-                if (matches(child))
-                    return child;
-                var foundChild = FindChild(child, matches);
-                if (matches(foundChild))
-                    return foundChild;
-            }
-            return null;
+                FormDefinition = new FormDefinition {Fields = new [] {new FieldDefinition {Key = "test"}}},
+                FieldFactory = fieldFactory,
+                LayoutStrategy = layoutStrategy
+            };
+
+            sut.Validate();
+            field.ReceivedWithAnyArgs().Validate();
         }
 
     }

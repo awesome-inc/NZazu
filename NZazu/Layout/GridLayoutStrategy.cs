@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -7,6 +8,26 @@ namespace NZazu.Layout
 {
     public class GridLayoutStrategy : INZazuLayoutStrategy
     {
+        private readonly ControlTemplate _errorTemplate;
+
+        public GridLayoutStrategy(ControlTemplate errorTemplate = null)
+        {
+            _errorTemplate = errorTemplate ?? GetDefaultErrorTemplate();
+        }
+
+        private static ControlTemplate GetDefaultErrorTemplate()
+        {
+            if (Application.Current == null || Application.Current.Dispatcher.HasShutdownStarted)
+            {
+                Trace.TraceWarning("No application");
+                return null;
+            }
+
+            var uri = new Uri("pack://application:,,,/NZazu;component/Themes/Generic.xaml", UriKind.Absolute);
+            var resources = new ResourceDictionary { Source = uri };
+            return (ControlTemplate)resources["NZazuErrorTemplate"];
+        }
+
         public void DoLayout(ContentControl container, IEnumerable<INZazuField> fields)
         {
             if (container == null) throw new ArgumentNullException("container");
@@ -25,7 +46,7 @@ namespace NZazu.Layout
                 if (labelElement == null && valueElement == null) continue;
 
                 grid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(28) });
-                
+
                 if (labelElement != null)
                 {
                     Grid.SetColumn(labelElement, 0);
@@ -35,7 +56,7 @@ namespace NZazu.Layout
 
                 if (valueElement != null)
                 {
-                    valueElement.Margin = new Thickness(5, 0, 5, 0);
+                    valueElement.Margin = new Thickness(5, 0, 25, 0);
                     //valueElement.HorizontalAlignment = HorizontalAlignment.Left;
                     valueElement.VerticalAlignment = VerticalAlignment.Center;
 
@@ -43,6 +64,7 @@ namespace NZazu.Layout
                     Grid.SetRow(valueElement, row);
                     grid.Children.Add(valueElement);
 
+                    Validation.SetErrorTemplate(valueElement, _errorTemplate);
                 }
 
                 row++;
