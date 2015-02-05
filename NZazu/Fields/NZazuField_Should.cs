@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Windows.Controls;
+using System.Windows.Data;
 using FluentAssertions;
 using NSubstitute;
 using NUnit.Framework;
@@ -64,14 +65,14 @@ namespace NZazu.Fields
         }
 
         [Test]
-        public void Get_Set_Value_should_do_nothing()
+        public void Set_And_Get_Value()
         {
             var sut = new NZazuField("test");
-            sut.Value.Should().BeEmpty();
+            sut.Value.Should().BeNull();
 
             sut.Value = "test";
 
-            sut.Value.Should().BeEmpty();
+            sut.Value.Should().Be("test");
         }
 
         [Test]
@@ -85,6 +86,8 @@ namespace NZazu.Fields
             sut.ValueControl.Should().NotBeNull();
         }
 
+        #region test NZazuField with bi-directional content property
+
         [Test]
         public void Attach_FieldValidationRule_according_to_checks()
         {
@@ -94,7 +97,11 @@ namespace NZazu.Fields
 
             var sut = new NZazuField_With_Description_As_Content_Property("test") { Description = "description", Checks = new[] { check } };
 
-            var expectedRule = new CheckValidationRule(check);
+            var expectedRule = new CheckValidationRule(check)
+            {
+                // we make sure the validation is executed on init
+                ValidatesOnTargetUpdated = true
+            };
             sut.ValueControl.Should().NotBeNull();
 
             var expression = sut.ValueControl.GetBindingExpression(sut.ContentProperty);
@@ -103,23 +110,12 @@ namespace NZazu.Fields
             // ReSharper disable once PossibleNullReferenceException
             var binding = expression.ParentBinding;
             binding.Should().NotBeNull();
+            binding.Source.Should().Be(sut, because: "we need a source for data binding");
+            binding.Mode.Should().Be(BindingMode.TwoWay, because: "we update databinding in two directions");
+            binding.UpdateSourceTrigger.Should().Be(UpdateSourceTrigger.PropertyChanged, because: "we want validation during edit");
 
             binding.ValidationRules.Single().ShouldBeEquivalentTo(expectedRule);
         }
-
-        #region test NZazuField with bi-directional content property
-
-        [Test]
-        public void Get_Set_Value_should_set_content_if_content_property_set()
-        {
-            var sut = new NZazuField_With_Description_As_Content_Property("test") { Description = "hello there" };
-            sut.Value.Should().Be("hello there");
-
-            sut.Value = "test";
-
-            sut.Value.Should().Be("test");
-        }
-
 
         private class NZazuField_With_Description_As_Content_Property : NZazuField
         {

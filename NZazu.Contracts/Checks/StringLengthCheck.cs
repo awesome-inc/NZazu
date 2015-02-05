@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Globalization;
 
 namespace NZazu.Contracts.Checks
@@ -8,9 +9,8 @@ namespace NZazu.Contracts.Checks
         public int MinimumLength { get; private set; }
         public int MaximumLength { get; private set; }
 
-        public StringLengthCheck(int min) : this(min, int.MaxValue)
-        {
-        }
+        // ReSharper disable IntroduceOptionalParameters.Global
+        public StringLengthCheck(int min) : this(min, int.MaxValue) { }
 
         public StringLengthCheck(int min, int max)
         {
@@ -22,6 +22,9 @@ namespace NZazu.Contracts.Checks
 
         public void Validate(string value, CultureInfo cultureInfo = null)
         {
+            Trace.WriteLine("");
+
+            // todo: we have an implicit required check here. this should be changed to "check length if not null or empty"
             var length = string.IsNullOrEmpty(value) ? 0 : value.Length;
             if (length < MinimumLength)
                 throw new ValidationException(string.Format("The specified string is too short (at least {0} characters)", MinimumLength));

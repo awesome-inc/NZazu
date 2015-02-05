@@ -9,14 +9,6 @@ namespace NZazu.Contracts.Checks
     // ReSharper disable InconsistentNaming
     public class StringLengthCheck_Should
     {
-        private StringLengthCheck _check;
-
-        [SetUp]
-        public void SetUp()
-        {
-            _check = new StringLengthCheck(4, 6);
-        }
-
         [Test]
         public void Ctor_MaxLEQMin_ShouldThrow()
         {
@@ -32,6 +24,7 @@ namespace NZazu.Contracts.Checks
         [Test]
         public void IsValid_BelowMin_Throws_ValidationException()
         {
+            var _check = new StringLengthCheck(4, 6);
             var candidate = new String('A', _check.MinimumLength - 1);
             Assert.Throws<ValidationException>(() => _check.Validate(candidate));
         }
@@ -39,6 +32,7 @@ namespace NZazu.Contracts.Checks
         [Test]
         public void IsValid_AboveMax_Throws_ValidationException()
         {
+            var _check = new StringLengthCheck(4, 6);
             var candidate = new String('A', _check.MaximumLength + 1);
             Assert.Throws<ValidationException>(() => _check.Validate(candidate));
         }
@@ -46,6 +40,7 @@ namespace NZazu.Contracts.Checks
         [Test]
         public void IsValid_InsideMinMax_Should_Pass()
         {
+            var _check = new StringLengthCheck(4, 6);
             Enumerable.Range(_check.MinimumLength, _check.MaximumLength - _check.MinimumLength)
                 .Select(val => new String('A', val))
                 .ToList().ForEach(candidate => _check.Validate(candidate));

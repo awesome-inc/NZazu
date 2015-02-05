@@ -56,7 +56,7 @@ namespace NZazu.Layout
 
                 if (valueElement != null)
                 {
-                    valueElement.Margin = new Thickness(5, 0, 5, 0);
+                    valueElement.Margin = new Thickness(5, 0, 25, 0);
                     //valueElement.HorizontalAlignment = HorizontalAlignment.Left;
                     valueElement.VerticalAlignment = VerticalAlignment.Center;
 
