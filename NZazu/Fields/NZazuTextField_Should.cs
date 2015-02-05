@@ -68,14 +68,14 @@ namespace NZazu.Fields
         public void Get_Set_Value_should_propagate_to_ValueControl_Without_LostFocus()
         {
             var sut = new NZazuTextField("test");
-            sut.Value.Should().BeNull();
+            sut.StringValue.Should().BeNull();
 
-            sut.Value = "test";
-            sut.Value.Should().Be("test");
+            sut.StringValue = "test";
+            sut.StringValue.Should().Be("test");
             ((TextBox)sut.ValueControl).Text.Should().Be("test");
 
             ((TextBox)sut.ValueControl).Text = String.Empty;
-            sut.Value.Should().BeEmpty();
+            sut.StringValue.Should().BeEmpty();
         }
     }
 }

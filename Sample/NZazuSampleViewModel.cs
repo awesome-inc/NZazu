@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Windows;
 using Caliburn.Micro;
+using NZazu;
 using NZazu.Contracts;
 
 namespace Sample
@@ -29,6 +31,14 @@ namespace Sample
         {
             var view = GetView() as NZazuSampleView;
             if (view == null) return;
+
+            var isValid = view.NZazuView.IsValid();
+            if (!isValid)
+            {
+                MessageBox.Show("this view contains invalid data");
+                return;
+            }
+
             view.NZazuView.ApplyChanges();
             FormData = view.NZazuView.FormData;
         }

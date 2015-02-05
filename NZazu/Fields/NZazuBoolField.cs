@@ -1,31 +1,34 @@
+using System;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 
 namespace NZazu.Fields
 {
-    class NZazuBoolField : NZazuField
+    class NZazuBoolField : NZazuField<bool?>
     {
         public NZazuBoolField(string key) : base(key)
         {
             Type = "bool";
+            ContentProperty = ToggleButton.IsCheckedProperty;
+        }
+
+        protected override void SetStringValue(string value)
+        {
+            bool b;
+            if (bool.TryParse(value, out b))
+                Value = b;
+            else
+                Value = null;
+        }
+
+        protected override string GetStringValue()
+        {
+            return Value.HasValue ? Value.Value.ToString() : String.Empty;
         }
 
         protected override Control GetValue()
         {
             return new CheckBox {Content = Hint, ToolTip = Description, IsChecked = null };
-        }
-
-        public override string Value
-        {
-            get { return ((CheckBox) ValueControl).IsChecked.ToString(); }
-            set
-            {
-                var checkBox = ((CheckBox) ValueControl);
-                bool isChecked;
-                if (bool.TryParse(value, out isChecked))
-                    checkBox.IsChecked = isChecked;
-                else
-                    checkBox.IsChecked = null;
-            }
         }
     }
 }

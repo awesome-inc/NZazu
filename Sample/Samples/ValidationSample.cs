@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using NZazu.Contracts;
 using NZazu.Contracts.Checks;
 
@@ -34,11 +35,15 @@ namespace Sample.Samples
                             //Prompt = "Is Admin",
                             Hint = "Is Admin",
                             Description = "Check to grant administrator permissions",
-                            Checks = new [] { new RequiredCheck() }
+                            Checks = new IValueCheck[]
+                            {
+                                new RequiredCheck(), 
+                                new StringRegExCheck("Must be true", new Regex("True"))
+                            }
                         }
                     }
                 },
-                FormData = new Dictionary<string, string> { { "name", "John" }, { "isAdmin", "true" } }
+                FormData = new Dictionary<string, string> { { "name", "John" }, { "isAdmin", "false" } }
             };
         }
     }

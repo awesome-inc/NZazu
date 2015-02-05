@@ -37,7 +37,7 @@ namespace NZazu.Layout
             var sut = new GridLayoutStrategy();
 
             var container = new ContentControl();
-            var fields = new[]
+            var fields = new INZazuField[]
             {
                 new NZazuField("label1") { Prompt="label prompt", Description = "label text"}, 
                 new NZazuTextField("string1") { Prompt="text prompt", Description = "text tooltip"}, 
@@ -70,7 +70,7 @@ namespace NZazu.Layout
             var sut = new GridLayoutStrategy();
 
             var container = new ContentControl();
-            var fields = new[]
+            var fields = new INZazuField[]
             {
                 new NZazuField("label1"),
                 new NZazuTextField("string1"),
@@ -94,7 +94,7 @@ namespace NZazu.Layout
             var sut = new GridLayoutStrategy(expectedTemplate);
 
             var container = new ContentControl();
-            var fields = new[]
+            var fields = new INZazuField[]
             {
                 new NZazuField("label1"),
                 new NZazuTextField("string1"),

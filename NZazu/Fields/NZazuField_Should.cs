@@ -69,11 +69,11 @@ namespace NZazu.Fields
         public void Set_And_Get_Value()
         {
             var sut = new NZazuField("test");
-            sut.Value.Should().BeNull();
+            sut.StringValue.Should().BeNull();
 
-            sut.Value = "test";
+            sut.StringValue = "test";
 
-            sut.Value.Should().Be("test");
+            sut.StringValue.Should().Be("test");
         }
 
         [Test]

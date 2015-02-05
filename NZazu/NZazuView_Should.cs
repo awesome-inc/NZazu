@@ -129,7 +129,7 @@ namespace NZazu
         }
 
         [Test]
-        public void Validate_By_Calling_IValueCheck()
+        public void Validate_By_Calling_INZazuField_Validate()
         {
             var field = Substitute.For<INZazuField>();
             field.Key.ReturnsForAnyArgs("test");

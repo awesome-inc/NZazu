@@ -11,14 +11,15 @@ using NZazu.Contracts.Checks;
 
 namespace NZazu.Fields
 {
-    class NZazuField : INZazuField, INotifyPropertyChanged
+    abstract class NZazuField<T> : INZazuField<T>, INotifyPropertyChanged
     {
         private readonly Lazy<Control> _labelControl;
         private readonly Lazy<Control> _valueControl;
-        private string _value;
+        private T _value;
 
         public string Type { get; protected set; }
-        public NZazuField(string key)
+
+        protected NZazuField(string key)
         {
             if (String.IsNullOrWhiteSpace(key)) throw new ArgumentException("key");
             Key = key;
@@ -33,30 +34,34 @@ namespace NZazu.Fields
         public string Hint { get; protected internal set; }
         public string Description { get; protected internal set; }
 
+        public T Value
+        {
+            get { return _value; }
+            set
+            {
+                _value = value;
+                OnPropertyChanged();
+                // ReSharper disable once ExplicitCallerInfoArgument
+                OnPropertyChanged("StringValue");
+            }
+        }
+
         protected internal DependencyProperty ContentProperty { get; protected set; } // 'internal' required for testing
         protected internal IEnumerable<IValueCheck> Checks { get; set; } // 'internal' required for testing
 
-        // todo: make this more generic so it does not need to be virtual
-        public virtual string Value
+        public string StringValue
         {
-            get
-            {
-                // todo ContentProperty.PropertyType != typeof(string) then... ConvertToString
-                return _value;
-            }
-            set
-            {
-                // todo ContentProperty.PropertyType != typeof(string) then... ConvertFromString
-                if (_value == value) return;
-                _value = value;
-                OnPropertyChanged();
-            }
+            get { return GetStringValue(); }
+            set { SetStringValue(value); }
         }
+
+        protected abstract void SetStringValue(string value);
+        protected abstract string GetStringValue();
 
         public void Validate()
         {
             var safeChecks = Checks == null ? new IValueCheck[] { } : Checks.ToArray();
-            new AggregateCheck(safeChecks).Validate(_value, CultureInfo.CurrentUICulture);
+            new AggregateCheck(safeChecks).Validate(StringValue, CultureInfo.CurrentUICulture);
         }
 
         public Control LabelControl { get { return _labelControl.Value; } }
@@ -94,6 +99,10 @@ namespace NZazu.Fields
                 IsAsync = false,
                 UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged,
             };
+
+            //if (Nullable.GetUnderlyingType(typeof (T)) != null)
+            //    binding.TargetNullValue = default(T);
+
             control.SetBinding(ContentProperty, binding);
 
             if (Checks == null || !Checks.Any()) return control; // no checks, no validation required. saves performance
@@ -106,12 +115,34 @@ namespace NZazu.Fields
             return control;
         }
 
+        protected virtual IValueConverter GetCconverter()
+        {
+            return null;
+        }
+
         public event PropertyChangedEventHandler PropertyChanged = (sender, e) => { };
 
         // ReSharper disable once MemberCanBePrivate.Global
         protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+        }
+    }
+
+    class NZazuField : NZazuField<string>
+    {
+        public NZazuField(string key) : base(key)
+        {
+        }
+
+        protected override void SetStringValue(string value)
+        {
+            Value = value;
+        }
+
+        protected override string GetStringValue()
+        {
+            return Value;
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using NZazu.Contracts;
+using NZazu.Contracts.Checks;
 
 namespace NZazu
 {
@@ -13,6 +14,8 @@ namespace NZazu
 
         INZazuField GetField(string fieldKey);
         void ApplyChanges();
+
+        /// <exception cref="ValidationException"></exception>
         void Validate();
     }
 }

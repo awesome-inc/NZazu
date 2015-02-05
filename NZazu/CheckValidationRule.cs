@@ -19,7 +19,7 @@ namespace NZazu
         {
             try
             {
-                var stringValue = value as string;
+                var stringValue = Convert.ToString(value);
                 _check.Validate(stringValue, cultureInfo);
                 return new ValidationResult(true, null);
             }
