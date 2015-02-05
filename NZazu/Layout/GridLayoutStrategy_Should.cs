@@ -114,5 +114,13 @@ namespace NZazu.Layout
                 .All(f => Validation.GetErrorTemplate(f.ValueControl) == expectedTemplate)
                 .Should().BeTrue();
         }
+
+        [Test]
+        public void Should_support_ThreeState_by_default()
+        {
+            var sut = new NZazuBoolField("test");
+
+            ((CheckBox) sut.ValueControl).IsThreeState.Should().BeTrue();
+        }
     }
 }

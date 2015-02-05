@@ -30,6 +30,19 @@ namespace Sample.Samples
                         },
                         new FieldDefinition
                         {
+                            Key = "email",
+                            Type = "string",
+                            Prompt = "Email",
+                            Hint = "Enter valid e-mail address",
+                            Description = "Your e-mail address",
+                            Checks = new IValueCheck[]
+                            {
+                                new RequiredCheck(), 
+                                new StringRegExCheck("Must be a valid e-mail address", new Regex(@"^.+@.+\..+$", RegexOptions.IgnoreCase))
+                            }
+                        },
+                        new FieldDefinition
+                        {
                             Key = "isAdmin",
                             Type = "bool",
                             //Prompt = "Is Admin",
@@ -37,13 +50,17 @@ namespace Sample.Samples
                             Description = "Check to grant administrator permissions",
                             Checks = new IValueCheck[]
                             {
-                                new RequiredCheck(), 
-                                new StringRegExCheck("Must be true", new Regex("True"))
+                                new StringRegExCheck("Must be Checked or Unchecked", new Regex("True"), new Regex("False"))
                             }
                         }
                     }
                 },
-                FormData = new Dictionary<string, string> { { "name", "John" }, { "isAdmin", "false" } }
+                FormData = new Dictionary<string, string>
+                {
+                    { "name", "John" }, 
+                    { "email", "foobar"},
+                    { "isAdmin", "false" }
+                }
             };
         }
     }
