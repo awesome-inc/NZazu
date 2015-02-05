@@ -14,7 +14,7 @@ namespace NZazu.Layout
         private Application application;
 
         [SetUp]
-        public void CreateApplicationForResources()
+        public void Create_Application_For_Resources()
         {
             if (Application.Current != null) return;
 

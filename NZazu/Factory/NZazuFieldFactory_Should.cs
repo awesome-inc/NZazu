@@ -1,3 +1,5 @@
+using System;
+using System.Windows.Controls;
 using FluentAssertions;
 using NSubstitute;
 using NUnit.Framework;
@@ -7,7 +9,7 @@ using NZazu.Fields;
 
 namespace NZazu.Factory
 {
-    [TestFixture]
+    [TestFixture, RequiresSTA]
     // ReSharper disable InconsistentNaming
     class NZazuFieldFactory_Should
     {
@@ -21,18 +23,23 @@ namespace NZazu.Factory
         }
 
         [Test]
-        [TestCase(null)]
-        [TestCase("label")]
-        [TestCase("string")]
-        [TestCase("bool")]
-        public void Support(string fieldType)
+        [TestCase(null, typeof(Label))]
+        [TestCase("label", typeof(Label))]
+        [TestCase("string", typeof(TextBox))]
+        [TestCase("bool", typeof(CheckBox))]
+        //[TestCase("birthday", "dateTime", "Birthday", "Choose birthday", "Your birthday", typeof (DatePicker))]
+        //[TestCase("weight", "double", "Weight", "Enter body weight (kg)", "Your weight", typeof(TextBox))]
+        public void Support(string fieldType, Type controlType)
         {
             var sut = new NZazuFieldFactory();
 
-            var field = sut.CreateField(new FieldDefinition { Key = "test", Type = fieldType });
+            var field = sut.CreateField(new FieldDefinition { Key = "test", Type = fieldType, Description = "test"});
 
             field.Should().NotBeNull();
             field.Type.Should().Be(fieldType ?? "label"); // because of the fallback in case of null
+
+            var control = field.ValueControl;
+            control.Should().BeOfType(controlType);
         }
 
         [Test]
