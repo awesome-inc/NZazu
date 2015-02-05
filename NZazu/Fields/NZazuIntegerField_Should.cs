@@ -51,6 +51,10 @@ namespace NZazu.Fields
             sut.Value = -23;
             textBox.Text.Should().Be("-23");
 
+            sut.Value = null;
+            textBox.Text.Should().Be(string.Empty);
+
+
             textBox.Text = "7";
             sut.Value.Should().Be(7);
 
@@ -60,6 +64,9 @@ namespace NZazu.Fields
             textBox.Text = "foo bar";
             new Action(sut.Validate).Invoking(a => a()).ShouldThrow<ValidationException>();
             sut.Value.Should().Be(-12, because: "WPF binding cannot sync value");
+
+            textBox.Text = "";
+            sut.Value.Should().NotHaveValue();
         }
 
         [Test]
@@ -78,6 +85,10 @@ namespace NZazu.Fields
             sut.StringValue = "-23";
             textBox.Text.Should().Be("-23");
 
+            sut.StringValue = null;
+            textBox.Text.Should().Be(string.Empty);
+
+
             textBox.Text = "7";
             sut.StringValue.Should().Be("7");
 
@@ -87,6 +98,12 @@ namespace NZazu.Fields
             textBox.Text = "foo bar";
             new Action(sut.Validate).Invoking(a => a()).ShouldThrow<ValidationException>();
             sut.StringValue.Should().Be("-12", because: "WPF binding cannot sync value");
+
+            textBox.Text = "";
+            sut.StringValue.Should().Be("");
+
+            textBox.Text = null;
+            sut.StringValue.Should().Be(String.Empty);
         }
     }
 }

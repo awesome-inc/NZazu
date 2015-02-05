@@ -61,7 +61,7 @@ namespace NZazu.Fields
             return DecorateValidation(control);
         }
 
-        private Control DecorateValidation(Control control)
+        protected virtual Control DecorateValidation(Control control)
         {
             if (control == null) return null;
             if (ContentProperty == null) return control; // because no validation if no content!
@@ -79,7 +79,7 @@ namespace NZazu.Fields
                 IsAsync = false,
                 UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged,
             };
-
+            binding = DecorateBinding(binding);
             control.SetBinding(ContentProperty, binding);
 
             if (Checks == null || !Checks.Any()) return control; // no checks, no validation required. saves performance
@@ -91,6 +91,13 @@ namespace NZazu.Fields
 
             return control;
         }
+
+        /// <summary>
+        /// binding needs to be changed by subclasses for example if the Nullable-binding should be set.
+        /// </summary>
+        /// <param name="binding"></param>
+        /// <returns></returns>
+        protected virtual Binding DecorateBinding(Binding binding) { return binding; }
     }
 
     abstract class NZazuField<T> : NZazuField, INZazuField<T>, INotifyPropertyChanged
@@ -130,5 +137,14 @@ namespace NZazu.Fields
         {
             PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
         }
+
+        protected override Binding DecorateBinding(Binding binding)
+        {
+            if (Nullable.GetUnderlyingType(typeof(T)) == null) return binding;
+
+            binding.TargetNullValue = string.Empty;
+            return binding;
+        }
+
     }
 }
