@@ -1,22 +1,24 @@
-﻿using System.Windows.Controls;
+﻿using System.Windows;
+using System.Windows.Controls;
 
 namespace NZazu.Fields
 {
-    class NZazuTextField : NZazuField
+    class NZazuTextField : NZazuField<string>
     {
         public NZazuTextField(string key) : base(key)
         {
-            Type = "string";
-            ContentProperty = TextBox.TextProperty;
         }
 
-        protected override Control GetValue()
+        protected override void SetStringValue(string value) { Value = value; }
+        protected override string GetStringValue() { return Value; }
+
+        public override string Type { get { return "string"; } }
+
+        protected internal override DependencyProperty ContentProperty
         {
-            return new TextBox
-            {
-                //Text = Hint, 
-                ToolTip = Description
-            };
+            get { return TextBox.TextProperty; }
         }
+
+        protected override Control GetValue() { return new TextBox { ToolTip = Description }; }
     }
 }

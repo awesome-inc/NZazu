@@ -17,7 +17,7 @@ namespace NZazu.Factory
                 case "bool": return Decorate(new NZazuBoolField(fieldDefinition.Key), fieldDefinition);
                 case "label":
                 default:
-                    var field = Decorate(new NZazuField(fieldDefinition.Key), fieldDefinition);
+                    var field = Decorate(new NZazuLabelField(fieldDefinition.Key), fieldDefinition);
                     if (fieldDefinition.Type != "label")
                         //throw new NotSupportedException("The specified field type is not supported: " + fieldDefinition.Type);
                         Trace.TraceWarning("The specified field type is not supported: " + fieldDefinition.Type);
@@ -25,7 +25,7 @@ namespace NZazu.Factory
             }
         }
 
-        private static NZazuField<T> Decorate<T>(NZazuField<T> field, FieldDefinition fieldDefinition)
+        private static NZazuField Decorate(NZazuField field, FieldDefinition fieldDefinition)
         {
             field.Prompt = fieldDefinition.Prompt;
             field.Hint = fieldDefinition.Hint;

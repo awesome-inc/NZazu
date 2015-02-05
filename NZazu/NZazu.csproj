@@ -68,6 +68,8 @@
     </Compile>
     <Compile Include="CheckValidationRule_Should.cs" />
     <Compile Include="Fields\NZazuBoolField_Should.cs" />
+    <Compile Include="Fields\NZazuField.cs" />
+    <Compile Include="Fields\NZazuField_Should.cs" />
     <Compile Include="Fields\NZazuTextField_Should.cs" />
     <Compile Include="CheckValidationRule.cs" />
     <Compile Include="Layout\GridLayoutStrategy.cs" />
@@ -76,10 +78,10 @@
     <Compile Include="INZazuLayoutStrategy.cs" />
     <Compile Include="INZazuView.cs" />
     <Compile Include="Fields\NZazuBoolField.cs" />
-    <Compile Include="Fields\NZazuField.cs" />
+    <Compile Include="Fields\NZazuLabelField.cs" />
     <Compile Include="Layout\GridLayoutStrategy_Should.cs" />
     <Compile Include="Factory\NZazuFieldFactory.cs" />
-    <Compile Include="Fields\NZazuField_Should.cs" />
+    <Compile Include="Fields\NZazuLabelField_Should.cs" />
     <Compile Include="Fields\NZazuTextField.cs" />
     <Compile Include="Factory\NZazuFieldFactory_Should.cs" />
     <Compile Include="Layout\GridLayoutStrategy_Without_Application_Should.cs" />

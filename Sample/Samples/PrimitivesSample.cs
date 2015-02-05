@@ -19,6 +19,12 @@ namespace Sample.Samples
                     {
                         new FieldDefinition
                         {
+                            Key = "caption",
+                            Type = "label",
+                            Description = "A fancy caption!"
+                        },
+                        new FieldDefinition
+                        {
                             Key = "settings",
                             Type = "label",
                             Prompt = "Settings",

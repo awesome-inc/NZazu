@@ -1,4 +1,5 @@
 using System;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 
@@ -6,11 +7,7 @@ namespace NZazu.Fields
 {
     class NZazuBoolField : NZazuField<bool?>
     {
-        public NZazuBoolField(string key) : base(key)
-        {
-            Type = "bool";
-            ContentProperty = ToggleButton.IsCheckedProperty;
-        }
+        public NZazuBoolField(string key) : base(key) { }
 
         protected override void SetStringValue(string value)
         {
@@ -25,6 +22,9 @@ namespace NZazu.Fields
         {
             return Value.HasValue ? Value.Value.ToString() : String.Empty;
         }
+
+        public override string Type { get { return "bool"; } }
+        protected internal override DependencyProperty ContentProperty { get { return ToggleButton.IsCheckedProperty; } }
 
         protected override Control GetValue()
         {

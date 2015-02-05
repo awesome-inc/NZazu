@@ -11,52 +11,31 @@ using NZazu.Contracts.Checks;
 
 namespace NZazu.Fields
 {
-    abstract class NZazuField<T> : INZazuField<T>, INotifyPropertyChanged
+    abstract class NZazuField : INZazuField
     {
         private readonly Lazy<Control> _labelControl;
         private readonly Lazy<Control> _valueControl;
-        private T _value;
-
-        public string Type { get; protected set; }
 
         protected NZazuField(string key)
         {
             if (String.IsNullOrWhiteSpace(key)) throw new ArgumentException("key");
             Key = key;
-            Type = "label";
 
             _labelControl = new Lazy<Control>(GetLabelControl);
             _valueControl = new Lazy<Control>(GetValueControl);
         }
 
+        public abstract string StringValue { get; set; }
+        protected abstract internal DependencyProperty ContentProperty { get; } // 'internal' required for testing
+
+        public abstract string Type { get; }
         public string Key { get; private set; }
         public string Prompt { get; protected internal set; }
         public string Hint { get; protected internal set; }
         public string Description { get; protected internal set; }
 
-        public T Value
-        {
-            get { return _value; }
-            set
-            {
-                _value = value;
-                OnPropertyChanged();
-                // ReSharper disable once ExplicitCallerInfoArgument
-                OnPropertyChanged("StringValue");
-            }
-        }
-
-        protected internal DependencyProperty ContentProperty { get; protected set; } // 'internal' required for testing
-        protected internal IEnumerable<IValueCheck> Checks { get; set; } // 'internal' required for testing
-
-        public string StringValue
-        {
-            get { return GetStringValue(); }
-            set { SetStringValue(value); }
-        }
-
-        protected abstract void SetStringValue(string value);
-        protected abstract string GetStringValue();
+        public Control LabelControl { get { return _labelControl.Value; } }
+        public Control ValueControl { get { return _valueControl.Value; } }
 
         public void Validate()
         {
@@ -64,11 +43,10 @@ namespace NZazu.Fields
             new AggregateCheck(safeChecks).Validate(StringValue, CultureInfo.CurrentUICulture);
         }
 
-        public Control LabelControl { get { return _labelControl.Value; } }
-        public Control ValueControl { get { return _valueControl.Value; } }
+        protected internal IEnumerable<IValueCheck> Checks { get; set; } // 'internal' required for testing
 
         protected virtual Control GetLabel() { return !String.IsNullOrWhiteSpace(Prompt) ? new Label { Content = Prompt } : null; }
-        protected virtual Control GetValue() { return !String.IsNullOrWhiteSpace(Description) ? new Label { Content = Description } : null; }
+        protected abstract Control GetValue();
 
         private Control GetLabelControl()
         {
@@ -100,9 +78,6 @@ namespace NZazu.Fields
                 UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged,
             };
 
-            //if (Nullable.GetUnderlyingType(typeof (T)) != null)
-            //    binding.TargetNullValue = default(T);
-
             control.SetBinding(ContentProperty, binding);
 
             if (Checks == null || !Checks.Any()) return control; // no checks, no validation required. saves performance
@@ -114,6 +89,36 @@ namespace NZazu.Fields
 
             return control;
         }
+    }
+
+    abstract class NZazuField<T> : NZazuField, INZazuField<T>, INotifyPropertyChanged
+    {
+        private T _value;
+
+        protected NZazuField(string key) : base(key)
+        {
+        }
+
+        public T Value
+        {
+            get { return _value; }
+            set
+            {
+                _value = value;
+                OnPropertyChanged();
+                // ReSharper disable once ExplicitCallerInfoArgument
+                OnPropertyChanged("StringValue");
+            }
+        }
+
+        public override string StringValue
+        {
+            get { return GetStringValue(); }
+            set { SetStringValue(value); }
+        }
+
+        protected abstract void SetStringValue(string value);
+        protected abstract string GetStringValue();
 
         public event PropertyChangedEventHandler PropertyChanged = (sender, e) => { };
 
@@ -121,23 +126,6 @@ namespace NZazu.Fields
         protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-        }
-    }
-
-    class NZazuField : NZazuField<string>
-    {
-        public NZazuField(string key) : base(key)
-        {
-        }
-
-        protected override void SetStringValue(string value)
-        {
-            Value = value;
-        }
-
-        protected override string GetStringValue()
-        {
-            return Value;
         }
     }
 }
