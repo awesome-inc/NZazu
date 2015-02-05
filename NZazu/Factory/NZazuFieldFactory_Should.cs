@@ -27,19 +27,34 @@ namespace NZazu.Factory
         [TestCase("label", typeof(Label))]
         [TestCase("string", typeof(TextBox))]
         [TestCase("bool", typeof(CheckBox))]
-        //[TestCase("birthday", "dateTime", "Birthday", "Choose birthday", "Your birthday", typeof (DatePicker))]
-        //[TestCase("weight", "double", "Weight", "Enter body weight (kg)", "Your weight", typeof(TextBox))]
+        [TestCase("int", typeof(TextBox))]
+        //[TestCase("double", typeof(TextBox))]
+        //[TestCase("dateTime", typeof (DatePicker))]
         public void Support(string fieldType, Type controlType)
         {
             var sut = new NZazuFieldFactory();
 
-            var field = sut.CreateField(new FieldDefinition { Key = "test", Type = fieldType, Description = "test"});
+            var field = sut.CreateField(new FieldDefinition { Key = "test", Type = fieldType, Description = "test" });
 
             field.Should().NotBeNull();
             field.Type.Should().Be(fieldType ?? "label"); // because of the fallback in case of null
 
             var control = field.ValueControl;
             control.Should().BeOfType(controlType);
+        }
+
+        [Test]
+        public void Return_Label_If_Not_Supported()
+        {
+            var sut = new NZazuFieldFactory();
+
+            var field = sut.CreateField(new FieldDefinition { Key = "test", Type = "I am a not supported label", Description = "test" });
+
+            field.Should().NotBeNull();
+            field.Type.Should().Be("label", because: "the fallback is label"); // because of the fallback in case of null
+
+            var control = field.ValueControl;
+            control.Should().BeOfType<Label>();
         }
 
         [Test]

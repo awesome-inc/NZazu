@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using NZazu.Contracts;
 using NZazu.Fields;
@@ -7,22 +8,32 @@ namespace NZazu.Factory
 {
     class NZazuFieldFactory : INZazuFieldFactory
     {
+        private readonly Dictionary<string, Type> _fieldTypes = new Dictionary<string, Type>();
+        private const string DefaultType = "label";
+
+        public NZazuFieldFactory()
+        {
+            _fieldTypes.Add("label", typeof(NZazuLabelField));
+            _fieldTypes.Add("string", typeof(NZazuTextField));
+            _fieldTypes.Add("bool", typeof(NZazuBoolField));
+            _fieldTypes.Add("int", typeof(NZazuIntegerField));
+        }
+
         public INZazuField CreateField(FieldDefinition fieldDefinition)
         {
             if (fieldDefinition == null) throw new ArgumentNullException("fieldDefinition");
+            var fieldTypeSafe = fieldDefinition.Type ?? DefaultType;
 
-            switch (fieldDefinition.Type)
+            NZazuField field;
+            if (_fieldTypes.ContainsKey(fieldTypeSafe))
+                field = (NZazuField)Activator.CreateInstance(_fieldTypes[fieldTypeSafe], fieldDefinition.Key);
+            else
             {
-                case "string": return Decorate(new NZazuTextField(fieldDefinition.Key), fieldDefinition);
-                case "bool": return Decorate(new NZazuBoolField(fieldDefinition.Key), fieldDefinition);
-                case "label":
-                default:
-                    var field = Decorate(new NZazuLabelField(fieldDefinition.Key), fieldDefinition);
-                    if (fieldDefinition.Type != "label")
-                        //throw new NotSupportedException("The specified field type is not supported: " + fieldDefinition.Type);
-                        Trace.TraceWarning("The specified field type is not supported: " + fieldDefinition.Type);
-                    return field;
+                Trace.TraceWarning("The specified field type is not supported: " + fieldTypeSafe);
+                field = (NZazuField)Activator.CreateInstance(_fieldTypes[DefaultType], fieldDefinition.Key);
             }
+
+            return Decorate(field, fieldDefinition);
         }
 
         private static NZazuField Decorate(NZazuField field, FieldDefinition fieldDefinition)
