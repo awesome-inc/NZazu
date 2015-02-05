@@ -4,6 +4,7 @@ using FluentAssertions;
 using NSubstitute;
 using NUnit.Framework;
 using NZazu.Contracts;
+using NZazu.Contracts.Checks;
 
 namespace NZazu
 {
@@ -18,6 +19,7 @@ namespace NZazu
             var sut = new NZazuView();
 
             sut.Should().NotBeNull();
+            sut.Should().BeAssignableTo<INZazuView>();
         }
 
         [Test]
@@ -115,7 +117,7 @@ namespace NZazu
             const string key = "name";
             const string value = "John";
 
-            var formDefinition = new FormDefinition { Fields = new[] { new FieldDefinition { Key = key, Type = "string"} } };
+            var formDefinition = new FormDefinition { Fields = new[] { new FieldDefinition { Key = key, Type = "string" } } };
             view.FormDefinition = formDefinition;
 
             var input = new Dictionary<string, string> { { key, value } };
@@ -125,5 +127,26 @@ namespace NZazu
             view.ApplyChanges();
             view.FormData.ShouldBeEquivalentTo(input);
         }
+
+        [Test]
+        public void Validate_By_Calling_IValueCheck()
+        {
+            var field = Substitute.For<INZazuField>();
+            field.Key.ReturnsForAnyArgs("test");
+            var fieldFactory = Substitute.For<INZazuFieldFactory>();
+            var layoutStrategy = Substitute.For<INZazuLayoutStrategy>();
+            fieldFactory.CreateField(Arg.Any<FieldDefinition>()).Returns(field);
+
+            var sut = new NZazuView
+            {
+                FormDefinition = new FormDefinition {Fields = new [] {new FieldDefinition {Key = "test"}}},
+                FieldFactory = fieldFactory,
+                LayoutStrategy = layoutStrategy
+            };
+
+            sut.Validate();
+            field.ReceivedWithAnyArgs().Validate();
+        }
+
     }
 }

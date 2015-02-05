@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using System.Linq;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -84,6 +85,27 @@ namespace NZazu.Fields
             var sut = new NZazuField("test") { Description = "description", Checks = new[] { check } };
             sut.ContentProperty.Should().BeNull();
             sut.ValueControl.Should().NotBeNull();
+        }
+
+        [Test]
+        public void Pass_Validation_To_Checks()
+        {
+            var check = Substitute.For<IValueCheck>();
+            var sut = new NZazuField("test") { Description = "description", Checks = new[] { check } };
+            sut.Validate();
+
+            check.ReceivedWithAnyArgs().Validate(Arg.Any<string>());
+        }
+
+        [Test]
+        public void Pass_Validation_To_Checks_And_Rethorow_Exception()
+        {
+            var check = Substitute.For<IValueCheck>();
+            check.When(x => x.Validate(Arg.Any<string>(), CultureInfo.CurrentUICulture)).Do(x => { throw new ValidationException("test"); });
+
+            var sut = new NZazuField("test") { Description = "description", Checks = new[] { check } };
+            new Action(sut.Validate).Invoking(a => a()).ShouldThrow<ValidationException>();
+            check.ReceivedWithAnyArgs().Validate(Arg.Any<string>());
         }
 
         #region test NZazuField with bi-directional content property

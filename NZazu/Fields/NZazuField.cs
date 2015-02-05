@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
@@ -40,20 +41,22 @@ namespace NZazu.Fields
         {
             get
             {
-                return _value;
                 // todo ContentProperty.PropertyType != typeof(string) then... ConvertToString
-                //if (ContentProperty == null) return String.Empty;
-                //return (string)ValueControl.GetValue(ContentProperty);
+                return _value;
             }
             set
             {
+                // todo ContentProperty.PropertyType != typeof(string) then... ConvertFromString
                 if (_value == value) return;
                 _value = value;
                 OnPropertyChanged();
-                // todo ContentProperty.PropertyType != typeof(string) then... ConvertFromString
-                //if (ContentProperty == null) return;
-                //ValueControl.SetValue(ContentProperty, value); // TODO issues with non-string fields like numeric
             }
+        }
+
+        public void Validate()
+        {
+            var safeChecks = Checks == null ? new IValueCheck[] { } : Checks.ToArray();
+            new AggregateCheck(safeChecks).Validate(_value, CultureInfo.CurrentUICulture);
         }
 
         public Control LabelControl { get { return _labelControl.Value; } }
@@ -96,8 +99,9 @@ namespace NZazu.Fields
             if (Checks == null || !Checks.Any()) return control; // no checks, no validation required. saves performance
 
             var safeChecks = Checks == null ? new IValueCheck[] { } : Checks.ToArray();
+            var aggregateCheck = new AggregateCheck(safeChecks);
             binding.ValidationRules.Clear();
-            binding.ValidationRules.Add(new CheckValidationRule(new AggregateCheck(safeChecks)) { ValidatesOnTargetUpdated = true });
+            binding.ValidationRules.Add(new CheckValidationRule(aggregateCheck) { ValidatesOnTargetUpdated = true });
 
             return control;
         }

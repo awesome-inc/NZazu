@@ -13,5 +13,6 @@ namespace NZazu
 
         INZazuField GetField(string fieldKey);
         void ApplyChanges();
+        void Validate();
     }
 }
