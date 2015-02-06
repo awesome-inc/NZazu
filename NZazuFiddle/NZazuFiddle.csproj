@@ -74,10 +74,6 @@
     </ApplicationDefinition>
     <Compile Include="FormDefinitionConverter.cs" />
     <Compile Include="FormDataConverter.cs" />
-    <Compile Include="FormDataViewModel.cs" />
-    <Compile Include="FormDefinitionViewModel.cs" />
-    <Compile Include="IFormDataViewModel.cs" />
-    <Compile Include="IFormDefinitionViewModel.cs" />
     <Compile Include="ShellView.xaml.cs">
       <DependentUpon>ShellView.xaml</DependentUpon>
     </Compile>
