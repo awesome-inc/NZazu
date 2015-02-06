@@ -11,64 +11,44 @@ using NZazu.Contracts.Checks;
 
 namespace NZazu.Fields
 {
-    abstract class NZazuField<T> : INZazuField<T>, INotifyPropertyChanged
+    abstract class NZazuField : INZazuField
     {
         private readonly Lazy<Control> _labelControl;
         private readonly Lazy<Control> _valueControl;
-        private T _value;
-
-        public string Type { get; protected set; }
 
         protected NZazuField(string key)
         {
             if (String.IsNullOrWhiteSpace(key)) throw new ArgumentException("key");
             Key = key;
-            Type = "label";
 
             _labelControl = new Lazy<Control>(GetLabelControl);
             _valueControl = new Lazy<Control>(GetValueControl);
         }
 
+        public abstract string StringValue { get; set; }
+        protected abstract internal DependencyProperty ContentProperty { get; } // 'internal' required for testing
+
+        public abstract string Type { get; }
         public string Key { get; private set; }
         public string Prompt { get; protected internal set; }
         public string Hint { get; protected internal set; }
         public string Description { get; protected internal set; }
 
-        public T Value
-        {
-            get { return _value; }
-            set
-            {
-                _value = value;
-                OnPropertyChanged();
-                // ReSharper disable once ExplicitCallerInfoArgument
-                OnPropertyChanged("StringValue");
-            }
-        }
-
-        protected internal DependencyProperty ContentProperty { get; protected set; } // 'internal' required for testing
-        protected internal IEnumerable<IValueCheck> Checks { get; set; } // 'internal' required for testing
-
-        public string StringValue
-        {
-            get { return GetStringValue(); }
-            set { SetStringValue(value); }
-        }
-
-        protected abstract void SetStringValue(string value);
-        protected abstract string GetStringValue();
+        public Control LabelControl { get { return _labelControl.Value; } }
+        public Control ValueControl { get { return _valueControl.Value; } }
 
         public void Validate()
         {
+            var bindingExpression = ContentProperty == null ? null : ValueControl.GetBindingExpression(ContentProperty);
+            if (bindingExpression != null && bindingExpression.HasError) throw new ValidationException("UI has errors. Value could not be converted");
             var safeChecks = Checks == null ? new IValueCheck[] { } : Checks.ToArray();
             new AggregateCheck(safeChecks).Validate(StringValue, CultureInfo.CurrentUICulture);
         }
 
-        public Control LabelControl { get { return _labelControl.Value; } }
-        public Control ValueControl { get { return _valueControl.Value; } }
+        protected internal IEnumerable<IValueCheck> Checks { get; set; } // 'internal' required for testing
 
         protected virtual Control GetLabel() { return !String.IsNullOrWhiteSpace(Prompt) ? new Label { Content = Prompt } : null; }
-        protected virtual Control GetValue() { return !String.IsNullOrWhiteSpace(Description) ? new Label { Content = Description } : null; }
+        protected abstract Control GetValue();
 
         private Control GetLabelControl()
         {
@@ -81,7 +61,7 @@ namespace NZazu.Fields
             return DecorateValidation(control);
         }
 
-        private Control DecorateValidation(Control control)
+        protected virtual Control DecorateValidation(Control control)
         {
             if (control == null) return null;
             if (ContentProperty == null) return control; // because no validation if no content!
@@ -99,10 +79,7 @@ namespace NZazu.Fields
                 IsAsync = false,
                 UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged,
             };
-
-            //if (Nullable.GetUnderlyingType(typeof (T)) != null)
-            //    binding.TargetNullValue = default(T);
-
+            binding = DecorateBinding(binding);
             control.SetBinding(ContentProperty, binding);
 
             if (Checks == null || !Checks.Any()) return control; // no checks, no validation required. saves performance
@@ -115,6 +92,44 @@ namespace NZazu.Fields
             return control;
         }
 
+        /// <summary>
+        /// binding needs to be changed by subclasses for example if the Nullable-binding should be set.
+        /// </summary>
+        /// <param name="binding"></param>
+        /// <returns></returns>
+        protected virtual Binding DecorateBinding(Binding binding) { return binding; }
+    }
+
+    abstract class NZazuField<T> : NZazuField, INZazuField<T>, INotifyPropertyChanged
+    {
+        private T _value;
+
+        protected NZazuField(string key)
+            : base(key)
+        {
+        }
+
+        public T Value
+        {
+            get { return _value; }
+            set
+            {
+                _value = value;
+                OnPropertyChanged();
+                // ReSharper disable once ExplicitCallerInfoArgument
+                OnPropertyChanged("StringValue");
+            }
+        }
+
+        public override string StringValue
+        {
+            get { return GetStringValue(); }
+            set { SetStringValue(value); }
+        }
+
+        protected abstract void SetStringValue(string value);
+        protected abstract string GetStringValue();
+
         public event PropertyChangedEventHandler PropertyChanged = (sender, e) => { };
 
         // ReSharper disable once MemberCanBePrivate.Global
@@ -122,22 +137,14 @@ namespace NZazu.Fields
         {
             PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
         }
-    }
 
-    class NZazuField : NZazuField<string>
-    {
-        public NZazuField(string key) : base(key)
+        protected override Binding DecorateBinding(Binding binding)
         {
+            if (Nullable.GetUnderlyingType(typeof(T)) == null) return binding;
+
+            binding.TargetNullValue = string.Empty;
+            return binding;
         }
 
-        protected override void SetStringValue(string value)
-        {
-            Value = value;
-        }
-
-        protected override string GetStringValue()
-        {
-            return Value;
-        }
     }
 }

@@ -5,10 +5,10 @@ namespace NZazu.Contracts.Checks
 {
     public class RangeCheck : IValueCheck
     {
-        public int Minimum { get; private set; }
-        public int Maximum { get; private set; }
+        public double Minimum { get; private set; }
+        public double Maximum { get; private set; }
 
-        public RangeCheck(int min, int max)
+        public RangeCheck(double min, double max)
         {
             if (max.CompareTo(min) < 0) throw new ArgumentOutOfRangeException(String.Format("min={0} must be less than or equal to max={1}.", min, max));
             Minimum = min;
@@ -20,8 +20,8 @@ namespace NZazu.Contracts.Checks
             try
             {
                 var safeCultureInfo = cultureInfo ?? CultureInfo.InvariantCulture;
-                var intVal = int.Parse(value, safeCultureInfo);
-                if (intVal < Minimum || intVal > Maximum)
+                var val = double.Parse(value, safeCultureInfo);
+                if (val < Minimum || val > Maximum)
                     throw new ValidationException(string.Format("The specified value must be between {0} and {1}",
                         Minimum, Maximum));
             }

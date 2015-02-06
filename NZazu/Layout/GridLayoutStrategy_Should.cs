@@ -14,7 +14,7 @@ namespace NZazu.Layout
         private Application application;
 
         [SetUp]
-        public void CreateApplicationForResources()
+        public void Create_Application_For_Resources()
         {
             if (Application.Current != null) return;
 
@@ -37,9 +37,9 @@ namespace NZazu.Layout
             var sut = new GridLayoutStrategy();
 
             var container = new ContentControl();
-            var fields = new INZazuField[]
+            var fields = new NZazuField[]
             {
-                new NZazuField("label1") { Prompt="label prompt", Description = "label text"}, 
+                new NZazuLabelField("label1") { Prompt="label prompt", Description = "label text"}, 
                 new NZazuTextField("string1") { Prompt="text prompt", Description = "text tooltip"}, 
                 new NZazuBoolField("bool1") { Prompt="bool prompt", Description = "checkbox tooltip"}
             };
@@ -70,9 +70,9 @@ namespace NZazu.Layout
             var sut = new GridLayoutStrategy();
 
             var container = new ContentControl();
-            var fields = new INZazuField[]
+            var fields = new NZazuField[]
             {
-                new NZazuField("label1"),
+                new NZazuLabelField("label1"),
                 new NZazuTextField("string1"),
                 new NZazuBoolField("bool1")
             };
@@ -94,9 +94,9 @@ namespace NZazu.Layout
             var sut = new GridLayoutStrategy(expectedTemplate);
 
             var container = new ContentControl();
-            var fields = new INZazuField[]
+            var fields = new NZazuField[]
             {
-                new NZazuField("label1"),
+                new NZazuLabelField("label1"),
                 new NZazuTextField("string1"),
                 new NZazuBoolField("bool1")
             };

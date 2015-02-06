@@ -1,6 +1,8 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using FluentAssertions;
@@ -15,25 +17,55 @@ namespace NZazu.Fields
     // ReSharper disable InconsistentNaming
     class NZazuField_Should
     {
+        #region Test fields to verify base class
+
+        [ExcludeFromCodeCoverage]
+        private class NZazuDummyField : NZazuField
+        {
+            public NZazuDummyField(string key)
+                : base(key)
+            {
+            }
+
+            public override string StringValue { get; set; }
+            public override string Type { get { return null; } }
+            protected internal override DependencyProperty ContentProperty { get { return null; } }
+            protected override Control GetValue() { return null; }
+        }
+
+        private class NZazuField_With_Description_As_Content_Property : NZazuDummyField
+        {
+            public NZazuField_With_Description_As_Content_Property(string key)
+                : base(key)
+            {
+            }
+
+            protected internal override DependencyProperty ContentProperty { get { return ContentControl.ContentProperty; } }
+            protected override Control GetValue() { return new ContentControl(); }
+        }
+
+        #endregion
+
         [Test]
         public void Validate_ctor_parameters()
         {
-            new Action(() => new NZazuField("")).Invoking(a => a.Invoke()).ShouldThrow<ArgumentException>();
-            new Action(() => new NZazuField(null)).Invoking(a => a.Invoke()).ShouldThrow<ArgumentException>();
-            new Action(() => new NZazuField("\t\r\n ")).Invoking(a => a.Invoke()).ShouldThrow<ArgumentException>();
+            new Action(() => new NZazuDummyField("")).Invoking(a => a.Invoke()).ShouldThrow<ArgumentException>();
+            new Action(() => new NZazuDummyField(null)).Invoking(a => a.Invoke()).ShouldThrow<ArgumentException>();
+            new Action(() => new NZazuDummyField("\t\r\n ")).Invoking(a => a.Invoke()).ShouldThrow<ArgumentException>();
         }
 
         [Test]
-        public void Not_Create_Empty_Label()
+        public void Not_Create_Label_if_no_prompt()
         {
-            var sut = new NZazuField("test");
+            var sut = new NZazuDummyField("test");
+            sut.Prompt.Should().BeNullOrWhiteSpace();
             sut.LabelControl.Should().BeNull();
         }
 
         [Test]
         public void Create_Label_Matching_Prompt()
         {
-            var sut = new NZazuField("test")
+            var sut = new NZazuDummyField("test")
             {
                 Prompt = "superhero"
             };
@@ -44,31 +76,9 @@ namespace NZazu.Fields
         }
 
         [Test]
-        public void Create_ValueControl_Matching_Description()
-        {
-            var sut = new NZazuField("test")
-            {
-                Description = "superhero is alive"
-            };
-
-            var label = (Label)sut.ValueControl;
-            label.Should().NotBeNull();
-            label.Content.Should().Be(sut.Description);
-        }
-
-        [Test]
-        public void Not_Create_ValueControl_On_Empty_Description()
-        {
-            var sut = new NZazuField("test");
-
-            var label = (Label)sut.ValueControl;
-            label.Should().BeNull();
-        }
-
-        [Test]
         public void Set_And_Get_Value()
         {
-            var sut = new NZazuField("test");
+            var sut = new NZazuDummyField("test");
             sut.StringValue.Should().BeNull();
 
             sut.StringValue = "test";
@@ -77,38 +87,27 @@ namespace NZazu.Fields
         }
 
         [Test]
-        public void Not_Attach_FieldValidationRule_if_no_ContentProperty_set()
-        {
-            var check = Substitute.For<IValueCheck>();
-            check.When(x => x.Validate(Arg.Any<string>())).Do(x => { throw new ValidationException("test"); });
-
-            var sut = new NZazuField("test") { Description = "description", Checks = new[] { check } };
-            sut.ContentProperty.Should().BeNull();
-            sut.ValueControl.Should().NotBeNull();
-        }
-
-        [Test]
         public void Pass_Validation_To_Checks()
         {
             var check = Substitute.For<IValueCheck>();
-            var sut = new NZazuField("test") { Description = "description", Checks = new[] { check } };
+            var sut = new NZazuDummyField("test") { Description = "description", Checks = new[] { check } };
             sut.Validate();
 
             check.ReceivedWithAnyArgs().Validate(Arg.Any<string>());
         }
 
         [Test]
-        public void Pass_Validation_To_Checks_And_Rethorow_Exception()
+        public void Pass_Validation_To_Checks_And_Rethrow_Exception()
         {
             var check = Substitute.For<IValueCheck>();
             check.When(x => x.Validate(Arg.Any<string>(), CultureInfo.CurrentUICulture)).Do(x => { throw new ValidationException("test"); });
 
-            var sut = new NZazuField("test") { Description = "description", Checks = new[] { check } };
+            var sut = new NZazuDummyField("test") { Description = "description", Checks = new[] { check } };
             new Action(sut.Validate).Invoking(a => a()).ShouldThrow<ValidationException>();
             check.ReceivedWithAnyArgs().Validate(Arg.Any<string>());
         }
 
-        #region test NZazuField with bi-directional content property
+        #region test NZazuDummyField with bi-directional content property
 
         [Test]
         public void Attach_FieldValidationRule_according_to_checks()
@@ -137,15 +136,6 @@ namespace NZazu.Fields
             binding.UpdateSourceTrigger.Should().Be(UpdateSourceTrigger.PropertyChanged, because: "we want validation during edit");
 
             binding.ValidationRules.Single().ShouldBeEquivalentTo(expectedRule);
-        }
-
-        private class NZazuField_With_Description_As_Content_Property : NZazuField
-        {
-            public NZazuField_With_Description_As_Content_Property(string key)
-                : base(key)
-            {
-                ContentProperty = ContentControl.ContentProperty;
-            }
         }
 
         #endregion

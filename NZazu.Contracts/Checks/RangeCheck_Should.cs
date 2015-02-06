@@ -44,7 +44,7 @@ namespace NZazu.Contracts.Checks
         public void Validate_InsideMinMax_Should_Pass()
         {
             var cultureInfo = CultureInfo.InvariantCulture;
-            Enumerable.Range(_check.Minimum, _check.Maximum - _check.Minimum)
+            Enumerable.Range((int) _check.Minimum, (int)(_check.Maximum - _check.Minimum))
                     .Select(val => val.ToString(cultureInfo))
                     .ToList().ForEach(val => _check.Validate(val, cultureInfo));
         }
@@ -64,6 +64,16 @@ namespace NZazu.Contracts.Checks
             const long longValue = int.MaxValue + 1L;
             var value = longValue.ToString(CultureInfo.InvariantCulture);
             Assert.Throws<ValidationException>(() => _check.Validate(value));
+        }
+
+        [Test]
+        public void Validate_Rethrows_OverflowException_as_ValidationException()
+        {
+            var culture = CultureInfo.InvariantCulture;
+            var value = double.MaxValue.ToString(culture);
+            _check.Invoking(x => x.Validate(value, culture))
+                .ShouldThrow<ValidationException>()
+                .WithInnerException<OverflowException>();
         }
     }
 }

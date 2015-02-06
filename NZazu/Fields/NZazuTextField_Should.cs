@@ -20,27 +20,7 @@ namespace NZazu.Fields
         }
 
         [Test]
-        public void Not_Create_Empty_Label()
-        {
-            var sut = new NZazuTextField("test");
-            sut.LabelControl.Should().BeNull();
-        }
-
-        [Test]
-        public void Create_Label_Matching_Prompt()
-        {
-            var sut = new NZazuTextField("test")
-            {
-                Prompt = "superhero"
-            };
-
-            var label = (Label)sut.LabelControl;
-            label.Should().NotBeNull();
-            label.Content.Should().Be(sut.Prompt);
-        }
-
-        [Test]
-        public void Create_ValueControl_Matching_Description()
+        public void Create_TextBox_with_ToolTip_Matching_Description()
         {
             var sut = new NZazuTextField("test")
             {

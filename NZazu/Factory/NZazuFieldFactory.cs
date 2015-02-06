@@ -1,37 +1,61 @@
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using NZazu.Contracts;
+using NZazu.Contracts.Checks;
 using NZazu.Fields;
 
 namespace NZazu.Factory
 {
     class NZazuFieldFactory : INZazuFieldFactory
     {
+        private readonly ICheckFactory _checkFactory;
+        private readonly Dictionary<string, Type> _fieldTypes = new Dictionary<string, Type>();
+        private const string DefaultType = "label";
+
+        public NZazuFieldFactory(ICheckFactory checkFactory = null)
+        {
+            _checkFactory = checkFactory ?? new CheckFactory();
+
+            _fieldTypes.Add("label", typeof(NZazuLabelField));
+            _fieldTypes.Add("string", typeof(NZazuTextField));
+            _fieldTypes.Add("bool", typeof(NZazuBoolField));
+            _fieldTypes.Add("int", typeof(NZazuIntegerField));
+            _fieldTypes.Add("date", typeof(NZazuDateField));
+        }
+
         public INZazuField CreateField(FieldDefinition fieldDefinition)
         {
             if (fieldDefinition == null) throw new ArgumentNullException("fieldDefinition");
+            var fieldTypeSafe = fieldDefinition.Type ?? DefaultType;
 
-            switch (fieldDefinition.Type)
+            NZazuField field;
+            if (_fieldTypes.ContainsKey(fieldTypeSafe))
+                field = (NZazuField)Activator.CreateInstance(_fieldTypes[fieldTypeSafe], fieldDefinition.Key);
+            else
             {
-                case "string": return Decorate(new NZazuTextField(fieldDefinition.Key), fieldDefinition);
-                case "bool": return Decorate(new NZazuBoolField(fieldDefinition.Key), fieldDefinition);
-                case "label":
-                default:
-                    var field = Decorate(new NZazuField(fieldDefinition.Key), fieldDefinition);
-                    if (fieldDefinition.Type != "label")
-                        //throw new NotSupportedException("The specified field type is not supported: " + fieldDefinition.Type);
-                        Trace.TraceWarning("The specified field type is not supported: " + fieldDefinition.Type);
-                    return field;
+                Trace.TraceWarning("The specified field type is not supported: " + fieldTypeSafe);
+                field = (NZazuField)Activator.CreateInstance(_fieldTypes[DefaultType], fieldDefinition.Key);
             }
+
+            return Decorate(field, fieldDefinition);
         }
 
-        private static NZazuField<T> Decorate<T>(NZazuField<T> field, FieldDefinition fieldDefinition)
+        private NZazuField Decorate(NZazuField field, FieldDefinition fieldDefinition)
         {
             field.Prompt = fieldDefinition.Prompt;
             field.Hint = fieldDefinition.Hint;
             field.Description = fieldDefinition.Description;
-            field.Checks = fieldDefinition.Checks;
+            field.Checks = CreateChecks(fieldDefinition.Checks);
             return field;
+        }
+
+        private IEnumerable<IValueCheck> CreateChecks(IEnumerable<CheckDefinition> checkDefinitions)
+        {
+            return checkDefinitions == null 
+                ? Enumerable.Empty<IValueCheck>() 
+                : checkDefinitions.Select(c => _checkFactory.CreateCheck(c)).ToArray();
         }
     }
 }

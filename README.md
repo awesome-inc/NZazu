@@ -6,8 +6,8 @@ The main view **NZazuView** connects factories, strategies and serializer to be 
 ## FormDefinition
 
 A **FormDefinition** defines a form with field types, descriptive texts and prompts. The definition is 
-independent from the kind of data storage (e.g. object, dictionary) or rendering (e.g. wpf controls, 
-xceed control)
+independent from the kind of data storage (e.g. object, dictionary) or rendering (e.g. wpf controls from 
+[Xceeds Extended WPF Toolkit](http://wpftoolkit.codeplex.com/))
 
 
     FormDefinition = new FormDefinition
