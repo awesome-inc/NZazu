@@ -65,6 +65,8 @@
     <Compile Include="Checks\ValidationException_Should.cs" />
     <Compile Include="FieldDefinition.cs" />
     <Compile Include="FieldDefinition_Should.cs" />
+    <Compile Include="FormData.cs" />
+    <Compile Include="FormData_Should.cs" />
     <Compile Include="FormDefinition.cs" />
     <Compile Include="FormDefinition_Should.cs" />
     <Compile Include="Checks\IValueCheck.cs" />
