@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using System.Windows.Controls;
 using FluentAssertions;
 using NUnit.Framework;
@@ -18,10 +19,11 @@ namespace NZazu.Fields
 
             sut.Should().NotBeNull();
             sut.Should().BeAssignableTo<INZazuField>();
+            sut.Type.Should().Be("int");
         }
 
         [Test]
-        public void Create_TextBox_With_ToolTip_Matching_Description()
+        public void Create_Control_With_ToolTip_Matching_Description()
         {
             var sut = new NZazuIntegerField("test")
             {
@@ -36,10 +38,9 @@ namespace NZazu.Fields
         }
 
         [Test]
-        public void Format_Correct_Value()
+        public void Format_TextBox_From_Value()
         {
             var sut = new NZazuIntegerField("test");
-
             var textBox = (TextBox)sut.ValueControl;
 
             sut.Value.Should().NotHaveValue();
@@ -53,7 +54,16 @@ namespace NZazu.Fields
 
             sut.Value = null;
             textBox.Text.Should().Be(string.Empty);
+        }
 
+        [Test]
+        public void Format_Value_From_TextBox()
+        {
+            var sut = new NZazuIntegerField("test");
+            var textBox = (TextBox)sut.ValueControl;
+
+            sut.Value.Should().NotHaveValue();
+            textBox.Text.Should().BeEmpty();
 
             textBox.Text = "7";
             sut.Value.Should().Be(7);
@@ -62,18 +72,18 @@ namespace NZazu.Fields
             sut.Value.Should().Be(-12);
 
             textBox.Text = "foo bar";
-            new Action(sut.Validate).Invoking(a => a()).ShouldThrow<ValidationException>();
+            sut.IsValid().Should().BeFalse();
             sut.Value.Should().Be(-12, because: "WPF binding cannot sync value");
 
             textBox.Text = "";
+            sut.IsValid().Should().BeTrue();
             sut.Value.Should().NotHaveValue();
         }
 
         [Test]
-        public void Format_StringValue()
+        public void Format_TextBox_From_StringValue()
         {
             var sut = new NZazuIntegerField("test");
-
             var textBox = (TextBox)sut.ValueControl;
 
             sut.StringValue.Should().BeNullOrEmpty();
@@ -87,7 +97,13 @@ namespace NZazu.Fields
 
             sut.StringValue = null;
             textBox.Text.Should().Be(string.Empty);
+        }
 
+        [Test]
+        public void Format_StringValue_From_TextBox()
+        {
+            var sut = new NZazuIntegerField("test");
+            var textBox = (TextBox)sut.ValueControl;
 
             textBox.Text = "7";
             sut.StringValue.Should().Be("7");
@@ -96,13 +112,125 @@ namespace NZazu.Fields
             sut.StringValue.Should().Be("-12");
 
             textBox.Text = "foo bar";
-            new Action(sut.Validate).Invoking(a => a()).ShouldThrow<ValidationException>();
+            sut.IsValid().Should().BeFalse();
             sut.StringValue.Should().Be("-12", because: "WPF binding cannot sync value");
 
             textBox.Text = "";
+            sut.IsValid().Should().BeTrue();
             sut.StringValue.Should().Be("");
 
             textBox.Text = null;
+            sut.IsValid().Should().BeTrue();
+            sut.StringValue.Should().Be(String.Empty);
+        }
+    }
+
+    [TestFixture]
+    [RequiresSTA]
+    // ReSharper disable InconsistentNaming
+    class NZazuDateField_Should
+    {
+        [Test]
+        public void Be_Creatable()
+        {
+            var sut = new NZazuDateField("test");
+
+            sut.Should().NotBeNull();
+            sut.Should().BeAssignableTo<INZazuField>();
+            sut.Type.Should().Be("date");
+        }
+
+        [Test]
+        public void Create_Control_With_ToolTip_Matching_Description()
+        {
+            var sut = new NZazuDateField("test")
+            {
+                Hint = "superhero",
+                Description = "check this if you are a registered superhero"
+            };
+
+            var textBox = (DatePicker)sut.ValueControl;
+            textBox.Should().NotBeNull();
+            textBox.Text.Should().BeEmpty();
+            textBox.ToolTip.Should().Be(sut.Description);
+        }
+
+        [Test]
+        public void Format_TextBox_From_Value()
+        {
+            var sut = new NZazuDateField("test");
+            var textBox = (DatePicker)sut.ValueControl;
+
+            sut.Value.Should().NotHaveValue();
+            textBox.Text.Should().BeEmpty();
+
+            var now = DateTime.Now;
+            sut.Value = now;
+            textBox.Text.Should().Be(now.ToString(CultureInfo.InvariantCulture));
+
+            sut.Value = null;
+            textBox.Text.Should().Be(string.Empty);
+        }
+
+        [Test]
+        public void Format_Value_From_TextBox()
+        {
+            var sut = new NZazuDateField("test");
+            var textBox = (DatePicker)sut.ValueControl;
+
+            sut.Value.Should().NotHaveValue();
+            textBox.Text.Should().BeEmpty();
+
+            var now = DateTime.Now;
+            textBox.Text = now.ToString(CultureInfo.InvariantCulture);
+            sut.Value.Should().Be(now);
+
+            textBox.Text = "foo bar";
+            sut.IsValid().Should().BeFalse();
+            sut.Value.Should().Be(now, because: "WPF binding cannot sync value");
+
+            textBox.Text = "";
+            sut.IsValid().Should().BeTrue();
+            sut.Value.Should().NotHaveValue();
+        }
+
+        [Test]
+        public void Format_TextBox_From_StringValue()
+        {
+            var sut = new NZazuDateField("test");
+            var textBox = (DatePicker)sut.ValueControl;
+
+            sut.StringValue.Should().BeNullOrEmpty();
+            textBox.Text.Should().BeEmpty();
+
+            var now = DateTime.Now;
+            sut.StringValue = now.ToString(CultureInfo.InvariantCulture);
+            textBox.Text.Should().Be(now.ToString(CultureInfo.InvariantCulture));
+
+            sut.StringValue = null;
+            textBox.Text.Should().Be(string.Empty);
+        }
+
+        [Test]
+        public void Format_StringValue_From_TextBox()
+        {
+            var sut = new NZazuDateField("test");
+            var textBox = (DatePicker)sut.ValueControl;
+
+            var now = DateTime.Now;
+            textBox.Text = now.ToString(CultureInfo.InvariantCulture);
+            sut.StringValue.Should().Be(now.ToString(CultureInfo.InvariantCulture));
+
+            textBox.Text = "foo bar";
+            sut.IsValid().Should().BeFalse();
+            sut.StringValue.Should().Be(now.ToString(CultureInfo.InvariantCulture), because: "WPF binding cannot sync value");
+
+            textBox.Text = "";
+            sut.IsValid().Should().BeTrue();
+            sut.StringValue.Should().Be("");
+
+            textBox.Text = null;
+            sut.IsValid().Should().BeTrue();
             sut.StringValue.Should().Be(String.Empty);
         }
     }

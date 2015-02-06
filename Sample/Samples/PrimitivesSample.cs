@@ -45,7 +45,14 @@ namespace Sample.Samples
                             //Prompt = "Is Admin",
                             Hint = "Is Admin",
                             Description = "Check to grant administrator permissions"
-                        }
+                        },
+                        new FieldDefinition
+                        {
+                            Key = "birthday",
+                            Type = "date",
+                            Prompt = "Birthday",
+                            Hint = "type your birthday",
+                        },
                     }
                 },
                 FormData = new Dictionary<string, string> {{"name", "John"}, {"isAdmin", "true"}}
