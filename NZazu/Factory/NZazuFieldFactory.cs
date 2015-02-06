@@ -3,17 +3,21 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using NZazu.Contracts;
+using NZazu.Contracts.Checks;
 using NZazu.Fields;
 
 namespace NZazu.Factory
 {
     class NZazuFieldFactory : INZazuFieldFactory
     {
+        private readonly ICheckFactory _checkFactory;
         private readonly Dictionary<string, Type> _fieldTypes = new Dictionary<string, Type>();
         private const string DefaultType = "label";
 
-        public NZazuFieldFactory()
+        public NZazuFieldFactory(ICheckFactory checkFactory = null)
         {
+            _checkFactory = checkFactory ?? new CheckFactory();
+
             _fieldTypes.Add("label", typeof(NZazuLabelField));
             _fieldTypes.Add("string", typeof(NZazuTextField));
             _fieldTypes.Add("bool", typeof(NZazuBoolField));
@@ -39,14 +43,20 @@ namespace NZazu.Factory
             return Decorate(field, fieldDefinition);
         }
 
-        private static NZazuField Decorate(NZazuField field, FieldDefinition fieldDefinition)
+        private NZazuField Decorate(NZazuField field, FieldDefinition fieldDefinition)
         {
             field.Prompt = fieldDefinition.Prompt;
             field.Hint = fieldDefinition.Hint;
             field.Description = fieldDefinition.Description;
-            field.Checks = fieldDefinition.Checks;
-            field.Settings = fieldDefinition.Settings ?? new Dictionary<string, string>();
+            field.Checks = CreateChecks(fieldDefinition.Checks);
             return field;
+        }
+
+        private IEnumerable<IValueCheck> CreateChecks(IEnumerable<CheckDefinition> checkDefinitions)
+        {
+            return checkDefinitions == null 
+                ? Enumerable.Empty<IValueCheck>() 
+                : checkDefinitions.Select(c => _checkFactory.CreateCheck(c)).ToArray();
         }
     }
 }

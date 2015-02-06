@@ -1,5 +1,5 @@
 using System;
-using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Controls;
 using FluentAssertions;
 using NSubstitute;
@@ -60,26 +60,18 @@ namespace NZazu.Factory
         }
 
         [Test]
-        public void Set_Checks()
+        public void Use_CheckFactory_for_creating_checks()
         {
-            var sut = new NZazuFieldFactory();
-            var check = Substitute.For<IValueCheck>();
-            var checks = new[] { check };
-            var field = (NZazuField)sut.CreateField(new FieldDefinition { Key = "test", Type = "string", Checks = checks });
+            var checkFactory = Substitute.For<ICheckFactory>();
+            var checkDefinition = new CheckDefinition { Type = "required" };
+            var check = new RequiredCheck();
+            checkFactory.CreateCheck(checkDefinition).Returns(check);
+
+            var sut = new NZazuFieldFactory(checkFactory);
+            var field = (NZazuField)sut.CreateField(new FieldDefinition { Key = "test", Type = "string", Checks = new[] { checkDefinition } });
 
             field.Should().NotBeNull();
-            field.Checks.Should().BeSameAs(checks);
-        }
-
-        [Test]
-        public void Set_Settings()
-        {
-            var sut = new NZazuFieldFactory();
-            var settings = new Dictionary<string, string>() { { "Format", "#.##" }, { "Color", "Green" } };
-            var field = (NZazuField)sut.CreateField(new FieldDefinition { Key = "test", Type = "string", Settings = settings });
-
-            field.Should().NotBeNull();
-            field.Settings.Should().BeSameAs(settings);
+            field.Checks.Single().Should().Be(check);
         }
     }
 }

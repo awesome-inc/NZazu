@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Windows;
+﻿using System.Windows;
 using Caliburn.Micro;
 using NZazu;
 using NZazu.Contracts;
@@ -9,20 +7,19 @@ namespace Sample
 {
     public class NZazuSampleViewModel : Screen, INZazuSample
     {
-        private readonly Dictionary<string, string> _formData = new Dictionary<string, string>();
+        private FormData _formData = new FormData();
 
         public string Name { get; set; }
         public string Description { get; set; }
         public FormDefinition FormDefinition { get; set; }
 
-        public IDictionary<string, string> FormData
+        public FormData FormData
         {
             get { return _formData; }
             set
             {
-                if (_formData.SequenceEqual(value ?? new Dictionary<string, string>())) return;
-                _formData.Clear();
-                if (value != null) value.ToList().ForEach(kvp => _formData.Add(kvp.Key, kvp.Value));
+                if (Equals(_formData, value)) return;
+                _formData = value;
                 NotifyOfPropertyChange();
             }
         }

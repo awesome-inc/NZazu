@@ -122,9 +122,9 @@ namespace NZazu
             var input = new Dictionary<string, string> { { key, value } };
             view.SetFieldValues(input);
 
-            view.FormData.Should().BeEmpty();
+            view.FormData.Values.Should().BeEmpty();
             view.ApplyChanges();
-            view.FormData.ShouldBeEquivalentTo(input);
+            view.FormData.Values.ShouldBeEquivalentTo(input);
         }
 
         [Test]

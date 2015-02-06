@@ -17,11 +17,11 @@ namespace NZazu.Fields
         protected override Control GetValue()
         {
             var result = new DatePicker { ToolTip = Description };
-            result.ApplyTemplate();
-            var textBox = (TextBox)result.GetType()
-                .GetProperty("TextBox", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(result);
-            var binding = textBox.GetBindingExpression(TextBox.TextProperty).ParentBinding;
-            binding.StringFormat = Settings["Format"];
+            //result.ApplyTemplate();
+            //var textBox = (TextBox)result.GetType()
+            //    .GetProperty("TextBox", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(result);
+            //var binding = textBox.GetBindingExpression(TextBox.TextProperty).ParentBinding;
+            //binding.StringFormat = Settings["Format"];
             return result;
         }
 
