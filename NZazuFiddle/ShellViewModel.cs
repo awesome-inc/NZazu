@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
 using Caliburn.Micro;
 using NZazu.Contracts;
 
@@ -9,6 +11,7 @@ namespace NZazuFiddle
     {
         private FormDefinition _definition = SampleFormDefinition();
         private FormData _data = SampleFormData();
+        private const string DateFormat = @"ddHHmm\Z MMM yy";
 
         public FormDefinition Definition
         {
@@ -42,14 +45,7 @@ namespace NZazuFiddle
                         {
                             Key = "caption",
                             Type = "label",
-                            Description = "A fancy caption!"
-                        },
-                        new FieldDefinition
-                        {
-                            Key = "settings",
-                            Type = "label",
-                            Prompt = "Settings",
-                            Description = "You can manage your account here."
+                            Prompt = "Settings"
                         },
                         new FieldDefinition
                         {
@@ -57,13 +53,31 @@ namespace NZazuFiddle
                             Type = "string",
                             Prompt = "Name",
                             Hint = "Enter name",
-                            Description = "Your account name. Only alpha-numeric ..."
+                            Description = "Your account name",
                         },
+                        new FieldDefinition
+                        {
+                            Key = "birthday",
+                            Type = "date",
+                            Format = DateFormat,
+                            Prompt = "Date of Birth",
+                            Hint = "Enter your date of birth",
+                            Description = "Your birthday",
+                        },
+                        new FieldDefinition
+                        {
+                            Key = "weight",
+                            Type = "double",
+                            Prompt = "Weight",
+                            Format = "#.00",
+                            Hint = "Enter your body weight",
+                            Description = "Your body weight in kg",
+                        },
+
                         new FieldDefinition
                         {
                             Key = "isAdmin",
                             Type = "bool",
-                            //Prompt = "Is Admin",
                             Hint = "Is Admin",
                             Description = "Check to grant administrator permissions"
                         }
@@ -73,7 +87,13 @@ namespace NZazuFiddle
 
         private static FormData SampleFormData()
         {
-            return new Dictionary<string, string> {{"name", "John"}, {"isAdmin", "true"}};
+            return new Dictionary<string, string>
+            {
+                {"name", "John"}, 
+                {"birthday", new DateTime(1980, 1,1).ToString(DateFormat)}, 
+                {"weight", 82.4d.ToString(CultureInfo.InvariantCulture)}, 
+                {"isAdmin", "true"}
+            };
         }
     }
 }

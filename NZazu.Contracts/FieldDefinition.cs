@@ -12,5 +12,7 @@ namespace NZazu.Contracts
         public string Description { get; set; }
 
         public IEnumerable<IValueCheck> Checks { get; set; }
+
+        public string Format { get; set; }
     }
 }
