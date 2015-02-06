@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>NZazu.Xceed</id>
+    <version>$Version$</version>
+    <title>NZazu.Xceed</title>
+    <authors>tmentzel, mkoertgen</authors>
+    <owners>tmentzel, mkoertgen</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Support for Xceeds Extended WPF Toolkit.</description>
+    <summary>Support for Xceeds Extended WPF Toolkit.</summary>
+    <copyright/>
+    <releaseNotes>Revision: $Revision$</releaseNotes>
+    <projectUrl>https://github.com/ThomasMentzel/NZazu</projectUrl>
+    <frameworkAssemblies>
+      <frameworkAssembly assemblyName="System.Xaml" targetFramework="" />
+    </frameworkAssemblies>
+    <dependencies>
+      <dependency id="NZazu" version="$Version$" />
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="bin\Release\NZazu.Xceed.dll" target="lib"/>
+  </files>
+</package>

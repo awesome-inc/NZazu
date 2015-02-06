@@ -5,7 +5,7 @@ using System.Windows.Controls.Primitives;
 
 namespace NZazu.Fields
 {
-    class NZazuBoolField : NZazuField<bool?>
+    public class NZazuBoolField : NZazuField<bool?>
     {
         public NZazuBoolField(string key) : base(key) { }
 

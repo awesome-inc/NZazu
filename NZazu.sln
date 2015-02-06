@@ -33,6 +33,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{607421
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NZazuFiddle", "NZazuFiddle\NZazuFiddle.csproj", "{ECCA4134-EE75-46B5-AA0D-5FA2C0EA8939}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NZazu.Xceed", "NZazu.Xceed\NZazu.Xceed.csproj", "{940EECDE-3453-4EA0-B052-15AB18A8119D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -55,6 +57,10 @@ Global
 		{ECCA4134-EE75-46B5-AA0D-5FA2C0EA8939}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ECCA4134-EE75-46B5-AA0D-5FA2C0EA8939}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ECCA4134-EE75-46B5-AA0D-5FA2C0EA8939}.Release|Any CPU.Build.0 = Release|Any CPU
+		{940EECDE-3453-4EA0-B052-15AB18A8119D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{940EECDE-3453-4EA0-B052-15AB18A8119D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{940EECDE-3453-4EA0-B052-15AB18A8119D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{940EECDE-3453-4EA0-B052-15AB18A8119D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

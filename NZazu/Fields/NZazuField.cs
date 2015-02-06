@@ -11,7 +11,7 @@ using NZazu.Contracts.Checks;
 
 namespace NZazu.Fields
 {
-    abstract class NZazuField : INZazuField
+    public abstract class NZazuField : INZazuField
     {
         private readonly Lazy<Control> _labelControl;
         private readonly Lazy<Control> _valueControl;
@@ -100,7 +100,7 @@ namespace NZazu.Fields
         protected virtual Binding DecorateBinding(Binding binding) { return binding; }
     }
 
-    abstract class NZazuField<T> : NZazuField, INZazuField<T>, INotifyPropertyChanged
+    public abstract class NZazuField<T> : NZazuField, INZazuField<T>, INotifyPropertyChanged
     {
         private T _value;
 

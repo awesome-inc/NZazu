@@ -5,7 +5,7 @@ using System.Windows.Controls;
 
 namespace NZazu.Fields
 {
-    class NZazuDateField : NZazuField<DateTime?>
+    public class NZazuDateField : NZazuField<DateTime?>
     {
         public NZazuDateField(string key) : base(key) { }
 

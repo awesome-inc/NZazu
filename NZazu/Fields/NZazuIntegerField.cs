@@ -5,7 +5,7 @@ using System.Windows.Controls;
 
 namespace NZazu.Fields
 {
-    class NZazuIntegerField : NZazuField<int?>
+    public class NZazuIntegerField : NZazuField<int?>
     {
         public NZazuIntegerField(string key) : base(key) { }
 
