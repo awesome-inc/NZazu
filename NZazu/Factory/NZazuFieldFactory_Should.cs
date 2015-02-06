@@ -28,6 +28,7 @@ namespace NZazu.Factory
         [TestCase("string", typeof(TextBox))]
         [TestCase("bool", typeof(CheckBox))]
         [TestCase("int", typeof(TextBox))]
+        [TestCase("date", typeof(DatePicker))]
         //[TestCase("double", typeof(TextBox))]
         //[TestCase("dateTime", typeof (DatePicker))]
         public void Support(string fieldType, Type controlType)

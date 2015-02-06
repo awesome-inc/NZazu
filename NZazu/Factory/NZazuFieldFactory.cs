@@ -17,6 +17,7 @@ namespace NZazu.Factory
             _fieldTypes.Add("string", typeof(NZazuTextField));
             _fieldTypes.Add("bool", typeof(NZazuBoolField));
             _fieldTypes.Add("int", typeof(NZazuIntegerField));
+            _fieldTypes.Add("date", typeof(NZazuDateField));
         }
 
         public INZazuField CreateField(FieldDefinition fieldDefinition)
