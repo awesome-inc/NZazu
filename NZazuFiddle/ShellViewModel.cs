@@ -11,7 +11,7 @@ namespace NZazuFiddle
     {
         private FormDefinition _definition = SampleFormDefinition();
         private FormData _data = SampleFormData();
-        private const string DateFormat = @"ddHHmm\Z MMM yy";
+        private const string DateFormat = @"yyyy/MM/dd";
 
         public FormDefinition Definition
         {
@@ -40,48 +40,61 @@ namespace NZazuFiddle
             return new FormDefinition
             {
                 Fields = new[]
+                {
+                    new FieldDefinition
                     {
-                        new FieldDefinition
+                        Key = "caption",
+                        Type = "label",
+                        Prompt = "Settings"
+                    },
+                    new FieldDefinition
+                    {
+                        Key = "name",
+                        Type = "string",
+                        Prompt = "Name",
+                        Hint = "Enter name",
+                        Description = "Your account name",
+                        Checks = new []
                         {
-                            Key = "caption",
-                            Type = "label",
-                            Prompt = "Settings"
-                        },
-                        new FieldDefinition
-                        {
-                            Key = "name",
-                            Type = "string",
-                            Prompt = "Name",
-                            Hint = "Enter name",
-                            Description = "Your account name",
-                        },
-                        new FieldDefinition
-                        {
-                            Key = "birthday",
-                            Type = "date",
-                            Format = DateFormat,
-                            Prompt = "Date of Birth",
-                            Hint = "Enter your date of birth",
-                            Description = "Your birthday",
-                        },
-                        new FieldDefinition
-                        {
-                            Key = "weight",
-                            Type = "double",
-                            Prompt = "Weight",
-                            Format = "#.00",
-                            Hint = "Enter your body weight",
-                            Description = "Your body weight in kg",
-                        },
+                            new CheckDefinition { Type = "required" }, 
+                            new CheckDefinition { Type="length", Values=new []{"6", "8"} }
+                        }
+                    },
+                    new FieldDefinition
+                    {
+                        Key = "birthday",
+                        Type = "date",
+                        Settings = new Dictionary<string, string> {{"Format", DateFormat}},
+                        Prompt = "Date of Birth",
+                        Hint = "Enter your date of birth",
+                        Description = "Your birthday",
+                    },
+                    new FieldDefinition
+                    {
+                        Key = "weight",
+                        Type = "double",
+                        Prompt = "Weight",
+                        Settings = new Dictionary<string, string> {{"Format", "#.00"}},
+                        Hint = "Enter your body weight",
+                        Description = "Your body weight in kg",
+                    },
 
-                        new FieldDefinition
+                    new FieldDefinition
+                    {
+                        Key = "isAdmin",
+                        Type = "bool",
+                        Hint = "Is Admin",
+                        Description = "Check to grant administrator permissions",
+                        Checks = new[]
                         {
-                            Key = "isAdmin",
-                            Type = "bool",
-                            Hint = "Is Admin",
-                            Description = "Check to grant administrator permissions"
+                            new CheckDefinition
+                            {
+                                Type = "regex",
+                                Values = new[] {"Must be Checked or Unchecked", "True", "False"}
+                            }
                         }
                     }
+                }
             };
         }
 
