@@ -23,6 +23,7 @@ namespace NZazu.Fields
 
             _labelControl = new Lazy<Control>(GetLabelControl);
             _valueControl = new Lazy<Control>(GetValueControl);
+            Settings = new Dictionary<string, string>();
         }
 
         public abstract string StringValue { get; set; }
@@ -36,6 +37,7 @@ namespace NZazu.Fields
 
         public Control LabelControl { get { return _labelControl.Value; } }
         public Control ValueControl { get { return _valueControl.Value; } }
+        public Dictionary<string, string> Settings { get; set; }
 
         public void Validate()
         {

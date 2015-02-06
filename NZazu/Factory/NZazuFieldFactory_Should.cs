@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Windows.Controls;
 using FluentAssertions;
 using NSubstitute;
@@ -29,7 +30,7 @@ namespace NZazu.Factory
         [TestCase("bool", typeof(CheckBox))]
         [TestCase("int", typeof(TextBox))]
         [TestCase("date", typeof(DatePicker))]
-        //[TestCase("double", typeof(TextBox))]
+        [TestCase("double", typeof(TextBox))]
         //[TestCase("dateTime", typeof (DatePicker))]
         public void Support(string fieldType, Type controlType)
         {
@@ -68,6 +69,17 @@ namespace NZazu.Factory
 
             field.Should().NotBeNull();
             field.Checks.Should().BeSameAs(checks);
+        }
+
+        [Test]
+        public void Set_Settings()
+        {
+            var sut = new NZazuFieldFactory();
+            var settings = new Dictionary<string, string>() { { "Format", "#.##" }, { "Color", "Green" } };
+            var field = (NZazuField)sut.CreateField(new FieldDefinition { Key = "test", Type = "string", Settings = settings });
+
+            field.Should().NotBeNull();
+            field.Settings.Should().BeSameAs(settings);
         }
     }
 }

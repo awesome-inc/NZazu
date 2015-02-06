@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.Globalization;
+using System.Windows;
 using System.Windows.Controls;
 using FluentAssertions;
 using NUnit.Framework;
@@ -30,14 +32,34 @@ namespace NZazu.Fields
                 Description = "check this if you are a registered superhero"
             };
 
-            var textBox = (DatePicker)sut.ValueControl;
-            textBox.Should().NotBeNull();
-            textBox.Text.Should().BeEmpty();
-            textBox.ToolTip.Should().Be(sut.Description);
+            var datePicker = (DatePicker)sut.ValueControl;
+            datePicker.Should().NotBeNull();
+            datePicker.Text.Should().BeEmpty();
+            datePicker.ToolTip.Should().Be(sut.Description);
         }
 
         [Test]
-        public void Format_TextBox_From_Value()
+        //[SetUICulture("en-US")]
+        public void Format_UIText_From_Value()
+        {
+            // ReSharper disable once UseObjectOrCollectionInitializer
+            var sut = new NZazuDateField("test");
+            sut.Settings = new Dictionary<string, string>() { { "Format", "yyyy_MM_dd" } };
+            var datePicker = (DatePicker)sut.ValueControl;
+
+            sut.Value.Should().NotHaveValue();
+            datePicker.Text.Should().BeEmpty();
+
+            var now = DateTime.Now.Date;
+            sut.Value = now;
+            datePicker.Text.Should().Be(now.ToString("yyyy_MM_dd"));
+
+            sut.Value = null;
+            datePicker.SelectedDate.Should().NotHaveValue();
+        }
+
+        [Test]
+        public void Format_SelectedDate_From_Value()
         {
             var sut = new NZazuDateField("test");
             var datePicker = (DatePicker)sut.ValueControl;

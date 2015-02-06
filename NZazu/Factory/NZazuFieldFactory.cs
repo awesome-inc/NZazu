@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using NZazu.Contracts;
 using NZazu.Fields;
 
@@ -18,6 +19,7 @@ namespace NZazu.Factory
             _fieldTypes.Add("bool", typeof(NZazuBoolField));
             _fieldTypes.Add("int", typeof(NZazuIntegerField));
             _fieldTypes.Add("date", typeof(NZazuDateField));
+            _fieldTypes.Add("double", typeof(NZazuDoubleField));
         }
 
         public INZazuField CreateField(FieldDefinition fieldDefinition)
@@ -43,6 +45,7 @@ namespace NZazu.Factory
             field.Hint = fieldDefinition.Hint;
             field.Description = fieldDefinition.Description;
             field.Checks = fieldDefinition.Checks;
+            field.Settings = fieldDefinition.Settings ?? new Dictionary<string, string>();
             return field;
         }
     }

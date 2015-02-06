@@ -4,7 +4,6 @@ using FluentAssertions;
 using NSubstitute;
 using NUnit.Framework;
 using NZazu.Contracts;
-using NZazu.Contracts.Checks;
 
 namespace NZazu
 {
