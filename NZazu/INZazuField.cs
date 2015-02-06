@@ -1,4 +1,5 @@
-﻿using System.Windows.Controls;
+﻿using System.Collections.Generic;
+using System.Windows.Controls;
 
 namespace NZazu
 {
@@ -15,6 +16,7 @@ namespace NZazu
 
         Control LabelControl { get; }
         Control ValueControl { get; }
+        Dictionary<string, string> Settings { get; set; }
     }
 
     public interface INZazuField<T> : INZazuField

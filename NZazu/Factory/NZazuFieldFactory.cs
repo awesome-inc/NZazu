@@ -23,6 +23,7 @@ namespace NZazu.Factory
             FieldTypes.Add("bool", typeof(NZazuBoolField));
             FieldTypes.Add("int", typeof(NZazuIntegerField));
             FieldTypes.Add("date", typeof(NZazuDateField));
+            FieldTypes.Add("double", typeof(NZazuDoubleField));
         }
 
         public INZazuField CreateField(FieldDefinition fieldDefinition)

@@ -53,6 +53,13 @@ namespace Sample.Samples
                             Prompt = "Birthday",
                             Hint = "type your birthday",
                         },
+                        new FieldDefinition
+                        {
+                            Key = "weight",
+                            Type = "double",
+                            Prompt = "Weight in kg",
+                            Hint = "type your weight with 2 digits aber comma",
+                        },
                     }
                 },
                 FormData = new Dictionary<string, string> {{"name", "John"}, {"isAdmin", "true"}}
