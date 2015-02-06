@@ -29,29 +29,5 @@ namespace NZazu.Fields
             return Value.HasValue ? Value.Value.ToString(CultureInfo.InvariantCulture) : String.Empty;
         }
     }
-    class NZazuDateField : NZazuField<DateTime?>
-    {
-        public NZazuDateField(string key) : base(key) { }
-
-        public override string Type { get { return "date"; } }
-        protected internal override DependencyProperty ContentProperty { get { return DatePicker.SelectedDateProperty; } }
-
-        protected override Control GetValue()
-        {
-            return new DatePicker { ToolTip = Description };
-        }
-
-        protected override void SetStringValue(string value)
-        {
-            DateTime dt;
-            if (DateTime.TryParse(value, out dt)) Value = dt;
-            else Value = null;
-        }
-        // todo culture
-        protected override string GetStringValue()
-        {
-            return Value.HasValue ? Value.Value.ToString(CultureInfo.InvariantCulture) : String.Empty;
-        }
-    }
 }
 

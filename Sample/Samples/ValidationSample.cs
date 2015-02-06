@@ -52,7 +52,18 @@ namespace Sample.Samples
                             {
                                 new StringRegExCheck("Must be Checked or Unchecked", new Regex("True"), new Regex("False"))
                             }
-                        }
+                        },
+                        new FieldDefinition
+                        {
+                            Key = "birthday",
+                            Type = "date",
+                            Prompt = "Birthday",
+                            Hint = "type your birthday",
+                            Checks = new IValueCheck[]
+                            {
+                                new RequiredCheck(), 
+                            }
+                        },
                     }
                 },
                 FormData = new Dictionary<string, string>

@@ -56,6 +56,8 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Fields\NZazuDateField.cs" />
+    <Compile Include="Fields\NZazuDateField_Should.cs" />
     <Compile Include="ViewExtensions_Should.cs" />
     <Page Include="NZazuView.xaml">
       <Generator>MSBuild:Compile</Generator>
