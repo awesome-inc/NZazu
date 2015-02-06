@@ -56,6 +56,7 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ViewExtensions_Should.cs" />
     <Page Include="NZazuView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -87,8 +88,8 @@
     <Compile Include="Fields\NZazuTextField.cs" />
     <Compile Include="Factory\NZazuFieldFactory_Should.cs" />
     <Compile Include="Layout\GridLayoutStrategy_Without_Application_Should.cs" />
-    <Compile Include="NZazuViewExtensions.cs" />
-    <Compile Include="NZazuViewExtensions_Should.cs" />
+    <Compile Include="ViewExtensions.cs" />
+    <Compile Include="FieldExtensions_Should.cs" />
     <Compile Include="NZazuView_Should.cs" />
     <Compile Include="NZazuView.xaml.cs">
       <DependentUpon>NZazuView.xaml</DependentUpon>

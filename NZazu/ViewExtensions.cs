@@ -5,7 +5,7 @@ using NZazu.Contracts.Checks;
 
 namespace NZazu
 {
-    public static class NZazuViewExtensions
+    public static class ViewExtensions
     {
         public static Dictionary<string, string> GetFieldValues(this INZazuView view)
         {
@@ -33,5 +33,22 @@ namespace NZazu
                 return false;
             }
         }
+    }
+
+    public static class FieldExtensions
+    {
+        public static bool IsValid(this INZazuField field)
+        {
+            try
+            {
+                field.Validate();
+                return true;
+            }
+            catch (ValidationException)
+            {
+                return false;
+            }
+        }
+
     }
 }
