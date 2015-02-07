@@ -1,7 +1,5 @@
 using System;
-using System.Diagnostics;
 using System.Globalization;
-using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -9,6 +7,11 @@ namespace NZazu.Fields
 {
     public class NZazuDateField : NZazuField<DateTime?>
     {
+        // TODO: How to customize or inject the cultur/formatprovider?
+        private IFormatProvider FormatProvider { get { return CultureInfo.InvariantCulture; } }
+
+        private string _dateFormat;
+
         public NZazuDateField(string key) : base(key) { }
 
         public override string Type { get { return "date"; } }
@@ -16,30 +19,38 @@ namespace NZazu.Fields
 
         protected override Control GetValue()
         {
-            var result = new DatePicker { ToolTip = Description };
-            //result.ApplyTemplate();
-            //var textBox = (TextBox)result.GetType()
-            //    .GetProperty("TextBox", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(result);
-            //var binding = textBox.GetBindingExpression(TextBox.TextProperty).ParentBinding;
-            //binding.StringFormat = Settings["Format"];
-            return result;
+            var datePicker = new DatePicker { ToolTip = Description };
+            String dateFormat;
+            if (Settings != null && Settings.TryGetValue("Format", out dateFormat))
+            {
+                _dateFormat = dateFormat;
+            }
+            return datePicker;
         }
 
         protected override void SetStringValue(string value)
         {
             try
             {
-                var date = DateTime.Parse(value, CultureInfo.InvariantCulture);
-                Value = date;
+                if (String.IsNullOrWhiteSpace(_dateFormat))
+                    Value = DateTime.Parse(value, FormatProvider);
+                else
+                    Value = DateTime.ParseExact(value, _dateFormat, FormatProvider);
             }
             catch (FormatException)
             {
                 Value = null;
             }
         }
+
         protected override string GetStringValue()
         {
-            return Value.HasValue ? Value.Value.ToString(CultureInfo.InvariantCulture) : String.Empty;
+            if (!Value.HasValue) return String.Empty;
+
+            var dateTime = Value.Value;
+            if (String.IsNullOrWhiteSpace(_dateFormat))
+                return dateTime.ToString(FormatProvider);
+            return dateTime.ToString(_dateFormat, FormatProvider);
         }
     }
 }

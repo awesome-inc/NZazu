@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
-using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
@@ -41,13 +40,18 @@ namespace NZazu.Fields
 
         public void Validate()
         {
-            var bindingExpression = ContentProperty == null ? null : ValueControl.GetBindingExpression(ContentProperty);
-            if (bindingExpression != null && bindingExpression.HasError) throw new ValidationException("UI has errors. Value could not be converted");
-            var safeChecks = Checks == null ? new IValueCheck[] { } : Checks.ToArray();
-            new AggregateCheck(safeChecks).Validate(StringValue, CultureInfo.CurrentUICulture);
+            var bindingExpression = ContentProperty != null 
+                ? ValueControl.GetBindingExpression(ContentProperty) 
+                : null;
+            if (bindingExpression != null && bindingExpression.HasError) 
+                throw new ValidationException("UI has errors. Value could not be converted");
+
+            if (Check == null) return;
+            // TODO: how to customize the culture?
+            Check.Validate(StringValue, CultureInfo.CurrentUICulture);
         }
 
-        protected internal IEnumerable<IValueCheck> Checks { get; set; } // 'internal' required for testing
+        protected internal IValueCheck Check { get; set; } // 'internal' required for testing
 
         protected virtual Control GetLabel() { return !String.IsNullOrWhiteSpace(Prompt) ? new Label { Content = Prompt } : null; }
         protected abstract Control GetValue();
@@ -68,7 +72,9 @@ namespace NZazu.Fields
             if (control == null) return null;
             if (ContentProperty == null) return control; // because no validation if no content!
 
-            if (control.GetBindingExpression(ContentProperty) != null) throw new InvalidOperationException("binding already applied.");
+            if (control.GetBindingExpression(ContentProperty) != null) 
+                throw new InvalidOperationException("binding already applied.");
+
             var binding = new Binding("Value")
             {
                 Source = this,
@@ -84,12 +90,10 @@ namespace NZazu.Fields
             binding = DecorateBinding(binding);
             control.SetBinding(ContentProperty, binding);
 
-            if (Checks == null || !Checks.Any()) return control; // no checks, no validation required. saves performance
+            if (Check == null) return control; // no checks, no validation required. saves performance
 
-            var safeChecks = Checks == null ? new IValueCheck[] { } : Checks.ToArray();
-            var aggregateCheck = new AggregateCheck(safeChecks);
             binding.ValidationRules.Clear();
-            binding.ValidationRules.Add(new CheckValidationRule(aggregateCheck) { ValidatesOnTargetUpdated = true });
+            binding.ValidationRules.Add(new CheckValidationRule(Check) { ValidatesOnTargetUpdated = true });
 
             return control;
         }

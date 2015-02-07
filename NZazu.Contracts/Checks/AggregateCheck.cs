@@ -7,6 +7,8 @@ namespace NZazu.Contracts.Checks
     public class AggregateCheck : IValueCheck
     {
         private readonly List<IValueCheck> _checks;
+        public IEnumerable<IValueCheck> Checks { get { return _checks; } }
+
 
         public AggregateCheck(params IValueCheck[] checks)
         {

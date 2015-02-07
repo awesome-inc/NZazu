@@ -9,7 +9,7 @@ namespace NZazu.Xceed
     class NZazuWatermarkTextBoxField_Should
     {
         [Test]
-        public void Set_Watermark_according_to_Hint()
+        public void Create_a_WatermarkTextBox()
         {
             const string hint = "Enter name";
             var sut = new NZazuWatermarkTextBoxField("test") {}; // {Hint = hint}};
@@ -17,8 +17,6 @@ namespace NZazu.Xceed
             var control = (WatermarkTextBox) sut.ValueControl;
             control.Should().NotBeNull();
             control.Should().BeOfType<WatermarkTextBox>();
-
-            control.Watermark.Should().Be(hint);
         }
     }
 }

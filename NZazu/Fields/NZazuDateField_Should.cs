@@ -44,7 +44,8 @@ namespace NZazu.Fields
         {
             // ReSharper disable once UseObjectOrCollectionInitializer
             var sut = new NZazuDateField("test");
-            sut.Settings = new Dictionary<string, string>() { { "Format", "yyyy_MM_dd" } };
+            const string dateFormat = "yyyy_MM_dd";
+            sut.Settings = new Dictionary<string, string>() { { "Format", dateFormat } };
             var datePicker = (DatePicker)sut.ValueControl;
 
             sut.Value.Should().NotHaveValue();
@@ -52,9 +53,12 @@ namespace NZazu.Fields
 
             var now = DateTime.Now.Date;
             sut.Value = now;
-            datePicker.Text.Should().Be(now.ToString("yyyy_MM_dd"));
+            var expected = now.ToString(dateFormat);
+            sut.StringValue.Should().Be(expected);
+            datePicker.Text.Should().Be(expected);
 
             sut.Value = null;
+            sut.StringValue.Should().BeEmpty();
             datePicker.SelectedDate.Should().NotHaveValue();
         }
 

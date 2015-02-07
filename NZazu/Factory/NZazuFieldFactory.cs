@@ -48,15 +48,18 @@ namespace NZazu.Factory
             field.Prompt = fieldDefinition.Prompt;
             field.Hint = fieldDefinition.Hint;
             field.Description = fieldDefinition.Description;
-            field.Checks = CreateChecks(fieldDefinition.Checks);
+            field.Check = CreateCheck(fieldDefinition.Checks);
             return field;
         }
 
-        private IEnumerable<IValueCheck> CreateChecks(IEnumerable<CheckDefinition> checkDefinitions)
+        private IValueCheck CreateCheck(IEnumerable<CheckDefinition> checkDefinitions)
         {
-            return checkDefinitions == null 
-                ? Enumerable.Empty<IValueCheck>() 
-                : checkDefinitions.Select(c => _checkFactory.CreateCheck(c)).ToArray();
+            if (checkDefinitions == null) return null;
+ 
+            var checks = checkDefinitions.Select(c => _checkFactory.CreateCheck(c)).ToArray();
+            return checks.Length == 1 
+                ? checks.First() 
+                : new AggregateCheck(checks.ToArray());
         }
     }
 }
