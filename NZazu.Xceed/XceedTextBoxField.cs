@@ -4,9 +4,9 @@ using Xceed.Wpf.Toolkit;
 
 namespace NZazu.Xceed
 {
-    public class NZazuWatermarkTextBoxField : NZazuTextField
+    public class XceedTextBoxField : NZazuTextField
     {
-        public NZazuWatermarkTextBoxField(string key) : base(key)
+        public XceedTextBoxField(string key) : base(key)
         {
         }
 

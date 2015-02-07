@@ -16,7 +16,7 @@ namespace NZazu
 
         Control LabelControl { get; }
         Control ValueControl { get; }
-        Dictionary<string, string> Settings { get; set; }
+        Dictionary<string, string> Settings { get; }
     }
 
     public interface INZazuField<T> : INZazuField

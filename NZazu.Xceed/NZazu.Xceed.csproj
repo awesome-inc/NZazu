@@ -73,10 +73,10 @@
     <Compile Include="..\VersionInfo.g.cs">
       <Link>Properties\VersionInfo.g.cs</Link>
     </Compile>
-    <Compile Include="NZazuFieldFactoryXceed.cs" />
-    <Compile Include="NZazuFieldFactoryXceed_Should.cs" />
-    <Compile Include="NZazuWatermarkTextBoxField.cs" />
-    <Compile Include="NZazuWatermarkTextBoxField_Should.cs" />
+    <Compile Include="XceedDateTimeField.cs" />
+    <Compile Include="XceedFieldFactory.cs" />
+    <Compile Include="XceedFieldFactory_Should.cs" />
+    <Compile Include="XceedTextBoxField.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

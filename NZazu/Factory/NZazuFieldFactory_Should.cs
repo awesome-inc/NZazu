@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Controls;
 using FluentAssertions;
@@ -103,6 +104,22 @@ namespace NZazu.Factory
             var aggregateCheck = (AggregateCheck) field.Check;
             aggregateCheck.Should().NotBeNull();
             aggregateCheck.Checks.ShouldBeEquivalentTo(new IValueCheck[]{check1,check2});
+        }
+
+        [Test]
+        public void Copy_Settings_from_FieldDefinition()
+        {
+            var sut = new NZazuFieldFactory();
+            var fieldDefinition = new FieldDefinition { Key = "test", Type = "string" };
+            var field = (NZazuField)sut.CreateField(fieldDefinition);
+            field.Settings.Should().NotBeNull();
+            field.Settings.Should().BeEmpty();
+
+            var settings = new Dictionary<string, string> {{"key", "value"}};
+            fieldDefinition.Settings = settings;
+
+            field = (NZazuField)sut.CreateField(fieldDefinition);
+            field.Settings.ShouldBeEquivalentTo(settings);
         }
     }
 }

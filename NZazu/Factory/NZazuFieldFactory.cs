@@ -49,6 +49,10 @@ namespace NZazu.Factory
             field.Hint = fieldDefinition.Hint;
             field.Description = fieldDefinition.Description;
             field.Check = CreateCheck(fieldDefinition.Checks);
+
+            if (fieldDefinition.Settings != null)
+                field.Settings = fieldDefinition.Settings.ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
+
             return field;
         }
 

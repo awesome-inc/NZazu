@@ -36,7 +36,7 @@ namespace NZazu.Fields
 
         public Control LabelControl { get { return _labelControl.Value; } }
         public Control ValueControl { get { return _valueControl.Value; } }
-        public Dictionary<string, string> Settings { get; set; }
+        public Dictionary<string, string> Settings { get; protected internal set; }
 
         public void Validate()
         {
