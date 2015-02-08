@@ -1,4 +1,3 @@
-using System;
 using FluentAssertions;
 using NUnit.Framework;
 using Xceed.Wpf.Toolkit;
@@ -9,6 +8,16 @@ namespace NZazu.Xceed
     // ReSharper disable InconsistentNaming
     class XceedDateTimeField_Should
     {
+        [Test]
+        public void Be_Creatable()
+        {
+            var sut = new XceedDateTimeField("test");
+
+            sut.Should().NotBeNull();
+            sut.Should().BeAssignableTo<INZazuField>();
+            sut.Type.Should().Be("date");
+        }
+
         [Test]
         public void Override_ContentProperty()
         {

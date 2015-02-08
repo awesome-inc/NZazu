@@ -20,7 +20,7 @@ namespace NZazu.Xceed
         protected override Control GetValue()
         {
             var control = new DateTimePicker { ToolTip = Description, Watermark = Hint };
-            DateFormat = GetDateFormat();
+            DateFormat = GetFormatString();
             if (!String.IsNullOrWhiteSpace(DateFormat))
             {
                 control.Format = DateTimeFormat.Custom;

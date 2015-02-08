@@ -71,7 +71,7 @@ namespace NZazu.Fields
         {
             try
             {
-                var date = double.Parse(value, CultureInfo.InvariantCulture);
+                var date = double.Parse(value, FormatProvider);
                 Value = date;
             }
             catch (FormatException)
@@ -82,7 +82,7 @@ namespace NZazu.Fields
 
         protected override string GetStringValue()
         {
-            return Value.HasValue ? Value.Value.ToString(CultureInfo.InvariantCulture) : String.Empty;
+            return Value.HasValue ? Value.Value.ToString(FormatProvider) : String.Empty;
         }
 
         protected override Binding DecorateBinding(Binding binding)

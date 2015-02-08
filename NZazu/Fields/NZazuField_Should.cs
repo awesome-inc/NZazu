@@ -100,7 +100,7 @@ namespace NZazu.Fields
         public void Pass_Validation_To_Checks_And_Rethrow_Exception()
         {
             var check = Substitute.For<IValueCheck>();
-            check.When(x => x.Validate(Arg.Any<string>(), CultureInfo.CurrentUICulture)).Do(x => { throw new ValidationException("test"); });
+            check.When(x => x.Validate(Arg.Any<string>(), Arg.Any<IFormatProvider>())).Do(x => { throw new ValidationException("test"); });
 
             var sut = new NZazuDummyField("test") { Description = "description", Check =  check };
             new Action(sut.Validate).Invoking(a => a()).ShouldThrow<ValidationException>();

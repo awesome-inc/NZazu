@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.Windows.Controls;
 using FluentAssertions;
@@ -44,7 +43,7 @@ namespace NZazu.Fields
             // ReSharper disable once UseObjectOrCollectionInitializer
             var sut = new NZazuDateField("test");
             const string dateFormat = "yyyy_MM_dd";
-            sut.Settings = new Dictionary<string, string>() { { "Format", dateFormat } };
+            sut.Settings.Add("Format", dateFormat);
             var datePicker = (DatePicker)sut.ValueControl;
 
             sut.Value.Should().NotHaveValue();

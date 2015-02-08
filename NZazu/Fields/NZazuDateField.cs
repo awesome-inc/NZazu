@@ -1,5 +1,4 @@
 using System;
-using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -7,9 +6,6 @@ namespace NZazu.Fields
 {
     public class NZazuDateField : NZazuField<DateTime?>
     {
-        // TODO: How to customize or inject the cultur/formatprovider?
-        private IFormatProvider FormatProvider { get { return CultureInfo.InvariantCulture; } }
-
         public string DateFormat { get; protected internal set; }
 
         public NZazuDateField(string key) : base(key) { }
@@ -19,7 +15,7 @@ namespace NZazu.Fields
 
         protected override Control GetValue()
         {
-            DateFormat = GetDateFormat();
+            DateFormat = GetFormatString();
             return new DatePicker {ToolTip = Description};
         }
 
@@ -46,13 +42,6 @@ namespace NZazu.Fields
             if (String.IsNullOrWhiteSpace(DateFormat))
                 return dateTime.ToString(FormatProvider);
             return dateTime.ToString(DateFormat, FormatProvider);
-        }
-
-        protected string GetDateFormat()
-        {
-            String dateFormat = null;
-            if (Settings != null) Settings.TryGetValue("Format", out dateFormat);
-            return dateFormat;
         }
     }
 }

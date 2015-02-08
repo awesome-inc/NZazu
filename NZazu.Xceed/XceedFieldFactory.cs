@@ -10,6 +10,8 @@ namespace NZazu.Xceed
         {
             FieldTypes["string"] = typeof(XceedTextBoxField);
             FieldTypes["date"] = typeof(XceedDateTimeField);
+            FieldTypes["double"] = typeof(XceedDoubleField);
+            FieldTypes["int"] = typeof(XceedIntegerField);
         }
     }
 }

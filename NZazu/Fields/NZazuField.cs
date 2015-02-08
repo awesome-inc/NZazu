@@ -12,18 +12,10 @@ namespace NZazu.Fields
 {
     public abstract class NZazuField : INZazuField
     {
+        protected IFormatProvider FormatProvider { get { return CultureInfo.InvariantCulture; } }
+
         private readonly Lazy<Control> _labelControl;
         private readonly Lazy<Control> _valueControl;
-
-        protected NZazuField(string key)
-        {
-            if (String.IsNullOrWhiteSpace(key)) throw new ArgumentException("key");
-            Key = key;
-
-            _labelControl = new Lazy<Control>(GetLabelControl);
-            _valueControl = new Lazy<Control>(GetValueControl);
-            Settings = new Dictionary<string, string>();
-        }
 
         public abstract string StringValue { get; set; }
         public abstract DependencyProperty ContentProperty { get; }
@@ -36,7 +28,17 @@ namespace NZazu.Fields
 
         public Control LabelControl { get { return _labelControl.Value; } }
         public Control ValueControl { get { return _valueControl.Value; } }
-        public Dictionary<string, string> Settings { get; protected internal set; }
+        public Dictionary<string, string> Settings { get; private set; }
+
+        protected NZazuField(string key)
+        {
+            if (String.IsNullOrWhiteSpace(key)) throw new ArgumentException("key");
+            Key = key;
+
+            _labelControl = new Lazy<Control>(GetLabelControl);
+            _valueControl = new Lazy<Control>(GetValueControl);
+            Settings = new Dictionary<string, string>();
+        }
 
         public void Validate()
         {
@@ -48,10 +50,10 @@ namespace NZazu.Fields
 
             if (Check == null) return;
             // TODO: how to customize the culture?
-            Check.Validate(StringValue, CultureInfo.CurrentUICulture);
+            Check.Validate(StringValue, FormatProvider);
         }
 
-        protected internal IValueCheck Check { get; set; } // 'internal' required for testing
+        protected internal IValueCheck Check { get; set; }
 
         protected virtual Control GetLabel() { return !String.IsNullOrWhiteSpace(Prompt) ? new Label { Content = Prompt } : null; }
         protected abstract Control GetValue();
@@ -101,6 +103,13 @@ namespace NZazu.Fields
         /// <param name="binding"></param>
         /// <returns></returns>
         protected virtual Binding DecorateBinding(Binding binding) { return binding; }
+
+        protected string GetFormatString()
+        {
+            String format = null;
+            if (Settings != null) Settings.TryGetValue("Format", out format);
+            return format;
+        }
     }
 
     public abstract class NZazuField<T> : NZazuField, INZazuField<T>, INotifyPropertyChanged
@@ -148,6 +157,5 @@ namespace NZazu.Fields
             binding.TargetNullValue = string.Empty;
             return binding;
         }
-
     }
 }

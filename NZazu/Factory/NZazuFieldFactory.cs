@@ -51,7 +51,10 @@ namespace NZazu.Factory
             field.Check = CreateCheck(fieldDefinition.Checks);
 
             if (fieldDefinition.Settings != null)
-                field.Settings = fieldDefinition.Settings.ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
+            {
+                foreach (var kvp in fieldDefinition.Settings)
+                    field.Settings[kvp.Key] = kvp.Value;
+            }
 
             return field;
         }

@@ -56,5 +56,37 @@ namespace NZazu.Xceed
             datePicker.FormatString.Should().Be(dateFormat);
         }
 
+        [Test]
+        public void Override_Double()
+        {
+            var sut = new XceedFieldFactory();
+            var fieldDefinition = new FieldDefinition
+            {
+                Key = "weight",
+                Type = "double",
+                Prompt = "Weight",
+                Hint = "Enter weight",
+                Description = "Your weight",
+            };
+            var field = sut.CreateField(fieldDefinition);
+            field.Should().BeOfType<XceedDoubleField>();
+        }
+
+        [Test]
+        public void Override_Integer()
+        {
+            var sut = new XceedFieldFactory();
+            var fieldDefinition = new FieldDefinition
+            {
+                Key = "age",
+                Type = "int",
+                Prompt = "Age",
+                Hint = "Enter Age",
+                Description = "Your Age",
+            };
+            var field = sut.CreateField(fieldDefinition);
+            field.Should().BeOfType<XceedIntegerField>();
+        }
+
     }
 }

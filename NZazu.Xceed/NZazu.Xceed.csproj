@@ -75,8 +75,12 @@
     </Compile>
     <Compile Include="XceedDateTimeField.cs" />
     <Compile Include="XceedDateTimeField_Should.cs" />
+    <Compile Include="XceedDoubleField.cs" />
+    <Compile Include="XceedDoubleField_Should.cs" />
     <Compile Include="XceedFieldFactory.cs" />
     <Compile Include="XceedFieldFactory_Should.cs" />
+    <Compile Include="XceedIntegerField.cs" />
+    <Compile Include="XceedIntegerField_Should.cs" />
     <Compile Include="XceedTextBoxField.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

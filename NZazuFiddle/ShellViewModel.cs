@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using Caliburn.Micro;
 using NZazu;
 using NZazu.Contracts;
@@ -43,6 +42,7 @@ namespace NZazuFiddle
         public INZazuFieldFactory FieldFactory
         {
             get { return _fieldFactory; }
+            // ReSharper disable once UnusedMember.Local
             private set
             {
                 if (Equals(value, _fieldFactory)) return;
@@ -54,6 +54,7 @@ namespace NZazuFiddle
         public INZazuLayoutStrategy LayoutStrategy
         {
             get { return _layoutStrategy; }
+            // ReSharper disable once UnusedMember.Local
             private set
             {
                 if (Equals(value, _layoutStrategy)) return;
@@ -98,6 +99,18 @@ namespace NZazuFiddle
                     },
                     new FieldDefinition
                     {
+                        Key = "ranking",
+                        Type = "int",
+                        Prompt = "Ranking",
+                        Hint = "Enter your ranking (0-100)",
+                        Description = "Your ranking",
+                        Checks = new []
+                        {
+                            new CheckDefinition { Type = "range", Values = new[] {"0", "100"}}
+                        }
+                    },
+                    new FieldDefinition
+                    {
                         Key = "weight",
                         Type = "double",
                         Prompt = "Weight",
@@ -131,7 +144,8 @@ namespace NZazuFiddle
             {
                 {"name", "John"}, 
                 {"birthday", new DateTime(1980, 1,1).ToString(DateFormat)}, 
-                {"weight", 82.4d.ToString(CultureInfo.InvariantCulture)}, 
+                {"ranking", "50"}, 
+                {"weight", "82.4"}, 
                 {"isAdmin", "true"}
             };
         }
