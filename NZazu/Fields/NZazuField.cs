@@ -26,7 +26,7 @@ namespace NZazu.Fields
         }
 
         public abstract string StringValue { get; set; }
-        protected abstract internal DependencyProperty ContentProperty { get; } // 'internal' required for testing
+        public abstract DependencyProperty ContentProperty { get; }
 
         public abstract string Type { get; }
         public string Key { get; private set; }
@@ -71,9 +71,6 @@ namespace NZazu.Fields
         {
             if (control == null) return null;
             if (ContentProperty == null) return control; // because no validation if no content!
-
-            if (control.GetBindingExpression(ContentProperty) != null) 
-                throw new InvalidOperationException("binding already applied.");
 
             var binding = new Binding("Value")
             {

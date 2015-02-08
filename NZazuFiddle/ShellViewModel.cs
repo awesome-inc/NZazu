@@ -2,7 +2,10 @@
 using System.Collections.Generic;
 using System.Globalization;
 using Caliburn.Micro;
+using NZazu;
 using NZazu.Contracts;
+using NZazu.Layout;
+using NZazu.Xceed;
 
 namespace NZazuFiddle
 {
@@ -11,7 +14,9 @@ namespace NZazuFiddle
     {
         private FormDefinition _definition = SampleFormDefinition();
         private FormData _data = SampleFormData();
-        private const string DateFormat = @"yyyy/MM/dd";
+        private INZazuFieldFactory _fieldFactory = new XceedFieldFactory();
+        private INZazuLayoutStrategy _layoutStrategy = new GridLayoutStrategy();
+        private const string DateFormat = @"yyyy-MM-dd";
 
         public FormDefinition Definition
         {
@@ -31,6 +36,28 @@ namespace NZazuFiddle
             {
                 if (Equals(value, _data)) return;
                 _data = value;
+                NotifyOfPropertyChange();
+            }
+        }
+
+        public INZazuFieldFactory FieldFactory
+        {
+            get { return _fieldFactory; }
+            private set
+            {
+                if (Equals(value, _fieldFactory)) return;
+                _fieldFactory = value;
+                NotifyOfPropertyChange();
+            }
+        }
+
+        public INZazuLayoutStrategy LayoutStrategy
+        {
+            get { return _layoutStrategy; }
+            private set
+            {
+                if (Equals(value, _layoutStrategy)) return;
+                _layoutStrategy = value;
                 NotifyOfPropertyChange();
             }
         }

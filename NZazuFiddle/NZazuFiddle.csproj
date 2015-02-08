@@ -110,6 +110,10 @@
       <Project>{4D469864-C26E-483E-99DB-DE7305EAAA4F}</Project>
       <Name>NZazu.Contracts</Name>
     </ProjectReference>
+    <ProjectReference Include="..\NZazu.Xceed\NZazu.Xceed.csproj">
+      <Project>{940EECDE-3453-4EA0-B052-15AB18A8119D}</Project>
+      <Name>NZazu.Xceed</Name>
+    </ProjectReference>
     <ProjectReference Include="..\NZazu\NZazu.csproj">
       <Project>{E1D0442F-73BD-443D-895B-4650270D2580}</Project>
       <Name>NZazu</Name>

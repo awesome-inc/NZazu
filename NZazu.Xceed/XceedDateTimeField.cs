@@ -1,3 +1,5 @@
+using System;
+using System.Windows;
 using System.Windows.Controls;
 using NZazu.Fields;
 using Xceed.Wpf.Toolkit;
@@ -10,11 +12,20 @@ namespace NZazu.Xceed
         {
         }
 
+        public override DependencyProperty ContentProperty
+        {
+            get { return DateTimePicker.ValueProperty; }
+        }
+
         protected override Control GetValue()
         {
             var control = new DateTimePicker { ToolTip = Description, Watermark = Hint };
-            if (Settings != null && Settings.ContainsKey("Format"))
-                control.FormatString = Settings["Format"];
+            DateFormat = GetDateFormat();
+            if (!String.IsNullOrWhiteSpace(DateFormat))
+            {
+                control.Format = DateTimeFormat.Custom;
+                control.FormatString = DateFormat;
+            }
             return control;
         }
     }

@@ -43,6 +43,8 @@
         <nZazu:NZazuView x:Name="View" Grid.Column="1" 
             FormDefinition="{Binding Definition}" 
             FormData="{Binding Data, Mode=TwoWay}" 
-                         LostFocus="ApplyChanges"/>
+            LostFocus="ApplyChanges"
+            FieldFactory="{Binding FieldFactory}"
+            LayoutStrategy="{Binding LayoutStrategy}"/>
     </Grid>
 </Window>

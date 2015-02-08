@@ -29,7 +29,7 @@ namespace NZazu.Fields
 
             public override string StringValue { get; set; }
             public override string Type { get { return null; } }
-            protected internal override DependencyProperty ContentProperty { get { return null; } }
+            public override DependencyProperty ContentProperty { get { return null; } }
             protected override Control GetValue() { return null; }
         }
 
@@ -40,7 +40,7 @@ namespace NZazu.Fields
             {
             }
 
-            protected internal override DependencyProperty ContentProperty { get { return ContentControl.ContentProperty; } }
+            public override DependencyProperty ContentProperty { get { return ContentControl.ContentProperty; } }
             protected override Control GetValue() { return new ContentControl(); }
         }
 

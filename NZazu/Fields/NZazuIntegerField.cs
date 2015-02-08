@@ -10,7 +10,7 @@ namespace NZazu.Fields
         public NZazuIntegerField(string key) : base(key) { }
 
         public override string Type { get { return "int"; } }
-        protected internal override DependencyProperty ContentProperty { get { return TextBox.TextProperty; } }
+        public override DependencyProperty ContentProperty { get { return TextBox.TextProperty; } }
 
         protected override Control GetValue()
         {

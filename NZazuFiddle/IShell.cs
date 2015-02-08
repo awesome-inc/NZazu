@@ -1,4 +1,5 @@
-﻿using NZazu.Contracts;
+﻿using NZazu;
+using NZazu.Contracts;
 
 namespace NZazuFiddle
 {
@@ -6,5 +7,8 @@ namespace NZazuFiddle
     {
         FormDefinition Definition { get; set; }
         FormData Data { get; set; }
+
+        INZazuFieldFactory FieldFactory { get; }
+        INZazuLayoutStrategy LayoutStrategy { get; }
     }
 }

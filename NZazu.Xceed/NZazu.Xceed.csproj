@@ -74,6 +74,7 @@
       <Link>Properties\VersionInfo.g.cs</Link>
     </Compile>
     <Compile Include="XceedDateTimeField.cs" />
+    <Compile Include="XceedDateTimeField_Should.cs" />
     <Compile Include="XceedFieldFactory.cs" />
     <Compile Include="XceedFieldFactory_Should.cs" />
     <Compile Include="XceedTextBoxField.cs" />

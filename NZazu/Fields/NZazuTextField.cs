@@ -14,7 +14,7 @@ namespace NZazu.Fields
 
         public override string Type { get { return "string"; } }
 
-        protected internal override DependencyProperty ContentProperty
+        public override DependencyProperty ContentProperty
         {
             get { return TextBox.TextProperty; }
         }

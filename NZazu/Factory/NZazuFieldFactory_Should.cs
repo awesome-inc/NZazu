@@ -32,7 +32,6 @@ namespace NZazu.Factory
         [TestCase("int", typeof (TextBox))]
         [TestCase("date", typeof (DatePicker))]
         [TestCase("double", typeof (TextBox))]
-        //[TestCase("dateTime", typeof (DatePicker))]
         public void Support(string fieldType, Type controlType)
         {
             var sut = new NZazuFieldFactory();

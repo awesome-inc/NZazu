@@ -24,7 +24,7 @@ namespace NZazu.Fields
         }
 
         public override string Type { get { return "bool"; } }
-        protected internal override DependencyProperty ContentProperty { get { return ToggleButton.IsCheckedProperty; } }
+        public override DependencyProperty ContentProperty { get { return ToggleButton.IsCheckedProperty; } }
 
         protected override Control GetValue()
         {

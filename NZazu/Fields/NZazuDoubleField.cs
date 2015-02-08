@@ -16,7 +16,7 @@ namespace NZazu.Fields
             private readonly string _format;
             private readonly CultureInfo _culture;
             private string _attachDot = string.Empty;
-            private string _lastValue = null;
+            private string _lastValue;
 
             public DoubleToStringConverter(string format = "G", CultureInfo culture = null)
             {
@@ -59,7 +59,7 @@ namespace NZazu.Fields
         public NZazuDoubleField(string key) : base(key) { }
 
         public override string Type { get { return "double"; } }
-        protected internal override DependencyProperty ContentProperty { get { return TextBox.TextProperty; } }
+        public override DependencyProperty ContentProperty { get { return TextBox.TextProperty; } }
 
         protected override Control GetValue()
         {
