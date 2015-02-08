@@ -4,14 +4,20 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:nZazuFiddle="clr-namespace:NZazuFiddle"
+             xmlns:avalonedit="http://icsharpcode.net/sharpdevelop/avalonedit"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300" d:DataContext="{d:DesignInstance nZazuFiddle:FormDefinitionViewModel}">
     <UserControl.Resources>
         <nZazuFiddle:FormDefinitionConverter x:Key="DefinitionConverter"/>
     </UserControl.Resources>
-    <Grid>
-        <ScrollViewer>
-            <TextBox Text="{Binding Definition, Converter={StaticResource DefinitionConverter}}" />
-        </ScrollViewer>
-    </Grid>
+    <Border BorderBrush="Black" BorderThickness="1">
+        <avalonedit:TextEditor x:Name="TextEditor">
+            <i:Interaction.Behaviors>
+                <nZazuFiddle:AvalonEditBehaviour 
+                    GiveMeTheText="{Binding Definition, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, 
+                    Converter={StaticResource DefinitionConverter}}"/>
+            </i:Interaction.Behaviors>
+        </avalonedit:TextEditor>
+    </Border>
 </UserControl>

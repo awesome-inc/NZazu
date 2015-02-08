@@ -81,6 +81,7 @@
     <Compile Include="..\VersionInfo.g.cs">
       <Link>Properties\VersionInfo.g.cs</Link>
     </Compile>
+    <Compile Include="AvalonEditBehaviour.cs" />
     <Compile Include="FormDataView.xaml.cs">
       <DependentUpon>FormDataView.xaml</DependentUpon>
     </Compile>
@@ -96,6 +97,7 @@
     <Compile Include="IHaveFormData.cs" />
     <Compile Include="IHaveFormDefinition.cs" />
     <Compile Include="IPreviewViewModel.cs" />
+    <Compile Include="MyCompletionData.cs" />
     <Compile Include="PreviewView.xaml.cs">
       <DependentUpon>PreviewView.xaml</DependentUpon>
     </Compile>
