@@ -8,21 +8,22 @@ using NZazu.Fields;
 
 namespace NZazu.Factory
 {
-    class NZazuFieldFactory : INZazuFieldFactory
+    public class NZazuFieldFactory : INZazuFieldFactory
     {
         private readonly ICheckFactory _checkFactory;
-        private readonly Dictionary<string, Type> _fieldTypes = new Dictionary<string, Type>();
+        protected readonly Dictionary<string, Type> FieldTypes = new Dictionary<string, Type>();
         private const string DefaultType = "label";
 
         public NZazuFieldFactory(ICheckFactory checkFactory = null)
         {
             _checkFactory = checkFactory ?? new CheckFactory();
 
-            _fieldTypes.Add("label", typeof(NZazuLabelField));
-            _fieldTypes.Add("string", typeof(NZazuTextField));
-            _fieldTypes.Add("bool", typeof(NZazuBoolField));
-            _fieldTypes.Add("int", typeof(NZazuIntegerField));
-            _fieldTypes.Add("date", typeof(NZazuDateField));
+            FieldTypes.Add("label", typeof(NZazuLabelField));
+            FieldTypes.Add("string", typeof(NZazuTextField));
+            FieldTypes.Add("bool", typeof(NZazuBoolField));
+            FieldTypes.Add("int", typeof(NZazuIntegerField));
+            FieldTypes.Add("date", typeof(NZazuDateField));
+            FieldTypes.Add("double", typeof(NZazuDoubleField));
         }
 
         public INZazuField CreateField(FieldDefinition fieldDefinition)
@@ -31,12 +32,12 @@ namespace NZazu.Factory
             var fieldTypeSafe = fieldDefinition.Type ?? DefaultType;
 
             NZazuField field;
-            if (_fieldTypes.ContainsKey(fieldTypeSafe))
-                field = (NZazuField)Activator.CreateInstance(_fieldTypes[fieldTypeSafe], fieldDefinition.Key);
+            if (FieldTypes.ContainsKey(fieldTypeSafe))
+                field = (NZazuField)Activator.CreateInstance(FieldTypes[fieldTypeSafe], fieldDefinition.Key);
             else
             {
                 Trace.TraceWarning("The specified field type is not supported: " + fieldTypeSafe);
-                field = (NZazuField)Activator.CreateInstance(_fieldTypes[DefaultType], fieldDefinition.Key);
+                field = (NZazuField)Activator.CreateInstance(FieldTypes[DefaultType], fieldDefinition.Key);
             }
 
             return Decorate(field, fieldDefinition);
@@ -47,15 +48,25 @@ namespace NZazu.Factory
             field.Prompt = fieldDefinition.Prompt;
             field.Hint = fieldDefinition.Hint;
             field.Description = fieldDefinition.Description;
-            field.Checks = CreateChecks(fieldDefinition.Checks);
+            field.Check = CreateCheck(fieldDefinition.Checks);
+
+            if (fieldDefinition.Settings != null)
+            {
+                foreach (var kvp in fieldDefinition.Settings)
+                    field.Settings[kvp.Key] = kvp.Value;
+            }
+
             return field;
         }
 
-        private IEnumerable<IValueCheck> CreateChecks(IEnumerable<CheckDefinition> checkDefinitions)
+        private IValueCheck CreateCheck(IEnumerable<CheckDefinition> checkDefinitions)
         {
-            return checkDefinitions == null 
-                ? Enumerable.Empty<IValueCheck>() 
-                : checkDefinitions.Select(c => _checkFactory.CreateCheck(c)).ToArray();
+            if (checkDefinitions == null) return null;
+ 
+            var checks = checkDefinitions.Select(c => _checkFactory.CreateCheck(c)).ToArray();
+            return checks.Length == 1 
+                ? checks.First() 
+                : new AggregateCheck(checks.ToArray());
         }
     }
 }

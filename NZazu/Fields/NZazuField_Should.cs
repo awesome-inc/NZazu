@@ -29,7 +29,7 @@ namespace NZazu.Fields
 
             public override string StringValue { get; set; }
             public override string Type { get { return null; } }
-            protected internal override DependencyProperty ContentProperty { get { return null; } }
+            public override DependencyProperty ContentProperty { get { return null; } }
             protected override Control GetValue() { return null; }
         }
 
@@ -40,7 +40,7 @@ namespace NZazu.Fields
             {
             }
 
-            protected internal override DependencyProperty ContentProperty { get { return ContentControl.ContentProperty; } }
+            public override DependencyProperty ContentProperty { get { return ContentControl.ContentProperty; } }
             protected override Control GetValue() { return new ContentControl(); }
         }
 
@@ -90,7 +90,7 @@ namespace NZazu.Fields
         public void Pass_Validation_To_Checks()
         {
             var check = Substitute.For<IValueCheck>();
-            var sut = new NZazuDummyField("test") { Description = "description", Checks = new[] { check } };
+            var sut = new NZazuDummyField("test") { Description = "description", Check = check };
             sut.Validate();
 
             check.ReceivedWithAnyArgs().Validate(Arg.Any<string>());
@@ -100,9 +100,9 @@ namespace NZazu.Fields
         public void Pass_Validation_To_Checks_And_Rethrow_Exception()
         {
             var check = Substitute.For<IValueCheck>();
-            check.When(x => x.Validate(Arg.Any<string>(), CultureInfo.CurrentUICulture)).Do(x => { throw new ValidationException("test"); });
+            check.When(x => x.Validate(Arg.Any<string>(), Arg.Any<IFormatProvider>())).Do(x => { throw new ValidationException("test"); });
 
-            var sut = new NZazuDummyField("test") { Description = "description", Checks = new[] { check } };
+            var sut = new NZazuDummyField("test") { Description = "description", Check =  check };
             new Action(sut.Validate).Invoking(a => a()).ShouldThrow<ValidationException>();
             check.ReceivedWithAnyArgs().Validate(Arg.Any<string>());
         }
@@ -116,7 +116,8 @@ namespace NZazu.Fields
             var check = Substitute.For<IValueCheck>();
             check.When(x => x.Validate(Arg.Any<string>())).Do(x => { throw new ValidationException("test"); });
 
-            var sut = new NZazuField_With_Description_As_Content_Property("test") { Description = "description", Checks = new[] { check } };
+            var sut = new NZazuField_With_Description_As_Content_Property("test") 
+                { Description = "description", Check = check };
 
             var expectedRule = new CheckValidationRule(check)
             {
@@ -133,7 +134,8 @@ namespace NZazu.Fields
             binding.Should().NotBeNull();
             binding.Source.Should().Be(sut, because: "we need a source for data binding");
             binding.Mode.Should().Be(BindingMode.TwoWay, because: "we update databinding in two directions");
-            binding.UpdateSourceTrigger.Should().Be(UpdateSourceTrigger.PropertyChanged, because: "we want validation during edit");
+            binding.UpdateSourceTrigger
+                .Should().Be(UpdateSourceTrigger.PropertyChanged, because: "we want validation during edit");
 
             binding.ValidationRules.Single().ShouldBeEquivalentTo(expectedRule);
         }

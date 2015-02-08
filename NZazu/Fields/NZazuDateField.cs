@@ -1,41 +1,47 @@
 using System;
-using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
 
 namespace NZazu.Fields
 {
-    class NZazuDateField : NZazuField<DateTime?>
+    public class NZazuDateField : NZazuField<DateTime?>
     {
+        public string DateFormat { get; protected internal set; }
+
         public NZazuDateField(string key) : base(key) { }
 
         public override string Type { get { return "date"; } }
-        protected internal override DependencyProperty ContentProperty { get { return DatePicker.SelectedDateProperty; } }
+        public override DependencyProperty ContentProperty { get { return DatePicker.SelectedDateProperty; } }
 
         protected override Control GetValue()
         {
-            var result = new DatePicker {ToolTip = Description};
-            return result;
+            DateFormat = GetFormatString();
+            return new DatePicker {ToolTip = Description};
         }
 
         protected override void SetStringValue(string value)
         {
-            Console.WriteLine(value);
             try
             {
-                var date = DateTime.Parse(value, CultureInfo.InvariantCulture);
-                Value = date;
+                if (String.IsNullOrWhiteSpace(DateFormat))
+                    Value = DateTime.Parse(value, FormatProvider);
+                else
+                    Value = DateTime.ParseExact(value, DateFormat, FormatProvider);
             }
-            catch (Exception ex)
+            catch (FormatException)
             {
-                Console.WriteLine(ex.Message);
                 Value = null;
             }
         }
-        // todo culture
+
         protected override string GetStringValue()
         {
-            return Value.HasValue ? Value.Value.ToString(CultureInfo.InvariantCulture) : String.Empty;
+            if (!Value.HasValue) return String.Empty;
+
+            var dateTime = Value.Value;
+            if (String.IsNullOrWhiteSpace(DateFormat))
+                return dateTime.ToString(FormatProvider);
+            return dateTime.ToString(DateFormat, FormatProvider);
         }
     }
 }

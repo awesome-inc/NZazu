@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
-using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
@@ -11,22 +10,15 @@ using NZazu.Contracts.Checks;
 
 namespace NZazu.Fields
 {
-    abstract class NZazuField : INZazuField
+    public abstract class NZazuField : INZazuField
     {
+        protected IFormatProvider FormatProvider { get { return CultureInfo.InvariantCulture; } }
+
         private readonly Lazy<Control> _labelControl;
         private readonly Lazy<Control> _valueControl;
 
-        protected NZazuField(string key)
-        {
-            if (String.IsNullOrWhiteSpace(key)) throw new ArgumentException("key");
-            Key = key;
-
-            _labelControl = new Lazy<Control>(GetLabelControl);
-            _valueControl = new Lazy<Control>(GetValueControl);
-        }
-
         public abstract string StringValue { get; set; }
-        protected abstract internal DependencyProperty ContentProperty { get; } // 'internal' required for testing
+        public abstract DependencyProperty ContentProperty { get; }
 
         public abstract string Type { get; }
         public string Key { get; private set; }
@@ -36,16 +28,32 @@ namespace NZazu.Fields
 
         public Control LabelControl { get { return _labelControl.Value; } }
         public Control ValueControl { get { return _valueControl.Value; } }
+        public Dictionary<string, string> Settings { get; private set; }
+
+        protected NZazuField(string key)
+        {
+            if (String.IsNullOrWhiteSpace(key)) throw new ArgumentException("key");
+            Key = key;
+
+            _labelControl = new Lazy<Control>(GetLabelControl);
+            _valueControl = new Lazy<Control>(GetValueControl);
+            Settings = new Dictionary<string, string>();
+        }
 
         public void Validate()
         {
-            var bindingExpression = ContentProperty == null ? null : ValueControl.GetBindingExpression(ContentProperty);
-            if (bindingExpression != null && bindingExpression.HasError) throw new ValidationException("UI has errors. Value could not be converted");
-            var safeChecks = Checks == null ? new IValueCheck[] { } : Checks.ToArray();
-            new AggregateCheck(safeChecks).Validate(StringValue, CultureInfo.CurrentUICulture);
+            var bindingExpression = ContentProperty != null 
+                ? ValueControl.GetBindingExpression(ContentProperty) 
+                : null;
+            if (bindingExpression != null && bindingExpression.HasError) 
+                throw new ValidationException("UI has errors. Value could not be converted");
+
+            if (Check == null) return;
+            // TODO: how to customize the culture?
+            Check.Validate(StringValue, FormatProvider);
         }
 
-        protected internal IEnumerable<IValueCheck> Checks { get; set; } // 'internal' required for testing
+        protected internal IValueCheck Check { get; set; }
 
         protected virtual Control GetLabel() { return !String.IsNullOrWhiteSpace(Prompt) ? new Label { Content = Prompt } : null; }
         protected abstract Control GetValue();
@@ -66,7 +74,6 @@ namespace NZazu.Fields
             if (control == null) return null;
             if (ContentProperty == null) return control; // because no validation if no content!
 
-            if (control.GetBindingExpression(ContentProperty) != null) throw new InvalidOperationException("binding already applied.");
             var binding = new Binding("Value")
             {
                 Source = this,
@@ -82,12 +89,10 @@ namespace NZazu.Fields
             binding = DecorateBinding(binding);
             control.SetBinding(ContentProperty, binding);
 
-            if (Checks == null || !Checks.Any()) return control; // no checks, no validation required. saves performance
+            if (Check == null) return control; // no checks, no validation required. saves performance
 
-            var safeChecks = Checks == null ? new IValueCheck[] { } : Checks.ToArray();
-            var aggregateCheck = new AggregateCheck(safeChecks);
             binding.ValidationRules.Clear();
-            binding.ValidationRules.Add(new CheckValidationRule(aggregateCheck) { ValidatesOnTargetUpdated = true });
+            binding.ValidationRules.Add(new CheckValidationRule(Check) { ValidatesOnTargetUpdated = true });
 
             return control;
         }
@@ -98,9 +103,16 @@ namespace NZazu.Fields
         /// <param name="binding"></param>
         /// <returns></returns>
         protected virtual Binding DecorateBinding(Binding binding) { return binding; }
+
+        protected string GetFormatString()
+        {
+            String format = null;
+            if (Settings != null) Settings.TryGetValue("Format", out format);
+            return format;
+        }
     }
 
-    abstract class NZazuField<T> : NZazuField, INZazuField<T>, INotifyPropertyChanged
+    public abstract class NZazuField<T> : NZazuField, INZazuField<T>, INotifyPropertyChanged
     {
         private T _value;
 
@@ -145,6 +157,5 @@ namespace NZazu.Fields
             binding.TargetNullValue = string.Empty;
             return binding;
         }
-
     }
 }

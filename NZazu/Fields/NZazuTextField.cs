@@ -3,7 +3,7 @@ using System.Windows.Controls;
 
 namespace NZazu.Fields
 {
-    class NZazuTextField : NZazuField<string>
+    public class NZazuTextField : NZazuField<string>
     {
         public NZazuTextField(string key) : base(key)
         {
@@ -14,7 +14,7 @@ namespace NZazu.Fields
 
         public override string Type { get { return "string"; } }
 
-        protected internal override DependencyProperty ContentProperty
+        public override DependencyProperty ContentProperty
         {
             get { return TextBox.TextProperty; }
         }

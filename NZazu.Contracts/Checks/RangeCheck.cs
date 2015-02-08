@@ -15,12 +15,12 @@ namespace NZazu.Contracts.Checks
             Maximum = max;
         }
 
-        public void Validate(string value, CultureInfo cultureInfo = null)
+        public void Validate(string value, IFormatProvider formatProvider = null)
         {
             try
             {
-                var safeCultureInfo = cultureInfo ?? CultureInfo.InvariantCulture;
-                var val = double.Parse(value, safeCultureInfo);
+                var safeFormatProvider = formatProvider ?? CultureInfo.InvariantCulture;
+                var val = double.Parse(value, safeFormatProvider);
                 if (val < Minimum || val > Maximum)
                     throw new ValidationException(string.Format("The specified value must be between {0} and {1}",
                         Minimum, Maximum));

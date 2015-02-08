@@ -16,7 +16,7 @@ namespace NZazu.Fields
             get { return null; }
             set {} }
 
-        protected internal override DependencyProperty ContentProperty
+        public override DependencyProperty ContentProperty
         {
             get { return null; }
         }

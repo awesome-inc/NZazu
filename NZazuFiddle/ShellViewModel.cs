@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using Caliburn.Micro;
+using NZazu;
 using NZazu.Contracts;
+using NZazu.Layout;
+using NZazu.Xceed;
 
 namespace NZazuFiddle
 {
@@ -11,7 +13,9 @@ namespace NZazuFiddle
     {
         private FormDefinition _definition = SampleFormDefinition();
         private FormData _data = SampleFormData();
-        private const string DateFormat = @"yyyy/MM/dd";
+        private INZazuFieldFactory _fieldFactory = new XceedFieldFactory();
+        private INZazuLayoutStrategy _layoutStrategy = new GridLayoutStrategy();
+        private const string DateFormat = @"yyyy-MM-dd";
 
         public FormDefinition Definition
         {
@@ -31,6 +35,30 @@ namespace NZazuFiddle
             {
                 if (Equals(value, _data)) return;
                 _data = value;
+                NotifyOfPropertyChange();
+            }
+        }
+
+        public INZazuFieldFactory FieldFactory
+        {
+            get { return _fieldFactory; }
+            // ReSharper disable once UnusedMember.Local
+            private set
+            {
+                if (Equals(value, _fieldFactory)) return;
+                _fieldFactory = value;
+                NotifyOfPropertyChange();
+            }
+        }
+
+        public INZazuLayoutStrategy LayoutStrategy
+        {
+            get { return _layoutStrategy; }
+            // ReSharper disable once UnusedMember.Local
+            private set
+            {
+                if (Equals(value, _layoutStrategy)) return;
+                _layoutStrategy = value;
                 NotifyOfPropertyChange();
             }
         }
@@ -71,6 +99,18 @@ namespace NZazuFiddle
                     },
                     new FieldDefinition
                     {
+                        Key = "ranking",
+                        Type = "int",
+                        Prompt = "Ranking",
+                        Hint = "Enter your ranking (0-100)",
+                        Description = "Your ranking",
+                        Checks = new []
+                        {
+                            new CheckDefinition { Type = "range", Values = new[] {"0", "100"}}
+                        }
+                    },
+                    new FieldDefinition
+                    {
                         Key = "weight",
                         Type = "double",
                         Prompt = "Weight",
@@ -104,7 +144,8 @@ namespace NZazuFiddle
             {
                 {"name", "John"}, 
                 {"birthday", new DateTime(1980, 1,1).ToString(DateFormat)}, 
-                {"weight", 82.4d.ToString(CultureInfo.InvariantCulture)}, 
+                {"ranking", "50"}, 
+                {"weight", "82.4"}, 
                 {"isAdmin", "true"}
             };
         }

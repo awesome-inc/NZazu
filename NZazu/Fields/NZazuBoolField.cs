@@ -5,7 +5,7 @@ using System.Windows.Controls.Primitives;
 
 namespace NZazu.Fields
 {
-    class NZazuBoolField : NZazuField<bool?>
+    public class NZazuBoolField : NZazuField<bool?>
     {
         public NZazuBoolField(string key) : base(key) { }
 
@@ -24,7 +24,7 @@ namespace NZazu.Fields
         }
 
         public override string Type { get { return "bool"; } }
-        protected internal override DependencyProperty ContentProperty { get { return ToggleButton.IsCheckedProperty; } }
+        public override DependencyProperty ContentProperty { get { return ToggleButton.IsCheckedProperty; } }
 
         protected override Control GetValue()
         {

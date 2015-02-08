@@ -16,29 +16,29 @@ namespace NZazu.Contracts.Checks
             var sut = new AggregateCheck(check1, check2);
 
             const string input = "foobar";
-            var cultureInfo = CultureInfo.InvariantCulture;
+            var formatProvider = CultureInfo.InvariantCulture;
             var error = new ValidationException("test");
 
             // true AND true => true
-            sut.Validate(input, cultureInfo);
+            sut.Validate(input, formatProvider);
 
-            check1.Received().Validate(input, cultureInfo);
-            check2.Received().Validate(input, cultureInfo);
+            check1.Received().Validate(input, formatProvider);
+            check2.Received().Validate(input, formatProvider);
 
             // false AND false => false
-            check1.When(x => x.Validate(input, cultureInfo)).Do(x => { throw error; });
-            check2.When(x => x.Validate(input, cultureInfo)).Do(x => { throw error; });
+            check1.When(x => x.Validate(input, formatProvider)).Do(x => { throw error; });
+            check2.When(x => x.Validate(input, formatProvider)).Do(x => { throw error; });
 
-            Assert.Throws<ValidationException>(() => sut.Validate(input, cultureInfo));
+            Assert.Throws<ValidationException>(() => sut.Validate(input, formatProvider));
 
             // false AND true => false
-            check2.When(x => x.Validate(input, cultureInfo)).Do(x => { });
-            Assert.Throws<ValidationException>(() => sut.Validate(input, cultureInfo));
+            check2.When(x => x.Validate(input, formatProvider)).Do(x => { });
+            Assert.Throws<ValidationException>(() => sut.Validate(input, formatProvider));
 
             // true AND false => false
-            check1.When(x => x.Validate(input, cultureInfo)).Do(x => { });
-            check2.When(x => x.Validate(input, cultureInfo)).Do(x => { throw error; });
-            Assert.Throws<ValidationException>(() => sut.Validate(input, cultureInfo));
+            check1.When(x => x.Validate(input, formatProvider)).Do(x => { });
+            check2.When(x => x.Validate(input, formatProvider)).Do(x => { throw error; });
+            Assert.Throws<ValidationException>(() => sut.Validate(input, formatProvider));
         }
     }
 }

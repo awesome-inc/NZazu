@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Globalization;
 
 namespace NZazu.Contracts.Checks
 {
@@ -20,7 +19,7 @@ namespace NZazu.Contracts.Checks
             MaximumLength = max;
         }
 
-        public void Validate(string value, CultureInfo cultureInfo = null)
+        public void Validate(string value, IFormatProvider formatProvider = null)
         {
             Trace.WriteLine("");
 

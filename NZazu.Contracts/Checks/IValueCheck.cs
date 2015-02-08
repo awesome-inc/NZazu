@@ -1,10 +1,10 @@
-﻿using System.Globalization;
+﻿using System;
 
 namespace NZazu.Contracts.Checks
 {
     public interface IValueCheck
     {
         /// <exception cref="ValidationException"/>
-        void Validate(string value, CultureInfo cultureInfo = null);
+        void Validate(string value, IFormatProvider formatProvider = null);
     }
 }
