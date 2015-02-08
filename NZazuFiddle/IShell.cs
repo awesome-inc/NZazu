@@ -1,14 +1,10 @@
-﻿using NZazu;
-using NZazu.Contracts;
-
-namespace NZazuFiddle
+﻿namespace NZazuFiddle
 {
     public interface IShell
     {
-        FormDefinition Definition { get; set; }
-        FormData Data { get; set; }
+        IFormDefinitionViewModel Definition { get; }
+        IFormDataViewModel Data { get; }
+        IPreviewViewModel Preview { get; }
 
-        INZazuFieldFactory FieldFactory { get; }
-        INZazuLayoutStrategy LayoutStrategy { get; }
     }
 }

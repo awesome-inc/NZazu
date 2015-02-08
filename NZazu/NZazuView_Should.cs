@@ -147,5 +147,29 @@ namespace NZazu
             field.ReceivedWithAnyArgs().Validate();
         }
 
+        [Test]
+        [Description("In real-time scenarios try to preserve formdat when formdefinition changed only marginally")]
+        public void Try_to_reapply_Formdata_if_FormDefinition_changed()
+        {
+            const string key = "name";
+            const string value = "John";
+
+            var fieldDefinition = new FieldDefinition { Key = key, Type = "string", Prompt = "Name" };
+            var formDefinition = new FormDefinition { Fields = new[] { fieldDefinition } };
+            var formData = new FormData(new Dictionary<string, string>{{key,value}});
+
+            var sut = new NZazuView {FormDefinition = formDefinition, FormData = formData};
+
+            sut.FormData.Should().Be(formData);
+            var actual = sut.GetFieldValues();
+            formData.Values.ShouldBeEquivalentTo(actual);
+
+            fieldDefinition.Prompt = "Login";
+            sut.FormDefinition = formDefinition;
+
+            sut.FormData.Should().Be(formData);
+            actual = sut.GetFieldValues();
+            formData.Values.ShouldBeEquivalentTo(actual);
+        }
     }
 }

@@ -1,6 +1,4 @@
-﻿using System.Windows;
-
-namespace NZazuFiddle
+﻿namespace NZazuFiddle
 {
     // ReSharper disable once UnusedMember.Global
     public partial class ShellView
@@ -8,11 +6,6 @@ namespace NZazuFiddle
         public ShellView()
         {
             InitializeComponent();
-        }
-
-        private void ApplyChanges(object sender, RoutedEventArgs e)
-        {
-            View.ApplyChanges();
         }
     }
 }

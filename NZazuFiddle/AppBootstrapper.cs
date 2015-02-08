@@ -1,6 +1,10 @@
 ﻿using System.Windows;
 using Autofac;
+using Caliburn.Micro;
 using Caliburn.Micro.Autofac;
+using NZazu;
+using NZazu.Layout;
+using NZazu.Xceed;
 
 namespace NZazuFiddle
 {
@@ -10,9 +14,21 @@ namespace NZazuFiddle
         {
             Initialize();
         }
+
         protected override void ConfigureContainer(ContainerBuilder builder)
         {
+            builder.RegisterType<EventAggregator>().As<IEventAggregator>().SingleInstance();
+
+            builder.RegisterInstance(Example.FormDefinition);
+            builder.RegisterInstance(Example.FormData);
+            builder.RegisterType<FormDefinitionViewModel>().As<IFormDefinitionViewModel>().SingleInstance();
+            builder.RegisterType<FormDataViewModel>().As<IFormDataViewModel>().SingleInstance();
+            builder.RegisterType<PreviewViewModel>().As<IPreviewViewModel>().SingleInstance();
+
+            builder.RegisterType<XceedFieldFactory>().As<INZazuFieldFactory>();
+            builder.RegisterType<GridLayoutStrategy>().As<INZazuLayoutStrategy>();
         }
+
         protected override void ConfigureBootstrapper()
         {
             base.ConfigureBootstrapper();
