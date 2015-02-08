@@ -10,7 +10,7 @@ namespace NZazu.Fields
         // TODO: How to customize or inject the cultur/formatprovider?
         private IFormatProvider FormatProvider { get { return CultureInfo.InvariantCulture; } }
 
-        public string DateFormat { get; protected set; }
+        public string DateFormat { get; protected internal set; }
 
         public NZazuDateField(string key) : base(key) { }
 
