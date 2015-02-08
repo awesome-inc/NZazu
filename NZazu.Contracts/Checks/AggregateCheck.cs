@@ -1,5 +1,5 @@
+using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 
 namespace NZazu.Contracts.Checks
@@ -15,9 +15,9 @@ namespace NZazu.Contracts.Checks
             _checks = (checks ?? Enumerable.Empty<IValueCheck>()).ToList();
         }
 
-        public void Validate(string value, CultureInfo cultureInfo)
+        public void Validate(string value, IFormatProvider formatProvider)
         {
-            _checks.ForEach(c => c.Validate(value, cultureInfo));
+            _checks.ForEach(c => c.Validate(value, formatProvider));
         }
     }
 }

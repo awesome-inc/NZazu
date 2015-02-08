@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 
@@ -19,7 +18,7 @@ namespace NZazu.Contracts.Checks
             _regex = regex;
         }
 
-        public void Validate(string value, CultureInfo cultureInfo = null)
+        public void Validate(string value, IFormatProvider formatProvider = null)
         {
             if (value == null) throw new ValidationException(_hint);
             var anyMatch = _regex.Any(r => r.IsMatch(value));
