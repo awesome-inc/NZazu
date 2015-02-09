@@ -1,0 +1,59 @@
+﻿<?xml version="1.0"?>
+<!-- Based on TypeScript-Addin for SharpDevelop, cf.: https://raw.githubusercontent.com/mrward/typescript-addin/master/src/TypeScriptBinding/Resources/TypeScript.xshd -->
+<!-- Based on JavaScript syntax definition for JavaScript 2.0 by Svante Lidman -->
+<!-- converted to AvalonEdit format by Siegfried Pammer in 2010 -->
+<SyntaxDefinition name="NzazuForm" extensions=".nzf" xmlns="http://icsharpcode.net/sharpdevelop/syntaxdefinition/2008">
+  <Color name="Digits" foreground="DarkBlue" />
+  <Color name="Comment" foreground="Green" />
+  <Color name="Character" foreground="Sienna" />
+  <Color name="Keywords" foreground="Blue" fontWeight="bold" />
+  <Color name="Literals" foreground="Blue" />
+  <RuleSet ignoreCase="false">
+    <Keywords color="Keywords">
+      <Word>"Fields"</Word>
+      <Word>"Key"</Word>
+      <Word>"Type"</Word>
+      <Word>"Prompt"</Word>
+      <Word>"Hint"</Word>
+      <Word>"Description"</Word>
+      <Word>"Checks"</Word>
+      <Word>"Values"</Word>
+      <Word>"Settings"</Word>
+      <Word>"Format"</Word>
+      <Word>"Behaviour"</Word>
+      <Word>"Name"</Word>
+    </Keywords>
+    <Keywords color="Literals">
+      <Word>null</Word>
+      <Word>"false"</Word>
+      <Word>"true"</Word>
+      <!-- field types -->
+      <Word>"string"</Word>
+      <Word>"bool"</Word>
+      <Word>"date"</Word>
+      <Word>"int"</Word>
+      <Word>"double"</Word>
+      <Word>"richtext"</Word>
+      <!-- check types -->
+      <Word>"required"</Word>
+      <Word>"length"</Word>
+      <Word>"range"</Word>
+      <Word>"regex"</Word>
+    </Keywords>
+    <Span color="Comment">
+      <Begin>//</Begin>
+    </Span>
+    <Span color="Comment" multiline="true">
+      <Begin>/\*</Begin>
+      <End>\*/</End>
+    </Span>
+    <Span color="Character">
+      <Begin>'</Begin>
+      <End>'</End>
+      <RuleSet>
+        <Span begin="\\" end="." />
+      </RuleSet>
+    </Span>
+    <Rule color="Digits">\b0[xX][0-9a-fA-F]+|(\b\d+(\.[0-9]+)?|\.[0-9]+)([eE][+-]?[0-9]+)?</Rule>
+  </RuleSet>
+</SyntaxDefinition>

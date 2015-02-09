@@ -1,26 +1,15 @@
 ﻿<Window x:Class="NZazuFiddle.ShellView"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:nZazu="clr-namespace:NZazu;assembly=NZazu" xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:nZazuFiddle="clr-namespace:NZazuFiddle"
         mc:Ignorable="d"
         Title="NZazuFiddle"
         Height="800" Width="1024" d:DataContext="{d:DesignInstance nZazuFiddle:ShellViewModel}">
     <Window.Resources>
-        <nZazuFiddle:FormDefinitionConverter x:Key="DefinitionConverter"/>
-        <nZazuFiddle:FormDataConverter x:Key="DataConverter"/>
         <Style TargetType="Grid">
             <Setter Property="Margin" Value="4"/>
-        </Style>
-        <Style TargetType="ScrollViewer">
-            <Setter Property="HorizontalScrollBarVisibility" Value="Auto"/>
-            <Setter Property="VerticalScrollBarVisibility" Value="Auto"/>
-        </Style>
-
-        <Style TargetType="TextBox">
-            <Setter Property="AcceptsReturn" Value="True"/>
-            <Setter Property="TextWrapping" Value="Wrap"/>
         </Style>
     </Window.Resources>
     <Grid>
@@ -33,18 +22,9 @@
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <ScrollViewer>
-                <TextBox Text="{Binding Definition, Converter={StaticResource DefinitionConverter}}" />
-            </ScrollViewer>
-            <ScrollViewer Grid.Row="1">
-                <TextBox  Text="{Binding Data, Converter={StaticResource DataConverter}}" />
-            </ScrollViewer>
+            <ContentControl x:Name="Definition"/>
+            <ContentControl x:Name="Data" Grid.Row="1"/>
         </Grid>
-        <nZazu:NZazuView x:Name="View" Grid.Column="1" 
-            FormDefinition="{Binding Definition}" 
-            FormData="{Binding Data, Mode=TwoWay}" 
-            LostFocus="ApplyChanges"
-            FieldFactory="{Binding FieldFactory}"
-            LayoutStrategy="{Binding LayoutStrategy}"/>
+        <ContentControl x:Name="Preview" Grid.Column="1"/>
     </Grid>
 </Window>

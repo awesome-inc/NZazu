@@ -6,8 +6,12 @@ namespace NZazu.Contracts
 {
 	// NOTE: Equals should have GetHashCode. However, we do not want to use FormData as keys in Dictionaries etc.
 	#pragma warning disable 659
-	public class FormData : IEquatable<FormData>
-	{
+    public interface IHaveFormData
+    {
+    }
+
+    public class FormData : IEquatable<FormData>, IHaveFormData
+    {
 		public Dictionary<string, string> Values { get; private set; }
 
 		public FormData(Dictionary<string, string> values = null)

@@ -47,6 +47,9 @@
     <Reference Include="Caliburn.Micro.Platform">
       <HintPath>..\packages\Caliburn.Micro.2.0.1\lib\net45\Caliburn.Micro.Platform.dll</HintPath>
     </Reference>
+    <Reference Include="ICSharpCode.AvalonEdit">
+      <HintPath>..\packages\AvalonEdit.5.0.2\lib\Net40\ICSharpCode.AvalonEdit.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\packages\Newtonsoft.Json.6.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -78,8 +81,29 @@
     <Compile Include="..\VersionInfo.g.cs">
       <Link>Properties\VersionInfo.g.cs</Link>
     </Compile>
+    <Compile Include="AvalonEditBehaviour.cs" />
+    <Compile Include="FormDataView.xaml.cs">
+      <DependentUpon>FormDataView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="FormDataViewModel.cs" />
     <Compile Include="FormDefinitionConverter.cs" />
     <Compile Include="FormDataConverter.cs" />
+    <Compile Include="FormDefinitionView.xaml.cs">
+      <DependentUpon>FormDefinitionView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="FormDefinitionViewModel.cs" />
+    <Compile Include="IFormDataViewModel.cs" />
+    <Compile Include="IFormDefinitionViewModel.cs" />
+    <Compile Include="IHaveFormData.cs" />
+    <Compile Include="IHaveFormDefinition.cs" />
+    <Compile Include="IPreviewViewModel.cs" />
+    <Compile Include="NZazuAutoCompletion.cs" />
+    <Compile Include="NzazuCompletionData.cs" />
+    <Compile Include="PreviewView.xaml.cs">
+      <DependentUpon>PreviewView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="PreviewViewModel.cs" />
+    <Compile Include="Example.cs" />
     <Compile Include="ShellView.xaml.cs">
       <DependentUpon>ShellView.xaml</DependentUpon>
     </Compile>
@@ -90,6 +114,19 @@
     </Compile>
     <Compile Include="AppBootstrapper.cs" />
     <Compile Include="IShell.cs" />
+    <Compile Include="TextEditorExtensions.cs" />
+    <Page Include="FormDataView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="FormDefinitionView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="PreviewView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="ShellView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -99,6 +136,7 @@
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
+    <EmbeddedResource Include="NZazu.xshd" />
     <None Include="packages.config" />
     <AppDesigner Include="Properties\" />
   </ItemGroup>
