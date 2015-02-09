@@ -17,8 +17,13 @@ namespace NZazuFiddle
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            var json = (string)value;
-            return JsonConvert.DeserializeObject<FormData>(json);
+            try
+            {
+                var json = (string)value;
+                return JsonConvert.DeserializeObject<FormData>(json);
+
+            }
+            catch (Exception) { return value; }
         }
     }
 }

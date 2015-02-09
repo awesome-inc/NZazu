@@ -97,7 +97,8 @@
     <Compile Include="IHaveFormData.cs" />
     <Compile Include="IHaveFormDefinition.cs" />
     <Compile Include="IPreviewViewModel.cs" />
-    <Compile Include="MyCompletionData.cs" />
+    <Compile Include="NZazuAutoCompletion.cs" />
+    <Compile Include="NzazuCompletionData.cs" />
     <Compile Include="PreviewView.xaml.cs">
       <DependentUpon>PreviewView.xaml</DependentUpon>
     </Compile>
@@ -113,6 +114,7 @@
     </Compile>
     <Compile Include="AppBootstrapper.cs" />
     <Compile Include="IShell.cs" />
+    <Compile Include="TextEditorExtensions.cs" />
     <Page Include="FormDataView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -134,6 +136,7 @@
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
+    <EmbeddedResource Include="NZazu.xshd" />
     <None Include="packages.config" />
     <AppDesigner Include="Properties\" />
   </ItemGroup>

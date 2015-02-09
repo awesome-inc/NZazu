@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Diagnostics;
 using Caliburn.Micro;
 using NZazu.Contracts;
+using Action = System.Action;
 
 namespace NZazuFiddle
 {
@@ -27,7 +29,8 @@ namespace NZazuFiddle
                 if (Equals(value, _definition)) return;
                 _definition = value;
                 NotifyOfPropertyChange();
-                if (!_inHandle) _events.PublishOnUIThread(_definition);
+                if (value == null || _inHandle) return;
+                Safe(() => _events.PublishOnUIThread(_definition), "Could not set form definition");
             }
         }
 
@@ -38,5 +41,12 @@ namespace NZazuFiddle
             try { Definition = definition; }
             finally { _inHandle = false; }
         }
+
+        static void Safe(Action action, string couldNot)
+        {
+            try { action(); }
+            catch (Exception ex) { Trace.TraceWarning("{0}: {1}", couldNot, ex.Message); }
+        }
+
     }
 }

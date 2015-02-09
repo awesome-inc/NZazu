@@ -4,7 +4,7 @@ using Caliburn.Micro;
 namespace NZazuFiddle
 {
     // ReSharper disable once ClassNeverInstantiated.Global
-    public class ShellViewModel : Screen, IShell
+    public sealed class ShellViewModel : Screen, IShell
     {
         public IFormDefinitionViewModel Definition { get; private set; }
         public IFormDataViewModel Data { get; private set; }
@@ -20,6 +20,8 @@ namespace NZazuFiddle
             Definition = definition;
             Data = data;
             Preview = preview;
+
+            DisplayName = "NZazuFiddle";
         }
     }
 }
