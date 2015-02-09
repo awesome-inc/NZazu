@@ -10,7 +10,7 @@ using NSubstitute;
 using NUnit.Framework;
 using NZazu.Contracts.Checks;
 
-namespace NZazu.FieldFactory
+namespace NZazu.Fields
 {
     [TestFixture]
     [RequiresSTA]

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Windows.Controls;
 using NZazu.Contracts;
 using NZazu.Contracts.Checks;
-using NZazu.FieldFactory;
+using NZazu.Fields;
 
 namespace NZazu.FieldBehavior
 {

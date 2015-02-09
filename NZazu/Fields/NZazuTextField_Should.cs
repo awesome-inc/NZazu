@@ -3,7 +3,7 @@ using System.Windows.Controls;
 using FluentAssertions;
 using NUnit.Framework;
 
-namespace NZazu.FieldFactory
+namespace NZazu.Fields
 {
     [TestFixture]
     [RequiresSTA]

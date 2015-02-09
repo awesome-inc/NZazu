@@ -8,7 +8,7 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using NZazu.Contracts.Checks;
 
-namespace NZazu.FieldFactory
+namespace NZazu.Fields
 {
     public abstract class NZazuField : INZazuWpfField
     {

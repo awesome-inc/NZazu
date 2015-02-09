@@ -3,7 +3,7 @@ using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
 
-namespace NZazu.FieldFactory
+namespace NZazu.Fields
 {
     public class NZazuIntegerField : NZazuField<int?>
     {

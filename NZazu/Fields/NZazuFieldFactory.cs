@@ -5,7 +5,7 @@ using System.Linq;
 using NZazu.Contracts;
 using NZazu.Contracts.Checks;
 
-namespace NZazu.FieldFactory
+namespace NZazu.Fields
 {
     public class NZazuFieldFactory : INZazuWpfFieldFactory
     {
@@ -23,6 +23,7 @@ namespace NZazu.FieldFactory
             FieldTypes.Add("int", typeof(NZazuIntegerField));
             FieldTypes.Add("date", typeof(NZazuDateField));
             FieldTypes.Add("double", typeof(NZazuDoubleField));
+            FieldTypes.Add("group", typeof(NZazuGroupField));
         }
 
         public INZazuWpfField CreateField(FieldDefinition fieldDefinition)

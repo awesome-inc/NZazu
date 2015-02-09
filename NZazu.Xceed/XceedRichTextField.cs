@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
-using NZazu.FieldFactory;
+using NZazu.Fields;
 using RichTextBox = Xceed.Wpf.Toolkit.RichTextBox;
 
 namespace NZazu.Xceed

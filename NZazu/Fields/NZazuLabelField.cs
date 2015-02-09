@@ -1,7 +1,7 @@
 using System.Windows;
 using System.Windows.Controls;
 
-namespace NZazu.FieldFactory
+namespace NZazu.Fields
 {
     class NZazuLabelField : NZazuField
     {
@@ -21,6 +21,6 @@ namespace NZazu.FieldFactory
             get { return null; }
         }
 
-        protected override Control GetValue() { return !string.IsNullOrWhiteSpace(Description) ? new Label { Content = Description} : null; }
+        protected override Control GetValue() { return !string.IsNullOrWhiteSpace(Description) ? new Label { Content = Description } : null; }
     }
 }

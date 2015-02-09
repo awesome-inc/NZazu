@@ -3,7 +3,7 @@ using System.Linq;
 using System.Windows;
 using NZazu.Contracts;
 using NZazu.Extensions;
-using NZazu.FieldFactory;
+using NZazu.Fields;
 using NZazu.LayoutStrategy;
 
 namespace NZazu

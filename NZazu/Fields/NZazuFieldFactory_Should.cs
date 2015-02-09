@@ -7,7 +7,7 @@ using NUnit.Framework;
 using NZazu.Contracts;
 using NZazu.Contracts.Checks;
 
-namespace NZazu.FieldFactory
+namespace NZazu.Fields
 {
     [TestFixture, RequiresSTA]
     // ReSharper disable InconsistentNaming
@@ -30,6 +30,7 @@ namespace NZazu.FieldFactory
         [TestCase("int", typeof(TextBox))]
         [TestCase("date", typeof(DatePicker))]
         [TestCase("double", typeof(TextBox))]
+        [TestCase("group", typeof(StackPanel))]
         public void Support(string fieldType, Type controlType)
         {
             var sut = new NZazuFieldFactory();

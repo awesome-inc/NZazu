@@ -7,7 +7,7 @@ using FluentAssertions;
 using NUnit.Framework;
 using NZazu.Extensions;
 
-namespace NZazu.FieldFactory
+namespace NZazu.Fields
 {
     [TestFixture]
     [RequiresSTA]
