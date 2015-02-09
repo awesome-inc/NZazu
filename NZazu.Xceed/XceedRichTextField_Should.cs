@@ -1,7 +1,9 @@
+using System;
 using System.Globalization;
 using System.Windows.Controls;
 using FluentAssertions;
 using NUnit.Framework;
+using Xceed.Wpf.Toolkit;
 using RichTextBox = Xceed.Wpf.Toolkit.RichTextBox;
 
 namespace NZazu.Xceed
@@ -63,6 +65,21 @@ namespace NZazu.Xceed
 
             textBox = (RichTextBox)field.ValueControl;
             textBox.MinHeight.Should().Be(expectedHeight);
+        }
+
+        [Test]
+        [TestCase("rtf", typeof(RtfFormatter))]
+        [TestCase("plain", typeof(PlainTextFormatter))]
+        [TestCase("xaml", typeof(XamlFormatter))]
+        [TestCase(null, typeof(RtfFormatter))]
+        [TestCase("foobar", typeof(RtfFormatter))]
+        public void Respect_Format_Setting(string format, Type formatterType)
+        {
+            var field = new XceedRichTextField("key");
+            field.Settings["Format"] = format;
+
+            var textBox = (RichTextBox)field.ValueControl;
+            textBox.TextFormatter.Should().BeOfType(formatterType);
         }
     }
 }
