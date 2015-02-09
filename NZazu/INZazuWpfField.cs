@@ -3,7 +3,7 @@ using System.Windows.Controls;
 
 namespace NZazu
 {
-    public interface INZazuField
+    public interface INZazuWpfField
     {
         string Key { get; }
         string Type { get; }
@@ -19,7 +19,7 @@ namespace NZazu
         Dictionary<string, string> Settings { get; }
     }
 
-    public interface INZazuField<T> : INZazuField
+    public interface INZazuWpfField<T> : INZazuWpfField
     {
         T Value { get; set; }
     }

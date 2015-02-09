@@ -8,7 +8,7 @@ namespace NZazuFiddle
         FormDefinition Definition { get; set; }
         FormData Data { get; set; }
 
-        INZazuFieldFactory FieldFactory { get; }
-        INZazuLayoutStrategy LayoutStrategy { get; }
+        INZazuWpfFieldFactory FieldFactory { get; }
+        INZazuWpfLayoutStrategy LayoutStrategy { get; }
     }
 }

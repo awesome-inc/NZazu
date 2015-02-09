@@ -16,7 +16,7 @@ namespace NZazu.Fields
             var sut = new NZazuTextField("test");
 
             sut.Should().NotBeNull();
-            sut.Should().BeAssignableTo<INZazuField>();
+            sut.Should().BeAssignableTo<INZazuWpfField>();
         }
 
         [Test]

@@ -15,7 +15,7 @@ namespace NZazu.Xceed
             var sut = new XceedIntegerField("test");
 
             sut.Should().NotBeNull();
-            sut.Should().BeAssignableTo<INZazuField>();
+            sut.Should().BeAssignableTo<INZazuWpfField>();
             sut.Type.Should().Be("int");
         }
 

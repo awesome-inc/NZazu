@@ -80,10 +80,10 @@
     <Compile Include="Fields\NZazuTextField_Should.cs" />
     <Compile Include="CheckValidationRule.cs" />
     <Compile Include="Layout\GridLayoutStrategy.cs" />
-    <Compile Include="INZazuField.cs" />
-    <Compile Include="INZazuFieldFactory.cs" />
-    <Compile Include="INZazuLayoutStrategy.cs" />
-    <Compile Include="INZazuView.cs" />
+    <Compile Include="INZazuWpfField.cs" />
+    <Compile Include="INZazuWpfFieldFactory.cs" />
+    <Compile Include="INZazuWpfLayoutStrategy.cs" />
+    <Compile Include="INZazuWpfView.cs" />
     <Compile Include="Fields\NZazuBoolField.cs" />
     <Compile Include="Fields\NZazuLabelField.cs" />
     <Compile Include="Layout\GridLayoutStrategy_Should.cs" />

@@ -21,7 +21,7 @@ namespace NZazu.Factory
             var sut = new NZazuFieldFactory();
 
             sut.Should().NotBeNull();
-            sut.Should().BeAssignableTo<INZazuFieldFactory>();
+            sut.Should().BeAssignableTo<INZazuWpfFieldFactory>();
         }
 
         [Test]
@@ -127,7 +127,7 @@ namespace NZazu.Factory
         }
 
         [Test]
-        public void Atach_Behavior_To_Field()
+        public void Attach_Behavior_To_Field()
         {
             var sut = new NZazuFieldFactory();
 
@@ -141,6 +141,7 @@ namespace NZazu.Factory
             field.Should().NotBeNull();
 
             var control = field.ValueControl;
+            Assert.Inconclusive("how to implement this?");
         }
 
     }

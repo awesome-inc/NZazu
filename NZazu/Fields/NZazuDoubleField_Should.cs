@@ -19,7 +19,7 @@ namespace NZazu.Fields
             var sut = new NZazuDoubleField("test");
 
             sut.Should().NotBeNull();
-            sut.Should().BeAssignableTo<INZazuField>();
+            sut.Should().BeAssignableTo<INZazuWpfField>();
             sut.Type.Should().Be("double");
         }
 
@@ -100,7 +100,7 @@ namespace NZazu.Fields
         public void Support_Format()
         {
             var sut = new NZazuDoubleField("test");
-            ((INZazuField)sut).Settings["Format"] = "0.##";
+            ((INZazuWpfField)sut).Settings["Format"] = "0.##";
             var control = (TextBox)sut.ValueControl;
 
             sut.Value.Should().NotHaveValue();

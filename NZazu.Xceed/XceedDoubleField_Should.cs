@@ -16,7 +16,7 @@ namespace NZazu.Xceed
             var sut = new XceedDoubleField("test");
 
             sut.Should().NotBeNull();
-            sut.Should().BeAssignableTo<INZazuField>();
+            sut.Should().BeAssignableTo<INZazuWpfField>();
             sut.Type.Should().Be("double");
         }
 

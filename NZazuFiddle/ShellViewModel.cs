@@ -13,8 +13,8 @@ namespace NZazuFiddle
     {
         private FormDefinition _definition = SampleFormDefinition();
         private FormData _data = SampleFormData();
-        private INZazuFieldFactory _fieldFactory = new XceedFieldFactory();
-        private INZazuLayoutStrategy _layoutStrategy = new GridLayoutStrategy();
+        private INZazuWpfFieldFactory _fieldFactory = new XceedFieldFactory();
+        private INZazuWpfLayoutStrategy _layoutStrategy = new GridLayoutStrategy();
         private const string DateFormat = @"yyyy-MM-dd";
 
         public FormDefinition Definition
@@ -39,7 +39,7 @@ namespace NZazuFiddle
             }
         }
 
-        public INZazuFieldFactory FieldFactory
+        public INZazuWpfFieldFactory FieldFactory
         {
             get { return _fieldFactory; }
             // ReSharper disable once UnusedMember.Local
@@ -51,7 +51,7 @@ namespace NZazuFiddle
             }
         }
 
-        public INZazuLayoutStrategy LayoutStrategy
+        public INZazuWpfLayoutStrategy LayoutStrategy
         {
             get { return _layoutStrategy; }
             // ReSharper disable once UnusedMember.Local

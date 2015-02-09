@@ -17,7 +17,7 @@ namespace NZazu.Fields
             var sut = new NZazuDateField("test");
 
             sut.Should().NotBeNull();
-            sut.Should().BeAssignableTo<INZazuField>();
+            sut.Should().BeAssignableTo<INZazuWpfField>();
             sut.Type.Should().Be("date");
         }
 
