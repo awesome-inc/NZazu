@@ -28,10 +28,10 @@ namespace NZazu.FieldFactory
                 Description = "check this if you are a registered superhero"
             };
 
-            var label = (TextBox)sut.ValueControl;
-            label.Should().NotBeNull();
-            label.Text.Should().BeEmpty();
-            label.ToolTip.Should().Be(sut.Description);
+            var textBox = (TextBox)sut.ValueControl;
+            textBox.Should().NotBeNull();
+            textBox.Text.Should().BeEmpty();
+            textBox.ToolTip.Should().Be(sut.Description);
         }
 
         [Test]
@@ -39,22 +39,28 @@ namespace NZazu.FieldFactory
         {
             var sut = new NZazuTextField("test");
 
-            var label = (TextBox)sut.ValueControl;
-            label.Should().NotBeNull();
-            label.Text.Should().BeEmpty();
+            var textBox = (TextBox)sut.ValueControl;
+            textBox.Should().NotBeNull();
+            textBox.Text.Should().BeEmpty();
         }
 
         [Test]
         public void Get_Set_Value_should_propagate_to_ValueControl_Without_LostFocus()
         {
             var sut = new NZazuTextField("test");
+            var textBox = (TextBox)sut.ValueControl;
+            textBox.Should().NotBeNull();
+
             sut.StringValue.Should().BeNull();
+            textBox.Text.Should().BeNullOrEmpty();
 
             sut.StringValue = "test";
             sut.StringValue.Should().Be("test");
-            ((TextBox)sut.ValueControl).Text.Should().Be("test");
 
-            ((TextBox)sut.ValueControl).Text = String.Empty;
+
+            textBox.Text.Should().Be("test");
+
+            textBox.Text = String.Empty;
             sut.StringValue.Should().BeEmpty();
         }
     }
