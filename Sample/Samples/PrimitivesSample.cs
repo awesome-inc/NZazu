@@ -7,6 +7,8 @@ namespace Sample.Samples
     {
         public INZazuSample Sample { get; private set; }
 
+        public int Order { get { return 10; } }
+
         public PrimitivesSample()
         {
             Sample = new NZazuSampleViewModel
@@ -62,7 +64,7 @@ namespace Sample.Samples
                         },
                     }
                 },
-                FormData = new Dictionary<string, string> {{"name", "John"}, {"isAdmin", "true"}}
+                FormData = new Dictionary<string, string> { { "name", "John" }, { "isAdmin", "true" } }
             };
         }
     }

@@ -11,15 +11,9 @@ namespace Sample
         private readonly BindableCollection<INZazuSample> _samples = new BindableCollection<INZazuSample>();
         private INZazuSample _selectedSample;
 
-        public ShellViewModel()
+        public ShellViewModel(IEnumerable<IHaveSample> samples)
         {
-            // TODO: register all IHaveSample and provide via constructor injection (AutoFac!)
-            Samples = new[]
-            {
-                new PrimitivesSample().Sample,
-                new SecondSample().Sample,
-                new ValidationSample().Sample
-            };
+            Samples = samples.OrderBy(s => s.Order).Select(s => s.Sample).ToArray();
         }
 
         public IEnumerable<INZazuSample> Samples

@@ -14,5 +14,21 @@ namespace NZazu.Contracts
 
             sut.Should().NotBeNull();
         }
+        
+        [Test]
+        public void Have_Settings_For_Additional_Confi()
+        {
+            var sut = new FieldDefinition();
+
+            sut.Should().NotBeNull();
+            sut.Settings.Should().BeNull();
+        }
+
+        [Test]
+        public void Have_Behavior()
+        {
+            var sut = new FieldDefinition();
+            sut.Behavior.Should().BeNull();
+        }
     }
 }
