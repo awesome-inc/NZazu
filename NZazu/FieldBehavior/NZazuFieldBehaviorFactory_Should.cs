@@ -67,21 +67,12 @@ namespace NZazu.FieldBehavior
             sut.Register(name, type);
 
             var behavior = sut.CreateFieldBehavior(new BehaviorDefinition { Name = name });
-            behavior.Should().BeNull();
-
-            sut.Should().NotBeNull();
-            sut.Should().BeAssignableTo<INZazuWpfFieldBehaviorFactory>();
+            behavior.Should().NotBeNull();
         }
 
         [Test]
         [TestCase(null)]
-        [TestCase("label", typeof(Label))]
-        [TestCase("string", typeof(TextBox))]
-        [TestCase("bool", typeof(CheckBox))]
-        [TestCase("int", typeof(TextBox))]
-        [TestCase("date", typeof(DatePicker))]
-        [TestCase("double", typeof(TextBox))]
-        [TestCase("richtext", typeof(RichTextBox))]
+        [TestCase("Empty", typeof(Label))]
         public void Support(string fieldType, Type controlType)
         {
             var sut = new NZazuFieldBehaviorFactory();

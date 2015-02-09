@@ -63,6 +63,7 @@
     <Compile Include="FieldFactory\NZazuDateField_Should.cs" />
     <Compile Include="FieldFactory\NZazuDoubleField.cs" />
     <Compile Include="FieldFactory\NZazuDoubleField_Should.cs" />
+    <Compile Include="FieldFactory\NZazuFieldFactory_Should.cs" />
     <Compile Include="INZazuWpfFieldBehavior.cs" />
     <Compile Include="Extensions\ViewExtensions_Should.cs" />
     <Page Include="NZazuView.xaml">
@@ -95,7 +96,6 @@
     <Compile Include="FieldFactory\NZazuFieldFactory.cs" />
     <Compile Include="FieldFactory\NZazuLabelField_Should.cs" />
     <Compile Include="FieldFactory\NZazuTextField.cs" />
-    <Compile Include="FieldFactory\NZazuFieldFactory_Should.cs" />
     <Compile Include="LayoutStrategy\GridLayoutStrategy_Without_Application_Should.cs" />
     <Compile Include="Extensions\ViewExtensions.cs" />
     <Compile Include="Extensions\FieldExtensions_Should.cs" />

@@ -54,6 +54,11 @@ namespace NZazu.FieldBehavior
         {
             return field;
         }
+
+        internal void Register(string name, Type type)
+        {
+            throw new NotImplementedException();
+        }
     }
 
     internal class NZazuFieldBehavior : INZazuWpfFieldBehavior

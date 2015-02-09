@@ -154,12 +154,10 @@ namespace NZazu
 
         private void AttachBehavior()
         {
-            throw new System.NotImplementedException();
         }
 
         private void DetachBehavior()
         {
-            throw new System.NotImplementedException();
         }
     }
 }
