@@ -142,5 +142,35 @@ namespace NZazu.Fields
             Assert.Inconclusive("how to implement this?");
         }
 
+        [Test]
+        public void Recursively_create_GroupFields()
+        {
+            var sut = new NZazuFieldFactory();
+
+            var fields = new[]
+            {
+                new FieldDefinition
+                {
+                    Key = "first",
+                    Type = "string", 
+                },
+                new FieldDefinition
+                {
+                    Key = "second",
+                    Type = "string", 
+                }
+            };
+
+            var fieldDefinition = new FieldDefinition
+            {
+                Key = "group1", Type = "group",
+                Fields = fields
+            };
+            var field = (INZazuWpfGroupField)sut.CreateField(fieldDefinition);
+
+            field.Should().NotBeNull();
+
+            field.Fields.Should().HaveCount(fieldDefinition.Fields.Length);
+        }
     }
 }

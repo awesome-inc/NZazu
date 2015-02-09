@@ -121,7 +121,44 @@ namespace NZazu.LayoutStrategy
         {
             var sut = new NZazuBoolField("test");
 
-            ((CheckBox) sut.ValueControl).IsThreeState.Should().BeTrue();
+            ((CheckBox)sut.ValueControl).IsThreeState.Should().BeTrue();
+        }
+
+        [Test]
+        public void Recurse_on_group_fields()
+        {
+            var sut = new GridLayoutStrategy();
+
+            var container = new ContentControl();
+            var fields = new NZazuField[]
+            {
+                new NZazuLabelField("label1"),
+                new NZazuTextField("string1"),
+                new NZazuBoolField("bool1")
+            };
+            var groups = new[]
+            {
+                new NZazuGroupField("group1") {Fields = fields},
+                new NZazuGroupField("group2") { Fields = fields }
+            };
+
+            sut.DoLayout(container, groups);
+
+            var grid = (Grid)container.Content;
+            grid.Should().NotBeNull();
+
+            grid.Children.Should().HaveCount(2);
+            var content1 = (ContentControl)groups[0].ValueControl;
+            var content2 = (ContentControl)groups[1].ValueControl;
+            grid.Children[0].Should().Be(content1);
+            grid.Children[1].Should().Be(content2);
+
+            // TODO: verify children are layouted too...
+            var grid1 = (Grid)content1.Content;
+            var grid2 = (Grid)content2.Content;
+
+            grid1.Children.Should().HaveCount(fields.Length);
+            grid2.Children.Should().HaveCount(fields.Length);
         }
     }
 }

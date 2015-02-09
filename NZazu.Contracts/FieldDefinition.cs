@@ -14,5 +14,7 @@ namespace NZazu.Contracts
         public BehaviorDefinition Behavior { get; set; }
 
         public Dictionary<string,string> Settings { get; set; }
+
+        public FieldDefinition[] Fields { get; set; }
     }
 }

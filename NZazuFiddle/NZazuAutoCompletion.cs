@@ -30,6 +30,8 @@ namespace NZazuFiddle
             new NzazuCompletionData { Text = "int", Replacement = "\"int\"", Description = "Adds an integer field"},
             new NzazuCompletionData { Text = "double", Replacement = "\"double\"", Description = "Adds a double field"},
             new NzazuCompletionData { Text = "richtext", Replacement = "\"richtext\"", Description = "Adds a richt-text field"},
+            new NzazuCompletionData { Text = "group", Replacement = "\"richtext\"", Description = "Adds a group field"},
+
             // checks
             new NzazuCompletionData { Text = "required", Replacement = "\"required\"", Description = "Adds a 'required' check"},
             new NzazuCompletionData { Text = "length", Replacement = "\"length\"", Description = "Adds a string length check"},

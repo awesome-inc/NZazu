@@ -2,7 +2,7 @@
 
 namespace NZazu
 {
-    public interface INZazuWpfGroupField
+    public interface INZazuWpfGroupField : INZazuWpfField
     {
         IEnumerable<INZazuWpfField> Fields { get; } 
     }

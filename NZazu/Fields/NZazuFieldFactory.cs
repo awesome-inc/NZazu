@@ -48,15 +48,23 @@ namespace NZazu.Fields
             field.Prompt = fieldDefinition.Prompt;
             field.Hint = fieldDefinition.Hint;
             field.Description = fieldDefinition.Description;
+
             field.Check = CreateCheck(fieldDefinition.Checks);
 
+            CopySettings(field, fieldDefinition);
+
+            RecurseGroupField(fieldDefinition, field as NZazuGroupField);
+
+            return field;
+        }
+
+        private static void CopySettings(NZazuField field, FieldDefinition fieldDefinition)
+        {
             if (fieldDefinition.Settings != null)
             {
                 foreach (var kvp in fieldDefinition.Settings)
                     field.Settings[kvp.Key] = kvp.Value;
             }
-
-            return field;
         }
 
         private IValueCheck CreateCheck(IEnumerable<CheckDefinition> checkDefinitions)
@@ -67,6 +75,15 @@ namespace NZazu.Fields
             return checks.Length == 1 
                 ? checks.First() 
                 : new AggregateCheck(checks.ToArray());
+        }
+
+        private void RecurseGroupField(FieldDefinition fieldDefinition, NZazuGroupField groupField)
+        {
+            if (fieldDefinition == null) throw new ArgumentNullException("fieldDefinition");
+            if (groupField == null) return;
+            if (fieldDefinition.Fields == null || !fieldDefinition.Fields.Any()) return;
+
+            groupField.Fields = fieldDefinition.Fields.Select(CreateField);
         }
     }
 }

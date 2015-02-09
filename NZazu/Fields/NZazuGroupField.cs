@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -8,6 +9,7 @@ namespace NZazu.Fields
     {
         public NZazuGroupField(string key) : base(key)
         {
+            Fields = Enumerable.Empty<INZazuWpfField>();
         }
 
         public override string StringValue { get; set; }
@@ -20,6 +22,6 @@ namespace NZazu.Fields
             return new ContentControl();
         }
 
-        public IEnumerable<INZazuWpfField> Fields { get; private set; }
+        public IEnumerable<INZazuWpfField> Fields { get; protected internal set; }
     }
 }
