@@ -1,7 +1,7 @@
 using FluentAssertions;
 using NUnit.Framework;
 
-namespace NZazu.Layout
+namespace NZazu.LayoutStrategy
 {
     [TestFixture, RequiresSTA]
     // ReSharper disable InconsistentNaming

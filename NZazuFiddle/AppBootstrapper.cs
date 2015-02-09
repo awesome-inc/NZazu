@@ -3,7 +3,7 @@ using Autofac;
 using Caliburn.Micro;
 using Caliburn.Micro.Autofac;
 using NZazu;
-using NZazu.Layout;
+using NZazu.LayoutStrategy;
 using NZazu.Xceed;
 
 namespace NZazuFiddle

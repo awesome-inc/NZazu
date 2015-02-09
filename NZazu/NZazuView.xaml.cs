@@ -4,7 +4,7 @@ using System.Windows;
 using NZazu.Contracts;
 using NZazu.Extensions;
 using NZazu.FieldFactory;
-using NZazu.Layout;
+using NZazu.LayoutStrategy;
 
 namespace NZazu
 {

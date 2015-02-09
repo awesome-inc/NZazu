@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 
-namespace NZazu.Layout
+namespace NZazu.LayoutStrategy
 {
     public class GridLayoutStrategy : INZazuWpfLayoutStrategy
     {
@@ -45,7 +45,7 @@ namespace NZazu.Layout
                 var valueElement = field.ValueControl;
                 if (labelElement == null && valueElement == null) continue;
 
-                grid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(28) });
+                grid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
 
                 if (labelElement != null)
                 {

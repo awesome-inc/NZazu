@@ -5,7 +5,7 @@ using FluentAssertions;
 using NUnit.Framework;
 using NZazu.FieldFactory;
 
-namespace NZazu.Layout
+namespace NZazu.LayoutStrategy
 {
     [TestFixture, RequiresSTA]
     // ReSharper disable InconsistentNaming
@@ -55,6 +55,7 @@ namespace NZazu.Layout
 
             var rowDefs = grid.RowDefinitions;
             rowDefs.Should().HaveCount(3);
+            rowDefs.All(r => r.Height == GridLength.Auto).Should().BeTrue();
 
             grid.Children.Should().HaveCount(2 * fields.Length);
             for (int i = 0; i < fields.Length; i++)

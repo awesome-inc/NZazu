@@ -2,7 +2,7 @@
 using Caliburn.Micro;
 using NZazu;
 using NZazu.Contracts;
-using NZazu.Layout;
+using NZazu.LayoutStrategy;
 using NZazu.Xceed;
 
 namespace NZazuFiddle
