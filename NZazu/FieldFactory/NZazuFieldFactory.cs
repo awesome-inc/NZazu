@@ -4,11 +4,10 @@ using System.Diagnostics;
 using System.Linq;
 using NZazu.Contracts;
 using NZazu.Contracts.Checks;
-using NZazu.Fields;
 
-namespace NZazu.Factory
+namespace NZazu.FieldFactory
 {
-    public class NZazuFieldFactory : INZazuFieldFactory
+    public class NZazuFieldFactory : INZazuWpfFieldFactory
     {
         private readonly ICheckFactory _checkFactory;
         protected readonly Dictionary<string, Type> FieldTypes = new Dictionary<string, Type>();
@@ -26,7 +25,7 @@ namespace NZazu.Factory
             FieldTypes.Add("double", typeof(NZazuDoubleField));
         }
 
-        public INZazuField CreateField(FieldDefinition fieldDefinition)
+        public INZazuWpfField CreateField(FieldDefinition fieldDefinition)
         {
             if (fieldDefinition == null) throw new ArgumentNullException("fieldDefinition");
             var fieldTypeSafe = fieldDefinition.Type ?? DefaultType;

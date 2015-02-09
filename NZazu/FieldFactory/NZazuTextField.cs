@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 
-namespace NZazu.Fields
+namespace NZazu.FieldFactory
 {
     public class NZazuTextField : NZazuField<string>
     {

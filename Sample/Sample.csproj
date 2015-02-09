@@ -86,6 +86,7 @@
     <Compile Include="Samples\IHaveSample.cs" />
     <Compile Include="Samples\PrimitivesSample.cs" />
     <Compile Include="Samples\SecondSample.cs" />
+    <Compile Include="Samples\BehaviorSample.cs" />
     <Compile Include="ShellViewModel.cs" />
     <Compile Include="Samples\ValidationSample.cs" />
     <Page Include="NZazuSampleView.xaml">

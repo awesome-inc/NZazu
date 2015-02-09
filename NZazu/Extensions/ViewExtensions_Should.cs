@@ -6,7 +6,7 @@ using NUnit.Framework;
 using NZazu.Contracts;
 using NZazu.Contracts.Checks;
 
-namespace NZazu
+namespace NZazu.Extensions
 {
     [TestFixture]
     // ReSharper disable InconsistentNaming
@@ -15,7 +15,7 @@ namespace NZazu
         [Test]
         public void Return_field_values_on_GetFieldValues()
         {
-            var view = Substitute.For<INZazuView>();
+            var view = Substitute.For<INZazuWpfView>();
 
             const string key = "name";
             const string value = "John";
@@ -23,7 +23,7 @@ namespace NZazu
             var formDefinition = new FormDefinition {Fields = new[] {new FieldDefinition {Key = key}}};
             view.FormDefinition = formDefinition;
 
-            var field = Substitute.For<INZazuField>();
+            var field = Substitute.For<INZazuWpfField>();
             field.StringValue = value;
             view.GetField(key).Returns(field);
 
@@ -35,7 +35,7 @@ namespace NZazu
         [Test]
         public void Set_field_values_on_SetFieldValues()
         {
-            var view = Substitute.For<INZazuView>();
+            var view = Substitute.For<INZazuWpfView>();
 
             const string key = "name";
             const string value = "John";
@@ -43,7 +43,7 @@ namespace NZazu
             var formDefinition = new FormDefinition {Fields = new[] {new FieldDefinition {Key = key}}};
             view.FormDefinition = formDefinition;
 
-            var field = Substitute.For<INZazuField>();
+            var field = Substitute.For<INZazuWpfField>();
             view.GetField(key).Returns(field);
 
             var input = new Dictionary<string, string> {{key, value}};
@@ -55,7 +55,7 @@ namespace NZazu
         [Test]
         public void Return_False_If_Validate_Has_Exception()
         {
-            var view = Substitute.For<INZazuView>();
+            var view = Substitute.For<INZazuWpfView>();
             view.WhenForAnyArgs(zazuView => zazuView.Validate()).Do(info => { throw new ValidationException("I am invalid"); });
 
             view.IsValid().Should().BeFalse();
@@ -66,7 +66,7 @@ namespace NZazu
         [Test]
         public void Return_True_If_Validate()
         {
-            var view = Substitute.For<INZazuView>();
+            var view = Substitute.For<INZazuWpfView>();
 
             view.IsValid().Should().BeTrue();
 

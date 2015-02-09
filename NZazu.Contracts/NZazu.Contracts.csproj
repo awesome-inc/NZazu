@@ -54,6 +54,7 @@
     <Compile Include="..\VersionInfo.g.cs">
       <Link>Properties\VersionInfo.g.cs</Link>
     </Compile>
+    <Compile Include="BehaviorDefinition.cs" />
     <Compile Include="CheckFactory.cs" />
     <Compile Include="CheckDefinition.cs" />
     <Compile Include="CheckFactory_Should.cs" />
@@ -74,6 +75,7 @@
     <Compile Include="FormDefinition_Should.cs" />
     <Compile Include="Checks\IValueCheck.cs" />
     <Compile Include="ICheckFactory.cs" />
+    <Compile Include="INZazuBehavior.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Checks\RangeCheck.cs" />
     <Compile Include="Checks\StringLengthCheck.cs" />

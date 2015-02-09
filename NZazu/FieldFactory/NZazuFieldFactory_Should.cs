@@ -1,15 +1,13 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Windows.Controls;
 using FluentAssertions;
 using NSubstitute;
 using NUnit.Framework;
 using NZazu.Contracts;
 using NZazu.Contracts.Checks;
-using NZazu.Fields;
 
-namespace NZazu.Factory
+namespace NZazu.FieldFactory
 {
     [TestFixture, RequiresSTA]
     // ReSharper disable InconsistentNaming
@@ -32,7 +30,6 @@ namespace NZazu.Factory
         [TestCase("int", typeof(TextBox))]
         [TestCase("date", typeof(DatePicker))]
         [TestCase("double", typeof(TextBox))]
-        [TestCase("richtext", typeof(RichTextBox))]
         public void Support(string fieldType, Type controlType)
         {
             var sut = new NZazuFieldFactory();

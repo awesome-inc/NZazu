@@ -2,7 +2,7 @@ using System;
 using System.Windows;
 using System.Windows.Controls;
 
-namespace NZazu.Fields
+namespace NZazu.FieldFactory
 {
     public class NZazuDateField : NZazuField<DateTime?>
     {

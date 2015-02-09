@@ -7,6 +7,8 @@ namespace Sample.Samples
     {
         public INZazuSample Sample { get; private set; }
 
+        public int Order { get { return 30; } }
+
         public ValidationSample()
         {
             Sample = new NZazuSampleViewModel

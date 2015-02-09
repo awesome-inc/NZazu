@@ -3,7 +3,7 @@ using System.Windows.Controls;
 using FluentAssertions;
 using NUnit.Framework;
 
-namespace NZazu.Fields
+namespace NZazu.FieldFactory
 {
     [TestFixture]
     [RequiresSTA]
@@ -16,7 +16,7 @@ namespace NZazu.Fields
             var sut = new NZazuTextField("test");
 
             sut.Should().NotBeNull();
-            sut.Should().BeAssignableTo<INZazuField>();
+            sut.Should().BeAssignableTo<INZazuWpfField>();
         }
 
         [Test]

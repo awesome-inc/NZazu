@@ -6,7 +6,7 @@ using System.Windows.Controls;
 
 namespace NZazu.Layout
 {
-    public class GridLayoutStrategy : INZazuLayoutStrategy
+    public class GridLayoutStrategy : INZazuWpfLayoutStrategy
     {
         private readonly ControlTemplate _errorTemplate;
 
@@ -28,7 +28,7 @@ namespace NZazu.Layout
             return (ControlTemplate)resources["NZazuErrorTemplate"];
         }
 
-        public void DoLayout(ContentControl container, IEnumerable<INZazuField> fields)
+        public void DoLayout(ContentControl container, IEnumerable<INZazuWpfField> fields)
         {
             if (container == null) throw new ArgumentNullException("container");
             if (fields == null) throw new ArgumentNullException("fields");

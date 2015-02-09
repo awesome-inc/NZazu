@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.Reflection;
+using System.Windows;
 using Autofac;
 using Caliburn.Micro.Autofac;
 
@@ -12,7 +13,11 @@ namespace Sample
         }
         protected override void ConfigureContainer(ContainerBuilder builder)
         {
+            builder.RegisterAssemblyTypes(Assembly.GetExecutingAssembly())
+               .Where(t => t.Namespace != null && t.Namespace.Contains("Samples"))
+               .AsImplementedInterfaces();
         }
+
         protected override void ConfigureBootstrapper()
         {
             base.ConfigureBootstrapper();

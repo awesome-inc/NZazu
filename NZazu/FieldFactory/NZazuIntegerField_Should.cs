@@ -2,9 +2,9 @@ using System;
 using System.Windows.Controls;
 using FluentAssertions;
 using NUnit.Framework;
-using NZazu.Contracts.Checks;
+using NZazu.Extensions;
 
-namespace NZazu.Fields
+namespace NZazu.FieldFactory
 {
     [TestFixture]
     [RequiresSTA]
@@ -17,7 +17,7 @@ namespace NZazu.Fields
             var sut = new NZazuIntegerField("test");
 
             sut.Should().NotBeNull();
-            sut.Should().BeAssignableTo<INZazuField>();
+            sut.Should().BeAssignableTo<INZazuWpfField>();
             sut.Type.Should().Be("int");
         }
 

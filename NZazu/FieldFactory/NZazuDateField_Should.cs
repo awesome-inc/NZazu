@@ -3,8 +3,9 @@ using System.Globalization;
 using System.Windows.Controls;
 using FluentAssertions;
 using NUnit.Framework;
+using NZazu.Extensions;
 
-namespace NZazu.Fields
+namespace NZazu.FieldFactory
 {
     [TestFixture]
     [RequiresSTA]
@@ -17,7 +18,7 @@ namespace NZazu.Fields
             var sut = new NZazuDateField("test");
 
             sut.Should().NotBeNull();
-            sut.Should().BeAssignableTo<INZazuField>();
+            sut.Should().BeAssignableTo<INZazuWpfField>();
             sut.Type.Should().Be("date");
         }
 
