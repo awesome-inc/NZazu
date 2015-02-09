@@ -21,7 +21,7 @@ namespace NZazu.Xceed
         protected override Control GetValue()
         {
             var control = new IntegerUpDown {ToolTip = Description, Watermark = Hint};
-            var formatString = GetFormatString();
+            var formatString = GetSetting("Format");
             if (IsSupported(formatString))
             {
                 control.FormatString = formatString;

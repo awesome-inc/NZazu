@@ -81,6 +81,8 @@
     <Compile Include="XceedFieldFactory_Should.cs" />
     <Compile Include="XceedIntegerField.cs" />
     <Compile Include="XceedIntegerField_Should.cs" />
+    <Compile Include="XceedRichTextField.cs" />
+    <Compile Include="XceedRichTextField_Should.cs" />
     <Compile Include="XceedTextBoxField.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

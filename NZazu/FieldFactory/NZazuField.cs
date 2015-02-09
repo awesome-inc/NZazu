@@ -67,7 +67,15 @@ namespace NZazu.FieldFactory
         private Control GetValueControl()
         {
             var control = GetValue();
+            ApplySettings(control);
             return DecorateValidation(control);
+        }
+
+        private void ApplySettings(Control control)
+        {
+            var height = GetSetting<double>("Height");
+            if (height.HasValue)
+                control.MinHeight = control.MaxHeight = height.Value;
         }
 
         protected virtual Control DecorateValidation(Control control)
@@ -105,11 +113,21 @@ namespace NZazu.FieldFactory
         /// <returns></returns>
         protected virtual Binding DecorateBinding(Binding binding) { return binding; }
 
-        protected string GetFormatString()
+        protected string GetSetting(string key)
         {
-            String format;
-            Settings.TryGetValue("Format", out format);
-            return format;
+            String value;
+            Settings.TryGetValue(key, out value);
+            return value;
+        }
+
+        protected T? GetSetting<T>(string key) where T:struct
+        {
+            try
+            {
+                var str = GetSetting(key);
+                return (T)Convert.ChangeType(str, typeof(T));
+            }
+            catch (Exception) { return null; }
         }
     }
 

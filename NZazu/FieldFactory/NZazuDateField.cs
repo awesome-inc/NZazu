@@ -15,7 +15,7 @@ namespace NZazu.FieldFactory
 
         protected override Control GetValue()
         {
-            DateFormat = GetFormatString();
+            DateFormat = GetSetting("Format");
             return new DatePicker {ToolTip = Description};
         }
 

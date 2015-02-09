@@ -12,6 +12,7 @@ namespace NZazu.Xceed
             FieldTypes["date"] = typeof(XceedDateTimeField);
             FieldTypes["double"] = typeof(XceedDoubleField);
             FieldTypes["int"] = typeof(XceedIntegerField);
+            FieldTypes["richtext"] = typeof(XceedRichTextField);
         }
     }
 }

@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -114,6 +115,18 @@ namespace NZazu.FieldFactory
 
             var propInfo = typeof (NZazuField).GetProperty("Settings");
             propInfo.GetSetMethod(true).IsPrivate.Should().BeTrue();
+        }
+
+        [Test]
+        public void Respect_Height_Setting()
+        {
+            var field = new NZazuField_With_Description_As_Content_Property("key");
+            const double expectedHeight = 65.5;
+            field.Settings.Add("Height", expectedHeight.ToString(CultureInfo.InvariantCulture));
+
+            var control = (ContentControl)field.ValueControl;
+            control.MinHeight.Should().Be(expectedHeight);
+            control.MaxHeight.Should().Be(expectedHeight);
         }
 
         #region test NZazuDummyField with bi-directional content property
