@@ -15,6 +15,8 @@ namespace NZazu.Contracts
 
         public Dictionary<string,string> Settings { get; set; }
 
+        // group fields
         public FieldDefinition[] Fields { get; set; }
+        public string Layout { get; set; }
     }
 }

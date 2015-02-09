@@ -124,7 +124,7 @@ namespace NZazu.Fields
             field.Settings.ShouldBeEquivalentTo(settings);
         }
 
-        [Test]
+        [Test, Ignore("TODO")]
         public void Attach_Behavior_To_Field()
         {
             var sut = new NZazuFieldFactory();
@@ -171,6 +171,22 @@ namespace NZazu.Fields
             field.Should().NotBeNull();
 
             field.Fields.Should().HaveCount(fieldDefinition.Fields.Length);
+        }
+
+        [Test]
+        public void Copy_group_layout()
+        {
+            var sut = new NZazuFieldFactory();
+
+            var fieldDefinition = new FieldDefinition
+            {
+                Key = "group1",
+                Type = "group",
+                Layout = "grid"
+            };
+            var field = (INZazuWpfGroupField)sut.CreateField(fieldDefinition);
+
+            field.Layout.Should().Be(fieldDefinition.Layout);
         }
     }
 }

@@ -53,7 +53,7 @@ namespace NZazu.Fields
 
             CopySettings(field, fieldDefinition);
 
-            RecurseGroupField(fieldDefinition, field as NZazuGroupField);
+            ProcessGroupField(fieldDefinition, field as NZazuGroupField);
 
             return field;
         }
@@ -77,13 +77,16 @@ namespace NZazu.Fields
                 : new AggregateCheck(checks.ToArray());
         }
 
-        private void RecurseGroupField(FieldDefinition fieldDefinition, NZazuGroupField groupField)
+        private void ProcessGroupField(FieldDefinition fieldDefinition, NZazuGroupField groupField)
         {
             if (fieldDefinition == null) throw new ArgumentNullException("fieldDefinition");
             if (groupField == null) return;
-            if (fieldDefinition.Fields == null || !fieldDefinition.Fields.Any()) return;
 
-            groupField.Fields = fieldDefinition.Fields.Select(CreateField);
+            if (!String.IsNullOrWhiteSpace(fieldDefinition.Layout))
+                groupField.Layout = fieldDefinition.Layout;
+
+            if (fieldDefinition.Fields == null || !fieldDefinition.Fields.Any()) return;
+            groupField.Fields = fieldDefinition.Fields.Select(CreateField).ToArray();
         }
     }
 }

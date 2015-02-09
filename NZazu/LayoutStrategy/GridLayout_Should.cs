@@ -2,6 +2,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using FluentAssertions;
+using NSubstitute;
 using NUnit.Framework;
 using NZazu.Fields;
 
@@ -9,7 +10,7 @@ namespace NZazu.LayoutStrategy
 {
     [TestFixture, RequiresSTA]
     // ReSharper disable InconsistentNaming
-    class GridLayoutStrategy_Should
+    class GridLayout_Should
     {
         private Application application;
 
@@ -17,7 +18,6 @@ namespace NZazu.LayoutStrategy
         public void Create_Application_For_Resources()
         {
             if (Application.Current != null) return;
-
             application = new Application();
         }
 
@@ -34,7 +34,7 @@ namespace NZazu.LayoutStrategy
         [Test]
         public void Layout_fields_in_a_two_column_grid()
         {
-            var sut = new GridLayoutStrategy();
+            var sut = new GridLayout();
 
             var container = new ContentControl();
             var fields = new NZazuField[]
@@ -68,7 +68,7 @@ namespace NZazu.LayoutStrategy
         [Test]
         public void Skip_rows_if_label_and_value_both_empty()
         {
-            var sut = new GridLayoutStrategy();
+            var sut = new GridLayout();
 
             var container = new ContentControl();
             var fields = new NZazuField[]
@@ -92,7 +92,7 @@ namespace NZazu.LayoutStrategy
         public void Set_Validation_Error_Template()
         {
             var expectedTemplate = new ControlTemplate();
-            var sut = new GridLayoutStrategy(expectedTemplate);
+            var sut = new GridLayout(expectedTemplate);
 
             var container = new ContentControl();
             var fields = new NZazuField[]
@@ -117,29 +117,27 @@ namespace NZazu.LayoutStrategy
         }
 
         [Test]
-        public void Should_support_ThreeState_by_default()
-        {
-            var sut = new NZazuBoolField("test");
-
-            ((CheckBox)sut.ValueControl).IsThreeState.Should().BeTrue();
-        }
-
-        [Test]
         public void Recurse_on_group_fields()
         {
-            var sut = new GridLayoutStrategy();
+            var sut = new GridLayout();//null, resolveLayout);
 
             var container = new ContentControl();
-            var fields = new NZazuField[]
+            var fields1 = new NZazuField[]
             {
-                new NZazuLabelField("label1"),
+                new NZazuLabelField("label1") { Description = "label1"},
                 new NZazuTextField("string1"),
                 new NZazuBoolField("bool1")
             };
+            var fields2 = new NZazuField[]
+            {
+                new NZazuLabelField("label2")  { Description = "label2"},
+                new NZazuTextField("string2"),
+                new NZazuBoolField("bool2")
+            };
             var groups = new[]
             {
-                new NZazuGroupField("group1") {Fields = fields},
-                new NZazuGroupField("group2") { Fields = fields }
+                new NZazuGroupField("group1") { Fields = fields1 },
+                new NZazuGroupField("group2") { Fields = fields2 }
             };
 
             sut.DoLayout(container, groups);
@@ -153,12 +151,52 @@ namespace NZazu.LayoutStrategy
             grid.Children[0].Should().Be(content1);
             grid.Children[1].Should().Be(content2);
 
-            // TODO: verify children are layouted too...
             var grid1 = (Grid)content1.Content;
             var grid2 = (Grid)content2.Content;
 
-            grid1.Children.Should().HaveCount(fields.Length);
-            grid2.Children.Should().HaveCount(fields.Length);
+            grid1.Children.Should().HaveCount(fields1.Length);
+            grid2.Children.Should().HaveCount(fields2.Length);
+            for (int i = 0; i < fields1.Length; i++)
+                grid1.Children[i].Should().Be(fields1[i].ValueControl);
+            for (int i = 0; i < fields2.Length; i++)
+                grid2.Children[i].Should().Be(fields2[i].ValueControl);
+        }
+
+        [Test]
+        public void Use_resolve_layout_on_groupfields()
+        {
+            var resolveLayout = Substitute.For<IResolveLayout>();
+            var stackLayout = Substitute.For<INZazuWpfLayoutStrategy>();
+            var gridLayout = Substitute.For<INZazuWpfLayoutStrategy>();
+            resolveLayout.Resolve("stack").Returns(stackLayout);
+            resolveLayout.Resolve("grid").Returns(gridLayout);
+
+            var sut = new GridLayout();
+
+
+            var container = new ContentControl();
+            var fields1 = new NZazuField[]
+            {
+                new NZazuLabelField("label1") { Description = "label1"},
+                new NZazuTextField("string1"),
+                new NZazuBoolField("bool1")
+            };
+            var fields2 = new NZazuField[]
+            {
+                new NZazuLabelField("label2")  { Description = "label2"},
+                new NZazuTextField("string2"),
+                new NZazuBoolField("bool2")
+            };
+            var groups = new[]
+            {
+                new NZazuGroupField("stack") { Fields = fields1, Layout = "stack"},
+                new NZazuGroupField("grid") { Fields = fields2, Layout = "grid"}
+            };
+
+            sut.DoLayout(container, groups, resolveLayout);
+            
+            stackLayout.Received().DoLayout(Arg.Any<ContentControl>(), fields1, resolveLayout);
+            //gridLayout.Received().DoLayout(Arg.Any<ContentControl>(), fields2);
         }
     }
 }

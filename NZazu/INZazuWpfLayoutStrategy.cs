@@ -5,6 +5,7 @@ namespace NZazu
 {
     public interface INZazuWpfLayoutStrategy
     {
-        void DoLayout(ContentControl container, IEnumerable<INZazuWpfField> fields);
+        void DoLayout(ContentControl contentControl, IEnumerable<INZazuWpfField> fields, 
+            IResolveLayout resolveLayout = null);
     }
 }

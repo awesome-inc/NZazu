@@ -29,9 +29,11 @@ namespace NZazu.Fields
         public void Create_ContentControl()
         {
             var sut = new NZazuGroupField("key");
-            var panel = (ContentControl)sut.ValueControl;
+            var contentControl = (ContentControl)sut.ValueControl;
 
-            panel.Should().NotBeNull();
+            contentControl.Should().NotBeNull();
+
+            contentControl.Focusable.Should().BeFalse("group fields should not have a tab stop of their own");
         }
     }
 }

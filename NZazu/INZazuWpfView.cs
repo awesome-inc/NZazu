@@ -9,9 +9,9 @@ namespace NZazu
         FormData FormData { get; set; }
             
         INZazuWpfFieldFactory FieldFactory { get; set; }
-        INZazuWpfLayoutStrategy LayoutStrategy { get; set; }
+        IResolveLayout ResolveLayout { get; set; }
 
-        INZazuWpfField GetField(string fieldKey);
+        INZazuWpfField GetField(string key);
         void ApplyChanges();
 
         /// <exception cref="ValidationException"></exception>

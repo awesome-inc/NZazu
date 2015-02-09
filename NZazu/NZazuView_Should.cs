@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
 using NSubstitute;
@@ -25,48 +26,59 @@ namespace NZazu
         [Test]
         public void Update_when_FormDefinition_changed()
         {
-            var sut = new NZazuView();
-
-            var layout = Substitute.For<INZazuWpfLayoutStrategy>();
-            sut.LayoutStrategy = layout;
-            layout.ClearReceivedCalls();
-
-            sut.FormDefinition = new FormDefinition { Fields = new FieldDefinition[] { } };
-
-            layout.Received().DoLayout(sut.Layout, Arg.Any<IEnumerable<INZazuWpfField>>());
+            var formDefinition = new FormDefinition { Layout = "grid", Fields = new FieldDefinition[] { } };
+            VerifyUpdate(view =>
+            {
+                view.FormDefinition = formDefinition;
+                view.FormDefinition.Should().Be(formDefinition);
+            });
         }
 
         [Test]
         public void Update_when_FieldFactory_changed()
         {
-            var layout = Substitute.For<INZazuWpfLayoutStrategy>();
-            var sut = new NZazuView();
-            sut.LayoutStrategy = layout;
-            sut.FieldFactory = Substitute.For<INZazuWpfFieldFactory>();
-            sut.FormDefinition = new FormDefinition { Fields = new FieldDefinition[] { } };
-
-
-            layout.ClearReceivedCalls();
             var fieldFactory = Substitute.For<INZazuWpfFieldFactory>();
-            sut.FieldFactory = fieldFactory;
-
-            layout.Received().DoLayout(sut.Layout, Arg.Any<IEnumerable<INZazuWpfField>>());
+            VerifyUpdate(view =>
+            {
+                view.FieldFactory = fieldFactory;
+                view.FieldFactory.Should().Be(fieldFactory);
+            });
         }
-
 
         [Test]
         public void Update_when_LayoutStrategy_changed()
         {
-            var sut = new NZazuView();
-            sut.FieldFactory = Substitute.For<INZazuWpfFieldFactory>();
-            sut.FormDefinition = new FormDefinition { Fields = new FieldDefinition[] { } };
+            var layout = Substitute.For<IResolveLayout>();
+            VerifyUpdate(view =>
+            {
+                view.ResolveLayout = layout;
+                view.ResolveLayout.Should().Be(layout);
+            });
+        }
 
-            var layoutStrategy = Substitute.For<INZazuWpfLayoutStrategy>();
+        static void VerifyUpdate(Action<INZazuWpfView> act)
+        {
+            var formDefinition = new FormDefinition { Fields = new FieldDefinition[] { } };
 
-            // change strategy
-            sut.LayoutStrategy = layoutStrategy;
+            var resolveLayout = Substitute.For<IResolveLayout>();
+            var layout = Substitute.For<INZazuWpfLayoutStrategy>();
+            resolveLayout.Resolve(formDefinition.Layout).Returns(layout);
+            var fieldFactory = Substitute.For<INZazuWpfFieldFactory>();
 
-            layoutStrategy.Received().DoLayout(sut.Layout, Arg.Any<IEnumerable<INZazuWpfField>>());
+            var sut = new NZazuView
+            {
+                ResolveLayout = resolveLayout,
+                FieldFactory = fieldFactory,
+                FormDefinition = formDefinition
+            };
+
+            fieldFactory.ClearReceivedCalls();
+            resolveLayout.ClearReceivedCalls();
+            layout.ClearReceivedCalls();
+
+            act(sut);
+
+            sut.ResolveLayout.Received().Resolve(sut.FormDefinition.Layout);
         }
 
         [Test]
@@ -84,11 +96,11 @@ namespace NZazu
         public void Disallow_null_LayoutStrategy()
         {
             var sut = new NZazuView();
-            sut.LayoutStrategy.Should().NotBeNull();
+            sut.ResolveLayout.Should().NotBeNull();
 
-            sut.LayoutStrategy = null;
+            sut.ResolveLayout = null;
 
-            sut.LayoutStrategy.Should().NotBeNull();
+            sut.ResolveLayout.Should().NotBeNull();
         }
 
         [Test]
@@ -134,14 +146,14 @@ namespace NZazu
             var field = Substitute.For<INZazuWpfField>();
             field.Key.ReturnsForAnyArgs("test");
             var fieldFactory = Substitute.For<INZazuWpfFieldFactory>();
-            var layoutStrategy = Substitute.For<INZazuWpfLayoutStrategy>();
+            var layout = Substitute.For<IResolveLayout>();
             fieldFactory.CreateField(Arg.Any<FieldDefinition>()).Returns(field);
 
             var sut = new NZazuView
             {
                 FormDefinition = new FormDefinition {Fields = new [] {new FieldDefinition {Key = "test"}}},
                 FieldFactory = fieldFactory,
-                LayoutStrategy = layoutStrategy
+                ResolveLayout = layout
             };
 
             sut.Validate();

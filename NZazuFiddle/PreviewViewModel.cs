@@ -28,7 +28,7 @@ namespace NZazuFiddle
             _definition = definition ?? Example.FormDefinition;
             _data = data ?? Example.FormData;
             _fieldFactory = fieldFactory ?? new XceedFieldFactory();
-            _layoutStrategy = layoutStrategy ?? new GridLayoutStrategy();
+            _layoutStrategy = layoutStrategy ?? new GridLayout();
         }
 
         public FormDefinition Definition

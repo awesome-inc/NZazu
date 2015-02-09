@@ -92,5 +92,13 @@ namespace NZazu.Fields
             checkBox.IsChecked = null;
             sut.StringValue.Should().BeEmpty();
         }
+
+        [Test]
+        public void Should_support_ThreeState_by_default()
+        {
+            var sut = new NZazuBoolField("test");
+
+            ((CheckBox)sut.ValueControl).IsThreeState.Should().BeTrue();
+        }
     }
 }

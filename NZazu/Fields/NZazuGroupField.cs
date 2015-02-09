@@ -19,9 +19,10 @@ namespace NZazu.Fields
 
         protected override Control GetValue()
         {
-            return new ContentControl();
+            return new ContentControl {Focusable = false};
         }
 
         public IEnumerable<INZazuWpfField> Fields { get; protected internal set; }
+        public string Layout { get; protected internal set; }
     }
 }
