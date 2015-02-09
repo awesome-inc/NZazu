@@ -30,7 +30,7 @@ namespace NZazu.Fields
         [TestCase("int", typeof(TextBox))]
         [TestCase("date", typeof(DatePicker))]
         [TestCase("double", typeof(TextBox))]
-        [TestCase("group", typeof(StackPanel))]
+        [TestCase("group", typeof(ContentControl))]
         public void Support(string fieldType, Type controlType)
         {
             var sut = new NZazuFieldFactory();
