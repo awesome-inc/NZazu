@@ -4,9 +4,8 @@ using System.Diagnostics;
 using System.Linq;
 using NZazu.Contracts;
 using NZazu.Contracts.Checks;
-using NZazu.Fields;
 
-namespace NZazu.Factory
+namespace NZazu.FieldFactory
 {
     public class NZazuFieldFactory : INZazuWpfFieldFactory
     {

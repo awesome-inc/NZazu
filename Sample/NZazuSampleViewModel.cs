@@ -2,6 +2,7 @@
 using Caliburn.Micro;
 using NZazu;
 using NZazu.Contracts;
+using NZazu.Extensions;
 
 namespace Sample
 {

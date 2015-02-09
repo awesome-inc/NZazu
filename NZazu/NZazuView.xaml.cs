@@ -2,7 +2,8 @@
 using System.Linq;
 using System.Windows;
 using NZazu.Contracts;
-using NZazu.Factory;
+using NZazu.Extensions;
+using NZazu.FieldFactory;
 using NZazu.Layout;
 
 namespace NZazu
@@ -124,14 +125,41 @@ namespace NZazu
 
         private void UpdateFields(FormDefinition formDefinition, INZazuWpfFieldFactory fieldFactory, INZazuWpfLayoutStrategy layoutStrategy)
         {
-            _fields.Clear();
+            DisposeFields();
 
             // make sure at least the minimum is set for render the layout
             if (formDefinition == null) return;
             if (formDefinition.Fields == null) return;
 
-            formDefinition.Fields.ToList().ForEach(f => _fields.Add(f.Key, fieldFactory.CreateField(f)));
+            CreateFields(formDefinition, fieldFactory);
+            AttachBehavior();
+            
             layoutStrategy.DoLayout(Layout, _fields.Values);
+        }
+
+        private void CreateFields(FormDefinition formDefinition, INZazuWpfFieldFactory fieldFactory)
+        {
+            formDefinition.Fields.ToList().ForEach(f =>
+            {
+                var field = fieldFactory.CreateField(f);
+                _fields.Add(f.Key, field);
+            });
+        }
+
+        private void DisposeFields()
+        {
+            DetachBehavior();
+            _fields.Clear();
+        }
+
+        private void AttachBehavior()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        private void DetachBehavior()
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

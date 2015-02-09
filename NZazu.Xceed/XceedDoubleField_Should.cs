@@ -1,6 +1,7 @@
 using System;
 using FluentAssertions;
 using NUnit.Framework;
+using NZazu.Extensions;
 using Xceed.Wpf.Toolkit;
 
 namespace NZazu.Xceed

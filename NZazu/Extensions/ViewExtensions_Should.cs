@@ -6,7 +6,7 @@ using NUnit.Framework;
 using NZazu.Contracts;
 using NZazu.Contracts.Checks;
 
-namespace NZazu
+namespace NZazu.Extensions
 {
     [TestFixture]
     // ReSharper disable InconsistentNaming

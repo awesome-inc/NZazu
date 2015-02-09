@@ -5,8 +5,9 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using FluentAssertions;
 using NUnit.Framework;
+using NZazu.Extensions;
 
-namespace NZazu.Fields
+namespace NZazu.FieldFactory
 {
     [TestFixture]
     [RequiresSTA]

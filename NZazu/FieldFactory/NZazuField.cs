@@ -8,7 +8,7 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using NZazu.Contracts.Checks;
 
-namespace NZazu.Fields
+namespace NZazu.FieldFactory
 {
     public abstract class NZazuField : INZazuWpfField
     {
@@ -29,6 +29,7 @@ namespace NZazu.Fields
         public Control LabelControl { get { return _labelControl.Value; } }
         public Control ValueControl { get { return _valueControl.Value; } }
         public Dictionary<string, string> Settings { get; private set; }
+        public INZazuWpfFieldBehavior Behavior { get; internal set; }
 
         protected NZazuField(string key)
         {

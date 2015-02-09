@@ -1,5 +1,5 @@
 ﻿using NZazu.Contracts;
-using NZazu.Factory;
+using NZazu.FieldFactory;
 
 namespace NZazu.Xceed
 {

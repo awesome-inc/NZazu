@@ -17,6 +17,7 @@ namespace NZazu
         Control LabelControl { get; }
         Control ValueControl { get; }
         Dictionary<string, string> Settings { get; }
+        INZazuWpfFieldBehavior Behavior { get; }
     }
 
     public interface INZazuWpfField<T> : INZazuWpfField

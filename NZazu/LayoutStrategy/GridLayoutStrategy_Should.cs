@@ -3,7 +3,7 @@ using System.Windows;
 using System.Windows.Controls;
 using FluentAssertions;
 using NUnit.Framework;
-using NZazu.Fields;
+using NZazu.FieldFactory;
 
 namespace NZazu.Layout
 {
