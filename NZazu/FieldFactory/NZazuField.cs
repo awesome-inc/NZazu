@@ -107,8 +107,8 @@ namespace NZazu.FieldFactory
 
         protected string GetFormatString()
         {
-            String format = null;
-            if (Settings != null) Settings.TryGetValue("Format", out format);
+            String format;
+            Settings.TryGetValue("Format", out format);
             return format;
         }
     }

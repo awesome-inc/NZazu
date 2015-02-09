@@ -106,6 +106,16 @@ namespace NZazu.FieldFactory
             check.ReceivedWithAnyArgs().Validate(Arg.Any<string>());
         }
 
+        [Test, Description("This test verifies that \"Settings\" cannot become null")]
+        public void Have_Settings_not_null()
+        {
+            var field = new NZazuDummyField("key");
+            field.Settings.Should().NotBeNull();
+
+            var propInfo = typeof (NZazuField).GetProperty("Settings");
+            propInfo.GetSetMethod(true).IsPrivate.Should().BeTrue();
+        }
+
         #region test NZazuDummyField with bi-directional content property
 
         [Test]

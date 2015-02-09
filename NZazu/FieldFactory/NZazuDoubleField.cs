@@ -87,7 +87,7 @@ namespace NZazu.FieldFactory
 
         protected override Binding DecorateBinding(Binding binding)
         {
-            var format = (Settings != null && Settings.ContainsKey("Format")) ? Settings["Format"] : "G";
+            var format = Settings.ContainsKey("Format") ? Settings["Format"] : "G";
             var decorated = base.DecorateBinding(binding);
             decorated.Converter = new DoubleToStringConverter(format);
             return decorated;
