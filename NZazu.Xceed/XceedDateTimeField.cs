@@ -1,7 +1,7 @@
 using System;
 using System.Windows;
 using System.Windows.Controls;
-using NZazu.Fields;
+using NZazu.FieldFactory;
 using Xceed.Wpf.Toolkit;
 
 namespace NZazu.Xceed
@@ -20,7 +20,7 @@ namespace NZazu.Xceed
         protected override Control GetValue()
         {
             var control = new DateTimePicker { ToolTip = Description, Watermark = Hint };
-            DateFormat = GetFormatString();
+            DateFormat = GetSetting("Format");
             if (!String.IsNullOrWhiteSpace(DateFormat))
             {
                 control.Format = DateTimeFormat.Custom;

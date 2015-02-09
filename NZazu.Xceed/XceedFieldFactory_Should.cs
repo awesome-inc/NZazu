@@ -88,5 +88,25 @@ namespace NZazu.Xceed
             field.Should().BeOfType<XceedIntegerField>();
         }
 
+        [Test]
+        public void Support_RichTextBox()
+        {
+            var sut = new XceedFieldFactory();
+            var fieldDefinition = new FieldDefinition
+            {
+                Key = "notes",
+                Type = "richtext",
+                Prompt = "Notes",
+                Hint = "Enter Notes",
+                Description = "Notes",
+            };
+            var field = (XceedRichTextField)sut.CreateField(fieldDefinition);
+            field.Should().NotBeNull();
+
+
+            var textBox = (RichTextBox)field.ValueControl;
+            textBox.Should().NotBeNull();
+            textBox.ToolTip.Should().Be(field.Description);
+        }
     }
 }

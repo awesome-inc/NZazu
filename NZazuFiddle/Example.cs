@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using NZazu.Contracts;
 
 namespace NZazuFiddle
@@ -80,6 +81,14 @@ namespace NZazuFiddle
                                     Values = new[] {"Must be Checked or Unchecked", "True", "False"}
                                 }
                             }
+                        },
+                        new FieldDefinition
+                        {
+                            Key = "notes",
+                            Type = "richtext",
+                            Prompt = "Notes",
+                            Description = "Notes for the current issue",
+                            Settings = new Dictionary<string, string> {{"Height", 80.ToString(CultureInfo.InvariantCulture)}}
                         }
                     }
                 };

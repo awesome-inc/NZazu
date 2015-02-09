@@ -11,6 +11,7 @@ namespace NZazu.Contracts
         public string Description { get; set; }
 
         public CheckDefinition[] Checks { get; set; }
+        public BehaviorDefinition Behavior { get; set; }
 
         public Dictionary<string,string> Settings { get; set; }
     }

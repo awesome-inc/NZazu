@@ -53,6 +53,7 @@ namespace NZazuFiddle
             new NzazuCompletionData { Text = "Format: Fixed Point", Replacement = "[{ \"Format\": \"F2\" }]", Description = "Fixed point"},
             new NzazuCompletionData { Text = "Format: General", Replacement = "[{ \"Format\": \"C2\" }]", Description = "General"},
             new NzazuCompletionData { Text = "Format: Percent", Replacement = "[{ \"Format\": \"P3\" }]", Description = "Percent"},
+            new NzazuCompletionData { Text = "Height", Replacement = "[{ \"Height\": \"64.3\" }]", Description = "The field's height in pixel"},
         });
 
         private static readonly ICompletionData KeyComplete = 

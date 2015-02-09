@@ -2,7 +2,7 @@ using System;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
-using NZazu.Fields;
+using NZazu.FieldFactory;
 using Xceed.Wpf.Toolkit;
 
 namespace NZazu.Xceed
@@ -21,7 +21,7 @@ namespace NZazu.Xceed
         protected override Control GetValue()
         {
             var control = new IntegerUpDown {ToolTip = Description, Watermark = Hint};
-            var formatString = GetFormatString();
+            var formatString = GetSetting("Format");
             if (IsSupported(formatString))
             {
                 control.FormatString = formatString;

@@ -2,7 +2,7 @@
 using Caliburn.Micro;
 using NZazu;
 using NZazu.Contracts;
-using NZazu.Layout;
+using NZazu.LayoutStrategy;
 using NZazu.Xceed;
 
 namespace NZazuFiddle
@@ -12,15 +12,15 @@ namespace NZazuFiddle
         private readonly IEventAggregator _events;
         private FormDefinition _definition;
         private FormData _data;
-        private INZazuFieldFactory _fieldFactory;
-        private INZazuLayoutStrategy _layoutStrategy;
+        private INZazuWpfFieldFactory _fieldFactory;
+        private INZazuWpfLayoutStrategy _layoutStrategy;
         private bool _inHandle;
 
         public PreviewViewModel(IEventAggregator events,
             FormDefinition definition = null,
             FormData data = null,
-            INZazuFieldFactory fieldFactory = null,
-            INZazuLayoutStrategy layoutStrategy = null)
+            INZazuWpfFieldFactory fieldFactory = null,
+            INZazuWpfLayoutStrategy layoutStrategy = null)
         {
             if (events == null) throw new ArgumentNullException("events");
             _events = events;
@@ -54,7 +54,7 @@ namespace NZazuFiddle
             }
         }
 
-        public INZazuFieldFactory FieldFactory
+        public INZazuWpfFieldFactory FieldFactory
         {
             get { return _fieldFactory; }
             set
@@ -65,7 +65,7 @@ namespace NZazuFiddle
             }
         }
 
-        public INZazuLayoutStrategy LayoutStrategy
+        public INZazuWpfLayoutStrategy LayoutStrategy
         {
             get { return _layoutStrategy; }
             set

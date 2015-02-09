@@ -3,7 +3,7 @@ using Autofac;
 using Caliburn.Micro;
 using Caliburn.Micro.Autofac;
 using NZazu;
-using NZazu.Layout;
+using NZazu.LayoutStrategy;
 using NZazu.Xceed;
 
 namespace NZazuFiddle
@@ -25,8 +25,8 @@ namespace NZazuFiddle
             builder.RegisterType<FormDataViewModel>().As<IFormDataViewModel>().SingleInstance();
             builder.RegisterType<PreviewViewModel>().As<IPreviewViewModel>().SingleInstance();
 
-            builder.RegisterType<XceedFieldFactory>().As<INZazuFieldFactory>();
-            builder.RegisterType<GridLayoutStrategy>().As<INZazuLayoutStrategy>();
+            builder.RegisterType<XceedFieldFactory>().As<INZazuWpfFieldFactory>();
+            builder.RegisterType<GridLayoutStrategy>().As<INZazuWpfLayoutStrategy>();
         }
 
         protected override void ConfigureBootstrapper()

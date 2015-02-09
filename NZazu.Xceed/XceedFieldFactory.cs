@@ -1,5 +1,5 @@
 ﻿using NZazu.Contracts;
-using NZazu.Factory;
+using NZazu.FieldFactory;
 
 namespace NZazu.Xceed
 {
@@ -12,6 +12,7 @@ namespace NZazu.Xceed
             FieldTypes["date"] = typeof(XceedDateTimeField);
             FieldTypes["double"] = typeof(XceedDoubleField);
             FieldTypes["int"] = typeof(XceedIntegerField);
+            FieldTypes["richtext"] = typeof(XceedRichTextField);
         }
     }
 }
