@@ -8,6 +8,9 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300" d:DataContext="{d:DesignInstance sample:NZazuSampleViewModel}">
     <Grid>
-        <nZazu:NZazuView x:Name="NZazuView" FormDefinition="{Binding FormDefinition}" FormData="{Binding FormData}"/>
+        <nZazu:NZazuView x:Name="NZazuView"
+             FormDefinition="{Binding FormDefinition}" 
+             FormData="{Binding FormData}"
+             FieldFactory="{Binding FieldFactory}"/>
     </Grid>
 </UserControl>

@@ -38,6 +38,7 @@ namespace NZazu.Xceed
             {
                 case "plain": return new PlainTextFormatter();
                 case "xaml": return new XamlFormatter();
+                // ReSharper disable once RedundantCaseLabel
                 case "rtf":
                 default: return new RtfFormatter();
             }

@@ -3,11 +3,19 @@ using Caliburn.Micro;
 using NZazu;
 using NZazu.Contracts;
 using NZazu.Extensions;
+using NZazu.Fields;
 
 namespace Sample
 {
     public class NZazuSampleViewModel : Screen, INZazuSample
     {
+        public INZazuWpfFieldFactory FieldFactory { get; set; }
+
+        public NZazuSampleViewModel(INZazuWpfFieldFactory fieldFactory = null)
+        {
+            FieldFactory = fieldFactory ?? new NZazuFieldFactory();
+        }
+
         private FormData _formData = new FormData();
 
         public string Name { get; set; }
