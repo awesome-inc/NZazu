@@ -3,8 +3,8 @@ using System.Linq;
 using System.Windows;
 using NZazu.Contracts;
 using NZazu.Extensions;
-using NZazu.FieldFactory;
-using NZazu.LayoutStrategy;
+using NZazu.FieldBehavior;
+using NZazu.Fields;
 
 namespace NZazu
 {
@@ -27,7 +27,7 @@ namespace NZazu
         {
             var view = (NZazuView)d;
             var formDefinition = (FormDefinition)e.NewValue;
-            view.UpdateFields(formDefinition, view.FieldFactory, view.LayoutStrategy);
+            view.UpdateFields(formDefinition, view.FieldFactory, view.FieldBehaviorFactory, view.ResolveLayout);
         }
 
         // ############# FieldFactory
@@ -45,7 +45,7 @@ namespace NZazu
         {
             var view = (NZazuView)d;
             var fieldFactory = (INZazuWpfFieldFactory)e.NewValue;
-            view.UpdateFields(view.FormDefinition, fieldFactory, view.LayoutStrategy);
+            view.UpdateFields(view.FormDefinition, fieldFactory, view.FieldBehaviorFactory, view.ResolveLayout);
         }
 
         private static object FieldFactoryCoerceCallback(DependencyObject d, object basevalue)
@@ -55,29 +55,55 @@ namespace NZazu
             return fieldFactory ?? view.FieldFactory;
         }
 
-        // ############# LayoutStrategy
+        // ############# FieldBehaviorFactory
 
-        public static readonly DependencyProperty LayoutStrategyProperty = DependencyProperty.Register(
-           "LayoutStrategy", typeof(INZazuWpfLayoutStrategy), typeof(NZazuView), new PropertyMetadata(new GridLayoutStrategy(), LayoutStrategyChanged, LayoutStrategyCoerceCallback));
+        public static readonly DependencyProperty FieldBehaviorFactoryProperty = DependencyProperty.Register(
+           "FieldBehaviorFactory", typeof(INZazuWpfFieldBehaviorFactory), typeof(NZazuView), new PropertyMetadata(new NZazuFieldBehaviorFactory(), FieldBehaviorFactoryChanged, FieldBehaviorFactoryCoerceCallback));
 
-        public INZazuWpfLayoutStrategy LayoutStrategy
+        public INZazuWpfFieldBehaviorFactory FieldBehaviorFactory
         {
-            get { return (INZazuWpfLayoutStrategy)GetValue(LayoutStrategyProperty); }
-            set { SetValue(LayoutStrategyProperty, value); }
+            get { return (INZazuWpfFieldBehaviorFactory)GetValue(FieldBehaviorFactoryProperty); }
+            set { SetValue(FieldBehaviorFactoryProperty, value); }
         }
 
-        private static void LayoutStrategyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        private static void FieldBehaviorFactoryChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var view = (NZazuView)d;
-            var layoutStrategy = (INZazuWpfLayoutStrategy)e.NewValue;
-            view.UpdateFields(view.FormDefinition, view.FieldFactory, layoutStrategy);
+            var fieldBehaviorFactory = (INZazuWpfFieldBehaviorFactory)e.NewValue;
+            view.UpdateFields(view.FormDefinition, view.FieldFactory, fieldBehaviorFactory, view.ResolveLayout);
         }
 
-        private static object LayoutStrategyCoerceCallback(DependencyObject d, object basevalue)
+        private static object FieldBehaviorFactoryCoerceCallback(DependencyObject d, object basevalue)
         {
             var view = (NZazuView)d;
-            var layoutStrategy = (INZazuWpfLayoutStrategy)basevalue;
-            return layoutStrategy ?? view.LayoutStrategy;
+            var fieldBehaviorFactory = (INZazuWpfFieldBehaviorFactory)basevalue;
+            return fieldBehaviorFactory ?? view.FieldBehaviorFactory;
+        }
+
+        // ############# ResolveLayout
+
+        public static readonly DependencyProperty ResolveLayoutProperty = DependencyProperty.Register(
+           "ResolveLayout", typeof(IResolveLayout), typeof(NZazuView),
+           new PropertyMetadata(new ResolveLayout(), ResolveLayoutChanged, ResolveLayoutCoerceCallback));
+
+        public IResolveLayout ResolveLayout
+        {
+            get { return (IResolveLayout)GetValue(ResolveLayoutProperty); }
+            set { SetValue(ResolveLayoutProperty, value); }
+        }
+
+        private static void ResolveLayoutChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var view = (NZazuView)d;
+            var layoutStrategy = (IResolveLayout)e.NewValue;
+            view.UpdateFields(view.FormDefinition, view.FieldFactory, view.FieldBehaviorFactory, layoutStrategy);
+        }
+
+        private static object ResolveLayoutCoerceCallback(DependencyObject d, object basevalue)
+        {
+            var view = (NZazuView)d;
+            var layout = (IResolveLayout)basevalue;
+            return layout ?? view.ResolveLayout;
         }
 
         // ############# FormData
@@ -106,15 +132,25 @@ namespace NZazu
             InitializeComponent();
         }
 
-        public INZazuWpfField GetField(string fieldKey)
+        public INZazuWpfField GetField(string key)
         {
-            return _fields[fieldKey];
+            INZazuWpfField field;
+            if (!_fields.TryGetValue(key, out field)
+                && !_groupFields.TryGetValue(key, out field))
+                throw new KeyNotFoundException();
+            return field;
         }
 
         public void ApplyChanges()
         {
-            FormData = new FormData(this.GetFieldValues());
+            FormData = GetFieldValues();
         }
+
+        public Dictionary<string, string> GetFieldValues()
+        {
+            return (_fields.Concat(_groupFields)).ToDictionary(f => f.Key, f => f.Value.StringValue);
+        }
+
 
         public void Validate()
         {
@@ -122,8 +158,13 @@ namespace NZazu
         }
 
         private readonly IDictionary<string, INZazuWpfField> _fields = new Dictionary<string, INZazuWpfField>();
+        private readonly IDictionary<string, INZazuWpfField> _groupFields = new Dictionary<string, INZazuWpfField>();
 
-        private void UpdateFields(FormDefinition formDefinition, INZazuWpfFieldFactory fieldFactory, INZazuWpfLayoutStrategy layoutStrategy)
+        private void UpdateFields(
+            FormDefinition formDefinition,
+            INZazuWpfFieldFactory fieldFactory,
+            INZazuWpfFieldBehaviorFactory fieldBehaviorFactory,
+            IResolveLayout resolveLayout)
         {
             DisposeFields();
 
@@ -132,9 +173,10 @@ namespace NZazu
             if (formDefinition.Fields == null) return;
 
             CreateFields(formDefinition, fieldFactory);
-            AttachBehavior();
-            
-            layoutStrategy.DoLayout(Layout, _fields.Values);
+            AttachBehavior(formDefinition, fieldBehaviorFactory);
+
+            var layout = resolveLayout.Resolve(formDefinition.Layout);
+            layout.DoLayout(Layout, _fields.Values, resolveLayout);
         }
 
         private void CreateFields(FormDefinition formDefinition, INZazuWpfFieldFactory fieldFactory)
@@ -143,21 +185,53 @@ namespace NZazu
             {
                 var field = fieldFactory.CreateField(f);
                 _fields.Add(f.Key, field);
+                AddGroupFieldKeys(field as INZazuWpfGroupField);
             });
+        }
+
+        private void AddGroupFieldKeys(INZazuWpfGroupField groupField)
+        {
+            if (groupField == null) return;
+            foreach (var field in groupField.Fields)
+            {
+                _groupFields.Add(field.Key, field);
+                AddGroupFieldKeys(field as INZazuWpfGroupField);
+            }
         }
 
         private void DisposeFields()
         {
             DetachBehavior();
             _fields.Clear();
+            _groupFields.Clear();
         }
 
-        private void AttachBehavior()
+        private void AttachBehavior(FormDefinition formDefinition, INZazuWpfFieldBehaviorFactory fieldBehaviorFactory)
         {
+            foreach (var fieldDefinition in formDefinition.Fields)
+            {
+                if (fieldDefinition.Behavior == null || string.IsNullOrWhiteSpace(fieldDefinition.Behavior.Name)) continue; // lets ship "nothing"
+
+                var behavior = fieldBehaviorFactory.CreateFieldBehavior(fieldDefinition.Behavior);
+                var field = GetField(fieldDefinition.Key) as NZazuField;
+                if (field == null) return;
+
+                behavior.AttachTo(field.ValueControl);
+                field.Behavior = behavior;
+            }
         }
 
         private void DetachBehavior()
         {
+            if (_fields == null) return;
+
+            foreach (var field in _fields)
+            {
+                // detach field
+                if (field.Value == null || field.Value.Behavior == null) return;
+                field.Value.Behavior.Detach();
+                field.Value.Behavior = null;
+            }
         }
     }
 }

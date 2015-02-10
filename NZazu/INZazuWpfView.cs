@@ -1,4 +1,5 @@
-﻿using NZazu.Contracts;
+﻿using System.Collections.Generic;
+using NZazu.Contracts;
 using NZazu.Contracts.Checks;
 
 namespace NZazu
@@ -9,9 +10,10 @@ namespace NZazu
         FormData FormData { get; set; }
             
         INZazuWpfFieldFactory FieldFactory { get; set; }
-        INZazuWpfLayoutStrategy LayoutStrategy { get; set; }
+        IResolveLayout ResolveLayout { get; set; }
 
-        INZazuWpfField GetField(string fieldKey);
+        INZazuWpfField GetField(string key);
+        Dictionary<string, string> GetFieldValues();
         void ApplyChanges();
 
         /// <exception cref="ValidationException"></exception>

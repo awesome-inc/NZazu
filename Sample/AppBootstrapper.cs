@@ -2,6 +2,8 @@
 using System.Windows;
 using Autofac;
 using Caliburn.Micro.Autofac;
+using NZazu;
+using NZazu.Xceed;
 
 namespace Sample
 {
@@ -16,6 +18,8 @@ namespace Sample
             builder.RegisterAssemblyTypes(Assembly.GetExecutingAssembly())
                .Where(t => t.Namespace != null && t.Namespace.Contains("Samples"))
                .AsImplementedInterfaces();
+
+            builder.RegisterType<XceedFieldFactory>().As<INZazuWpfFieldFactory>().SingleInstance();
         }
 
         protected override void ConfigureBootstrapper()

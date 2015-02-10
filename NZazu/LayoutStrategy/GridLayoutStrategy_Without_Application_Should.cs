@@ -10,7 +10,7 @@ namespace NZazu.LayoutStrategy
         [Test]
         public void Be_Creatable()
         {
-            var sut = new GridLayoutStrategy();
+            var sut = new GridLayout();
             sut.Should().NotBeNull();
         }
     }

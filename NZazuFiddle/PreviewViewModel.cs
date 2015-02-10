@@ -16,19 +16,19 @@ namespace NZazuFiddle
         private INZazuWpfLayoutStrategy _layoutStrategy;
         private bool _inHandle;
 
-        public PreviewViewModel(IEventAggregator events,
-            FormDefinition definition = null,
-            FormData data = null,
+        public PreviewViewModel(IEventAggregator events, FormDefinition definition, FormData data,
             INZazuWpfFieldFactory fieldFactory = null,
             INZazuWpfLayoutStrategy layoutStrategy = null)
         {
             if (events == null) throw new ArgumentNullException("events");
+            if (definition == null) throw new ArgumentNullException("definition");
+            if (data == null) throw new ArgumentNullException("data");
             _events = events;
             _events.Subscribe(this);
-            _definition = definition ?? Example.FormDefinition;
-            _data = data ?? Example.FormData;
+            _definition = definition;
+            _data = data;
             _fieldFactory = fieldFactory ?? new XceedFieldFactory();
-            _layoutStrategy = layoutStrategy ?? new GridLayoutStrategy();
+            _layoutStrategy = layoutStrategy ?? new GridLayout();
         }
 
         public FormDefinition Definition

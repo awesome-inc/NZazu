@@ -6,25 +6,11 @@ using NZazu.Contracts;
 
 namespace NZazu.FieldBehavior
 {
-    [TestFixture, RequiresSTA]
+    [TestFixture]
+    [RequiresSTA]
     // ReSharper disable InconsistentNaming
     class NZazuFieldBehaviorFactory_Should
     {
-        #region inner classes for testing
-
-        private class DummyFieldBehavior : INZazuWpfFieldBehavior
-        {
-            public void AttachTo(Control valueControl)
-            {
-            }
-
-            public void Detach()
-            {
-            }
-        }
-
-        #endregion
-
         [Test]
         public void Be_Creatable()
         {
@@ -48,6 +34,28 @@ namespace NZazu.FieldBehavior
                 .ShouldThrow<ArgumentException>();
         }
 
+        #region simple interface implementation
+
+        private class SimpleInterfaceImplementation : INZazuWpfFieldBehavior
+        {
+            public void AttachTo(Control valueControl) { }
+            public void Detach() { }
+        }
+        #endregion
+
+        [Test]
+        public void Handle_Interface_Implementations()
+        {
+            BehaviorExtender.Register("IfaceImpl", typeof(SimpleInterfaceImplementation));
+            var sut = new NZazuFieldBehaviorFactory();
+            var behavior = sut.CreateFieldBehavior(new BehaviorDefinition { Name = "IfaceImpl" });
+            behavior.Should().BeAssignableTo<SimpleInterfaceImplementation>();
+
+            // just to get code coverage
+            behavior.AttachTo(null);
+            behavior.Detach();
+        }
+
         [Test]
         public void Return_Null_For_Unknown_Types()
         {
@@ -58,33 +66,15 @@ namespace NZazu.FieldBehavior
         }
 
         [Test]
-        public void Allow_Registration_Of_Additional_Behaviors()
-        {
-            const string name = "mock";
-            var type = typeof(DummyFieldBehavior);
-            var sut = new NZazuFieldBehaviorFactory();
-
-            sut.Register(name, type);
-
-            var behavior = sut.CreateFieldBehavior(new BehaviorDefinition { Name = name });
-            behavior.Should().NotBeNull();
-        }
-
-        [Test]
         [TestCase(null)]
-        [TestCase("Empty", typeof(Label))]
+        [TestCase("Empty", typeof(EmptyNZazuFieldBehavior))]
         public void Support(string fieldType, Type controlType)
         {
             var sut = new NZazuFieldBehaviorFactory();
 
-            //var field = sut.CreateFieldBehavior(new FieldDefinition { Key = "test", Type = fieldType, Description = "test" });
-
-            //field.Should().NotBeNull();
-            //field.Type.Should().Be(fieldType ?? "label"); // because of the fallback in case of null
-
-            //var control = field.ValueControl;
-            //control.Should().BeOfType(controlType);
-            Assert.Inconclusive("implement me");
+            var field = sut.CreateFieldBehavior(new BehaviorDefinition { Name = fieldType });
+            field.Should().NotBeNull();
+            field.GetType().Should().Be(controlType);
         }
     }
 
