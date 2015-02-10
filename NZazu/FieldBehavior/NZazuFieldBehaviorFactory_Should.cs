@@ -66,7 +66,6 @@ namespace NZazu.FieldBehavior
         }
 
         [Test]
-        [TestCase(null)]
         [TestCase("Empty", typeof(EmptyNZazuFieldBehavior))]
         public void Support(string fieldType, Type controlType)
         {

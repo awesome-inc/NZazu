@@ -67,6 +67,8 @@
     <Compile Include="Checks\AggregateCheck.cs" />
     <Compile Include="Checks\ValidationException.cs" />
     <Compile Include="Checks\ValidationException_Should.cs" />
+    <Compile Include="DictionaryExtensions.cs" />
+    <Compile Include="DictionaryExtensions_Should.cs" />
     <Compile Include="FieldDefinition.cs" />
     <Compile Include="FieldDefinition_Should.cs" />
     <Compile Include="FormData.cs" />

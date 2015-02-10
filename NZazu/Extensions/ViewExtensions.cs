@@ -11,7 +11,15 @@ namespace NZazu.Extensions
             if (view == null) throw new ArgumentNullException("view");
             if (fieldValues == null) throw new ArgumentNullException("fieldValues");
             foreach (var kvp in fieldValues)
-                view.GetField(kvp.Key).StringValue = kvp.Value;
+            {
+                try
+                {
+                    var field = view.GetField(kvp.Key);
+                    if (field == null) continue;
+                    field.StringValue = kvp.Value;
+                }
+                catch (KeyNotFoundException) { }
+            }
         }
 
         public static bool IsValid(this INZazuWpfView view)
