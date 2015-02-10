@@ -12,17 +12,13 @@ namespace NZazu.Extensions
             if (fieldValues == null) throw new ArgumentNullException("fieldValues");
             foreach (var kvp in fieldValues)
             {
-                INZazuWpfField field = null;
                 try
                 {
-                    field = view.GetField(kvp.Key);
+                    var field = view.GetField(kvp.Key);
                     if (field == null) continue;
+                    field.StringValue = kvp.Value;
                 }
-                catch (KeyNotFoundException)
-                {
-                    continue;
-                }
-                field.StringValue = kvp.Value;
+                catch (KeyNotFoundException) { }
             }
         }
 
