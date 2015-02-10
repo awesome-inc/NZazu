@@ -11,13 +11,26 @@ namespace NZazu.Contracts
         [Test]
         public void Support_implicit_casting_from_and_to_dictionaries()
         {
-            var input = new Dictionary<string, string> {{"user","John"}};
+            var input = new Dictionary<string, string> { { "user", "John" } };
             FormData formData = input;
             formData.Values.ShouldBeEquivalentTo(input);
 
-            Dictionary<string,string> output = formData;
+            Dictionary<string, string> output = formData;
 
             output.ShouldBeEquivalentTo(input);
+        }
+
+        [Test]
+        public void Not_Serialize_Null_Values()
+        {
+            var expected = new Dictionary<string, string> { { "user", "john" } };
+            var input = new Dictionary<string, string> { { "user", "john" }, { "password", null } };
+
+            FormData formData = input;
+            formData.Values.ShouldBeEquivalentTo(expected);
+
+            Dictionary<string, string> output = formData;
+            output.ShouldBeEquivalentTo(expected);
         }
 
         [Test]
