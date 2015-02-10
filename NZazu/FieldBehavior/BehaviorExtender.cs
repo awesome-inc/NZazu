@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Runtime.InteropServices;
 using FluentAssertions;
 using NUnit.Framework;
 
@@ -21,7 +20,7 @@ namespace NZazu.FieldBehavior
             get { return instance.Value; }
         }
 
-        // wrapper for comfort
+        // wrapper for comfort. instance method set to private
         public static void Register(string name, Type type)
         {
             Instance.RegisterType(name, type);
@@ -33,6 +32,7 @@ namespace NZazu.FieldBehavior
 
         private BehaviorExtender()
         {
+            // over here you can add new default behaviors
             _fieldTypes.Add("Empty", typeof(EmptyNZazuFieldBehavior));
         }
 
@@ -52,7 +52,15 @@ namespace NZazu.FieldBehavior
                 _fieldTypes.Add(name, type);
         }
 
-        #region internal test due to private contructor
+        private void UnRegisterType(string name)
+        {
+            if (_fieldTypes.ContainsKey(name))
+                _fieldTypes.Remove(name);
+            else
+                Trace.TraceInformation(" A regsitration for the key '{0}' does not exist. Nothing removed", name);
+        }
+
+        #region internal test due to private constructor
 
         [TestFixture]
         // ReSharper disable once InconsistentNaming
@@ -89,24 +97,35 @@ namespace NZazu.FieldBehavior
             }
 
             [Test]
-            public void Add_Registration_Of_Additional_Behaviors()
+            public void Add_And_Remove_Registration_Of_Additional_Behaviors()
             {
                 const string name = "Mock";
                 var type = typeof(DummyFieldBehavior);
                 var sut = new BehaviorExtender();
 
                 sut.RegisterType(name, type);
+                sut.Behaviors.Should().Contain(kvp => String.Compare(kvp.Key, name, StringComparison.Ordinal) == 0 && kvp.Value == type);
 
-                sut.Behaviors.Should()
-                    .Contain(kvp => String.Compare(kvp.Key, name, StringComparison.Ordinal) == 0 && kvp.Value == type);
+                sut.UnRegisterType(name);
+                sut.Behaviors.Should().NotContain(kvp => String.Compare(kvp.Key, name, StringComparison.Ordinal) == 0);
             }
 
             [Test]
-            public void Registration_Through_Public_Method()
+            public void Do_Nothing_On_Remove_Registration_Of_Wrong_Name()
+            {
+                var name = "I do not exist as registration. " + Guid.NewGuid().ToString();
+                var sut = new BehaviorExtender();
+
+                sut.UnRegisterType(name);
+            }
+
+            [Test]
+            public void Registration_And_Unregisteration_Through_Public_Method()
             {
                 const string name = "Mock For a Static Thing Which Stays Forever In List";
                 var type = typeof(DummyFieldBehavior);
 
+                BehaviorExtender.Register(name, type);
                 BehaviorExtender.Register(name, type);
             }
 

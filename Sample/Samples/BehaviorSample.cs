@@ -55,6 +55,7 @@ namespace Sample.Samples
             };
         }
 
+        #region behavior and behavior test
 
         private class OpenUrlOnStringEnterBehavior : INZazuWpfFieldBehavior
         {
@@ -125,6 +126,6 @@ namespace Sample.Samples
             }
         }
 
-
+        #endregion
     }
 }
