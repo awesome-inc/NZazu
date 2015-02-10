@@ -29,7 +29,7 @@ namespace NZazu.Fields
         public Control LabelControl { get { return _labelControl.Value; } }
         public Control ValueControl { get { return _valueControl.Value; } }
         public Dictionary<string, string> Settings { get; private set; }
-        public INZazuWpfFieldBehavior Behavior { get; internal set; }
+        public INZazuWpfFieldBehavior Behavior { get; set; }
 
         protected NZazuField(string key)
         {

@@ -18,12 +18,12 @@ namespace NZazu.FieldBehavior
 
             if (behaviorType == null) return null;
 
-            var behavior = (NZazuFieldBehavior)Activator.CreateInstance(behaviorType);
+            var behavior = (INZazuWpfFieldBehavior)Activator.CreateInstance(behaviorType);
             return Decorate(behavior, behaviorDefinition);
         }
 
 
-        private NZazuFieldBehavior Decorate(NZazuFieldBehavior field, BehaviorDefinition behaviorDefinition)
+        private INZazuWpfFieldBehavior Decorate(INZazuWpfFieldBehavior field, BehaviorDefinition behaviorDefinition)
         {
             return field;
         }

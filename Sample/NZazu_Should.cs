@@ -19,6 +19,7 @@ namespace Sample
         //[TestCase("birthday", "dateTime", "Birthday", "Choose birthday", "Your birthday", typeof (DatePicker))]
         [TestCase("weight", "double", "Weight", "Enter body weight (kg)", "Your weight", typeof(TextBox))]
         [TestCase("age", "int", "Age", "Enter body age", "Your age", typeof(TextBox))]
+        [TestCase("group", "int", "Age", "Enter body age", "Your age", typeof(ContentControl))]
         public void Support_field(string key, string type, string prompt, string hint, string description, Type controlType)
         {
             var sut = new NZazuView();

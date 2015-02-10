@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Controls;
 using FluentAssertions;
 using NSubstitute;
 using NUnit.Framework;
@@ -151,7 +152,7 @@ namespace NZazu
 
             var sut = new NZazuView
             {
-                FormDefinition = new FormDefinition {Fields = new [] {new FieldDefinition {Key = "test"}}},
+                FormDefinition = new FormDefinition { Fields = new[] { new FieldDefinition { Key = "test" } } },
                 FieldFactory = fieldFactory,
                 ResolveLayout = layout
             };
@@ -169,9 +170,9 @@ namespace NZazu
 
             var fieldDefinition = new FieldDefinition { Key = key, Type = "string", Prompt = "Name" };
             var formDefinition = new FormDefinition { Fields = new[] { fieldDefinition } };
-            var formData = new FormData(new Dictionary<string, string>{{key,value}});
+            var formData = new FormData(new Dictionary<string, string> { { key, value } });
 
-            var sut = new NZazuView {FormDefinition = formDefinition, FormData = formData};
+            var sut = new NZazuView { FormDefinition = formDefinition, FormData = formData };
 
             sut.FormData.Should().Be(formData);
             var actual = sut.GetFieldValues();
@@ -184,5 +185,55 @@ namespace NZazu
             actual = sut.GetFieldValues();
             formData.Values.ShouldBeEquivalentTo(actual);
         }
+
+
+        [Test]
+        [Description("In real-time scenarios try to preserve formdat when formdefinition changed only marginally")]
+        public void Throw_KeyNotFoundException_On_GetField_For_Wrong_Key()
+        {
+            const string key = "name";
+            const string value = "John";
+
+            var fieldDefinition = new FieldDefinition { Key = key, Type = "string", Prompt = "Name" };
+            var formDefinition = new FormDefinition { Fields = new[] { fieldDefinition } };
+            var formData = new FormData(new Dictionary<string, string> { { key, value } });
+
+            var sut = new NZazuView { FormDefinition = formDefinition, FormData = formData };
+            new Action(() => sut.GetField("I do not exist")).Invoking(a => a()).ShouldThrow<KeyNotFoundException>();
+
+        }
+
+        [Test]
+        public void Attach_And_Detach_Behavior_To_Field()
+        {
+            const string key = "name";
+            const string value = "John";
+
+            // lets mock the behavior
+            var behaviorDefinition=new BehaviorDefinition { Name = "Empty" };
+            var behavior = Substitute.For<INZazuWpfFieldBehavior>();
+            var fieldDefinition = new FieldDefinition
+            {
+                Key = key, Type = "string", Prompt = "Name",
+                Behavior = behaviorDefinition
+            };
+            var formDefinition = new FormDefinition { Fields = new[] { fieldDefinition } };
+            var formData = new FormData(new Dictionary<string, string> { { key, value } });
+            var behaviorFactory = Substitute.For<INZazuWpfFieldBehaviorFactory>();
+            behaviorFactory.CreateFieldBehavior(Arg.Any<BehaviorDefinition>()).ReturnsForAnyArgs(behavior);
+
+            // amke sure an attach happens
+            var sut = new NZazuView { FieldBehaviorFactory = behaviorFactory, FormDefinition = formDefinition, FormData = formData };
+            sut.Should().NotBeNull();
+
+            behavior.ReceivedWithAnyArgs().AttachTo(Arg.Any<Control>());
+            behavior.ClearReceivedCalls();
+
+            // now lets create a ner form and detach the existing behavior
+            sut.FormDefinition = new FormDefinition { Fields = new[] { fieldDefinition } };
+            behavior.ReceivedWithAnyArgs().Detach();
+        }
+
+
     }
 }

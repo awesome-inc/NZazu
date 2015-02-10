@@ -34,6 +34,28 @@ namespace NZazu.FieldBehavior
                 .ShouldThrow<ArgumentException>();
         }
 
+        #region simple interface implementation
+
+        private class SimpleInterfaceImplementation : INZazuWpfFieldBehavior
+        {
+            public void AttachTo(Control valueControl) { }
+            public void Detach() { }
+        }
+        #endregion
+
+        [Test]
+        public void Handle_Interface_Implementations()
+        {
+            BehaviorExtender.Register("IfaceImpl", typeof(SimpleInterfaceImplementation));
+            var sut = new NZazuFieldBehaviorFactory();
+            var behavior = sut.CreateFieldBehavior(new BehaviorDefinition { Name = "IfaceImpl" });
+            behavior.Should().BeAssignableTo<SimpleInterfaceImplementation>();
+
+            // just to get code coverage
+            behavior.AttachTo(null);
+            behavior.Detach();
+        }
+
         [Test]
         public void Return_Null_For_Unknown_Types()
         {

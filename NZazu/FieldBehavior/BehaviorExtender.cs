@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.InteropServices;
 using FluentAssertions;
 using NUnit.Framework;
 
@@ -20,6 +21,12 @@ namespace NZazu.FieldBehavior
             get { return instance.Value; }
         }
 
+        // wrapper for comfort
+        public static void Register(string name, Type type)
+        {
+            Instance.RegisterType(name, type);
+        }
+
         #endregion
 
         private readonly Dictionary<string, Type> _fieldTypes = new Dictionary<string, Type>();
@@ -29,12 +36,12 @@ namespace NZazu.FieldBehavior
             _fieldTypes.Add("Empty", typeof(EmptyNZazuFieldBehavior));
         }
 
-        public IEnumerable<KeyValuePair<string, Type>> Behaviors
+        internal IEnumerable<KeyValuePair<string, Type>> Behaviors
         {
             get { return _fieldTypes.ToArray(); }
         }
 
-        public void Register(string name, Type type)
+        private void RegisterType(string name, Type type)
         {
             if (_fieldTypes.ContainsKey(name))
             {
@@ -53,7 +60,7 @@ namespace NZazu.FieldBehavior
         {
             #region inner classes for testing
 
-            private class DummyFieldBehavior : EmptyNZazuFieldBehavior{}
+            private class DummyFieldBehavior : EmptyNZazuFieldBehavior { }
 
             #endregion
 
@@ -88,10 +95,19 @@ namespace NZazu.FieldBehavior
                 var type = typeof(DummyFieldBehavior);
                 var sut = new BehaviorExtender();
 
-                sut.Register(name, type);
+                sut.RegisterType(name, type);
 
                 sut.Behaviors.Should()
                     .Contain(kvp => String.Compare(kvp.Key, name, StringComparison.Ordinal) == 0 && kvp.Value == type);
+            }
+
+            [Test]
+            public void Registration_Through_Public_Method()
+            {
+                const string name = "Mock For a Static Thing Which Stays Forever In List";
+                var type = typeof(DummyFieldBehavior);
+
+                BehaviorExtender.Register(name, type);
             }
 
             [Test]
@@ -101,7 +117,7 @@ namespace NZazu.FieldBehavior
                 var type = typeof(DummyFieldBehavior);
                 var sut = new BehaviorExtender();
 
-                sut.Register(name, type);
+                sut.RegisterType(name, type);
 
                 sut.Behaviors.Should()
                     .Contain(kvp => String.Compare(kvp.Key, name, StringComparison.Ordinal) == 0 && kvp.Value == type);

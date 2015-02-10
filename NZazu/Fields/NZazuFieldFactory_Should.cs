@@ -126,24 +126,6 @@ namespace NZazu.Fields
         }
 
         [Test]
-        public void Attach_Behavior_To_Field()
-        {
-            var sut = new NZazuFieldFactory();
-            // by default we use an internal class to resolve controls
-
-            var field = sut.CreateField(
-                new FieldDefinition
-                {
-                    Key = "test",
-                    Type = "string",
-                    Behavior = new BehaviorDefinition { Name = "Empty" }
-                });
-            field.Should().NotBeNull();
-            field.Behavior.Should().NotBeNull();
-            field.Behavior.GetType().Should().Be(typeof(EmptyNZazuFieldBehavior));
-        }
-
-        [Test]
         public void Attach_Null_Behavior_To_Field_If_Invalid()
         {
             var sut = new NZazuFieldFactory();
