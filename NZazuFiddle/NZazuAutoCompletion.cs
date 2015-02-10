@@ -50,6 +50,7 @@ namespace NZazuFiddle
             new NzazuCompletionData { Text = "date", Replacement = "\"date\"", Description = "Adds a date/time field"},
             new NzazuCompletionData { Text = "int", Replacement = "\"int\"", Description = "Adds an integer field"},
             new NzazuCompletionData { Text = "double", Replacement = "\"double\"", Description = "Adds a double field"},
+            new NzazuCompletionData { Text = "option", Replacement = "\"option\"", Description = "Adds an option field (choose from Values)"},
             new NzazuCompletionData { Text = "richtext", Replacement = "\"richtext\"", Description = "Adds a richt-text field"},
             new NzazuCompletionData { Text = "group", Replacement = "\"richtext\"", Description = "Adds a group field"},
 

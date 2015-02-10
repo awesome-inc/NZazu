@@ -49,21 +49,34 @@ namespace NZazuFiddle.Samples
                             Key = "birthday",
                             Type = "date",
                             Prompt = "Birthday",
-                            Hint = "type your birthday",
+                            Hint = "dd-MM-yyyy",
+                            Description = "Enter your birthday (dd-MM-yyyy)",
+                            Settings = new Dictionary<string, string>{{"Format","dd-MM-yyyy"}}
                         },
                         new FieldDefinition
                         {
                             Key = "weight",
                             Type = "double",
                             Prompt = "Weight in kg",
-                            Hint = "type your weight with 2 digits aber comma",
+                            Hint = "type your weight with 2 digits after comma",
+                            Settings = new Dictionary<string, string>{{"Format","#.00"}}
                         },
+                        new FieldDefinition
+                        {
+                            Key = "ranking",
+                            Type = "option",
+                            Prompt = "Rank",
+                            Values = new []{"1","2","3","4","5"},
+                        }
                     }
                 },
                 new Dictionary<string, string>
                 {
                     { "name", "John" }, 
-                    { "isAdmin", "true" }
+                    { "isAdmin", "true" },
+                    { "birthday", "01-06-1990"},
+                    { "weight", "75.5"},
+                    { "ranking", "3"}
                 })
             };
         }

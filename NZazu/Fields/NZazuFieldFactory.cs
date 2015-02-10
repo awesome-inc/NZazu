@@ -24,6 +24,7 @@ namespace NZazu.Fields
             FieldTypes.Add("date", typeof(NZazuDateField));
             FieldTypes.Add("double", typeof(NZazuDoubleField));
             FieldTypes.Add("group", typeof(NZazuGroupField));
+            FieldTypes.Add("option", typeof(NZazuOptionsField));
         }
 
         public INZazuWpfField CreateField(FieldDefinition fieldDefinition)
@@ -55,16 +56,9 @@ namespace NZazu.Fields
 
             ProcessGroupField(fieldDefinition, field as NZazuGroupField);
 
-            return field;
-        }
+            CopyValues(fieldDefinition, field as NZazuOptionsField);
 
-        private static void CopySettings(NZazuField field, FieldDefinition fieldDefinition)
-        {
-            if (fieldDefinition.Settings != null)
-            {
-                foreach (var kvp in fieldDefinition.Settings)
-                    field.Settings[kvp.Key] = kvp.Value;
-            }
+            return field;
         }
 
         private IValueCheck CreateCheck(IEnumerable<CheckDefinition> checkDefinitions)
@@ -77,6 +71,15 @@ namespace NZazu.Fields
                 : new AggregateCheck(checks.ToArray());
         }
 
+        private static void CopySettings(NZazuField field, FieldDefinition fieldDefinition)
+        {
+            if (fieldDefinition.Settings != null)
+            {
+                foreach (var kvp in fieldDefinition.Settings)
+                    field.Settings[kvp.Key] = kvp.Value;
+            }
+        }
+
         private void ProcessGroupField(FieldDefinition fieldDefinition, NZazuGroupField groupField)
         {
             if (fieldDefinition == null) throw new ArgumentNullException("fieldDefinition");
@@ -87,6 +90,14 @@ namespace NZazu.Fields
 
             if (fieldDefinition.Fields == null || !fieldDefinition.Fields.Any()) return;
             groupField.Fields = fieldDefinition.Fields.Select(CreateField).ToArray();
+        }
+
+        private static void CopyValues(FieldDefinition fieldDefinition, NZazuOptionsField optionsField)
+        {
+            if (fieldDefinition == null) throw new ArgumentNullException("fieldDefinition");
+            if (optionsField == null) return;
+            if (fieldDefinition.Values == null || !fieldDefinition.Values.Any()) return;
+            optionsField.Options = fieldDefinition.Values;
         }
     }
 }

@@ -20,8 +20,11 @@
       <Word>"Values"</Word>
       <Word>"Settings"</Word>
       <Word>"Format"</Word>
-      <Word>"Behaviour"</Word>
+      <Word>"Width"</Word>
+      <Word>"Height"</Word>
+      <Word>"Behavior"</Word>
       <Word>"Name"</Word>
+      <Word>"Layout"</Word>
     </Keywords>
     <Keywords color="Literals">
       <Word>null</Word>
@@ -33,7 +36,9 @@
       <Word>"date"</Word>
       <Word>"int"</Word>
       <Word>"double"</Word>
+      <Word>"option"</Word>
       <Word>"richtext"</Word>
+      <Word>"group"</Word>
       <!-- check types -->
       <Word>"required"</Word>
       <Word>"length"</Word>

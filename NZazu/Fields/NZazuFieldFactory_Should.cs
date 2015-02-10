@@ -31,6 +31,7 @@ namespace NZazu.Fields
         [TestCase("date", typeof(DatePicker))]
         [TestCase("double", typeof(TextBox))]
         [TestCase("group", typeof(ContentControl))]
+        [TestCase("option", typeof(ComboBox))]
         public void Support(string fieldType, Type controlType)
         {
             var sut = new NZazuFieldFactory();
@@ -187,6 +188,22 @@ namespace NZazu.Fields
             var field = (INZazuWpfGroupField)sut.CreateField(fieldDefinition);
 
             field.Layout.Should().Be(fieldDefinition.Layout);
+        }
+
+        [Test]
+        public void Copy_values_for_option_field()
+        {
+            var sut = new NZazuFieldFactory();
+
+            var fieldDefinition = new FieldDefinition
+            {
+                Key = "test", Type = "option",
+                Values = new[] { "1","2","3"}
+            };
+
+            var field = (NZazuOptionsField)sut.CreateField(fieldDefinition);
+
+            field.Options.Should().BeEquivalentTo(fieldDefinition.Values);
         }
     }
 }
