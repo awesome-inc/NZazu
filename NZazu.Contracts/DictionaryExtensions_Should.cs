@@ -5,19 +5,19 @@ using NUnit.Framework;
 namespace NZazu.Contracts
 {
     [TestFixture]
-// ReSharper disable once InconsistentNaming
+    // ReSharper disable once InconsistentNaming
     class DictionaryExtensions_Should
     {
         [Test]
         public void Remove_Items()
         {
-            var source = new Dictionary<string, string> { { "name", "thomas" }, { "street", "123 Ave" }, { "nullthing", "null" } };
+            var source = new Dictionary<string, string> { { "name", "thomas" }, { "street", "123 Ave" }, { "nullthing", null } };
 
             var expected1 = new Dictionary<string, string> { { "name", "thomas" }, { "street", "123 Ave" } };
             var actual1 = source.Remove(kvp => kvp.Value == null);
-            actual1.ShouldAllBeEquivalentTo(expected1);
+            actual1.ShouldBeEquivalentTo(expected1);
 
-            var expected2 = new Dictionary<string, string> { { "street", "123 Ave" }, { "nullthing", "null" } };
+            var expected2 = new Dictionary<string, string> { { "street", "123 Ave" }, { "nullthing", null } };
             var actual2 = source.Remove(kvp => kvp.Key == "name");
             actual2.ShouldAllBeEquivalentTo(expected2);
 
