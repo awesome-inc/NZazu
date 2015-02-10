@@ -57,6 +57,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Extensions\FieldExtensions.cs" />
+    <Compile Include="FieldBehavior\BehaviorExtender.cs" />
+    <Compile Include="FieldBehavior\EmptyNZazuFieldBehavior.cs" />
+    <Compile Include="FieldBehavior\EmptyNZazuFieldBehavior_Should.cs" />
+    <Compile Include="FieldBehavior\NZazuFieldBehavior.cs" />
     <Compile Include="FieldBehavior\NZazuFieldBehaviorFactory.cs" />
     <Compile Include="FieldBehavior\NZazuFieldBehaviorFactory_Should.cs" />
     <Compile Include="FieldFactory\NZazuDateField.cs" />
