@@ -32,14 +32,6 @@ namespace NZazu.Fields
             return control;
         }
 
-        protected override void SetStringValue(string value)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        protected override string GetStringValue()
-        {
-            throw new System.NotImplementedException();
-        }
-    }
+        protected override void SetStringValue(string value) { Value = value; }
+        protected override string GetStringValue() { return Value; }}
 }
