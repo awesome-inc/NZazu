@@ -12,9 +12,6 @@
     <copyright/>
     <releaseNotes>Revision: $Revision$</releaseNotes>
     <projectUrl>https://github.com/ThomasMentzel/NZazu</projectUrl>
-    <frameworkAssemblies>
-      <frameworkAssembly assemblyName="System.Xaml" targetFramework="" />
-    </frameworkAssemblies>
   </metadata>
   <files>
     <file src="bin\Release\NZazu.Contracts.dll" target="lib"/>
