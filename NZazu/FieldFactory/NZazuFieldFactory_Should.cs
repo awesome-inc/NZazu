@@ -133,9 +133,11 @@ namespace NZazu.FieldFactory
                 {
                     Key = "test",
                     Type = "string", 
-                    Behavior = new BehaviorDefinition { Name = "empty" }
+                    Behavior = new BehaviorDefinition { Name = "Empty" }
                 });
             field.Should().NotBeNull();
+            field.Behavior.Should().NotBeNull();
+            field.Behavior.GetType().Name.Should().Contain("Empty", because: "this is ");
 
             var control = field.ValueControl;
             Assert.Inconclusive("how to implement this?");
