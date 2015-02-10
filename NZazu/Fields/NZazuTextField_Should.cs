@@ -17,6 +17,8 @@ namespace NZazu.Fields
 
             sut.Should().NotBeNull();
             sut.Should().BeAssignableTo<INZazuWpfField>();
+
+            sut.Type.Should().Be("string");
         }
 
         [Test]
