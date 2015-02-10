@@ -1,22 +1,17 @@
 using System.Collections.Generic;
 using NZazu.Contracts;
-using NZazu.Xceed;
 
-namespace Sample.Samples
+namespace NZazuFiddle.Samples
 {
-    class MixedGroupLayout : IHaveSample
+    class MixedGroupLayout : SampleBase
     {
-        public INZazuSample Sample { get; private set; }
-        public int Order { get { return 50; } }
-
-        public MixedGroupLayout()
+        public MixedGroupLayout() : base(50)
         {
-            Sample = new NZazuSampleViewModel
+            Sample = new SampleViewModel
             {
-                FieldFactory = new XceedFieldFactory(),
                 Name = "Layout",
                 Description = "An example showing mixed layout types with group fields",
-                FormDefinition = new FormDefinition
+                Fiddle = ToFiddle(new FormDefinition
                 {
                     Fields = new[]
                     {
@@ -67,13 +62,13 @@ namespace Sample.Samples
                         }
                     }
                 },
-                FormData = new Dictionary<string, string>
+                new Dictionary<string, string>
                 {
                     { "left.name", "John" }, 
                     { "right.name", "Jim" }, 
                     { "left.score", "15"},
                     { "right.score", "35"}
-                }
+                })
             };
         }
     }

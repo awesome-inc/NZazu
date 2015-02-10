@@ -10,12 +10,13 @@ namespace NZazuFiddle
         private FormData _data;
         private bool _inHandle;
 
-        public FormDataViewModel(IEventAggregator events, FormData data = null)
+        public FormDataViewModel(IEventAggregator events, FormData data)
         {
             if (events == null) throw new ArgumentNullException("events");
+            if (data == null) throw new ArgumentNullException("data");
             _events = events;
             _events.Subscribe(this);
-            _data = data ?? Example.FormData;
+            _data = data;
         }
 
         public FormData Data

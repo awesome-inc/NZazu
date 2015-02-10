@@ -1,6 +1,6 @@
 namespace NZazu
 {
-    public interface IResolveFromNames<out T>
+    public interface IResolveFromName<out T>
     {
         T Resolve(string name);
     }

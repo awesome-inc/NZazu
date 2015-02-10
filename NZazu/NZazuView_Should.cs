@@ -24,6 +24,65 @@ namespace NZazu
         }
 
         [Test]
+        public void Return_field_values_on_GetFieldValues()
+        {
+            var view = new NZazuView();
+
+            const string key = "name";
+            const string value = "John";
+
+            var fieldDefinition = new FieldDefinition { Key = key };
+            var formDefinition = new FormDefinition { Fields = new[] { fieldDefinition } };
+            view.FormDefinition = formDefinition;
+
+            var factory = Substitute.For<INZazuWpfFieldFactory>();
+            var field = Substitute.For<INZazuWpfField>();
+            field.StringValue = value;
+            factory.CreateField(fieldDefinition).Returns(field);
+            view.FieldFactory = factory;
+
+            var actual = view.GetFieldValues();
+            actual.Keys.Single().Should().Be(key);
+            actual[key].Should().Be(value);
+        }
+
+        [Test]
+        public void Include_group_fields_in_GetFieldValues()
+        {
+            var view = new NZazuView
+            {
+                FormDefinition = new FormDefinition
+                {
+                    Fields = new[]
+                    {
+                        new FieldDefinition {Key = "name", Type = "string"},
+                        new FieldDefinition
+                        {
+                            Key = "group",
+                            Type = "group",
+                            Fields = new[]
+                            {
+                                new FieldDefinition {Key = "group.name", Type = "string"}
+                            }
+                        }
+                    }
+                }
+            };
+
+            var expected = new Dictionary<string, string>
+            {
+                { "name", "John" }, 
+                { "group", null },
+                { "group.name", "Jim" },
+            };
+
+            view.SetFieldValues(expected);
+
+            var actual = view.GetFieldValues();
+            actual.ShouldBeEquivalentTo(expected);
+        }
+
+        [Test]
         public void Update_when_FormDefinition_changed()
         {
             var formDefinition = new FormDefinition { Layout = "grid", Fields = new FieldDefinition[] { } };

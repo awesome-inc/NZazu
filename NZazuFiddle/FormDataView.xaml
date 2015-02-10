@@ -11,13 +11,18 @@
     <UserControl.Resources>
         <nZazuFiddle:FormDataConverter x:Key="DataConverter"/>
     </UserControl.Resources>
-    <Border BorderBrush="Black" BorderThickness="1">
-        <avalonedit:TextEditor x:Name="TextEditor">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <TextBlock Text="Data:"/>
+        <avalonedit:TextEditor Grid.Row="1" x:Name="TextEditor">
             <i:Interaction.Behaviors>
                 <nZazuFiddle:AvalonEditBehaviour 
                     GiveMeTheText="{Binding Data, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, 
                     Converter={StaticResource DataConverter}}"/>
             </i:Interaction.Behaviors>
         </avalonedit:TextEditor>
-    </Border>
+    </Grid>
 </UserControl>

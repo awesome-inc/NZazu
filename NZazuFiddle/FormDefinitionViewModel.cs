@@ -13,12 +13,13 @@ namespace NZazuFiddle
         private bool _inHandle;
 
         public FormDefinitionViewModel(IEventAggregator events, 
-            FormDefinition definition = null)
+            FormDefinition definition)
         {
             if (events == null) throw new ArgumentNullException("events");
+            if (definition == null) throw new ArgumentNullException("definition");
             _events = events;
             _events.Subscribe(this);
-            _definition = definition ?? Example.FormDefinition;
+            _definition = definition;
         }
 
         public FormDefinition Definition

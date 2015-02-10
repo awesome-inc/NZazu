@@ -1,10 +1,10 @@
-﻿namespace NZazuFiddle
+﻿using System.Collections.Generic;
+
+namespace NZazuFiddle
 {
     public interface IShell
     {
-        IFormDefinitionViewModel Definition { get; }
-        IFormDataViewModel Data { get; }
-        IPreviewViewModel Preview { get; }
-
+        IEnumerable<ISample> Samples { get; set; }
+        ISample SelectedSample { get; set; }
     }
 }

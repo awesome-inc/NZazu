@@ -56,8 +56,8 @@ namespace NZazu.LayoutStrategy
         protected static void StyleValue(Control control)
         {
             control.VerticalAlignment = VerticalAlignment.Center;
-            control.Margin = new Thickness(4);
-            control.Padding = new Thickness(2);
+            control.Margin = new Thickness(3);
+            control.Padding = new Thickness(3);
         }
 
         protected static void StyleLabel(Control control)
