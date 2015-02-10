@@ -13,6 +13,6 @@
             FormData="{Binding Data, Mode=TwoWay}" 
             LostFocus="ApplyChanges"
             FieldFactory="{Binding FieldFactory}"
-            LayoutStrategy="{Binding LayoutStrategy}"/>
+            ResolveLayout="{Binding LayoutStrategy}"/>
     </Grid>
 </UserControl>

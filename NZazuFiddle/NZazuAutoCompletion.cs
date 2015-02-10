@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Configuration;
 using ICSharpCode.AvalonEdit.CodeCompletion;
 
 namespace NZazuFiddle
@@ -17,6 +16,7 @@ namespace NZazuFiddle
                 case "Description\":": data.Add(DescriptionComplete); break;
                 case "Checks\":": Checks.ForEach(data.Add); break;
                 case "Settings\":": Settings.ForEach(data.Add); break;
+                case "Format\":": Format.ForEach(data.Add); break;
             }
         }
 
@@ -30,6 +30,8 @@ namespace NZazuFiddle
             new NzazuCompletionData { Text = "int", Replacement = "\"int\"", Description = "Adds an integer field"},
             new NzazuCompletionData { Text = "double", Replacement = "\"double\"", Description = "Adds a double field"},
             new NzazuCompletionData { Text = "richtext", Replacement = "\"richtext\"", Description = "Adds a richt-text field"},
+            new NzazuCompletionData { Text = "group", Replacement = "\"richtext\"", Description = "Adds a group field"},
+
             // checks
             new NzazuCompletionData { Text = "required", Replacement = "\"required\"", Description = "Adds a 'required' check"},
             new NzazuCompletionData { Text = "length", Replacement = "\"length\"", Description = "Adds a string length check"},
@@ -47,14 +49,24 @@ namespace NZazuFiddle
 
         private static readonly List<ICompletionData> Settings = new List<ICompletionData>(new[]
         {
-            new NzazuCompletionData { Text = "Format: Date", Replacement = "[{ \"Format\": \"yyyy-MM-dd Z HH:mm:ss.zzz\" }]", Description = "A date format"},
-            new NzazuCompletionData { Text = "Format: Custom", Replacement = "[{ \"Format\": \"#.00\" }]", Description = "Custom"},
-            new NzazuCompletionData { Text = "Format: Currency", Replacement = "[{ \"Format\": \"C2\" }]", Description = "Currency format"},
-            new NzazuCompletionData { Text = "Format: Fixed Point", Replacement = "[{ \"Format\": \"F2\" }]", Description = "Fixed point"},
-            new NzazuCompletionData { Text = "Format: General", Replacement = "[{ \"Format\": \"C2\" }]", Description = "General"},
-            new NzazuCompletionData { Text = "Format: Percent", Replacement = "[{ \"Format\": \"P3\" }]", Description = "Percent"},
-            new NzazuCompletionData { Text = "Height", Replacement = "[{ \"Height\": \"64.3\" }]", Description = "The field's height in pixel"},
+            new NzazuCompletionData { Text = "Format", Replacement = "{ \"Format\": \"\" }", Description = "The field format"},
+            new NzazuCompletionData { Text = "Height", Replacement = "{ \"Height\": \"64.3\" }", Description = "The field's height in pixel"}
         });
+
+        private static readonly List<ICompletionData> Format = new List<ICompletionData>(new []
+        {
+            new NzazuCompletionData { Text = "date", Replacement = "\"yyyy-MM-dd Z HH:mm:ss.zzz\"", Description = "A date format"},
+
+            new NzazuCompletionData { Text = "custom", Replacement = "\"#.00\"", Description = "Custom"},
+            new NzazuCompletionData { Text = "currency (C)", Replacement = "\"C2\"", Description = "Currency format"},
+            new NzazuCompletionData { Text = "fixed (F)", Replacement = "\"F2\"", Description = "Fixed point"},
+            new NzazuCompletionData { Text = "general (G)", Replacement = "\"G\"", Description = "General"},
+            new NzazuCompletionData { Text = "percent (P)", Replacement = "\"P3\"", Description = "Percent"},
+           
+            new NzazuCompletionData { Text = "rtf", Replacement = "\"rtf\"", Description = "Rich text format"},
+            new NzazuCompletionData { Text = "plain", Replacement = "\"plain\"", Description = "Plain text"},
+            new NzazuCompletionData { Text = "xaml", Replacement = "\"xaml\"", Description = "Xaml"}
+        }); 
 
         private static readonly ICompletionData KeyComplete = 
             new NzazuCompletionData { Text = "\"<key>\"", Description = "A unique key for the field" };

@@ -5,7 +5,7 @@ using System.Linq;
 using NZazu.Contracts;
 using NZazu.Contracts.Checks;
 
-namespace NZazu.FieldFactory
+namespace NZazu.Fields
 {
     public class NZazuFieldFactory : INZazuWpfFieldFactory
     {
@@ -23,6 +23,7 @@ namespace NZazu.FieldFactory
             FieldTypes.Add("int", typeof(NZazuIntegerField));
             FieldTypes.Add("date", typeof(NZazuDateField));
             FieldTypes.Add("double", typeof(NZazuDoubleField));
+            FieldTypes.Add("group", typeof(NZazuGroupField));
         }
 
         public INZazuWpfField CreateField(FieldDefinition fieldDefinition)
@@ -47,15 +48,23 @@ namespace NZazu.FieldFactory
             field.Prompt = fieldDefinition.Prompt;
             field.Hint = fieldDefinition.Hint;
             field.Description = fieldDefinition.Description;
+
             field.Check = CreateCheck(fieldDefinition.Checks);
 
+            CopySettings(field, fieldDefinition);
+
+            ProcessGroupField(fieldDefinition, field as NZazuGroupField);
+
+            return field;
+        }
+
+        private static void CopySettings(NZazuField field, FieldDefinition fieldDefinition)
+        {
             if (fieldDefinition.Settings != null)
             {
                 foreach (var kvp in fieldDefinition.Settings)
                     field.Settings[kvp.Key] = kvp.Value;
             }
-
-            return field;
         }
 
         private IValueCheck CreateCheck(IEnumerable<CheckDefinition> checkDefinitions)
@@ -66,6 +75,18 @@ namespace NZazu.FieldFactory
             return checks.Length == 1 
                 ? checks.First() 
                 : new AggregateCheck(checks.ToArray());
+        }
+
+        private void ProcessGroupField(FieldDefinition fieldDefinition, NZazuGroupField groupField)
+        {
+            if (fieldDefinition == null) throw new ArgumentNullException("fieldDefinition");
+            if (groupField == null) return;
+
+            if (!String.IsNullOrWhiteSpace(fieldDefinition.Layout))
+                groupField.Layout = fieldDefinition.Layout;
+
+            if (fieldDefinition.Fields == null || !fieldDefinition.Fields.Any()) return;
+            groupField.Fields = fieldDefinition.Fields.Select(CreateField).ToArray();
         }
     }
 }

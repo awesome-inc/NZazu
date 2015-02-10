@@ -63,13 +63,21 @@
     <Compile Include="FieldBehavior\NZazuFieldBehavior.cs" />
     <Compile Include="FieldBehavior\NZazuFieldBehaviorFactory.cs" />
     <Compile Include="FieldBehavior\NZazuFieldBehaviorFactory_Should.cs" />
-    <Compile Include="FieldFactory\NZazuDateField.cs" />
-    <Compile Include="FieldFactory\NZazuDateField_Should.cs" />
-    <Compile Include="FieldFactory\NZazuDoubleField.cs" />
-    <Compile Include="FieldFactory\NZazuDoubleField_Should.cs" />
-    <Compile Include="FieldFactory\NZazuFieldFactory_Should.cs" />
+    <Compile Include="Fields\NZazuDateField.cs" />
+    <Compile Include="Fields\NZazuDateField_Should.cs" />
+    <Compile Include="Fields\NZazuDoubleField.cs" />
+    <Compile Include="Fields\NZazuDoubleField_Should.cs" />
+    <Compile Include="Fields\NZazuFieldFactory_Should.cs" />
+    <Compile Include="Fields\NZazuGroupField.cs" />
+    <Compile Include="Fields\NZazuGroupField_Should.cs" />
+    <Compile Include="IResolveLayout.cs" />
     <Compile Include="INZazuWpfFieldBehavior.cs" />
     <Compile Include="Extensions\ViewExtensions_Should.cs" />
+    <Compile Include="ResolveLayout.cs" />
+    <Compile Include="LayoutStrategy\Layout.cs" />
+    <Compile Include="ResolveFromNamesProxy.cs" />
+    <Compile Include="StackedLayout.cs" />
+    <Compile Include="StackedLayout_Should.cs" />
     <Page Include="NZazuView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -81,25 +89,27 @@
       <Link>Properties\VersionInfo.g.cs</Link>
     </Compile>
     <Compile Include="CheckValidationRule_Should.cs" />
-    <Compile Include="FieldFactory\NZazuBoolField_Should.cs" />
-    <Compile Include="FieldFactory\NZazuField.cs" />
-    <Compile Include="FieldFactory\NZazuField_Should.cs" />
-    <Compile Include="FieldFactory\NZazuIntegerField.cs" />
-    <Compile Include="FieldFactory\NZazuIntegerField_Should.cs" />
-    <Compile Include="FieldFactory\NZazuTextField_Should.cs" />
+    <Compile Include="Fields\NZazuBoolField_Should.cs" />
+    <Compile Include="Fields\NZazuField.cs" />
+    <Compile Include="Fields\NZazuField_Should.cs" />
+    <Compile Include="Fields\NZazuIntegerField.cs" />
+    <Compile Include="Fields\NZazuIntegerField_Should.cs" />
+    <Compile Include="Fields\NZazuTextField_Should.cs" />
     <Compile Include="CheckValidationRule.cs" />
     <Compile Include="INZazuWpfFieldBehaviorFactory.cs" />
-    <Compile Include="LayoutStrategy\GridLayoutStrategy.cs" />
+    <Compile Include="INzazuWpfGroupField.cs" />
+    <Compile Include="IResolveFromNames.cs" />
+    <Compile Include="LayoutStrategy\GridLayout.cs" />
     <Compile Include="INZazuWpfField.cs" />
     <Compile Include="INZazuWpfFieldFactory.cs" />
     <Compile Include="INZazuWpfLayoutStrategy.cs" />
     <Compile Include="INZazuWpfView.cs" />
-    <Compile Include="FieldFactory\NZazuBoolField.cs" />
-    <Compile Include="FieldFactory\NZazuLabelField.cs" />
-    <Compile Include="LayoutStrategy\GridLayoutStrategy_Should.cs" />
-    <Compile Include="FieldFactory\NZazuFieldFactory.cs" />
-    <Compile Include="FieldFactory\NZazuLabelField_Should.cs" />
-    <Compile Include="FieldFactory\NZazuTextField.cs" />
+    <Compile Include="Fields\NZazuBoolField.cs" />
+    <Compile Include="Fields\NZazuLabelField.cs" />
+    <Compile Include="LayoutStrategy\GridLayout_Should.cs" />
+    <Compile Include="Fields\NZazuFieldFactory.cs" />
+    <Compile Include="Fields\NZazuLabelField_Should.cs" />
+    <Compile Include="Fields\NZazuTextField.cs" />
     <Compile Include="LayoutStrategy\GridLayoutStrategy_Without_Application_Should.cs" />
     <Compile Include="Extensions\ViewExtensions.cs" />
     <Compile Include="Extensions\FieldExtensions_Should.cs" />

@@ -3,7 +3,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 
-namespace NZazu.FieldFactory
+namespace NZazu.Fields
 {
     public class NZazuBoolField : NZazuField<bool?>
     {

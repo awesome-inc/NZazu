@@ -5,7 +5,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 
-namespace NZazu.FieldFactory
+namespace NZazu.Fields
 {
     class NZazuDoubleField : NZazuField<double?>
     {

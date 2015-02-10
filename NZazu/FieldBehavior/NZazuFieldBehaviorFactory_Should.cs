@@ -11,21 +11,6 @@ namespace NZazu.FieldBehavior
     // ReSharper disable InconsistentNaming
     class NZazuFieldBehaviorFactory_Should
     {
-        #region inner classes for testing
-
-        private class DummyFieldBehavior : INZazuWpfFieldBehavior
-        {
-            public void AttachTo(Control valueControl)
-            {
-            }
-
-            public void Detach()
-            {
-            }
-        }
-
-        #endregion
-
         [Test]
         public void Be_Creatable()
         {

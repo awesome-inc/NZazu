@@ -8,7 +8,7 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using NZazu.Contracts.Checks;
 
-namespace NZazu.FieldFactory
+namespace NZazu.Fields
 {
     public abstract class NZazuField : INZazuWpfField
     {
@@ -76,6 +76,9 @@ namespace NZazu.FieldFactory
             var height = GetSetting<double>("Height");
             if (height.HasValue)
                 control.MinHeight = control.MaxHeight = height.Value;
+            var width = GetSetting<double>("Width");
+            if (width.HasValue)
+                control.MinWidth = control.MaxWidth = width.Value;
         }
 
         protected virtual Control DecorateValidation(Control control)
@@ -120,12 +123,12 @@ namespace NZazu.FieldFactory
             return value;
         }
 
-        protected T? GetSetting<T>(string key) where T:struct
+        protected internal T? GetSetting<T>(string key) where T:struct
         {
             try
             {
                 var str = GetSetting(key);
-                return (T)Convert.ChangeType(str, typeof(T));
+                return (T)Convert.ChangeType(str, typeof(T), CultureInfo.InvariantCulture);
             }
             catch (Exception) { return null; }
         }

@@ -32,14 +32,12 @@ namespace Sample.Samples
                                 new CheckDefinition { Type="length", Values=new []{"100"} }
                             },
                             Behavior = new BehaviorDefinition { Name = "autourl" },
-                        },
+                        }
                     }
                 },
                 FormData = new Dictionary<string, string>
                 {
-                    { "name", "John" }, 
-                    { "email", "foobar"},
-                    { "isAdmin", "false" }
+                    { "comment", "John" }, 
                 }
             };
         }

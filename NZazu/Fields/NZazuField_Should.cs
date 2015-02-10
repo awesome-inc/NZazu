@@ -10,7 +10,7 @@ using NSubstitute;
 using NUnit.Framework;
 using NZazu.Contracts.Checks;
 
-namespace NZazu.FieldFactory
+namespace NZazu.Fields
 {
     [TestFixture]
     [RequiresSTA]
@@ -121,12 +121,35 @@ namespace NZazu.FieldFactory
         public void Respect_Height_Setting()
         {
             var field = new NZazuField_With_Description_As_Content_Property("key");
+            const double expected = 65.5;
+            field.Settings.Add("Height", expected.ToString(CultureInfo.InvariantCulture));
+
+            var control = (ContentControl)field.ValueControl;
+            control.MinHeight.Should().Be(expected);
+            control.MaxHeight.Should().Be(expected);
+        }
+
+        [Test]
+        public void Respect_Width_Setting()
+        {
+            var field = new NZazuField_With_Description_As_Content_Property("key");
+            const double expected = 65.5;
+            field.Settings.Add("Width", expected.ToString(CultureInfo.InvariantCulture));
+
+            var control = (ContentControl)field.ValueControl;
+            control.MinWidth.Should().Be(expected);
+            control.MaxWidth.Should().Be(expected);
+        }
+
+        [Test]
+        [SetCulture("fr")]
+        public void Use_InvariantCulture_in_GetSettingT()
+        {
+            var field = new NZazuDummyField("key");
             const double expectedHeight = 65.5;
             field.Settings.Add("Height", expectedHeight.ToString(CultureInfo.InvariantCulture));
 
-            var control = (ContentControl)field.ValueControl;
-            control.MinHeight.Should().Be(expectedHeight);
-            control.MaxHeight.Should().Be(expectedHeight);
+            field.GetSetting<double>("Height").Should().Be(expectedHeight);
         }
 
         #region test NZazuDummyField with bi-directional content property

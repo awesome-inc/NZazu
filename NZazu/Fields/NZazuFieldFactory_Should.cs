@@ -8,7 +8,7 @@ using NZazu.Contracts;
 using NZazu.Contracts.Checks;
 using NZazu.FieldBehavior;
 
-namespace NZazu.FieldFactory
+namespace NZazu.Fields
 {
     [TestFixture, RequiresSTA]
     // ReSharper disable InconsistentNaming
@@ -31,6 +31,7 @@ namespace NZazu.FieldFactory
         [TestCase("int", typeof(TextBox))]
         [TestCase("date", typeof(DatePicker))]
         [TestCase("double", typeof(TextBox))]
+        [TestCase("group", typeof(ContentControl))]
         public void Support(string fieldType, Type controlType)
         {
             var sut = new NZazuFieldFactory();
@@ -159,5 +160,51 @@ namespace NZazu.FieldFactory
             field.Behavior.Should().BeNull();
         }
 
+        [Test]
+        public void Recursively_create_GroupFields()
+        {
+            var sut = new NZazuFieldFactory();
+
+            var fields = new[]
+            {
+                new FieldDefinition
+                {
+                    Key = "first",
+                    Type = "string", 
+                },
+                new FieldDefinition
+                {
+                    Key = "second",
+                    Type = "string", 
+                }
+            };
+
+            var fieldDefinition = new FieldDefinition
+            {
+                Key = "group1", Type = "group",
+                Fields = fields
+            };
+            var field = (INZazuWpfGroupField)sut.CreateField(fieldDefinition);
+
+            field.Should().NotBeNull();
+
+            field.Fields.Should().HaveCount(fieldDefinition.Fields.Length);
+        }
+
+        [Test]
+        public void Copy_group_layout()
+        {
+            var sut = new NZazuFieldFactory();
+
+            var fieldDefinition = new FieldDefinition
+            {
+                Key = "group1",
+                Type = "group",
+                Layout = "grid"
+            };
+            var field = (INZazuWpfGroupField)sut.CreateField(fieldDefinition);
+
+            field.Layout.Should().Be(fieldDefinition.Layout);
+        }
     }
 }

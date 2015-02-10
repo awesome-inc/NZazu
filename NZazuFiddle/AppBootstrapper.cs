@@ -25,8 +25,8 @@ namespace NZazuFiddle
             builder.RegisterType<FormDataViewModel>().As<IFormDataViewModel>().SingleInstance();
             builder.RegisterType<PreviewViewModel>().As<IPreviewViewModel>().SingleInstance();
 
-            builder.RegisterType<XceedFieldFactory>().As<INZazuWpfFieldFactory>();
-            builder.RegisterType<GridLayoutStrategy>().As<INZazuWpfLayoutStrategy>();
+            builder.RegisterType<XceedFieldFactory>().Named<INZazuWpfFieldFactory>("xceed");
+            builder.RegisterType<GridLayout>().Named<INZazuWpfLayoutStrategy>("grid");
         }
 
         protected override void ConfigureBootstrapper()

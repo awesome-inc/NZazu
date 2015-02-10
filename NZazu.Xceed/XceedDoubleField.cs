@@ -1,7 +1,7 @@
 using System;
 using System.Windows;
 using System.Windows.Controls;
-using NZazu.FieldFactory;
+using NZazu.Fields;
 using Xceed.Wpf.Toolkit;
 
 namespace NZazu.Xceed
