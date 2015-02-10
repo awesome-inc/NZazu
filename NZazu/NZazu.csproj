@@ -70,6 +70,8 @@
     <Compile Include="Fields\NZazuFieldFactory_Should.cs" />
     <Compile Include="Fields\NZazuGroupField.cs" />
     <Compile Include="Fields\NZazuGroupField_Should.cs" />
+    <Compile Include="Fields\NZazuOptionsField.cs" />
+    <Compile Include="Fields\NZazuOptionsField_Should.cs" />
     <Compile Include="IResolveLayout.cs" />
     <Compile Include="INZazuWpfFieldBehavior.cs" />
     <Compile Include="Extensions\ViewExtensions_Should.cs" />
