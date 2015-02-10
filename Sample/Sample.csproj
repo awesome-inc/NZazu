@@ -41,8 +41,9 @@
     <Reference Include="Caliburn.Micro">
       <HintPath>..\packages\Caliburn.Micro.Core.2.0.1\lib\net45\Caliburn.Micro.dll</HintPath>
     </Reference>
-    <Reference Include="Caliburn.Micro.Autofac">
-      <HintPath>..\packages\Caliburn.Micro.AutofacBootstrap.2.0.7\lib\net40\Caliburn.Micro.Autofac.dll</HintPath>
+    <Reference Include="Caliburn.Micro.Autofac, Version=2.0.8.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Caliburn.Micro.AutofacBootstrap.2.0.8\lib\net40\Caliburn.Micro.Autofac.dll</HintPath>
     </Reference>
     <Reference Include="Caliburn.Micro.Platform">
       <HintPath>..\packages\Caliburn.Micro.2.0.1\lib\net45\Caliburn.Micro.Platform.dll</HintPath>
