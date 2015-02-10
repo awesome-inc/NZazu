@@ -12,6 +12,8 @@ namespace NZazu.LayoutStrategy
         {
             var sut = new GridLayout();
             sut.Should().NotBeNull();
+
+            sut.Should().BeAssignableTo<INZazuWpfLayoutStrategy>();
         }
     }
 }

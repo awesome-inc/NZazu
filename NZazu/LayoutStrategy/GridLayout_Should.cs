@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -15,6 +16,7 @@ namespace NZazu.LayoutStrategy
         private Application application;
 
         [SetUp]
+        [ExcludeFromCodeCoverage]
         public void Create_Application_For_Resources()
         {
             if (Application.Current != null) return;
@@ -22,6 +24,7 @@ namespace NZazu.LayoutStrategy
         }
 
         [TearDown]
+        [ExcludeFromCodeCoverage]
         public void RemoveApplicationForResources()
         {
             if (application == null) return;

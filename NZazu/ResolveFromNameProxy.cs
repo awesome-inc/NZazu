@@ -6,7 +6,7 @@ namespace NZazu
     {
         private readonly Func<string, T> _factory;
 
-        public ResolveFromNameProxy(Func<string,T> factory)
+        public ResolveFromNameProxy(Func<string, T> factory)
         {
             if (factory == null) throw new ArgumentNullException("factory");
             _factory = factory;
