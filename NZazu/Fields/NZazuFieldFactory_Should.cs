@@ -6,7 +6,6 @@ using NSubstitute;
 using NUnit.Framework;
 using NZazu.Contracts;
 using NZazu.Contracts.Checks;
-using NZazu.FieldBehavior;
 
 namespace NZazu.Fields
 {
@@ -125,21 +124,22 @@ namespace NZazu.Fields
             field.Settings.ShouldBeEquivalentTo(settings);
         }
 
-        [Test]
-        public void Attach_Null_Behavior_To_Field_If_Invalid()
+        [Test, Ignore("TODO")]
+        public void Attach_Behavior_To_Field()
         {
             var sut = new NZazuFieldFactory();
-            // by default we use an internal class to resolve controls
 
             var field = sut.CreateField(
                 new FieldDefinition
                 {
                     Key = "test",
-                    Type = "string",
-                    Behavior = new BehaviorDefinition { Name = "This is not an registered behavior" }
+                    Type = "string", 
+                    Behavior = new BehaviorDefinition { Name = "empty" }
                 });
             field.Should().NotBeNull();
-            field.Behavior.Should().BeNull();
+
+            var control = field.ValueControl;
+            Assert.Inconclusive("how to implement this?");
         }
 
         [Test]
