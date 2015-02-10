@@ -2,11 +2,11 @@ using System;
 
 namespace NZazu
 {
-    public class ResolveFromNamesProxy<T> : IResolveFromNames<T>
+    public class ResolveFromNameProxy<T> : IResolveFromName<T>
     {
         private readonly Func<string, T> _factory;
 
-        public ResolveFromNamesProxy(Func<string,T> factory)
+        public ResolveFromNameProxy(Func<string,T> factory)
         {
             if (factory == null) throw new ArgumentNullException("factory");
             _factory = factory;

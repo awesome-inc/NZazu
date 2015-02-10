@@ -1,14 +1,12 @@
-﻿using System.Windows;
+﻿using System.Reflection;
+using System.Windows;
 using Autofac;
-using Caliburn.Micro;
 using Caliburn.Micro.Autofac;
-using NZazu;
-using NZazu.LayoutStrategy;
-using NZazu.Xceed;
+using NZazuFiddle.Samples;
 
 namespace NZazuFiddle
 {
-    public class AppBootstrapper : AutofacBootstrapper<ShellViewModel>
+    public class AppBootstrapper : AutofacBootstrapper<FiddleViewModel>
     {
         public AppBootstrapper()
         {
@@ -17,16 +15,12 @@ namespace NZazuFiddle
 
         protected override void ConfigureContainer(ContainerBuilder builder)
         {
-            builder.RegisterType<EventAggregator>().As<IEventAggregator>().SingleInstance();
-
-            builder.RegisterInstance(Example.FormDefinition);
-            builder.RegisterInstance(Example.FormData);
-            builder.RegisterType<FormDefinitionViewModel>().As<IFormDefinitionViewModel>().SingleInstance();
-            builder.RegisterType<FormDataViewModel>().As<IFormDataViewModel>().SingleInstance();
-            builder.RegisterType<PreviewViewModel>().As<IPreviewViewModel>().SingleInstance();
-
-            builder.RegisterType<XceedFieldFactory>().Named<INZazuWpfFieldFactory>("xceed");
-            builder.RegisterType<GridLayout>().Named<INZazuWpfLayoutStrategy>("grid");
+            builder.RegisterType<ShellViewModel>().As<IShell>().SingleInstance();
+            
+            // register all samples
+            builder.RegisterAssemblyTypes(Assembly.GetExecutingAssembly())
+               .Where(t => typeof(IHaveSample).IsAssignableFrom(t))
+               .AsImplementedInterfaces();
         }
 
         protected override void ConfigureBootstrapper()
@@ -36,7 +30,7 @@ namespace NZazuFiddle
         }
         protected override void OnStartup(object sender, StartupEventArgs e)
         {
-            DisplayRootViewFor<ShellViewModel>();
+            DisplayRootViewFor<IShell>();
         }
     }
 }

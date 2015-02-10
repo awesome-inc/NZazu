@@ -97,23 +97,38 @@
     <Compile Include="IHaveFormData.cs" />
     <Compile Include="IHaveFormDefinition.cs" />
     <Compile Include="IPreviewViewModel.cs" />
+    <Compile Include="ISample.cs" />
+    <Compile Include="IShell.cs" />
     <Compile Include="NZazuAutoCompletion.cs" />
     <Compile Include="NzazuCompletionData.cs" />
     <Compile Include="PreviewView.xaml.cs">
       <DependentUpon>PreviewView.xaml</DependentUpon>
     </Compile>
     <Compile Include="PreviewViewModel.cs" />
-    <Compile Include="Example.cs" />
-    <Compile Include="ShellView.xaml.cs">
-      <DependentUpon>ShellView.xaml</DependentUpon>
+    <Compile Include="FiddleView.xaml.cs">
+      <DependentUpon>FiddleView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ShellViewModel.cs" />
+    <Compile Include="FiddleViewModel.cs" />
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="AppBootstrapper.cs" />
-    <Compile Include="IShell.cs" />
+    <Compile Include="IFiddle.cs" />
+    <Compile Include="Samples\BehaviorSample.cs" />
+    <Compile Include="Samples\IHaveSample.cs" />
+    <Compile Include="Samples\MixedGroupLayout.cs" />
+    <Compile Include="Samples\PrimitivesSample.cs" />
+    <Compile Include="Samples\SampleBase.cs" />
+    <Compile Include="Samples\ValidationSample.cs" />
+    <Compile Include="SampleView.xaml.cs">
+      <DependentUpon>SampleView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SampleViewModel.cs" />
+    <Compile Include="ShellView.xaml.cs">
+      <DependentUpon>ShellView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ShellViewModel.cs" />
     <Compile Include="TextEditorExtensions.cs" />
     <Page Include="FormDataView.xaml">
       <SubType>Designer</SubType>
@@ -127,9 +142,17 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="ShellView.xaml">
+    <Page Include="FiddleView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="SampleView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ShellView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>

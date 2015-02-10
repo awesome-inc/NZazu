@@ -143,8 +143,14 @@ namespace NZazu
 
         public void ApplyChanges()
         {
-            FormData = new FormData(this.GetFieldValues());
+            FormData = GetFieldValues();
         }
+
+        public Dictionary<string, string> GetFieldValues()
+        {
+            return (_fields.Concat(_groupFields)).ToDictionary(f => f.Key, f => f.Value.StringValue);
+        }
+
 
         public void Validate()
         {

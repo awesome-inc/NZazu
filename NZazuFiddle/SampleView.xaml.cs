@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace NZazuFiddle
 {
     /// <summary>
-    /// Interaction logic for ShellView.xaml
+    /// Interaction logic for SampleView.xaml
     /// </summary>
-    public partial class ShellView : UserControl
+    public partial class SampleView : UserControl
     {
-        public ShellView()
+        public SampleView()
         {
             InitializeComponent();
         }

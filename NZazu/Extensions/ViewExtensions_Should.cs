@@ -13,26 +13,6 @@ namespace NZazu.Extensions
     class ViewExtensions_Should
     {
         [Test]
-        public void Return_field_values_on_GetFieldValues()
-        {
-            var view = Substitute.For<INZazuWpfView>();
-
-            const string key = "name";
-            const string value = "John";
-
-            var formDefinition = new FormDefinition {Fields = new[] {new FieldDefinition {Key = key}}};
-            view.FormDefinition = formDefinition;
-
-            var field = Substitute.For<INZazuWpfField>();
-            field.StringValue = value;
-            view.GetField(key).Returns(field);
-
-            var actual = view.GetFieldValues();
-            actual.Keys.Single().Should().Be(key);
-            actual[key].Should().Be(value);
-        }
-
-        [Test]
         public void Set_field_values_on_SetFieldValues()
         {
             var view = Substitute.For<INZazuWpfView>();

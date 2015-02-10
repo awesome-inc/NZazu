@@ -1,4 +1,5 @@
-﻿using NZazu.Contracts;
+﻿using System.Collections.Generic;
+using NZazu.Contracts;
 using NZazu.Contracts.Checks;
 
 namespace NZazu
@@ -12,6 +13,7 @@ namespace NZazu
         IResolveLayout ResolveLayout { get; set; }
 
         INZazuWpfField GetField(string key);
+        Dictionary<string, string> GetFieldValues();
         void ApplyChanges();
 
         /// <exception cref="ValidationException"></exception>

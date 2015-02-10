@@ -75,7 +75,7 @@
     <Compile Include="Extensions\ViewExtensions_Should.cs" />
     <Compile Include="ResolveLayout.cs" />
     <Compile Include="LayoutStrategy\Layout.cs" />
-    <Compile Include="ResolveFromNamesProxy.cs" />
+    <Compile Include="ResolveFromNameProxy.cs" />
     <Compile Include="StackedLayout.cs" />
     <Compile Include="StackedLayout_Should.cs" />
     <Page Include="NZazuView.xaml">
@@ -98,7 +98,7 @@
     <Compile Include="CheckValidationRule.cs" />
     <Compile Include="INZazuWpfFieldBehaviorFactory.cs" />
     <Compile Include="INzazuWpfGroupField.cs" />
-    <Compile Include="IResolveFromNames.cs" />
+    <Compile Include="IResolveFromName.cs" />
     <Compile Include="LayoutStrategy\GridLayout.cs" />
     <Compile Include="INZazuWpfField.cs" />
     <Compile Include="INZazuWpfFieldFactory.cs" />
