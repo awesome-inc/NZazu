@@ -1,5 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using ICSharpCode.AvalonEdit.CodeCompletion;
+using NZazu.FieldBehavior;
 
 namespace NZazuFiddle
 {
@@ -17,7 +20,25 @@ namespace NZazuFiddle
                 case "Checks\":": Checks.ForEach(data.Add); break;
                 case "Settings\":": Settings.ForEach(data.Add); break;
                 case "Format\":": Format.ForEach(data.Add); break;
+                case "Names\":": GetNames().ForEach(data.Add); break;
             }
+        }
+
+        private static List<NzazuCompletionData> GetNames()
+        {
+            return GetBehaviours();
+        }
+
+        private static List<NzazuCompletionData> GetBehaviours()
+        {
+            var behaviors = BehaviorExtender.GetBehaviors();
+            return
+                behaviors.Select(kvp => new NzazuCompletionData
+                {
+                    Text = kvp.Key, 
+                    Replacement = String.Format("\"{0}\"", kvp.Key),
+                    Description = String.Format("Add behavior '{0}'", kvp.Key)
+                }).ToList();
         }
 
         private static readonly List<ICompletionData> Types = new List<ICompletionData>(new[]

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using FluentAssertions;
+using FluentAssertions.Common;
 using NUnit.Framework;
 
 namespace NZazu.FieldBehavior
@@ -31,6 +32,11 @@ namespace NZazu.FieldBehavior
         {
             Instance.UnregisterType(name);
         }
+
+        public static IEnumerable<KeyValuePair<string, Type>> GetBehaviors()
+        {
+            return Instance.Behaviors;
+        } 
 
         #endregion
 
@@ -86,7 +92,7 @@ namespace NZazu.FieldBehavior
             }
 
             [Test]
-            public void Have_Behavior_As_Immutal_Enumeration()
+            public void Have_Behavior_As_Immutable_Enumeration()
             {
                 var sut = new BehaviorExtender();
 
@@ -126,13 +132,26 @@ namespace NZazu.FieldBehavior
             }
 
             [Test]
-            public void Registration_And_Unregisteration_Through_Public_Method()
+            public void Registration_And_Unregistration_Through_Public_Method()
             {
                 const string name = "Mock For a Static Thing Which Stays Forever In List";
                 var type = typeof(DummyFieldBehavior);
 
-                BehaviorExtender.Register(name, type);
-                BehaviorExtender.Unregister(name);
+                // thread-safe?
+                lock (new object())
+                {
+                    BehaviorExtender.Register(name, type);
+                    try
+                    {
+                        var behaviors = BehaviorExtender.GetBehaviors().ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
+                        behaviors[name].Should().Be(type);
+                        behaviors["Empty"].Should().Be(typeof (EmptyNZazuFieldBehavior));
+                    }
+                    finally
+                    {
+                        BehaviorExtender.Unregister(name);
+                    }
+                }
             }
 
             [Test]
