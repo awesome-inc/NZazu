@@ -26,6 +26,12 @@ namespace NZazu.FieldBehavior
             Instance.RegisterType(name, type);
         }
 
+        // wrapper for comfort. instance method set to private
+        public static void Unregister(string name)
+        {
+            Instance.UnregisterType(name);
+        }
+
         #endregion
 
         private readonly Dictionary<string, Type> _fieldTypes = new Dictionary<string, Type>();
@@ -45,19 +51,19 @@ namespace NZazu.FieldBehavior
         {
             if (_fieldTypes.ContainsKey(name))
             {
-                Trace.TraceInformation(" A regsitration for the key '{0}' already exists for {1}. Replacing registration with {2}", name, _fieldTypes[name].Name, type.Name);
+                Trace.TraceInformation("A registration for '{0}' already exists for {1}. Replacing with {2}", name, _fieldTypes[name].Name, type.Name);
                 _fieldTypes[name] = type;
             }
             else
                 _fieldTypes.Add(name, type);
         }
 
-        private void UnRegisterType(string name)
+        private void UnregisterType(string name)
         {
             if (_fieldTypes.ContainsKey(name))
                 _fieldTypes.Remove(name);
             else
-                Trace.TraceInformation(" A regsitration for the key '{0}' does not exist. Nothing removed", name);
+                Trace.TraceInformation("A registration for '{0}' does not exist. Nothing removed", name);
         }
 
         #region internal test due to private constructor
@@ -106,7 +112,7 @@ namespace NZazu.FieldBehavior
                 sut.RegisterType(name, type);
                 sut.Behaviors.Should().Contain(kvp => String.Compare(kvp.Key, name, StringComparison.Ordinal) == 0 && kvp.Value == type);
 
-                sut.UnRegisterType(name);
+                sut.UnregisterType(name);
                 sut.Behaviors.Should().NotContain(kvp => String.Compare(kvp.Key, name, StringComparison.Ordinal) == 0);
             }
 
@@ -116,7 +122,7 @@ namespace NZazu.FieldBehavior
                 var name = "I do not exist as registration. " + Guid.NewGuid().ToString();
                 var sut = new BehaviorExtender();
 
-                sut.UnRegisterType(name);
+                sut.UnregisterType(name);
             }
 
             [Test]
@@ -126,7 +132,7 @@ namespace NZazu.FieldBehavior
                 var type = typeof(DummyFieldBehavior);
 
                 BehaviorExtender.Register(name, type);
-                BehaviorExtender.Register(name, type);
+                BehaviorExtender.Unregister(name);
             }
 
             [Test]

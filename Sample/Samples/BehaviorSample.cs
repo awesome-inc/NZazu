@@ -35,6 +35,13 @@ namespace Sample.Samples
                     {
                         new FieldDefinition
                         {
+                            Key = "headercomment",
+                            Prompt = "",
+                            Type = "label",
+                            Description = "in the dialog below you can enter a text and open a url by hitting STRG+Return"
+                        },
+                        new FieldDefinition
+                        {
                             Key = "comment",
                             Type = "string",
                             Prompt = "Comment",
@@ -50,7 +57,7 @@ namespace Sample.Samples
                 },
                 FormData = new Dictionary<string, string>
                 {
-                    { "comment", "John" }, 
+                    { "comment", "type in a url like http://google.de and open it with STRG+Enter" }, 
                 }
             };
         }
@@ -72,16 +79,26 @@ namespace Sample.Samples
                 _control.KeyUp += _handler;
             }
 
+            public void Detach()
+            {
+                if (_control == null) return;
+                
+                _control.KeyUp -= _handler;
+                _handler = null;
+                _control = null;
+            }
+
             private void HandleKeyUp(object sender, KeyEventArgs e)
             {
                 if (!((Keyboard.Modifiers == ModifierKeys.Control) && (e.Key == Key.Return))) return;
 
-                var link = GeLinkUnderCursorInTextBox(((TextBox)_control).Text, ((TextBox)_control).SelectionStart);
+                var link = GetLinkAtPosition(((TextBox)_control).Text, ((TextBox)_control).SelectionStart);
                 if (link == null) return;
+
                 Process.Start(link);
             }
 
-            internal static string GeLinkUnderCursorInTextBox(string text, int position)
+            internal static string GetLinkAtPosition(string text, int position)
             {
                 var spaceBefore = text.Substring(0, position).LastIndexOf(" ", StringComparison.Ordinal);
                 if (spaceBefore < 0) spaceBefore = 0;
@@ -96,14 +113,6 @@ namespace Sample.Samples
                 var textUnderCursor = text.Substring(spaceBefore, length);
                 return textUnderCursor.StartsWith("http://") ? textUnderCursor : null;
             }
-
-            public void Detach()
-            {
-                _control.KeyUp -= _handler;
-
-                _handler = null;
-                _control = null;
-            }
         }
 
         [TestFixture]
@@ -116,11 +125,11 @@ namespace Sample.Samples
             [TestCase("asdfklj asöfkdljsa ftp://google.de fdöakfjl saöljad fösadfa", 25, null)]
             [TestCase("asdfklj asöfkdljsa http://google.de fdöakfjl saöljad fösadfa", 25, "http://google.de")]
             [TestCase("http://google.de asdfklj asöfkdljsa fdöakfjl saöljad fösadfa", 4, "http://google.de")]
-            [TestCase("http://google.de asdfklj asöfkdljsa fdöakfjl saöljad fösadfa", 0, "http://google.de")]
+            [TestCase("http://google.de", 0, "http://google.de")]
             [TestCase("asdfklj asöfkdljsa fdöakfjl saöljad fösadfa http://google.de", 56, "http://google.de")]
             public void Extract_Url(string text, int position, string expected)
             {
-                var url = OpenUrlOnStringEnterBehavior.GeLinkUnderCursorInTextBox(text, position);
+                var url = OpenUrlOnStringEnterBehavior.GetLinkAtPosition(text, position);
 
                 url.Should().Be(expected);
             }
