@@ -84,6 +84,39 @@ namespace NZazu
         }
 
         [Test]
+        public void Handle_FormData_Which_Has_More_Values_Than_Fields()
+        {
+            var sut = new NZazuView();
+            sut.FormDefinition = new FormDefinition
+            {
+                Fields = new[]
+                {
+                    new FieldDefinition
+                    {
+                        Key = "name",
+                        Type = "string",
+                        Prompt = "Name",
+                        Hint = "Enter name",
+                        Description = "Your account name. Only alpha-numeric ..."
+                    },
+                    new FieldDefinition
+                    {
+                        Key = "isAdmin",
+                        Type = "bool",
+                        Hint = "Is Admin",
+                        Description = "Check to grant administrator permissions"
+                    },
+                }
+            };
+            sut.FormData = new Dictionary<string, string>
+            {
+                {"name", "John"},
+                {"isAdmin", "true"},
+                {"iDontExist", "foo"}
+            };
+        }
+
+        [Test]
         public void Update_when_FormDefinition_changed()
         {
             var formDefinition = new FormDefinition { Layout = "grid", Fields = new FieldDefinition[] { } };

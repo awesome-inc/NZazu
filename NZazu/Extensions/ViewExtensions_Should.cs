@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using FluentAssertions;
 using NSubstitute;
 using NUnit.Framework;
@@ -20,18 +19,44 @@ namespace NZazu.Extensions
             const string key = "name";
             const string value = "John";
 
-            var formDefinition = new FormDefinition {Fields = new[] {new FieldDefinition {Key = key}}};
+            var formDefinition = new FormDefinition { Fields = new[] { new FieldDefinition { Key = key } } };
             view.FormDefinition = formDefinition;
 
             var field = Substitute.For<INZazuWpfField>();
             view.GetField(key).Returns(field);
 
-            var input = new Dictionary<string, string> {{key, value}};
+            var input = new Dictionary<string, string> { { key, value } };
 
             view.SetFieldValues(input);
 
             field.StringValue.Should().Be(value);
         }
+
+        [Test]
+        public void Ignore_missing_field_on_SetFieldValues()
+        {
+            var view = Substitute.For<INZazuWpfView>();
+
+            const string key = "name";
+            const string value = "John";
+
+            var formDefinition = new FormDefinition { Fields = new[] { new FieldDefinition { Key = key } } };
+            view.FormDefinition = formDefinition;
+
+            var field = Substitute.For<INZazuWpfField>();
+            view.GetField(key).Returns(field);
+
+            var input = new Dictionary<string, string>
+            {
+                { "another key", "somevalue" },
+                {key, value}
+            };
+
+            view.SetFieldValues(input);
+
+            field.StringValue.Should().Be(value, because: "nothing can be changed");
+        }
+
         [Test]
         public void Return_False_If_Validate_Has_Exception()
         {
