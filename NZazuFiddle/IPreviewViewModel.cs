@@ -6,6 +6,5 @@ namespace NZazuFiddle
         : IHaveFormDefinition, IHaveFormData
     {
         INZazuWpfFieldFactory FieldFactory { get; }
-        INZazuWpfLayoutStrategy LayoutStrategy { get; }
     }
 }

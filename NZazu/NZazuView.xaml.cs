@@ -130,6 +130,8 @@ namespace NZazu
         public NZazuView()
         {
             InitializeComponent();
+
+            LostFocus += (s, e) => FormData = GetFieldValues();
         }
 
         public INZazuWpfField GetField(string key)
@@ -139,11 +141,6 @@ namespace NZazu
                 && !_groupFields.TryGetValue(key, out field))
                 throw new KeyNotFoundException();
             return field;
-        }
-
-        public void ApplyChanges()
-        {
-            FormData = GetFieldValues();
         }
 
         public Dictionary<string, string> GetFieldValues()

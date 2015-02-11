@@ -2,7 +2,6 @@
 using Caliburn.Micro;
 using NZazu;
 using NZazu.Contracts;
-using NZazu.LayoutStrategy;
 using NZazu.Xceed;
 
 namespace NZazuFiddle
@@ -12,13 +11,12 @@ namespace NZazuFiddle
         private readonly IEventAggregator _events;
         private FormDefinition _definition;
         private FormData _data;
-        private INZazuWpfFieldFactory _fieldFactory;
-        private INZazuWpfLayoutStrategy _layoutStrategy;
         private bool _inHandle;
+        private INZazuWpfFieldFactory _fieldFactory;
 
-        public PreviewViewModel(IEventAggregator events, FormDefinition definition, FormData data,
-            INZazuWpfFieldFactory fieldFactory = null,
-            INZazuWpfLayoutStrategy layoutStrategy = null)
+        public PreviewViewModel(IEventAggregator events, 
+            FormDefinition definition, FormData data, 
+            INZazuWpfFieldFactory fieldFactory = null)
         {
             if (events == null) throw new ArgumentNullException("events");
             if (definition == null) throw new ArgumentNullException("definition");
@@ -28,7 +26,6 @@ namespace NZazuFiddle
             _definition = definition;
             _data = data;
             _fieldFactory = fieldFactory ?? new XceedFieldFactory();
-            _layoutStrategy = layoutStrategy ?? new GridLayout();
         }
 
         public FormDefinition Definition
@@ -57,21 +54,10 @@ namespace NZazuFiddle
         public INZazuWpfFieldFactory FieldFactory
         {
             get { return _fieldFactory; }
-            set
+            private set
             {
                 if (Equals(value, _fieldFactory)) return;
                 _fieldFactory = value;
-                NotifyOfPropertyChange();
-            }
-        }
-
-        public INZazuWpfLayoutStrategy LayoutStrategy
-        {
-            get { return _layoutStrategy; }
-            set
-            {
-                if (Equals(value, _layoutStrategy)) return;
-                _layoutStrategy = value;
                 NotifyOfPropertyChange();
             }
         }

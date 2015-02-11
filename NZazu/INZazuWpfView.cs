@@ -14,7 +14,6 @@ namespace NZazu
 
         INZazuWpfField GetField(string key);
         Dictionary<string, string> GetFieldValues();
-        void ApplyChanges();
 
         /// <exception cref="ValidationException"></exception>
         void Validate();

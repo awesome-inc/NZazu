@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows;
 using System.Windows.Controls;
 using FluentAssertions;
 using NSubstitute;
@@ -29,8 +30,8 @@ namespace NZazu
         {
             var view = new NZazuView();
 
-            const string key = "name";
-            const string value = "John";
+            const string key = "key";
+            const string value = "value";
 
             var fieldDefinition = new FieldDefinition { Key = key };
             var formDefinition = new FormDefinition { Fields = new[] { fieldDefinition } };
@@ -105,7 +106,7 @@ namespace NZazu
                         Type = "bool",
                         Hint = "Is Admin",
                         Description = "Check to grant administrator permissions"
-                    },
+                    }
                 }
             };
             sut.FormData = new Dictionary<string, string>
@@ -201,8 +202,8 @@ namespace NZazu
         {
             var view = new NZazuView();
 
-            const string key = "name";
-            const string value = "John";
+            const string key = "key";
+            const string value = "value";
 
             var formDefinition = new FormDefinition { Fields = new[] { new FieldDefinition { Key = key, Type = "string" } } };
             view.FormDefinition = formDefinition;
@@ -215,22 +216,28 @@ namespace NZazu
         }
 
         [Test]
-        public void Update_FormData_On_ApplyChanges()
+        public void Update_FormData_On_LostFocus()
         {
             var view = new NZazuView();
 
-            const string key = "name";
-            const string value = "John";
+            const string key = "key";
+            const string value = "value";
 
             var formDefinition = new FormDefinition { Fields = new[] { new FieldDefinition { Key = key, Type = "string" } } };
             view.FormDefinition = formDefinition;
+            var values = new Dictionary<string, string> { { key, value } };
+            view.FormData = values;
+            view.FormData.Values.ShouldBeEquivalentTo(values);
 
-            var input = new Dictionary<string, string> { { key, value } };
-            view.SetFieldValues(input);
+            // simulate user editing
+            const string changedValue = "other";
+            view.GetField(key).StringValue = changedValue;
 
-            view.FormData.Values.Should().BeEmpty();
-            view.ApplyChanges();
-            view.FormData.Values.ShouldBeEquivalentTo(input);
+            // simulate user leaves the field -> LostFoucs
+            view.RaiseEvent(new RoutedEventArgs(UIElement.LostFocusEvent));
+
+            // verify (bound) FormData has been updated, so thumbs up for binding experience
+            view.FormData.Values[key].Should().Be(changedValue);
         }
 
         [Test]
@@ -283,8 +290,8 @@ namespace NZazu
         [Description("In real-time scenarios try to preserve formdat when formdefinition changed only marginally")]
         public void Throw_KeyNotFoundException_On_GetField_For_Wrong_Key()
         {
-            const string key = "name";
-            const string value = "John";
+            const string key = "key";
+            const string value = "value";
 
             var fieldDefinition = new FieldDefinition { Key = key, Type = "string", Prompt = "Name" };
             var formDefinition = new FormDefinition { Fields = new[] { fieldDefinition } };
@@ -298,8 +305,8 @@ namespace NZazu
         [Test]
         public void Attach_And_Detach_Behavior_To_Field()
         {
-            const string key = "name";
-            const string value = "John";
+            const string key = "key";
+            const string value = "value";
 
             // lets mock the behavior
             var behaviorDefinition=new BehaviorDefinition { Name = "Empty" };
@@ -325,7 +332,5 @@ namespace NZazu
             sut.FormDefinition = new FormDefinition { Fields = new[] { fieldDefinition } };
             behavior.ReceivedWithAnyArgs().Detach();
         }
-
-
     }
 }
