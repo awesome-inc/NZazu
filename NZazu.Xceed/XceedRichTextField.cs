@@ -22,7 +22,7 @@ namespace NZazu.Xceed
 
         protected override Control GetValue()
         {
-            return new RichTextBox
+            var control = new RichTextBox
             {
                 ToolTip = Description,
                 VerticalScrollBarVisibility = ScrollBarVisibility.Auto,
@@ -30,6 +30,12 @@ namespace NZazu.Xceed
                 MaxHeight = DefaultHeight,
                 TextFormatter = GetFormatter(GetSetting("Format"))
             };
+
+            var showFormatBar = GetSetting<bool>("ShowFormatBar");
+            if (showFormatBar == true)
+                RichTextBoxFormatBarManager.SetFormatBar(control, new RichTextBoxFormatBar());
+
+            return control;
         }
 
         private static ITextFormatter GetFormatter(string format)

@@ -81,5 +81,21 @@ namespace NZazu.Xceed
             var textBox = (RichTextBox)field.ValueControl;
             textBox.TextFormatter.Should().BeOfType(formatterType);
         }
+
+        [Test]
+        public void Add_optional_RichTextFormatBar()
+        {
+            var field = new XceedRichTextField("key");
+            var textBox = (RichTextBox)field.ValueControl;
+            var formatBar = RichTextBoxFormatBarManager.GetFormatBar(textBox);
+            formatBar.Should().BeNull();
+
+            field = new XceedRichTextField("key");
+            field.Settings["ShowFormatBar"] = true.ToString();
+
+            textBox = (RichTextBox)field.ValueControl;
+            formatBar = RichTextBoxFormatBarManager.GetFormatBar(textBox);
+            formatBar.Should().NotBeNull();
+        }
     }
 }
