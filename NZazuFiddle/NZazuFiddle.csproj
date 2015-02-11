@@ -16,6 +16,9 @@
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
+    <!-- DO NOT remove this line. It is important to set this property early (like here).
+      cf.: http://pauldevenney.blogspot.de/2014/07/could-not-copy-file-manifest-because-it_22.html -->
+    <GenerateManifests>true</GenerateManifests>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
