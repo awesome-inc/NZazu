@@ -125,22 +125,20 @@ namespace NZazu.Fields
             field.Settings.ShouldBeEquivalentTo(settings);
         }
 
-        [Test, Ignore("TODO")]
-        public void Attach_Behavior_To_Field()
+        [Test]
+        public void Does_Not_Attach_Behavior_To_Field()
         {
+            // because view has the resolver and attaches the behavior
             var sut = new NZazuFieldFactory();
-
             var field = sut.CreateField(
                 new FieldDefinition
                 {
                     Key = "test",
-                    Type = "string", 
-                    Behavior = new BehaviorDefinition { Name = "empty" }
+                    Type = "string",
+                    Behavior = new BehaviorDefinition { Name = "Empty" }
                 });
             field.Should().NotBeNull();
-
-            var control = field.ValueControl;
-            Assert.Inconclusive("how to implement this?");
+            field.Behavior.Should().BeNull();
         }
 
         [Test]
