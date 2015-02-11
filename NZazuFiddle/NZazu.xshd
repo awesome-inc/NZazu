@@ -22,6 +22,7 @@
       <Word>"Format"</Word>
       <Word>"Width"</Word>
       <Word>"Height"</Word>
+      <Word>"ShowFormatBar"</Word>
       <Word>"Behavior"</Word>
       <Word>"Name"</Word>
       <Word>"Layout"</Word>
