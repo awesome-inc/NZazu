@@ -65,5 +65,14 @@ namespace NZazu.Xceed
             sut.StringValue.Should().Be(String.Empty);
         }
 
+        [Test]
+        public void Not_Set_null_format_string()
+        {
+            var sut = new XceedDoubleField("test");
+            sut.Settings.Add("Format", null);
+
+            var control = (DoubleUpDown)sut.ValueControl;
+            control.FormatString.Should().NotBeNull();
+        }
     }
 }

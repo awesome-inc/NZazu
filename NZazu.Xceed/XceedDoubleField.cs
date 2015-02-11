@@ -21,7 +21,11 @@ namespace NZazu.Xceed
 
         protected override Control GetValue()
         {
-            return new DoubleUpDown {ToolTip = Description, Watermark = Hint, FormatString = GetSetting("Format")};
+            var control = new DoubleUpDown { ToolTip = Description, Watermark = Hint };
+            var formatString = GetSetting("Format");
+            if (!String.IsNullOrWhiteSpace(formatString))
+                control.FormatString = formatString;
+            return control;
         }
 
         protected override void SetStringValue(string value)
