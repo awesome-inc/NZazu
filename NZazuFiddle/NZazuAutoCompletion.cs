@@ -72,7 +72,8 @@ namespace NZazuFiddle
         private static readonly List<ICompletionData> Settings = new List<ICompletionData>(new[]
         {
             new NzazuCompletionData { Text = "Format", Replacement = "{ \"Format\": \"\" }", Description = "The field format"},
-            new NzazuCompletionData { Text = "Height", Replacement = "{ \"Height\": \"64.3\" }", Description = "The field's height in pixel"}
+            new NzazuCompletionData { Text = "Height", Replacement = "{ \"Height\": \"64.3\" }", Description = "The field's height in pixel"},
+            new NzazuCompletionData { Text = "ShowFormatBar", Replacement = "{ \"ShowFormatBar\": \"True\" }", Description = "Adds an optional richtext format bar for text selections"}
         });
 
         private static readonly List<ICompletionData> Format = new List<ICompletionData>(new []
