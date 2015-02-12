@@ -21,14 +21,16 @@ namespace NZazuFiddle
         {
             base.OnAttached();
             if (AssociatedObject != null)
-                AssociatedObject.TextChanged += AssociatedObjectOnTextChanged;
+                //AssociatedObject.TextChanged += AssociatedObjectOnTextChanged;
+                AssociatedObject.LostFocus += AssociatedObjectOnTextChanged;
         }
 
         protected override void OnDetaching()
         {
             base.OnDetaching();
             if (AssociatedObject != null)
-                AssociatedObject.TextChanged -= AssociatedObjectOnTextChanged;
+                //AssociatedObject.TextChanged -= AssociatedObjectOnTextChanged;
+                AssociatedObject.LostFocus -= AssociatedObjectOnTextChanged;
         }
 
         private void AssociatedObjectOnTextChanged(object sender, EventArgs eventArgs)
@@ -47,9 +49,12 @@ namespace NZazuFiddle
             if (behavior.AssociatedObject == null) return;
             var editor = behavior.AssociatedObject;
             if (editor.Document == null) return;
+            
             var caretOffset = editor.CaretOffset;
+
             editor.Document.Text = dependencyPropertyChangedEventArgs.NewValue.ToString();
-            editor.CaretOffset = caretOffset;
+
+            try { editor.CaretOffset = caretOffset; } catch (ArgumentOutOfRangeException) { }
         }
     }
 }
