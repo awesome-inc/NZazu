@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Windows.Controls;
 using FluentAssertions;
 using NUnit.Framework;
@@ -36,11 +37,13 @@ namespace NZazu.FieldBehavior
 
         #region simple interface implementation
 
+        [ExcludeFromCodeCoverage]
         private class SimpleInterfaceImplementation : INZazuWpfFieldBehavior
         {
             public void AttachTo(Control valueControl) { }
             public void Detach() { }
         }
+
         #endregion
 
         [Test]
@@ -76,5 +79,4 @@ namespace NZazu.FieldBehavior
             field.GetType().Should().Be(controlType);
         }
     }
-
 }
