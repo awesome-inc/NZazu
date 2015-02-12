@@ -1,6 +1,7 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
+using System.Windows.Controls;
 using NZazu.Contracts;
 using NZazu.Extensions;
 using NZazu.FieldBehavior;
@@ -8,7 +9,7 @@ using NZazu.Fields;
 
 namespace NZazu
 {
-    public partial class NZazuView : INZazuWpfView
+    public sealed class NZazuView : ContentControl, INZazuWpfView
     {
         #region dependency properties
 
@@ -33,7 +34,7 @@ namespace NZazu
         // ############# FieldFactory
 
         public static readonly DependencyProperty FieldFactoryProperty = DependencyProperty.Register(
-           "FieldFactory", typeof(INZazuWpfFieldFactory), typeof(NZazuView), new PropertyMetadata(new NZazuFieldFactory(), FieldFactoryChanged, FieldFactoryCoerceCallback));
+            "FieldFactory", typeof(INZazuWpfFieldFactory), typeof(NZazuView), new PropertyMetadata(new NZazuFieldFactory(), FieldFactoryChanged, FieldFactoryCoerceCallback));
 
         public INZazuWpfFieldFactory FieldFactory
         {
@@ -58,7 +59,7 @@ namespace NZazu
         // ############# FieldBehaviorFactory
 
         public static readonly DependencyProperty FieldBehaviorFactoryProperty = DependencyProperty.Register(
-           "FieldBehaviorFactory", typeof(INZazuWpfFieldBehaviorFactory), typeof(NZazuView), new PropertyMetadata(new NZazuFieldBehaviorFactory(), FieldBehaviorFactoryChanged, FieldBehaviorFactoryCoerceCallback));
+            "FieldBehaviorFactory", typeof(INZazuWpfFieldBehaviorFactory), typeof(NZazuView), new PropertyMetadata(new NZazuFieldBehaviorFactory(), FieldBehaviorFactoryChanged, FieldBehaviorFactoryCoerceCallback));
 
         public INZazuWpfFieldBehaviorFactory FieldBehaviorFactory
         {
@@ -83,8 +84,8 @@ namespace NZazu
         // ############# ResolveLayout
 
         public static readonly DependencyProperty ResolveLayoutProperty = DependencyProperty.Register(
-           "ResolveLayout", typeof(IResolveLayout), typeof(NZazuView),
-           new PropertyMetadata(new ResolveLayout(), ResolveLayoutChanged, ResolveLayoutCoerceCallback));
+            "ResolveLayout", typeof(IResolveLayout), typeof(NZazuView),
+            new PropertyMetadata(new ResolveLayout(), ResolveLayoutChanged, ResolveLayoutCoerceCallback));
 
         public IResolveLayout ResolveLayout
         {
@@ -130,6 +131,25 @@ namespace NZazu
         public NZazuView()
         {
             InitializeComponent();
+        }
+
+        private readonly ContentControl _layout = new ContentControl {Focusable = false};
+        private void InitializeComponent()
+        {
+            Focusable = false;
+
+            var scrollViewer = new ScrollViewer
+            {
+                Focusable = false,
+                CanContentScroll = true,
+                VerticalScrollBarVisibility = ScrollBarVisibility.Auto,
+                HorizontalScrollBarVisibility = ScrollBarVisibility.Auto,
+                VerticalContentAlignment = VerticalAlignment.Top,
+                HorizontalContentAlignment = HorizontalAlignment.Left
+            };
+            scrollViewer.Content = _layout;
+
+            AddChild(scrollViewer);
 
             LostFocus += (s, e) => ApplyChanges();
         }
@@ -151,7 +171,7 @@ namespace NZazu
         public Dictionary<string, string> GetFieldValues()
         {
             return (_fields.Concat(_groupFields))
-                .Where( f => f.Value.IsEditable)
+                .Where(f => f.Value.IsEditable)
                 .ToDictionary(f => f.Key, f => f.Value.StringValue);
         }
 
@@ -180,7 +200,7 @@ namespace NZazu
             AttachBehavior(formDefinition, fieldBehaviorFactory);
 
             var layout = resolveLayout.Resolve(formDefinition.Layout);
-            layout.DoLayout(Layout, _fields.Values, resolveLayout);
+            layout.DoLayout(_layout, _fields.Values, resolveLayout);
 
             this.SetFieldValues(FormData.Values);
         }

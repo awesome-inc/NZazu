@@ -75,6 +75,7 @@
     <Compile Include="IResolveLayout.cs" />
     <Compile Include="INZazuWpfFieldBehavior.cs" />
     <Compile Include="Extensions\ViewExtensions_Should.cs" />
+    <Compile Include="NZazuView.cs" />
     <Compile Include="ResolveFromNameProxy_Should.cs" />
     <Compile Include="ResolveLayout.cs" />
     <Compile Include="LayoutStrategy\Layout.cs" />
@@ -82,10 +83,6 @@
     <Compile Include="ResolveLayout_Should.cs" />
     <Compile Include="StackedLayout.cs" />
     <Compile Include="StackedLayout_Should.cs" />
-    <Page Include="NZazuView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Compile Include="..\SolutionInfo.cs">
       <Link>Properties\SolutionInfo.cs</Link>
     </Compile>
@@ -118,10 +115,6 @@
     <Compile Include="Extensions\ViewExtensions.cs" />
     <Compile Include="Extensions\FieldExtensions_Should.cs" />
     <Compile Include="NZazuView_Should.cs" />
-    <Compile Include="NZazuView.xaml.cs">
-      <DependentUpon>NZazuView.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
     <Page Include="Themes\Generic.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

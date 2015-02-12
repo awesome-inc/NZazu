@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using System.Windows;
+using System.Windows.Markup;
 
 [assembly: AssemblyTitle("NZazu")]
 [assembly:ThemeInfo(
@@ -10,3 +11,7 @@ using System.Windows;
                                       //(used if a resource is not found in the page, 
                                       // app, or any theme specific resource dictionaries)
 )]
+
+[assembly: XmlnsPrefix("http://schemas.nzazu.com/wpf/xaml/nzazu", "nzazu")]
+[assembly: XmlnsDefinition("http://schemas.nzazu.com/wpf/xaml/nzazu", "NZazu")]
+
