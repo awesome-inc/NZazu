@@ -28,7 +28,12 @@ namespace NZazu.Fields
 
         protected override Control GetValue()
         {
-            return new CheckBox {Content = Hint, ToolTip = Description, IsChecked = null, IsThreeState = true};
+            return new CheckBox
+            {
+                Content = Hint, ToolTip = Description, 
+                IsChecked = null, IsThreeState = true,
+                VerticalContentAlignment = VerticalAlignment.Center
+            };
         }
     }
 }

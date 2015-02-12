@@ -1,3 +1,4 @@
+using System.Windows;
 using System.Windows.Controls;
 using FluentAssertions;
 using NUnit.Framework;
@@ -96,11 +97,19 @@ namespace NZazu.Fields
         }
 
         [Test]
-        public void Should_support_ThreeState_by_default()
+        public void Support_ThreeState_by_default()
         {
             var sut = new NZazuBoolField("test");
 
             ((CheckBox)sut.ValueControl).IsThreeState.Should().BeTrue();
+        }
+
+        [Test]
+        public void Center_checkboxes_vertically()
+        {
+            var sut = new NZazuBoolField("test");
+            var checkBox = (CheckBox)sut.ValueControl;
+            checkBox.VerticalContentAlignment.Should().Be(VerticalAlignment.Center);
         }
     }
 }
