@@ -4,32 +4,46 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:nZazuFiddle="clr-namespace:NZazuFiddle"
-        xmlns:wpf="clr-namespace:MiniMod.WPF"
-        xmlns:properties="clr-namespace:NZazuFiddle.Properties"
         mc:Ignorable="d"
         Height="800" Width="1024" d:DataContext="{d:DesignInstance nZazuFiddle:FiddleViewModel}">
     <UserControl.Resources>
         <Style TargetType="Grid">
             <Setter Property="Margin" Value="4"/>
         </Style>
+        <Style TargetType="GridSplitter">
+            <Setter Property="Focusable" Value="False"/>
+        </Style>
         <Style TargetType="ContentControl">
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+            <Setter Property="VerticalAlignment" Value="Top"/>
             <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
             <Setter Property="VerticalContentAlignment" Value="Stretch"/>
         </Style>
     </UserControl.Resources>
-    <DockPanel LastChildFill="True" MinWidth="500">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
 
-        <DockPanel DockPanel.Dock="Left" MinWidth="250"
-            Width="{Binding MidSplitter, Source={x:Static properties:ShellView.Default}, Mode=TwoWay}">
-            <ContentControl x:Name="Definition" DockPanel.Dock="Top" MinHeight="250"/>
+        <Grid>  
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
 
-            <wpf:DockPanelSplitter DockPanel.Dock="Top" Height="2" />
+            <ContentControl x:Name="Definition" />
 
-            <ContentControl x:Name="Data" DockPanel.Dock="Bottom" MinHeight="250" />
-        </DockPanel>
 
-        <wpf:DockPanelSplitter DockPanel.Dock="Left" Width="2" />
+            <GridSplitter Grid.Row="1" Height="5" VerticalAlignment="Center" HorizontalAlignment="Stretch" />
 
-        <ContentControl x:Name="Preview" MinWidth="250" />
-    </DockPanel>
+            <ContentControl Grid.Row="2" x:Name="Data"/>
+        </Grid>
+
+        <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Center" VerticalAlignment="Stretch" />
+
+        <ContentControl x:Name="Preview" Grid.Column="2" />
+    </Grid>
 </UserControl>
