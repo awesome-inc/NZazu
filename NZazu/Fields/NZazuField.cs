@@ -17,6 +17,7 @@ namespace NZazu.Fields
         private readonly Lazy<Control> _labelControl;
         private readonly Lazy<Control> _valueControl;
 
+        public abstract bool IsEditable { get; }
         public abstract string StringValue { get; set; }
         public abstract DependencyProperty ContentProperty { get; }
 
@@ -154,6 +155,8 @@ namespace NZazu.Fields
                 OnPropertyChanged("StringValue");
             }
         }
+
+        public override bool IsEditable { get { return true; } }
 
         public override string StringValue
         {

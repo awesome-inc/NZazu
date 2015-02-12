@@ -11,6 +11,7 @@ namespace NZazu
         string Hint { get; }
         string Description { get; }
 
+        bool IsEditable { get; }
         string StringValue { get; set; }
         void Validate();
 

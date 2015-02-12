@@ -27,12 +27,14 @@ namespace NZazu.Fields
             {
             }
 
+            public override bool IsEditable { get { throw new NotImplementedException(); } }
             public override string StringValue { get; set; }
             public override string Type { get { return null; } }
             public override DependencyProperty ContentProperty { get { return null; } }
             protected override Control GetValue() { return null; }
         }
 
+        [ExcludeFromCodeCoverage]
         private class NZazuField_With_Description_As_Content_Property : NZazuDummyField
         {
             public NZazuField_With_Description_As_Content_Property(string key)
@@ -44,6 +46,17 @@ namespace NZazu.Fields
             protected override Control GetValue() { return new ContentControl(); }
         }
 
+
+        [ExcludeFromCodeCoverage]
+        class GenericDummyField : NZazuField<int>
+        {
+            public GenericDummyField(string key) : base(key) { }
+            public override DependencyProperty ContentProperty { get { throw new NotImplementedException(); } }
+            public override string Type { get { throw new NotImplementedException(); } }
+            protected override Control GetValue() { throw new NotImplementedException(); }
+            protected override void SetStringValue(string value) { throw new NotImplementedException(); }
+            protected override string GetStringValue() { throw new NotImplementedException(); }
+        }
         #endregion
 
         [Test]
@@ -186,5 +199,13 @@ namespace NZazu.Fields
         }
 
         #endregion
+
+        [Test]
+        public void Be_Editable()
+        {
+            var sut = new GenericDummyField("test");
+            sut.IsEditable.Should().BeTrue();
+        }
+
     }
 }

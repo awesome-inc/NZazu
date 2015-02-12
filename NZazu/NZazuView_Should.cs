@@ -41,7 +41,9 @@ namespace NZazu
             var factory = Substitute.For<INZazuWpfFieldFactory>();
             var field = Substitute.For<INZazuWpfField>();
             field.StringValue = value;
+            field.IsEditable.Returns(true);
             factory.CreateField(fieldDefinition).Returns(field);
+
             view.FieldFactory = factory;
 
             var actual = view.GetFieldValues();
@@ -50,7 +52,7 @@ namespace NZazu
         }
 
         [Test]
-        public void Include_group_fields_in_GetFieldValues()
+        public void Recurse_on_group_fields_in_GetFieldValues()
         {
             var view = new NZazuView
             {
@@ -75,7 +77,6 @@ namespace NZazu
             var expected = new Dictionary<string, string>
             {
                 { "name", "John" }, 
-                { "group", null },
                 { "group.name", "Jim" },
             };
 
@@ -345,5 +346,29 @@ namespace NZazu
             sut.FormDefinition = new FormDefinition { Fields = new[] { fieldDefinition } };
             behavior.ReceivedWithAnyArgs().Detach();
         }
+
+        [Test]
+        public void Skip_skip_fixed_fields_in_GetFieldValues()
+        {
+            var view = new NZazuView
+            {
+                FormDefinition = new FormDefinition
+                {
+                    Fields = new[]
+                    {
+                        new FieldDefinition {Key = "caption", Type = "label"},
+                        new FieldDefinition {Key = "name", Type = "string"}
+                    }
+                }
+            };
+
+            var expected = new Dictionary<string, string> { { "name", "John" } };
+
+            view.SetFieldValues(expected);
+
+            var actual = view.GetFieldValues();
+            actual.ShouldBeEquivalentTo(expected);
+        }
+
     }
 }

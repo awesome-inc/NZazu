@@ -35,5 +35,12 @@ namespace NZazu.Fields
 
             contentControl.Focusable.Should().BeFalse("group fields should not have a tab stop of their own");
         }
+
+        [Test]
+        public void Not_be_Editable()
+        {
+            var sut = new NZazuGroupField("test");
+            sut.IsEditable.Should().BeFalse();
+        }
     }
 }

@@ -11,6 +11,8 @@ namespace NZazu.Fields
 
         public override string Type { get { return "label"; } }
 
+        public override bool IsEditable { get { return false; } }
+
         public override string StringValue 
         {
             get { return null; }

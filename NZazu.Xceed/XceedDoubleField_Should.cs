@@ -73,6 +73,13 @@ namespace NZazu.Xceed
 
             var control = (DoubleUpDown)sut.ValueControl;
             control.FormatString.Should().NotBeNull();
+
+            const string format = "#.00";
+            sut = new XceedDoubleField("test");
+            sut.Settings.Add("Format", format);
+
+            control = (DoubleUpDown)sut.ValueControl;
+            control.FormatString.Should().Be(format);
         }
     }
 }

@@ -150,7 +150,9 @@ namespace NZazu
 
         public Dictionary<string, string> GetFieldValues()
         {
-            return (_fields.Concat(_groupFields)).ToDictionary(f => f.Key, f => f.Value.StringValue);
+            return (_fields.Concat(_groupFields))
+                .Where( f => f.Value.IsEditable)
+                .ToDictionary(f => f.Key, f => f.Value.StringValue);
         }
 
 
