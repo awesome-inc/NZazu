@@ -1,16 +1,29 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <ControlTemplate x:Key="NZazuErrorTemplate">
-        <DockPanel>
-            <Border BorderThickness="1" BorderBrush="Red">
-                <AdornedElementPlaceholder x:Name="placeholder" />
+        <Grid>
+            <Border x:Name="errorBorder" BorderThickness="1" BorderBrush="Red">
+                <AdornedElementPlaceholder x:Name="placeholder"/>
             </Border>
-            <Image DockPanel.Dock="Right"
-                       Source="../Images/error.png"
-                       Stretch="Fill"
-                       Height="16"
-                       Width="16"
-                       ToolTip="{Binding ElementName=placeholder, Path=AdornedElement.(Validation.Errors)[0].ErrorContent}" />
-        </DockPanel>
+            <Image Source="../Images/error.png" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="4"
+                   ToolTip="{Binding ElementName=placeholder, Path=AdornedElement.(Validation.Errors)[0].ErrorContent}" />
+
+            <Popup AllowsTransparency="True" HorizontalAlignment="Right" 
+                HorizontalOffset="0" VerticalOffset="0" PopupAnimation="Fade" Placement="Bottom"
+                PlacementTarget="{Binding ElementName=errorBorder}"
+                IsOpen="{Binding ElementName=placeholder, Path=AdornedElement.IsFocused, Mode=OneWay}">
+                <Popup.Resources>
+                    <Brush x:Key="ErrorBrush">#E0FF6655</Brush>
+                </Popup.Resources>
+                <StackPanel Orientation="Vertical">
+                    <Polygon Points="12,4 16,0 20,4" Fill="{StaticResource ErrorBrush}"
+                        Stroke="{StaticResource ErrorBrush}" StrokeThickness="1"/>
+                    <Border Background="{StaticResource ErrorBrush}" CornerRadius="4" Padding="4">
+                        <TextBlock Text="{Binding ElementName=placeholder, Path=AdornedElement.(Validation.Errors)[0].ErrorContent}"
+                            VerticalAlignment="Center"/>
+                    </Border>
+                </StackPanel>
+            </Popup>
+        </Grid>
     </ControlTemplate>
 </ResourceDictionary>
