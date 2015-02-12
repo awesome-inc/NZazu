@@ -1,7 +1,5 @@
 ﻿<UserControl x:Class="NZazuFiddle.SampleView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    <Grid>
-          <ContentControl x:Name="Fiddle"/>  
-    </Grid>
+    <ContentControl x:Name="Fiddle"/>
 </UserControl>

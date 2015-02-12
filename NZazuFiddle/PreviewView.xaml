@@ -6,11 +6,9 @@
              xmlns:nZazu="clr-namespace:NZazu;assembly=NZazu"
              xmlns:nZazuFiddle="clr-namespace:NZazuFiddle"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300" d:DataContext="{d:DesignInstance nZazuFiddle:PreviewViewModel}">
-    <Grid>
-        <nZazu:NZazuView x:Name="View" 
+             d:DataContext="{d:DesignInstance nZazuFiddle:PreviewViewModel}">
+    <nZazu:NZazuView x:Name="View" 
             FieldFactory="{Binding FieldFactory}"
             FormDefinition="{Binding Definition}" 
             FormData="{Binding Data, Mode=TwoWay}" />
-    </Grid>
 </UserControl>

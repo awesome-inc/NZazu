@@ -11,18 +11,11 @@
     <UserControl.Resources>
         <nZazuFiddle:FormDefinitionConverter x:Key="DefinitionConverter"/>
     </UserControl.Resources>
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
-        <TextBlock Text="Form definition:"/>
-        <avalonedit:TextEditor Grid.Row="1" x:Name="TextEditor">
-            <i:Interaction.Behaviors>
-                <nZazuFiddle:AvalonEditBehaviour 
+    <avalonedit:TextEditor x:Name="TextEditor">
+        <i:Interaction.Behaviors>
+            <nZazuFiddle:AvalonEditBehaviour 
                     GiveMeTheText="{Binding Definition, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, 
                     Converter={StaticResource DefinitionConverter}}"/>
-            </i:Interaction.Behaviors>
-        </avalonedit:TextEditor>
-    </Grid>
+        </i:Interaction.Behaviors>
+    </avalonedit:TextEditor>
 </UserControl>

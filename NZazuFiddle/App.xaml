@@ -1,13 +1,26 @@
 ﻿<Application x:Class="NZazuFiddle.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:nZazuFiddle="clr-namespace:NZazuFiddle">
+             xmlns:nZazuFiddle="clr-namespace:NZazuFiddle"
+             xmlns:wpf="clr-namespace:MiniMod.WPF">
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary>
                     <!-- cf: https://github.com/brendankowitz/Caliburn.Micro.Autofac/blob/master/samples/Sample-WPF/App.xaml -->
                     <nZazuFiddle:AppBootstrapper x:Key="AppBootstrapper" />
+
+                    <Style TargetType="{x:Type wpf:DockPanelSplitter}">
+                        <!-- Important to make the splitter clickable with the mouse -->
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="{x:Type wpf:DockPanelSplitter}">
+                                    <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}"/>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                        <Setter Property="Background" Value="Gray"/>
+                    </Style>
                 </ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>

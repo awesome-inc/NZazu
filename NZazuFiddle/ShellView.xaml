@@ -4,13 +4,18 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:nZazuFiddle="clr-namespace:NZazuFiddle"
+             xmlns:wpf="clr-namespace:MiniMod.WPF"
+             xmlns:properties="clr-namespace:NZazuFiddle.Properties"
              mc:Ignorable="d" d:DataContext="{d:DesignInstance nZazuFiddle:ShellViewModel}">
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
-        <ListBox x:Name="Samples" ItemsSource="{Binding Samples}" SelectedItem="{Binding SelectedSample}" />
-        <ContentControl Grid.Column="1" x:Name="SelectedSample"/>
-    </Grid>
+    <DockPanel LastChildFill="True">
+        <ListBox x:Name="Samples" DockPanel.Dock="Left"
+            MinWidth="100"
+            Width="{Binding LeftSplitter, Source={x:Static properties:ShellView.Default}, Mode=TwoWay}"
+            ItemsSource="{Binding Samples}" 
+            SelectedItem="{Binding SelectedSample}" />
+        
+        <wpf:DockPanelSplitter DockPanel.Dock="Left" Width="2" />
+
+        <ContentControl x:Name="SelectedSample"/>
+    </DockPanel>
 </UserControl>

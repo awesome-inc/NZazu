@@ -369,6 +369,5 @@ namespace NZazu
             var actual = view.GetFieldValues();
             actual.ShouldBeEquivalentTo(expected);
         }
-
     }
 }

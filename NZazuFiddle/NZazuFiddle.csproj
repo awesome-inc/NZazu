@@ -119,6 +119,7 @@
     <Compile Include="IPreviewViewModel.cs" />
     <Compile Include="ISample.cs" />
     <Compile Include="IShell.cs" />
+    <Compile Include="MiniMods\DockPanelSplitter.cs" />
     <Compile Include="NZazuAutoCompletion.cs" />
     <Compile Include="NzazuCompletionData.cs" />
     <Compile Include="PreviewView.xaml.cs">
@@ -145,6 +146,11 @@
       <DependentUpon>SampleView.xaml</DependentUpon>
     </Compile>
     <Compile Include="SampleViewModel.cs" />
+    <Compile Include="Properties\ShellView.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>ShellView.settings</DependentUpon>
+    </Compile>
     <Compile Include="ShellView.xaml.cs">
       <DependentUpon>ShellView.xaml</DependentUpon>
     </Compile>
@@ -183,6 +189,10 @@
     <None Include="ClickOnce.targets" />
     <None Include="packages.config" />
     <AppDesigner Include="Properties\" />
+    <None Include="Properties\ShellView.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>ShellView.Designer.cs</LastGenOutput>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

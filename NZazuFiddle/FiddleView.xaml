@@ -4,26 +4,32 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:nZazuFiddle="clr-namespace:NZazuFiddle"
+        xmlns:wpf="clr-namespace:MiniMod.WPF"
+        xmlns:properties="clr-namespace:NZazuFiddle.Properties"
         mc:Ignorable="d"
         Height="800" Width="1024" d:DataContext="{d:DesignInstance nZazuFiddle:FiddleViewModel}">
     <UserControl.Resources>
         <Style TargetType="Grid">
             <Setter Property="Margin" Value="4"/>
         </Style>
+        <Style TargetType="ContentControl">
+            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+            <Setter Property="VerticalContentAlignment" Value="Stretch"/>
+        </Style>
     </UserControl.Resources>
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-            <ContentControl x:Name="Definition"/>
-            <ContentControl x:Name="Data" Grid.Row="1"/>
-        </Grid>
-        <ContentControl x:Name="Preview" Grid.Column="1"/>
-    </Grid>
+    <DockPanel LastChildFill="True" MinWidth="500">
+
+        <DockPanel DockPanel.Dock="Left" MinWidth="250"
+            Width="{Binding MidSplitter, Source={x:Static properties:ShellView.Default}, Mode=TwoWay}">
+            <ContentControl x:Name="Definition" DockPanel.Dock="Top" MinHeight="250"/>
+
+            <wpf:DockPanelSplitter DockPanel.Dock="Top" Height="2" />
+
+            <ContentControl x:Name="Data" DockPanel.Dock="Bottom" MinHeight="250" />
+        </DockPanel>
+
+        <wpf:DockPanelSplitter DockPanel.Dock="Left" Width="2" />
+
+        <ContentControl x:Name="Preview" MinWidth="250" />
+    </DockPanel>
 </UserControl>

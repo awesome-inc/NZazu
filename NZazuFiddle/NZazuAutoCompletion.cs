@@ -20,7 +20,7 @@ namespace NZazuFiddle
                 case "Checks\":": Checks.ForEach(data.Add); break;
                 case "Settings\":": Settings.ForEach(data.Add); break;
                 case "Format\":": Format.ForEach(data.Add); break;
-                case "Names\":": GetNames().ForEach(data.Add); break;
+                case "Name\":": GetNames().ForEach(data.Add); break;
             }
         }
 
