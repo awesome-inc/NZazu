@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using FluentAssertions;
-using FluentAssertions.Common;
 using NUnit.Framework;
 
 namespace NZazu.FieldBehavior
