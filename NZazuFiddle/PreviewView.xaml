@@ -3,11 +3,11 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:nZazu="clr-namespace:NZazu;assembly=NZazu"
              xmlns:nZazuFiddle="clr-namespace:NZazuFiddle"
+             xmlns:nz="http://schemas.nzazu.com/wpf/xaml/nzazu"
              mc:Ignorable="d" 
              d:DataContext="{d:DesignInstance nZazuFiddle:PreviewViewModel}">
-    <nZazu:NZazuView x:Name="View" 
+    <nz:NZazuView x:Name="View" 
             FieldFactory="{Binding FieldFactory}"
             FormDefinition="{Binding Definition}" 
             FormData="{Binding Data, Mode=TwoWay}" />

@@ -9,7 +9,7 @@ using NZazu.Fields;
 
 namespace NZazu
 {
-    public sealed class NZazuView : ContentControl, INZazuWpfView
+    public class NZazuView : ContentControl, INZazuWpfView
     {
         #region dependency properties
 
@@ -59,7 +59,9 @@ namespace NZazu
         // ############# FieldBehaviorFactory
 
         public static readonly DependencyProperty FieldBehaviorFactoryProperty = DependencyProperty.Register(
-            "FieldBehaviorFactory", typeof(INZazuWpfFieldBehaviorFactory), typeof(NZazuView), new PropertyMetadata(new NZazuFieldBehaviorFactory(), FieldBehaviorFactoryChanged, FieldBehaviorFactoryCoerceCallback));
+            "FieldBehaviorFactory", typeof(INZazuWpfFieldBehaviorFactory), typeof(NZazuView),
+            new PropertyMetadata(new NZazuFieldBehaviorFactory(),
+                FieldBehaviorFactoryChanged, FieldBehaviorFactoryCoerceCallback));
 
         public INZazuWpfFieldBehaviorFactory FieldBehaviorFactory
         {
@@ -133,24 +135,10 @@ namespace NZazu
             InitializeComponent();
         }
 
-        private readonly ContentControl _layout = new ContentControl {Focusable = false};
+        private ContentControl Layout { get { return this; } }
         private void InitializeComponent()
         {
-            Focusable = false;
-
-            var scrollViewer = new ScrollViewer
-            {
-                Focusable = false,
-                CanContentScroll = true,
-                VerticalScrollBarVisibility = ScrollBarVisibility.Auto,
-                HorizontalScrollBarVisibility = ScrollBarVisibility.Auto,
-                VerticalContentAlignment = VerticalAlignment.Top,
-                HorizontalContentAlignment = HorizontalAlignment.Left
-            };
-            scrollViewer.Content = _layout;
-
-            AddChild(scrollViewer);
-
+            Focusable = false,
             LostFocus += (s, e) => ApplyChanges();
         }
 
@@ -200,7 +188,7 @@ namespace NZazu
             AttachBehavior(formDefinition, fieldBehaviorFactory);
 
             var layout = resolveLayout.Resolve(formDefinition.Layout);
-            layout.DoLayout(_layout, _fields.Values, resolveLayout);
+            layout.DoLayout(Layout, _fields.Values, resolveLayout);
 
             this.SetFieldValues(FormData.Values);
         }

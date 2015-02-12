@@ -12,6 +12,6 @@ using System.Windows.Markup;
                                       // app, or any theme specific resource dictionaries)
 )]
 
-[assembly: XmlnsPrefix("http://schemas.nzazu.com/wpf/xaml/nzazu", "nzazu")]
+[assembly: XmlnsPrefix("http://schemas.nzazu.com/wpf/xaml/nzazu", "nz")]
 [assembly: XmlnsDefinition("http://schemas.nzazu.com/wpf/xaml/nzazu", "NZazu")]
 
