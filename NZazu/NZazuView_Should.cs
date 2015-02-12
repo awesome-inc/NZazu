@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -261,33 +262,43 @@ namespace NZazu
         }
 
         [Test]
-        [Description("In real-time scenarios try to preserve formdat when formdefinition changed only marginally")]
-        public void Try_to_reapply_Formdata_if_FormDefinition_changed()
+        [NUnit.Framework.Description("In real-time scenarios try to preserve formdata when formdefinition changed only marginally")]
+        public void Preserve_Formdata_if_FormDefinition_changed()
         {
             const string key = "name";
             const string value = "John";
 
             var fieldDefinition = new FieldDefinition { Key = key, Type = "string", Prompt = "Name" };
-            var formDefinition = new FormDefinition { Fields = new[] { fieldDefinition } };
+            var initialFormDefinition = new FormDefinition { Fields = new[] { fieldDefinition } };
             var formData = new FormData(new Dictionary<string, string> { { key, value } });
 
-            var sut = new NZazuView { FormDefinition = formDefinition, FormData = formData };
+            var sut = new NZazuView { FormDefinition = initialFormDefinition, FormData = formData };
 
             sut.FormData.Should().Be(formData);
             var actual = sut.GetFieldValues();
             formData.Values.ShouldBeEquivalentTo(actual);
 
             fieldDefinition.Prompt = "Login";
-            sut.FormDefinition = formDefinition;
+            var changedFormDefinition = new FormDefinition {Fields = new[] {fieldDefinition}};
 
-            sut.FormData.Should().Be(formData);
+            // it is ugly to attach to depProperty.changed. It goes like this
+            // https://social.msdn.microsoft.com/Forums/vstudio/en-US/262df30c-8383-4d5c-8d76-7b8e2cea51de/how-do-you-attach-a-change-event-to-a-dependency-property?forum=wpf
+            var dpDescriptor = DependencyPropertyDescriptor.FromProperty(NZazuView.FormDefinitionProperty, typeof(NZazuView));
+            var formDefinitionChanged = false;
+            EventHandler handler = (sender, args) => { formDefinitionChanged = true; };
+            dpDescriptor.AddValueChanged(sut, handler);
+            try { sut.FormDefinition = changedFormDefinition; }
+            finally { dpDescriptor.RemoveValueChanged(sut, handler); }            
+
+            formDefinitionChanged.Should().BeTrue();
+
             actual = sut.GetFieldValues();
-            formData.Values.ShouldBeEquivalentTo(actual);
+            actual.ShouldBeEquivalentTo(formData.Values);
         }
 
 
         [Test]
-        [Description("In real-time scenarios try to preserve formdat when formdefinition changed only marginally")]
+        [NUnit.Framework.Description("In real-time scenarios try to preserve formdat when formdefinition changed only marginally")]
         public void Throw_KeyNotFoundException_On_GetField_For_Wrong_Key()
         {
             const string key = "key";
@@ -309,11 +320,13 @@ namespace NZazu
             const string value = "value";
 
             // lets mock the behavior
-            var behaviorDefinition=new BehaviorDefinition { Name = "Empty" };
+            var behaviorDefinition = new BehaviorDefinition { Name = "Empty" };
             var behavior = Substitute.For<INZazuWpfFieldBehavior>();
             var fieldDefinition = new FieldDefinition
             {
-                Key = key, Type = "string", Prompt = "Name",
+                Key = key,
+                Type = "string",
+                Prompt = "Name",
                 Behavior = behaviorDefinition
             };
             var formDefinition = new FormDefinition { Fields = new[] { fieldDefinition } };

@@ -131,7 +131,12 @@ namespace NZazu
         {
             InitializeComponent();
 
-            LostFocus += (s, e) => FormData = GetFieldValues();
+            LostFocus += (s, e) => UpdateFormData();
+        }
+
+        private void UpdateFormData()
+        {
+            FormData = GetFieldValues();
         }
 
         public INZazuWpfField GetField(string key)
@@ -174,6 +179,8 @@ namespace NZazu
 
             var layout = resolveLayout.Resolve(formDefinition.Layout);
             layout.DoLayout(Layout, _fields.Values, resolveLayout);
+
+            this.SetFieldValues(FormData.Values);
         }
 
         private void CreateFields(FormDefinition formDefinition, INZazuWpfFieldFactory fieldFactory)
