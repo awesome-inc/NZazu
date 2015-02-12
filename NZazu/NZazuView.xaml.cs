@@ -131,10 +131,10 @@ namespace NZazu
         {
             InitializeComponent();
 
-            LostFocus += (s, e) => UpdateFormData();
+            LostFocus += (s, e) => ApplyChanges();
         }
 
-        private void UpdateFormData()
+        public void ApplyChanges()
         {
             FormData = GetFieldValues();
         }
