@@ -39,5 +39,12 @@ namespace NZazu.Fields
             sut.StringValue = "foobar";
             sut.StringValue.Should().BeNull();
         }
+
+        [Test]
+        public void Not_be_Editable()
+        {
+            var sut = new NZazuLabelField("test");
+            sut.IsEditable.Should().BeFalse();
+        }
     }
 }
