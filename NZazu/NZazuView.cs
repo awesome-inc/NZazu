@@ -138,7 +138,7 @@ namespace NZazu
         private ContentControl Layout { get { return this; } }
         private void InitializeComponent()
         {
-            Focusable = false,
+            Focusable = false;
             LostFocus += (s, e) => ApplyChanges();
         }
 
