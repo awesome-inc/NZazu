@@ -11,7 +11,7 @@
     <UserControl.Resources>
         <nZazuFiddle:FormDataConverter x:Key="DataConverter"/>
     </UserControl.Resources>
-    <avalonedit:TextEditor Grid.Row="1" x:Name="TextEditor">
+    <avalonedit:TextEditor x:Name="TextEditor">
         <i:Interaction.Behaviors>
             <nZazuFiddle:AvalonEditBehaviour 
                 GiveMeTheText="{Binding Data, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, 
