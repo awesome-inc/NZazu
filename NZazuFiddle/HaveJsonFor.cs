@@ -1,4 +1,3 @@
-using System;
 using Caliburn.Micro;
 using Newtonsoft.Json;
 
@@ -20,11 +19,7 @@ namespace NZazuFiddle
                     Model = JsonConvert.DeserializeObject<T>(value);
                     JsonError = null;
                 }
-                catch (JsonReaderException ex)
-                {
-                    JsonError = String.Format("Error in line {0}, position {1}. Path: {2}",
-                        ex.LineNumber, ex.LinePosition, ex.Path);
-                }
+                catch (JsonException ex) { JsonError = ex.Message; }
             }
         }
 
