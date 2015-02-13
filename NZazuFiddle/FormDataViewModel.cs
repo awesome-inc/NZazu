@@ -25,8 +25,9 @@ namespace NZazuFiddle
             set
             {
                 if (Equals(value, _data)) return;
-                _data = value;
+                _data = value ?? new FormData();
                 NotifyOfPropertyChange();
+                NotifyOfPropertyChange("Json");
                 if (!_inHandle) _events.PublishOnUIThread(_data);
             }
         }
