@@ -4,7 +4,7 @@ using NZazu.Contracts;
 
 namespace NZazuFiddle
 {
-    public class FormDataViewModel : Screen, IFormDataViewModel
+    public class FormDataViewModel : HaveJsonFor<FormData>, IFormDataViewModel
     {
         private readonly IEventAggregator _events;
         private FormData _data;
@@ -38,5 +38,7 @@ namespace NZazuFiddle
             try { Data = formData; }
             finally { _inHandle = false; } 
         }
+
+        public override FormData Model { get { return Data; } set { Data = value; } }
     }
 }

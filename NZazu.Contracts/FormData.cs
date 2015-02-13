@@ -5,12 +5,8 @@ using System.Linq;
 namespace NZazu.Contracts
 {
     // NOTE: Equals should have GetHashCode. However, we do not want to use FormData as keys in Dictionaries etc.
-#pragma warning disable 659
-    public interface IHaveFormData
-    {
-    }
-
-    public class FormData : IEquatable<FormData>, IHaveFormData
+    #pragma warning disable 659
+    public class FormData : IEquatable<FormData>
     {
         public Dictionary<string, string> Values { get; private set; }
 

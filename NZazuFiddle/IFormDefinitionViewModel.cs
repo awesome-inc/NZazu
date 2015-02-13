@@ -1,6 +1,10 @@
-﻿namespace NZazuFiddle
+﻿using NZazu.Contracts;
+
+namespace NZazuFiddle
 {
-    public interface IFormDefinitionViewModel : IHaveFormDefinition
+    public interface IFormDefinitionViewModel 
+        : IHaveFormDefinition
+        , IHaveJsonFor<FormDefinition>
     {
     }
 }

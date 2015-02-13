@@ -102,23 +102,26 @@
       <Link>Properties\VersionInfo.g.cs</Link>
     </Compile>
     <Compile Include="AvalonEditBehaviour.cs" />
+    <Compile Include="FormDataValidationRule.cs" />
     <Compile Include="FormDataView.xaml.cs">
       <DependentUpon>FormDataView.xaml</DependentUpon>
     </Compile>
     <Compile Include="FormDataViewModel.cs" />
-    <Compile Include="FormDefinitionConverter.cs" />
-    <Compile Include="FormDataConverter.cs" />
+    <Compile Include="FormDefinitionValidationRule.cs" />
     <Compile Include="FormDefinitionView.xaml.cs">
       <DependentUpon>FormDefinitionView.xaml</DependentUpon>
     </Compile>
     <Compile Include="FormDefinitionViewModel.cs" />
+    <Compile Include="HaveJsonFor.cs" />
     <Compile Include="IFormDataViewModel.cs" />
     <Compile Include="IFormDefinitionViewModel.cs" />
     <Compile Include="IHaveFormData.cs" />
     <Compile Include="IHaveFormDefinition.cs" />
+    <Compile Include="IHaveJson.cs" />
     <Compile Include="IPreviewViewModel.cs" />
     <Compile Include="ISample.cs" />
     <Compile Include="IShell.cs" />
+    <Compile Include="JsonValidationRule.cs" />
     <Compile Include="NZazuAutoCompletion.cs" />
     <Compile Include="NzazuCompletionData.cs" />
     <Compile Include="PreviewView.xaml.cs">
@@ -149,6 +152,7 @@
       <DependentUpon>ShellView.xaml</DependentUpon>
     </Compile>
     <Compile Include="ShellViewModel.cs" />
+    <Compile Include="SimpleEditor.cs" />
     <Compile Include="TextEditorExtensions.cs" />
     <Page Include="FormDataView.xaml">
       <SubType>Designer</SubType>
@@ -200,6 +204,9 @@
       <Project>{E1D0442F-73BD-443D-895B-4650270D2580}</Project>
       <Name>NZazu</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\error.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.build\build.targets" />

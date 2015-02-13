@@ -6,7 +6,7 @@ using Action = System.Action;
 
 namespace NZazuFiddle
 {
-    public class FormDefinitionViewModel : Screen, IFormDefinitionViewModel
+    public class FormDefinitionViewModel : HaveJsonFor<FormDefinition>, IFormDefinitionViewModel
     {
         private readonly IEventAggregator _events;
         private FormDefinition _definition;
@@ -30,6 +30,7 @@ namespace NZazuFiddle
                 if (Equals(value, _definition)) return;
                 _definition = value;
                 NotifyOfPropertyChange();
+                NotifyOfPropertyChange("Json");
                 if (value == null || _inHandle) return;
                 Safe(() => _events.PublishOnUIThread(_definition), "Could not set form definition");
             }
@@ -49,5 +50,6 @@ namespace NZazuFiddle
             catch (Exception ex) { Trace.TraceWarning("{0}: {1}", couldNot, ex.Message); }
         }
 
+        public override FormDefinition Model { get { return Definition; } set { Definition = value; } }
     }
 }

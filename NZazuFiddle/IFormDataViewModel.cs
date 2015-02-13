@@ -1,6 +1,8 @@
-﻿namespace NZazuFiddle
+﻿using NZazu.Contracts;
+
+namespace NZazuFiddle
 {
-    public interface IFormDataViewModel : IHaveFormData
+    public interface IFormDataViewModel : IHaveFormData, IHaveJsonFor<FormData>
     {
     }
 }
