@@ -18,6 +18,7 @@ namespace NZazuFiddle
 
         public SimpleEditor()
         {
+            Encoding = System.Text.Encoding.UTF8;
             LostFocus += UpdateText;
         }
 
