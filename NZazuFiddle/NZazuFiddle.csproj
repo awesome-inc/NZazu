@@ -139,6 +139,7 @@
     <Compile Include="AppBootstrapper.cs" />
     <Compile Include="IFiddle.cs" />
     <Compile Include="Samples\BehaviorSample.cs" />
+    <Compile Include="Samples\FocusSample.cs" />
     <Compile Include="Samples\IHaveSample.cs" />
     <Compile Include="Samples\MixedGroupLayout.cs" />
     <Compile Include="Samples\PrimitivesSample.cs" />

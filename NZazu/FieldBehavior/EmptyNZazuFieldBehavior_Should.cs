@@ -33,13 +33,13 @@ namespace NZazu.FieldBehavior
         [Test]
         public void Do_Nothing()
         {
-            var ctrl = Substitute.For<Control>();
+            var field = Substitute.For<INZazuWpfField>();
             var sut = new EmptyNZazuFieldBehavior();
 
-            sut.AttachTo(ctrl);
+            sut.AttachTo(field);
             sut.Detach();
 
-            ctrl.ReceivedCalls().Should().BeEmpty();
+            field.ReceivedCalls().Should().BeEmpty();
         }
     }
 }

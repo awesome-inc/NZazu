@@ -57,6 +57,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Extensions\FieldExtensions.cs" />
+    <Compile Include="Extensions\FocusExtensions.cs" />
     <Compile Include="FieldBehavior\BehaviorExtender.cs" />
     <Compile Include="FieldBehavior\EmptyNZazuFieldBehavior.cs" />
     <Compile Include="FieldBehavior\EmptyNZazuFieldBehavior_Should.cs" />

@@ -1,10 +1,8 @@
-﻿using System.Windows.Controls;
-
-namespace NZazu
+﻿namespace NZazu
 {
     public interface INZazuWpfFieldBehavior
     {
-        void AttachTo(Control valueControl);
+        void AttachTo(INZazuWpfField field);
         void Detach();
     }
 }

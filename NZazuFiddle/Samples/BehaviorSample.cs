@@ -63,9 +63,10 @@ namespace NZazuFiddle.Samples
             private Control _control;
             private KeyEventHandler _handler;
 
-            public void AttachTo(Control valueControl)
+            public void AttachTo(INZazuWpfField field)
             {
-                if (valueControl == null) throw new ArgumentNullException("valueControl");
+                if (field == null) throw new ArgumentNullException("field");
+                var valueControl = field.ValueControl;
 
                 _control = valueControl;
 

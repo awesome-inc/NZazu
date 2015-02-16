@@ -1,7 +1,9 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using NZazu.Contracts;
 using NZazu.Contracts.Checks;
 using NZazu.Extensions;
@@ -30,6 +32,7 @@ namespace NZazu
             var view = (NZazuView)d;
             var formDefinition = (FormDefinition)e.NewValue;
             view.UpdateFields(formDefinition, view.FieldFactory, view.FieldBehaviorFactory, view.ResolveLayout);
+            view.TrySetFocusOn(formDefinition.FocusOn);
         }
 
         // ############# FieldFactory
@@ -151,10 +154,15 @@ namespace NZazu
         public INZazuWpfField GetField(string key)
         {
             INZazuWpfField field;
-            if (!_fields.TryGetValue(key, out field)
-                && !_groupFields.TryGetValue(key, out field))
-                throw new KeyNotFoundException();
-            return field;
+            if (TryGetField(key, out field))
+                return field;
+            throw new KeyNotFoundException();
+        }
+
+        public bool TryGetField(string key, out INZazuWpfField field)
+        {
+            return _fields.TryGetValue(key, out field)
+                   || _groupFields.TryGetValue(key, out field);
         }
 
         public Dictionary<string, string> GetFieldValues()
@@ -195,6 +203,20 @@ namespace NZazu
             this.SetFieldValues(FormData.Values);
         }
 
+        public bool TrySetFocusOn(string focusOn)
+        {
+            INZazuWpfField field;
+            if (String.IsNullOrWhiteSpace(focusOn) || !TryGetField(focusOn, out field)) return false;
+
+            var control = field.ValueControl;
+            if (control == null) return false;
+
+            control.SetFocus();
+            control.DelayedFocus();
+
+            return true;
+        }
+
         private void CreateFields(FormDefinition formDefinition, INZazuWpfFieldFactory fieldFactory)
         {
             formDefinition.Fields.ToList().ForEach(f =>
@@ -232,7 +254,7 @@ namespace NZazu
                 var field = GetField(fieldDefinition.Key) as NZazuField;
                 if (field == null) return;
 
-                behavior.AttachTo(field.ValueControl);
+                behavior.AttachTo(field);
                 field.Behavior = behavior;
             }
         }

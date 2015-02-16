@@ -1,14 +1,14 @@
 using System;
-using System.Windows.Controls;
 
 namespace NZazu.FieldBehavior
 {
     internal class EmptyNZazuFieldBehavior : NZazuFieldBehavior
     {
-        public override void AttachTo(Control valueControl)
+        public override void AttachTo(INZazuWpfField field)
         {
-            if (valueControl == null) throw new ArgumentNullException("valueControl");
+            if (field == null) throw new ArgumentNullException("field");
         }
+
         public override void Detach() { }
     }
 }

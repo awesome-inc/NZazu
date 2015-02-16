@@ -13,6 +13,9 @@ namespace NZazu
         IResolveLayout ResolveLayout { get; set; }
 
         INZazuWpfField GetField(string key);
+        bool TryGetField(string key, out INZazuWpfField field);
+        bool TrySetFocusOn(string key);
+
         Dictionary<string, string> GetFieldValues();
         void ApplyChanges();
 
