@@ -19,7 +19,13 @@ namespace NZazu
         {
             var stringValue = Convert.ToString(value);
             var vr = _check.Validate(stringValue, cultureInfo);
-            return new ValidationResult(vr.IsValid, vr.Error);
+
+            var error = vr.Error;
+            var exception = error as Exception;
+            if (exception != null)
+                error = exception.Message;
+
+            return new ValidationResult(vr.IsValid, error);
         }
     }
 }
