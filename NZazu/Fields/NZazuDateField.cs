@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -21,17 +22,20 @@ namespace NZazu.Fields
 
         protected override void SetStringValue(string value)
         {
-            try
+            var parsed = false;
+            var result = new DateTime();
+
+            if (!String.IsNullOrWhiteSpace(value))
             {
-                if (String.IsNullOrWhiteSpace(DateFormat))
-                    Value = DateTime.Parse(value, FormatProvider);
-                else
-                    Value = DateTime.ParseExact(value, DateFormat, FormatProvider);
+                const DateTimeStyles dateTimeStyles = DateTimeStyles.AssumeLocal;
+                parsed = String.IsNullOrWhiteSpace(DateFormat) 
+                    ? DateTime.TryParse(value, FormatProvider, dateTimeStyles, out result) 
+                    : DateTime.TryParseExact(value, DateFormat, FormatProvider, dateTimeStyles, out result);
             }
-            catch (FormatException)
-            {
+            if (parsed)
+                Value = result;
+            else
                 Value = null;
-            }
         }
 
         protected override string GetStringValue()

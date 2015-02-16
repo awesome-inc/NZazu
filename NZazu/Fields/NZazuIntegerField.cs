@@ -19,9 +19,11 @@ namespace NZazu.Fields
 
         protected override void SetStringValue(string value)
         {
-            int i;
-            if (int.TryParse(value, out i)) Value = i;
-            else Value = null;
+            int result;
+            if (!String.IsNullOrWhiteSpace(value) && int.TryParse(value, out result)) 
+                Value = result;
+            else 
+                Value = null;
         }
 
         protected override string GetStringValue()
