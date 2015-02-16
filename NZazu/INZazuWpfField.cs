@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Windows.Controls;
+using NZazu.Contracts.Checks;
 
 namespace NZazu
 {
@@ -13,7 +14,7 @@ namespace NZazu
 
         bool IsEditable { get; }
         string StringValue { get; set; }
-        void Validate();
+        ValueCheckResult Validate();
 
         Control LabelControl { get; }
         Control ValueControl { get; }

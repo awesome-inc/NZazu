@@ -4,10 +4,11 @@ namespace NZazu.Contracts.Checks
 {
     public class RequiredCheck : IValueCheck
     {
-        public void Validate(string value, IFormatProvider formatProvider = null)
+        public static readonly ValueCheckResult FieldMissing = new ValueCheckResult(false, new ArgumentException("This field is required."));
+
+        public ValueCheckResult Validate(string value, IFormatProvider formatProvider = null)
         {
-            if (String.IsNullOrWhiteSpace(value))
-                throw new ValidationException("This field is required.");
+            return String.IsNullOrWhiteSpace(value) ? FieldMissing : ValueCheckResult.Success;
         }
     }
 }

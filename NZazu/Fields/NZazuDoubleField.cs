@@ -69,15 +69,12 @@ namespace NZazu.Fields
 
         protected override void SetStringValue(string value)
         {
-            try
-            {
-                var date = double.Parse(value, FormatProvider);
-                Value = date;
-            }
-            catch (FormatException)
-            {
+            double result;
+            if (!String.IsNullOrWhiteSpace(value) &&
+                double.TryParse(value, NumberStyles.Number, FormatProvider, out result))
+                Value = result;
+            else
                 Value = null;
-            }
         }
 
         protected override string GetStringValue()

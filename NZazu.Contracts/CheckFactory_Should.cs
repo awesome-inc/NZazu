@@ -88,10 +88,7 @@ namespace NZazu.Contracts
             var actual = (StringRegExCheck) check;
             actual.Should().NotBeNull();
             actual.Validate(pattern);
-
-            actual.Invoking(x => x.Validate("foobar"))
-                .ShouldThrow<ValidationException>()
-                .WithMessage(hint);
+            actual.ShouldFailWith<ArgumentException>("foobar", ex => ex.Message == hint);
 
             checkDefinition.Values = null;
             sut.Invoking(x => x.CreateCheck(checkDefinition))

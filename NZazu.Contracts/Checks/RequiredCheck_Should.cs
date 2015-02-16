@@ -1,4 +1,5 @@
 ﻿using System;
+using FluentAssertions;
 using NUnit.Framework;
 
 namespace NZazu.Contracts.Checks
@@ -12,13 +13,12 @@ namespace NZazu.Contracts.Checks
         {
             var check = new RequiredCheck();
 
-            Assert.Throws<ValidationException>(() => check.Validate(null));
-            Assert.Throws<ValidationException>(() => check.Validate(String.Empty));
-            Assert.Throws<ValidationException>(() => check.Validate("\t\r\n"));
+            check.ShouldFailWith<ArgumentException>(null);
+            check.ShouldFailWith<ArgumentException>(String.Empty);
+            check.ShouldFailWith<ArgumentException>("\t\r\n");
+            check.ShouldFailWith<ArgumentException>(" ");
 
-            Assert.Throws<ValidationException>(() => check.Validate(" "));
-
-            check.Validate("a");
+            check.Validate("a").IsValid.Should().BeTrue();
         }
     }
 }

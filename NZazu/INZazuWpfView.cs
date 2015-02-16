@@ -16,7 +16,6 @@ namespace NZazu
         Dictionary<string, string> GetFieldValues();
         void ApplyChanges();
 
-        /// <exception cref="ValidationException"></exception>
-        void Validate();
+        ValueCheckResult Validate();
     }
 }

@@ -12,7 +12,7 @@ namespace NZazu.Fields
         protected override void SetStringValue(string value)
         {
             bool b;
-            if (bool.TryParse(value, out b))
+            if (!String.IsNullOrWhiteSpace(value) && bool.TryParse(value, out b))
                 Value = b;
             else
                 Value = null;

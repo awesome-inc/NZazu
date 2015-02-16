@@ -43,6 +43,7 @@
       <HintPath>..\packages\NUnit.2.6.4\lib\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Xml" />
@@ -65,8 +66,8 @@
     <Compile Include="Checks\StringLengthCheck_Should.cs" />
     <Compile Include="Checks\StringRegExCheck_Should.cs" />
     <Compile Include="Checks\AggregateCheck.cs" />
-    <Compile Include="Checks\ValidationException.cs" />
-    <Compile Include="Checks\ValidationException_Should.cs" />
+    <Compile Include="Checks\TestExtensions.cs" />
+    <Compile Include="Checks\ValueCheckResult.cs" />
     <Compile Include="DictionaryExtensions.cs" />
     <Compile Include="DictionaryExtensions_Should.cs" />
     <Compile Include="FieldDefinition.cs" />

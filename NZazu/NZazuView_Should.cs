@@ -8,6 +8,7 @@ using FluentAssertions;
 using NSubstitute;
 using NUnit.Framework;
 using NZazu.Contracts;
+using NZazu.Contracts.Checks;
 using NZazu.Extensions;
 
 namespace NZazu
@@ -247,6 +248,7 @@ namespace NZazu
         {
             var field = Substitute.For<INZazuWpfField>();
             field.Key.ReturnsForAnyArgs("test");
+            field.Validate().Returns(ValueCheckResult.Success);
             var fieldFactory = Substitute.For<INZazuWpfFieldFactory>();
             var layout = Substitute.For<IResolveLayout>();
             fieldFactory.CreateField(Arg.Any<FieldDefinition>()).Returns(field);

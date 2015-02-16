@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using NZazu.Contracts.Checks;
 
 namespace NZazu.Extensions
 {
@@ -24,15 +23,8 @@ namespace NZazu.Extensions
 
         public static bool IsValid(this INZazuWpfView view)
         {
-            try
-            {
-                view.Validate();
-                return true;
-            }
-            catch (ValidationException)
-            {
-                return false;
-            }
+            if (view == null) throw new ArgumentNullException("view");
+            return view.Validate().IsValid;
         }
     }
 }

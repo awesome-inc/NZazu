@@ -61,7 +61,7 @@ namespace NZazu.Extensions
         public void Return_False_If_Validate_Has_Exception()
         {
             var view = Substitute.For<INZazuWpfView>();
-            view.WhenForAnyArgs(zazuView => zazuView.Validate()).Do(info => { throw new ValidationException("I am invalid"); });
+            view.Validate().Returns(new ValueCheckResult(false, "I am invalid"));
 
             view.IsValid().Should().BeFalse();
 
@@ -72,6 +72,7 @@ namespace NZazu.Extensions
         public void Return_True_If_Validate()
         {
             var view = Substitute.For<INZazuWpfView>();
+            view.Validate().Returns(ValueCheckResult.Success);
 
             view.IsValid().Should().BeTrue();
 
