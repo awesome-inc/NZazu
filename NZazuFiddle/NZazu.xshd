@@ -26,6 +26,7 @@
       <Word>"Behavior"</Word>
       <Word>"Name"</Word>
       <Word>"Layout"</Word>
+      <Word>"FocusOn"</Word>
     </Keywords>
     <Keywords color="Literals">
       <Word>null</Word>

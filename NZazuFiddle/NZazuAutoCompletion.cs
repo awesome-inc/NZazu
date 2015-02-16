@@ -73,6 +73,7 @@ namespace NZazuFiddle
         {
             new NzazuCompletionData { Text = "Format", Replacement = "{ \"Format\": \"\" }", Description = "The field format"},
             new NzazuCompletionData { Text = "Height", Replacement = "{ \"Height\": \"64.3\" }", Description = "The field's height in pixel"},
+            new NzazuCompletionData { Text = "Width", Replacement = "{ \"Width\": \"64.3\" }", Description = "The field's width in pixel"},
             new NzazuCompletionData { Text = "ShowFormatBar", Replacement = "{ \"ShowFormatBar\": \"True\" }", Description = "Adds an optional richtext format bar for text selections"}
         });
 
