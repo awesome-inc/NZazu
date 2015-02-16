@@ -51,6 +51,7 @@ namespace NZazuFiddle.Samples
                             Description = "Check to grant administrator permissions",
                             Checks = new []
                             {
+                                new CheckDefinition { Type = "required" }, 
                                 new CheckDefinition { Type = "regex", Values= new []{"Must be Checked or Unchecked", "True", "False"}}
                             }
                         },
