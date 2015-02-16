@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Globalization;
 using FluentAssertions;
 using NSubstitute;
 using NUnit.Framework;
@@ -31,6 +32,13 @@ namespace NZazu
             result = sut.Validate(input, cultureInfo);
             result.IsValid.Should().BeFalse();
             result.ErrorContent.Should().Be(error.Error);
+
+            var exception = new ArgumentException("test");
+            error = new ValueCheckResult(false, exception);
+            check.Validate(input, cultureInfo).Returns(error);
+            result = sut.Validate(input, cultureInfo);
+            result.IsValid.Should().BeFalse();
+            result.ErrorContent.Should().Be(exception.Message);
         }
     }
 }
