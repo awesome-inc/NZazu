@@ -371,5 +371,33 @@ namespace NZazu
             var actual = view.GetFieldValues();
             actual.ShouldBeEquivalentTo(expected);
         }
+
+        [Test]
+        public void Focus_specified_field_after_changing_FormDefinition()
+        {
+            var view = new NZazuView
+            {
+                FormDefinition = new FormDefinition
+                {
+                    Fields = new[]
+                    {
+                        new FieldDefinition {Key = "other", Type = "string"},
+                        new FieldDefinition {Key = "focus", Type = "string"}
+                    },
+                    FocusOn = "focus"
+                }
+            };
+
+            var otherCtrl = view.GetField("other").ValueControl;
+            var keyCtrl = view.GetField("focus").ValueControl;
+
+            otherCtrl.IsFocused.Should().BeFalse();
+            keyCtrl.IsFocused.Should().BeTrue();
+
+            view.TrySetFocusOn("other").Should().BeTrue();
+
+            keyCtrl.IsFocused.Should().BeFalse();
+            otherCtrl.IsFocused.Should().BeTrue();
+        }
     }
 }

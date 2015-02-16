@@ -62,6 +62,16 @@ namespace NZazuFiddle
             }
         }
 
+        protected override void OnActivate()
+        {
+            base.OnActivate();
+
+            var view = GetView() as PreviewView;
+            if (view == null) return;
+
+            view.View.TrySetFocusOn(Definition.FocusOn);
+        }
+
         public void Handle(FormDefinition definition)
         {
             Definition = definition;
