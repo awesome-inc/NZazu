@@ -24,7 +24,7 @@ namespace NZazuFiddle
             {
                 if (Equals(value, _samples)) return;
                 _samples.Clear();
-                if (value != null) _samples.AddRange(value.OrderBy(s => s.Name));
+                if (value != null) _samples.AddRange(value);
                 SelectedSample = _samples.FirstOrDefault();
             }
         }
