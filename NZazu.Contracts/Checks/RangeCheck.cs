@@ -17,6 +17,7 @@ namespace NZazu.Contracts.Checks
 
         public void Validate(string value, IFormatProvider formatProvider = null)
         {
+            if (String.IsNullOrWhiteSpace(value)) return;
             try
             {
                 var safeFormatProvider = formatProvider ?? CultureInfo.InvariantCulture;

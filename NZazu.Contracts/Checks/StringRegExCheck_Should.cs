@@ -1,3 +1,4 @@
+using System;
 using System.Text.RegularExpressions;
 using NUnit.Framework;
 
@@ -8,10 +9,14 @@ namespace NZazu.Contracts.Checks
     public class StringRegExCheck_Should
     {
         [Test]
-        public void IsValid_NullString_Should_Throw_ValidationException()
+        public void IsValid_null_or_whitespace_should_pass()
         {
             var check = new StringRegExCheck("test", new Regex(@"^.*$", RegexOptions.IgnoreCase));
-            Assert.Throws<ValidationException>(() => check.Validate(null));
+
+            check.Validate(null);
+            check.Validate(String.Empty);
+            check.Validate("\t\r\n");
+            check.Validate(" ");
         }
 
         [Test]
@@ -46,7 +51,6 @@ namespace NZazu.Contracts.Checks
             var twoDigits = new Regex(@"\d{2}");
             var check = new StringRegExCheck("Enter 2 chars or 2 digits", twoChars, twoDigits);
 
-            Assert.Throws<ValidationException>(() => check.Validate(null));
             Assert.Throws<ValidationException>(() => check.Validate("a"));
 
             // false OR false => false
