@@ -50,12 +50,12 @@ namespace NZazu.Contracts.Checks
         }
 
         [Test]
-        public void Validate_Value_NullOrWhiteSpace_Throws_ValidationException()
+        public void Validate_Value_NullOrWhiteSpace_Passes()
         {
-            Assert.Throws<ValidationException>(() => _check.Validate(null));
-            Assert.Throws<ValidationException>(() => _check.Validate(String.Empty));
-            Assert.Throws<ValidationException>(() => _check.Validate("\t\r\n"));
-            Assert.Throws<ValidationException>(() => _check.Validate(" "));
+            _check.Validate(null);
+            _check.Validate(String.Empty);
+            _check.Validate("\t\r\n");
+            _check.Validate(" ");
         }
 
         [Test]

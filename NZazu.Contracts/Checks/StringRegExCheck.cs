@@ -20,7 +20,7 @@ namespace NZazu.Contracts.Checks
 
         public void Validate(string value, IFormatProvider formatProvider = null)
         {
-            if (value == null) throw new ValidationException(_hint);
+            if (String.IsNullOrWhiteSpace(value)) return;
             var anyMatch = _regex.Any(r => r.IsMatch(value));
             if (!anyMatch) throw new ValidationException(_hint);
         }

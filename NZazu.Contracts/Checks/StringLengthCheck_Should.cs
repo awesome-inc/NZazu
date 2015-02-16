@@ -47,10 +47,13 @@ namespace NZazu.Contracts.Checks
         }
 
         [Test]
-        public void IsValid_HandleNullString_AsLengthZero()
+        public void IsValid_NullOrWhitespace_passes()
         {
-            var check = new StringLengthCheck(0, 1);
+            var check = new StringLengthCheck(3, 4);
             check.Validate(null);
+            check.Validate(String.Empty);
+            check.Validate("\t\r\n");
+            check.Validate(" ");
         }
 
         [Test]
