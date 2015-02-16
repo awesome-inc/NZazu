@@ -341,7 +341,7 @@ namespace NZazu
             var sut = new NZazuView { FieldBehaviorFactory = behaviorFactory, FormDefinition = formDefinition, FormData = formData };
             sut.Should().NotBeNull();
 
-            behavior.ReceivedWithAnyArgs().AttachTo(Arg.Any<Control>());
+            behavior.ReceivedWithAnyArgs().AttachTo(Arg.Any<INZazuWpfField>());
             behavior.ClearReceivedCalls();
 
             // now lets create a ner form and detach the existing behavior

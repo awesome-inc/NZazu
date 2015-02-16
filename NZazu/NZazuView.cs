@@ -232,7 +232,7 @@ namespace NZazu
                 var field = GetField(fieldDefinition.Key) as NZazuField;
                 if (field == null) return;
 
-                behavior.AttachTo(field.ValueControl);
+                behavior.AttachTo(field);
                 field.Behavior = behavior;
             }
         }

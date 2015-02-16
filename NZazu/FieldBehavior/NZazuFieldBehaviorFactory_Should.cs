@@ -1,6 +1,5 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
-using System.Windows.Controls;
 using FluentAssertions;
 using NUnit.Framework;
 using NZazu.Contracts;
@@ -40,7 +39,7 @@ namespace NZazu.FieldBehavior
         [ExcludeFromCodeCoverage]
         private class SimpleInterfaceImplementation : INZazuWpfFieldBehavior
         {
-            public void AttachTo(Control valueControl) { }
+            public void AttachTo(INZazuWpfField field) { }
             public void Detach() { }
         }
 
