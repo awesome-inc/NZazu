@@ -9,20 +9,14 @@
                    ToolTip="{Binding ElementName=placeholder, Path=AdornedElement.(Validation.Errors)[0].ErrorContent}" />
 
             <Popup AllowsTransparency="True" HorizontalAlignment="Right" 
-                HorizontalOffset="0" VerticalOffset="0" PopupAnimation="Fade" Placement="Bottom"
-                PlacementTarget="{Binding ElementName=errorBorder}"
+                PopupAnimation="Fade" 
+                PlacementTarget="{Binding ElementName=errorBorder}" 
+                Placement="Bottom" VerticalOffset="6" HorizontalOffset="0"
                 IsOpen="{Binding ElementName=placeholder, Path=AdornedElement.IsFocused, Mode=OneWay}">
-                <Popup.Resources>
-                    <Brush x:Key="ErrorBrush">#E0FF6655</Brush>
-                </Popup.Resources>
-                <StackPanel Orientation="Vertical">
-                    <Polygon Points="12,4 16,0 20,4" Fill="{StaticResource ErrorBrush}"
-                        Stroke="{StaticResource ErrorBrush}" StrokeThickness="1"/>
-                    <Border Background="{StaticResource ErrorBrush}" CornerRadius="4" Padding="4">
-                        <TextBlock Text="{Binding ElementName=placeholder, Path=AdornedElement.(Validation.Errors)[0].ErrorContent}"
-                            VerticalAlignment="Center"/>
-                    </Border>
-                </StackPanel>
+                <Border Background="#E0FF6655" CornerRadius="4" Padding="4">
+                    <TextBlock Text="{Binding ElementName=placeholder, Path=AdornedElement.(Validation.Errors)[0].ErrorContent}"
+                        VerticalAlignment="Center"/>
+                </Border>
             </Popup>
         </Grid>
     </ControlTemplate>
