@@ -22,38 +22,38 @@ namespace NZazu.Contracts.Checks
         }
 
         [Test]
-        public void IsValid_BelowMin_Throws_ValidationException()
+        public void IsValid_BelowMin_fails()
         {
             var _check = new StringLengthCheck(4, 6);
             var candidate = new String('A', _check.MinimumLength - 1);
-            Assert.Throws<ValidationException>(() => _check.Validate(candidate));
+            _check.ShouldFailWith<ArgumentException>(candidate);
         }
 
         [Test]
-        public void IsValid_AboveMax_Throws_ValidationException()
+        public void IsValid_AboveMax_fails()
         {
             var _check = new StringLengthCheck(4, 6);
             var candidate = new String('A', _check.MaximumLength + 1);
-            Assert.Throws<ValidationException>(() => _check.Validate(candidate));
+            _check.ShouldFailWith<ArgumentException>(candidate);
         }
 
         [Test]
-        public void IsValid_InsideMinMax_Should_Pass()
+        public void IsValid_InsideMinMax_passes()
         {
             var _check = new StringLengthCheck(4, 6);
             Enumerable.Range(_check.MinimumLength, _check.MaximumLength - _check.MinimumLength)
                 .Select(val => new String('A', val))
-                .ToList().ForEach(candidate => _check.Validate(candidate));
+                .ToList().ForEach(_check.ShouldPass);
         }
 
         [Test]
         public void IsValid_NullOrWhitespace_passes()
         {
             var check = new StringLengthCheck(3, 4);
-            check.Validate(null);
-            check.Validate(String.Empty);
-            check.Validate("\t\r\n");
-            check.Validate(" ");
+            check.ShouldPass(null);
+            check.ShouldPass(String.Empty);
+            check.ShouldPass("\t\r\n");
+            check.ShouldPass(" ");
         }
 
         [Test]

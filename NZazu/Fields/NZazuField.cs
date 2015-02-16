@@ -42,17 +42,18 @@ namespace NZazu.Fields
             Settings = new Dictionary<string, string>();
         }
 
-        public void Validate()
+        public ValueCheckResult Validate()
         {
             var bindingExpression = ContentProperty != null 
                 ? ValueControl.GetBindingExpression(ContentProperty) 
                 : null;
             if (bindingExpression != null && bindingExpression.HasError) 
-                throw new ValidationException("UI has errors. Value could not be converted");
+                return new ValueCheckResult(false, "UI has errors. Value could not be converted");
 
-            if (Check == null) return;
+            if (Check == null) return ValueCheckResult.Success;
+
             // TODO: how to customize the culture?
-            Check.Validate(StringValue, FormatProvider);
+            return Check.Validate(StringValue, FormatProvider);
         }
 
         protected internal IValueCheck Check { get; set; }

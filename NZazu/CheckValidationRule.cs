@@ -17,16 +17,9 @@ namespace NZazu
 
         public override ValidationResult Validate(object value, CultureInfo cultureInfo)
         {
-            try
-            {
-                var stringValue = Convert.ToString(value);
-                _check.Validate(stringValue, cultureInfo);
-                return new ValidationResult(true, null);
-            }
-            catch (ValidationException ex)
-            {
-                return new ValidationResult(false, ex.Message);
-            }
+            var stringValue = Convert.ToString(value);
+            var vr = _check.Validate(stringValue, cultureInfo);
+            return new ValidationResult(vr.IsValid, vr.Error);
         }
     }
 }

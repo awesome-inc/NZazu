@@ -1,4 +1,4 @@
-﻿using NZazu.Contracts.Checks;
+﻿using System;
 
 namespace NZazu.Extensions
 {
@@ -6,16 +6,8 @@ namespace NZazu.Extensions
     {
         public static bool IsValid(this INZazuWpfField field)
         {
-            try
-            {
-                field.Validate();
-                return true;
-            }
-            catch (ValidationException)
-            {
-                return false;
-            }
+            if (field == null) throw new ArgumentNullException("field");
+            return field.Validate().IsValid;
         }
-
     }
 }

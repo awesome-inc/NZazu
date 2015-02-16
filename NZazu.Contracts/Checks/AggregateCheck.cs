@@ -15,9 +15,10 @@ namespace NZazu.Contracts.Checks
             _checks = (checks ?? Enumerable.Empty<IValueCheck>()).ToList();
         }
 
-        public void Validate(string value, IFormatProvider formatProvider)
+        public ValueCheckResult Validate(string value, IFormatProvider formatProvider)
         {
-            _checks.ForEach(c => c.Validate(value, formatProvider));
+            var invalid = _checks.Select(c => c.Validate(value, formatProvider)).FirstOrDefault(vr => !vr.IsValid);
+            return invalid ?? ValueCheckResult.Success;
         }
     }
 }

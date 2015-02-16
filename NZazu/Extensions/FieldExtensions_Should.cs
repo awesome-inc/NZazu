@@ -13,7 +13,7 @@ namespace NZazu.Extensions
         public void Return_False_If_Validate_Has_Exception()
         {
             var field = Substitute.For<INZazuWpfField>();
-            field.WhenForAnyArgs(f => f.Validate()).Do(info => { throw new ValidationException("I am invalid"); });
+            field.Validate().Returns(new ValueCheckResult(false, "I am invalid"));
 
             field.IsValid().Should().BeFalse();
 
@@ -24,6 +24,7 @@ namespace NZazu.Extensions
         public void Return_True_If_Validate()
         {
             var field = Substitute.For<INZazuWpfField>();
+            field.Validate().Returns(ValueCheckResult.Success);
 
             field.IsValid().Should().BeTrue();
 

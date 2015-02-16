@@ -25,19 +25,23 @@ namespace NZazu.Contracts.Checks
         }
 
         [Test]
-        public void Validate_BelowMin_Throws_ValidationException()
+        public void Validate_BelowMin_fails()
         {
             var cultureInfo = CultureInfo.InvariantCulture;
             var value = (_check.Minimum - 1).ToString(cultureInfo);
-            Assert.Throws<ValidationException>(() => _check.Validate(value, cultureInfo));
+            var vr = _check.Validate(value, cultureInfo);
+            vr.IsValid.Should().BeFalse();
+            vr.Error.Should().BeOfType<ArgumentOutOfRangeException>();
         }
 
         [Test]
-        public void Validate_AboveMax_Throws_ValidationException()
+        public void Validate_AboveMax_fails()
         {
             var cultureInfo = CultureInfo.InvariantCulture;
             var value = (_check.Maximum + 1).ToString(cultureInfo);
-            Assert.Throws<ValidationException>(() => _check.Validate(value, cultureInfo));
+            var vr = _check.Validate(value, cultureInfo);
+            vr.IsValid.Should().BeFalse();
+            vr.Error.Should().BeOfType<ArgumentOutOfRangeException>();
         }
 
         [Test]
@@ -46,34 +50,24 @@ namespace NZazu.Contracts.Checks
             var cultureInfo = CultureInfo.InvariantCulture;
             Enumerable.Range((int) _check.Minimum, (int)(_check.Maximum - _check.Minimum))
                     .Select(val => val.ToString(cultureInfo))
-                    .ToList().ForEach(val => _check.Validate(val, cultureInfo));
+                    .ToList().ForEach(val => _check.Validate(val, cultureInfo).IsValid.Should().BeTrue());
         }
 
         [Test]
         public void Validate_Value_NullOrWhiteSpace_Passes()
         {
-            _check.Validate(null);
-            _check.Validate(String.Empty);
-            _check.Validate("\t\r\n");
-            _check.Validate(" ");
+            _check.ShouldPass(null);
+            _check.ShouldPass(String.Empty);
+            _check.ShouldPass("\t\r\n");
+            _check.ShouldPass(" ");
         }
 
         [Test]
-        public void Validate_Should_Rethrow_Overflow_as_ValidationException()
+        public void Validate_NaN_fails()
         {
-            const long longValue = int.MaxValue + 1L;
-            var value = longValue.ToString(CultureInfo.InvariantCulture);
-            Assert.Throws<ValidationException>(() => _check.Validate(value));
-        }
-
-        [Test]
-        public void Validate_Rethrows_OverflowException_as_ValidationException()
-        {
-            var culture = CultureInfo.InvariantCulture;
-            var value = double.MaxValue.ToString(culture);
-            _check.Invoking(x => x.Validate(value, culture))
-                .ShouldThrow<ValidationException>()
-                .WithInnerException<OverflowException>();
+            var vr = _check.Validate("not a number");
+            vr.IsValid.Should().BeFalse();
+            vr.Error.Should().BeOfType<ArgumentException>();
         }
     }
 }

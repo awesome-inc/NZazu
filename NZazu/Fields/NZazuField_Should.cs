@@ -110,13 +110,13 @@ namespace NZazu.Fields
         }
 
         [Test]
-        public void Pass_Validation_To_Checks_And_Rethrow_Exception()
+        public void Pass_Validation_To_Checks_and_returns_first_error_if_any()
         {
             var check = Substitute.For<IValueCheck>();
-            check.When(x => x.Validate(Arg.Any<string>(), Arg.Any<IFormatProvider>())).Do(x => { throw new ValidationException("test"); });
+            check.Validate(Arg.Any<string>(), Arg.Any<IFormatProvider>()).Returns(new ValueCheckResult(false, "test"));
 
             var sut = new NZazuDummyField("test") { Description = "description", Check =  check };
-            new Action(sut.Validate).Invoking(a => a()).ShouldThrow<ValidationException>();
+            sut.Validate().IsValid.Should().BeFalse();
             check.ReceivedWithAnyArgs().Validate(Arg.Any<string>());
         }
 
@@ -172,7 +172,7 @@ namespace NZazu.Fields
         {
             // but we need a dummy content enabled field -> no content, no validation
             var check = Substitute.For<IValueCheck>();
-            check.When(x => x.Validate(Arg.Any<string>())).Do(x => { throw new ValidationException("test"); });
+            check.Validate(Arg.Any<string>()).Returns(new ValueCheckResult(false,"test"));
 
             var sut = new NZazuField_With_Description_As_Content_Property("test") 
                 { Description = "description", Check = check };

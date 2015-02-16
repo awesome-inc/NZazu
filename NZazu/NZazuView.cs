@@ -3,6 +3,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using NZazu.Contracts;
+using NZazu.Contracts.Checks;
 using NZazu.Extensions;
 using NZazu.FieldBehavior;
 using NZazu.Fields;
@@ -164,9 +165,10 @@ namespace NZazu
         }
 
 
-        public void Validate()
+        public ValueCheckResult Validate()
         {
-            _fields.Values.ToList().ForEach(f => f.Validate());
+            var result = _fields.Values.Select(f => f.Validate()).FirstOrDefault(vr => !vr.IsValid);
+            return result ?? ValueCheckResult.Success;
         }
 
         private readonly IDictionary<string, INZazuWpfField> _fields = new Dictionary<string, INZazuWpfField>();
