@@ -26,6 +26,17 @@ namespace NZazu.FieldBehavior
             Instance.RegisterType(name, type);
         }
 
+        // even more comfort and type-safety
+        public static void Register<TBehavior>(string name) where TBehavior : INZazuWpfFieldBehavior
+        {
+            Instance.RegisterType(name, typeof(TBehavior));
+        }
+
+        public static bool IsRegistered(string name)
+        {
+            return Instance._fieldTypes.ContainsKey(name);
+        }
+
         // wrapper for comfort. instance method set to private
         public static void Unregister(string name)
         {
@@ -139,17 +150,30 @@ namespace NZazu.FieldBehavior
                 // thread-safe?
                 lock (new object())
                 {
-                    BehaviorExtender.Register(name, type);
+                    Register(name, type);
                     try
                     {
-                        var behaviors = BehaviorExtender.GetBehaviors().ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
+                        var behaviors = GetBehaviors().ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
                         behaviors[name].Should().Be(type);
                         behaviors["Empty"].Should().Be(typeof (EmptyNZazuFieldBehavior));
                     }
                     finally
                     {
-                        BehaviorExtender.Unregister(name);
+                        Unregister(name);
                     }
+                }
+            }
+
+            [Test]
+            public void Support_type_safe_generic_registration()
+            {
+                lock (new object())
+                {
+                    const string name = "dummy";
+                    IsRegistered(name).Should().BeFalse();
+                    Register<DummyFieldBehavior>(name);
+                    try { IsRegistered(name).Should().BeTrue(); }
+                    finally { Unregister(name); }
                 }
             }
 

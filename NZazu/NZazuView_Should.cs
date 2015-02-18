@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows;
-using System.Windows.Controls;
 using FluentAssertions;
 using NSubstitute;
 using NUnit.Framework;
@@ -341,7 +340,7 @@ namespace NZazu
             var sut = new NZazuView { FieldBehaviorFactory = behaviorFactory, FormDefinition = formDefinition, FormData = formData };
             sut.Should().NotBeNull();
 
-            behavior.ReceivedWithAnyArgs().AttachTo(Arg.Any<INZazuWpfField>());
+            behavior.Received().AttachTo(Arg.Any<INZazuWpfField>(), sut);
             behavior.ClearReceivedCalls();
 
             // now lets create a ner form and detach the existing behavior
