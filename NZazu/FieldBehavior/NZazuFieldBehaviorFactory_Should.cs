@@ -39,7 +39,7 @@ namespace NZazu.FieldBehavior
         [ExcludeFromCodeCoverage]
         private class SimpleInterfaceImplementation : INZazuWpfFieldBehavior
         {
-            public void AttachTo(INZazuWpfField field) { }
+            public void AttachTo(INZazuWpfField field, INZazuWpfView view) { }
             public void Detach() { }
         }
 
@@ -54,7 +54,7 @@ namespace NZazu.FieldBehavior
             behavior.Should().BeAssignableTo<SimpleInterfaceImplementation>();
 
             // just to get code coverage
-            behavior.AttachTo(null);
+            behavior.AttachTo(null, null);
             behavior.Detach();
         }
 

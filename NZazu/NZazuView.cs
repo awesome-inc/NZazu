@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Input;
 using NZazu.Contracts;
 using NZazu.Contracts.Checks;
 using NZazu.Extensions;
@@ -254,7 +253,7 @@ namespace NZazu
                 var field = GetField(fieldDefinition.Key) as NZazuField;
                 if (field == null) return;
 
-                behavior.AttachTo(field);
+                behavior.AttachTo(field, this);
                 field.Behavior = behavior;
             }
         }

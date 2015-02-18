@@ -17,7 +17,7 @@ namespace NZazuFiddle.Samples
         public BehaviorSample() : base(40)
         {
             // register behavior
-            BehaviorExtender.Register("OpenUrlOnStringEnter", typeof(OpenUrlOnStringEnterBehavior));
+            BehaviorExtender.Register<OpenUrlOnStringEnterBehavior>("OpenUrlOnStringEnter");
 
             Sample = new SampleViewModel
             {
@@ -63,7 +63,7 @@ namespace NZazuFiddle.Samples
             private Control _control;
             private KeyEventHandler _handler;
 
-            public void AttachTo(INZazuWpfField field)
+            public void AttachTo(INZazuWpfField field, INZazuWpfView view)
             {
                 if (field == null) throw new ArgumentNullException("field");
                 var valueControl = field.ValueControl;

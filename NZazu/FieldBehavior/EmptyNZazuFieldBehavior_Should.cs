@@ -1,5 +1,4 @@
 using System;
-using System.Windows.Controls;
 using FluentAssertions;
 using NSubstitute;
 using NUnit.Framework;
@@ -21,25 +20,29 @@ namespace NZazu.FieldBehavior
         }
 
         [Test]
-        public void Throw_Excepion_If_No_Control_Provided()
+        public void Have_guard_clauses_on_ctor()
         {
             var sut = new EmptyNZazuFieldBehavior();
 
-            new Action(() => sut.AttachTo(null))
-                .Invoking(a => a())
-                .ShouldThrow<ArgumentNullException>();
+            var field = Substitute.For<INZazuWpfField>();
+            var view = Substitute.For<INZazuWpfView>();
+            sut.Invoking(x => x.AttachTo(null,null)).ShouldThrow<ArgumentNullException>();
+            sut.Invoking(x => x.AttachTo(field, null)).ShouldThrow<ArgumentNullException>();
+            sut.Invoking(x => x.AttachTo(null, view)).ShouldThrow<ArgumentNullException>();
         }
 
         [Test]
         public void Do_Nothing()
         {
             var field = Substitute.For<INZazuWpfField>();
+            var view = Substitute.For<INZazuWpfView>();
             var sut = new EmptyNZazuFieldBehavior();
 
-            sut.AttachTo(field);
+            sut.AttachTo(field, view);
             sut.Detach();
 
             field.ReceivedCalls().Should().BeEmpty();
+            view.ReceivedCalls().Should().BeEmpty();
         }
     }
 }
