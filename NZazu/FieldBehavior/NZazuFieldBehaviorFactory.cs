@@ -11,9 +11,9 @@ namespace NZazu.FieldBehavior
             if (behaviorDefinition == null) throw new ArgumentNullException("behaviorDefinition");
             if (string.IsNullOrWhiteSpace(behaviorDefinition.Name)) throw new ArgumentException("BehaviorDefinition.Name should be set");
 
-            var fieldTypes = BehaviorExtender.Instance.Behaviors.ToArray();
+            var behaviorTypes = BehaviorExtender.Instance.Behaviors.ToArray();
             var behaviorType =
-                fieldTypes.FirstOrDefault(
+                behaviorTypes.FirstOrDefault(
                     kvp => string.Compare(kvp.Key, behaviorDefinition.Name, StringComparison.Ordinal) == 0).Value;
 
             if (behaviorType == null) return null;

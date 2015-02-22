@@ -281,7 +281,7 @@ namespace NZazu
             formData.Values.ShouldBeEquivalentTo(actual);
 
             fieldDefinition.Prompt = "Login";
-            var changedFormDefinition = new FormDefinition {Fields = new[] {fieldDefinition}};
+            var changedFormDefinition = new FormDefinition { Fields = new[] { fieldDefinition } };
 
             // it is ugly to attach to depProperty.changed. It goes like this
             // https://social.msdn.microsoft.com/Forums/vstudio/en-US/262df30c-8383-4d5c-8d76-7b8e2cea51de/how-do-you-attach-a-change-event-to-a-dependency-property?forum=wpf
@@ -290,7 +290,7 @@ namespace NZazu
             EventHandler handler = (sender, args) => { formDefinitionChanged = true; };
             dpDescriptor.AddValueChanged(sut, handler);
             try { sut.FormDefinition = changedFormDefinition; }
-            finally { dpDescriptor.RemoveValueChanged(sut, handler); }            
+            finally { dpDescriptor.RemoveValueChanged(sut, handler); }
 
             formDefinitionChanged.Should().BeTrue();
 
@@ -316,36 +316,36 @@ namespace NZazu
         }
 
         [Test]
-        public void Attach_And_Detach_Behavior_To_Field()
+        public void Attach_And_Detach_Behavior_To_Fields()
         {
-            const string key = "key";
-            const string value = "value";
-
             // lets mock the behavior
             var behaviorDefinition = new BehaviorDefinition { Name = "Empty" };
             var behavior = Substitute.For<INZazuWpfFieldBehavior>();
-            var fieldDefinition = new FieldDefinition
+
+            var fields = new[]
             {
-                Key = key,
-                Type = "string",
-                Prompt = "Name",
-                Behavior = behaviorDefinition
+                new FieldDefinition { Key = "a", Type = "string", Behavior = behaviorDefinition },
+                new FieldDefinition { Key = "b", Type = "group", 
+                    Fields = new []
+                    {
+                        new FieldDefinition { Key= "b.a", Type = "string", Behavior = behaviorDefinition}
+                    }}
             };
-            var formDefinition = new FormDefinition { Fields = new[] { fieldDefinition } };
-            var formData = new FormData(new Dictionary<string, string> { { key, value } });
+            var formDefinition = new FormDefinition { Fields = fields };
+
             var behaviorFactory = Substitute.For<INZazuWpfFieldBehaviorFactory>();
             behaviorFactory.CreateFieldBehavior(Arg.Any<BehaviorDefinition>()).ReturnsForAnyArgs(behavior);
 
-            // amke sure an attach happens
-            var sut = new NZazuView { FieldBehaviorFactory = behaviorFactory, FormDefinition = formDefinition, FormData = formData };
+            // make sure an attach happens
+            var sut = new NZazuView { FieldBehaviorFactory = behaviorFactory, FormDefinition = formDefinition };
             sut.Should().NotBeNull();
 
-            behavior.Received().AttachTo(Arg.Any<INZazuWpfField>(), sut);
+            behavior.Received(2).AttachTo(Arg.Any<INZazuWpfField>(), sut);
             behavior.ClearReceivedCalls();
 
             // now lets create a ner form and detach the existing behavior
-            sut.FormDefinition = new FormDefinition { Fields = new[] { fieldDefinition } };
-            behavior.ReceivedWithAnyArgs().Detach();
+            sut.FormDefinition = new FormDefinition { Fields = fields };
+            behavior.ReceivedWithAnyArgs(2).Detach();
         }
 
         [Test]
