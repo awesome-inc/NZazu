@@ -329,14 +329,14 @@ namespace NZazu
                 Key = key,
                 Type = "string",
                 Prompt = "Name",
-                Behavior = behaviorDefinition
+                Behavior = behaviorDefinition,
             };
             var formDefinition = new FormDefinition { Fields = new[] { fieldDefinition } };
             var formData = new FormData(new Dictionary<string, string> { { key, value } });
             var behaviorFactory = Substitute.For<INZazuWpfFieldBehaviorFactory>();
             behaviorFactory.CreateFieldBehavior(Arg.Any<BehaviorDefinition>()).ReturnsForAnyArgs(behavior);
 
-            // amke sure an attach happens
+            // make sure an attach happens
             var sut = new NZazuView { FieldBehaviorFactory = behaviorFactory, FormDefinition = formDefinition, FormData = formData };
             sut.Should().NotBeNull();
 
@@ -346,6 +346,12 @@ namespace NZazu
             // now lets create a ner form and detach the existing behavior
             sut.FormDefinition = new FormDefinition { Fields = new[] { fieldDefinition } };
             behavior.ReceivedWithAnyArgs().Detach();
+        }
+
+        [Test]
+        public void Attach_and_Detach_behaviors_to_nested_fields()
+        {
+            throw new NotImplementedException();
         }
 
         [Test]

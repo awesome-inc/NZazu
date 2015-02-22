@@ -245,29 +245,38 @@ namespace NZazu
 
         private void AttachBehavior(FormDefinition formDefinition, INZazuWpfFieldBehaviorFactory fieldBehaviorFactory)
         {
-            foreach (var fieldDefinition in formDefinition.Fields)
-            {
-                if (fieldDefinition.Behavior == null || string.IsNullOrWhiteSpace(fieldDefinition.Behavior.Name)) continue; // lets ship "nothing"
-
-                var behavior = fieldBehaviorFactory.CreateFieldBehavior(fieldDefinition.Behavior);
-                var field = GetField(fieldDefinition.Key) as NZazuField;
-                if (field == null) return;
-
-                behavior.AttachTo(field, this);
-                field.Behavior = behavior;
-            }
+            formDefinition.Fields.ToList().ForEach(f => AttachBehavior(fieldBehaviorFactory, f));
         }
+
+        private void AttachBehavior(INZazuWpfFieldBehaviorFactory fieldBehaviorFactory, FieldDefinition fieldDefinition)
+        {
+            if (fieldDefinition.Behavior == null || string.IsNullOrWhiteSpace(fieldDefinition.Behavior.Name)) return;
+
+            var behavior = fieldBehaviorFactory.CreateFieldBehavior(fieldDefinition.Behavior);
+            INZazuWpfField field;
+            if (!TryGetField(fieldDefinition.Key, out field)) return;
+            behavior.AttachTo(field, this);
+            field.Behavior = behavior;
+
+            if (fieldDefinition.Fields == null) return;
+            fieldDefinition.Fields.ToList().ForEach(f => AttachBehavior(fieldBehaviorFactory, f));
+        }
+
 
         private void DetachBehavior()
         {
-            if (_fields == null) return;
+            DetachBehavior(_fields.Values);
+            DetachBehavior(_groupFields.Values);
+        }
 
-            foreach (var field in _fields)
+        private static void DetachBehavior(IEnumerable<INZazuWpfField> fields)
+        {
+            foreach (var field in fields)
             {
                 // detach field
-                if (field.Value == null || field.Value.Behavior == null) return;
-                field.Value.Behavior.Detach();
-                field.Value.Behavior = null;
+                if (field == null || field.Behavior == null) return;
+                field.Behavior.Detach();
+                field.Behavior = null;
             }
         }
     }
