@@ -160,13 +160,12 @@ namespace NZazu
 
         public bool TryGetField(string key, out INZazuWpfField field)
         {
-            return _fields.TryGetValue(key, out field)
-                   || _groupFields.TryGetValue(key, out field);
+            return _fields.TryGetValue(key, out field);
         }
 
         public Dictionary<string, string> GetFieldValues()
         {
-            return (_fields.Concat(_groupFields))
+            return _fields
                 .Where(f => f.Value.IsEditable)
                 .ToDictionary(f => f.Key, f => f.Value.StringValue);
         }
@@ -179,7 +178,6 @@ namespace NZazu
         }
 
         private readonly IDictionary<string, INZazuWpfField> _fields = new Dictionary<string, INZazuWpfField>();
-        private readonly IDictionary<string, INZazuWpfField> _groupFields = new Dictionary<string, INZazuWpfField>();
 
         private void UpdateFields(
             FormDefinition formDefinition,
@@ -197,7 +195,9 @@ namespace NZazu
             AttachBehavior(formDefinition, fieldBehaviorFactory);
 
             var layout = resolveLayout.Resolve(formDefinition.Layout);
-            layout.DoLayout(Layout, _fields.Values, resolveLayout);
+
+            var parentFields = FormDefinition.Fields.Select(fd => GetField(fd.Key));
+            layout.DoLayout(Layout, parentFields, resolveLayout);
 
             this.SetFieldValues(FormData.Values);
         }
@@ -231,7 +231,7 @@ namespace NZazu
             if (groupField == null) return;
             foreach (var field in groupField.Fields)
             {
-                _groupFields.Add(field.Key, field);
+                _fields.Add(field.Key, field);
                 AddGroupFieldKeys(field as INZazuWpfGroupField);
             }
         }
@@ -240,7 +240,6 @@ namespace NZazu
         {
             DetachBehavior();
             _fields.Clear();
-            _groupFields.Clear();
         }
 
         private void AttachBehavior(FormDefinition formDefinition, INZazuWpfFieldBehaviorFactory fieldBehaviorFactory)
@@ -250,13 +249,14 @@ namespace NZazu
 
         private void AttachBehavior(INZazuWpfFieldBehaviorFactory fieldBehaviorFactory, FieldDefinition fieldDefinition)
         {
-            if (fieldDefinition.Behavior == null || string.IsNullOrWhiteSpace(fieldDefinition.Behavior.Name)) return;
-
-            var behavior = fieldBehaviorFactory.CreateFieldBehavior(fieldDefinition.Behavior);
-            INZazuWpfField field;
-            if (!TryGetField(fieldDefinition.Key, out field)) return;
-            behavior.AttachTo(field, this);
-            field.Behavior = behavior;
+            if (fieldDefinition.Behavior != null && !string.IsNullOrWhiteSpace(fieldDefinition.Behavior.Name))
+            {
+                var behavior = fieldBehaviorFactory.CreateFieldBehavior(fieldDefinition.Behavior);
+                INZazuWpfField field;
+                if (!TryGetField(fieldDefinition.Key, out field)) return;
+                behavior.AttachTo(field, this);
+                field.Behavior = behavior;
+            }
 
             if (fieldDefinition.Fields == null) return;
             fieldDefinition.Fields.ToList().ForEach(f => AttachBehavior(fieldBehaviorFactory, f));
@@ -266,15 +266,13 @@ namespace NZazu
         private void DetachBehavior()
         {
             DetachBehavior(_fields.Values);
-            DetachBehavior(_groupFields.Values);
         }
 
         private static void DetachBehavior(IEnumerable<INZazuWpfField> fields)
         {
             foreach (var field in fields)
             {
-                // detach field
-                if (field == null || field.Behavior == null) return;
+                if (field == null || field.Behavior == null) continue;
                 field.Behavior.Detach();
                 field.Behavior = null;
             }

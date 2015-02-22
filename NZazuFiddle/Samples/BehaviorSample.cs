@@ -14,7 +14,8 @@ namespace NZazuFiddle.Samples
     // ReSharper disable once ClassNeverInstantiated.Global
     class BehaviorSample : SampleBase
     {
-        public BehaviorSample() : base(40)
+        public BehaviorSample()
+            : base(40)
         {
             // register behavior
             BehaviorExtender.Register<OpenUrlOnStringEnterBehavior>("OpenUrlOnStringEnter");
@@ -46,18 +47,33 @@ namespace NZazuFiddle.Samples
                                 new CheckDefinition { Type = "required" }
                             },
                             Behavior = new BehaviorDefinition { Name = "OpenUrlOnStringEnter" },
+                        },
+                        new FieldDefinition
+                        {
+                            Key ="group",
+                            Type = "group",
+                            Fields = new []
+                            {
+                                new FieldDefinition
+                                {
+                                    Key = "nested.comment", Type ="string",
+                                    Behavior = new BehaviorDefinition { Name = "OpenUrlOnStringEnter" }
+                                }
+                            }
                         }
                     }
                 },
                 new Dictionary<string, string>
                 {
-                    { "comment", "type in a url like http://google.de and open it with STRG+Enter" }, 
+                    { "comment", "type in a url like http://google.de and open it with Ctrl+Enter" }, 
+                    { "nested.comment", "type in a url like http://google.de and open it with Ctrl+Enter" }, 
                 })
             };
         }
 
         #region behavior and behavior test
 
+        // ReSharper disable once ClassNeverInstantiated.Local
         private class OpenUrlOnStringEnterBehavior : INZazuWpfFieldBehavior
         {
             private Control _control;
