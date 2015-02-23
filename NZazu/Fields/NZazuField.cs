@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
@@ -81,6 +82,15 @@ namespace NZazu.Fields
             var width = GetSetting<double>("Width");
             if (width.HasValue)
                 control.MinWidth = control.MaxWidth = width.Value;
+
+            ApplyGenericSettings(control);
+        }
+
+        private void ApplyGenericSettings(Control control)
+        {
+            var controlSettings = Settings.Where(settings => control.CanSetProperty(settings.Key));
+            foreach (var setting in controlSettings)
+                control.SetProperty(setting.Key, setting.Value);
         }
 
         protected virtual Control DecorateValidation(Control control)

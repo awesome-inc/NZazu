@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using NZazu.Contracts;
+using NZazu.Fields;
 
 namespace NZazu.FieldBehavior
 {
@@ -23,9 +24,22 @@ namespace NZazu.FieldBehavior
         }
 
 
-        private INZazuWpfFieldBehavior Decorate(INZazuWpfFieldBehavior field, BehaviorDefinition behaviorDefinition)
+        private static INZazuWpfFieldBehavior Decorate(INZazuWpfFieldBehavior behavior, BehaviorDefinition behaviorDefinition)
         {
-            return field;
+            if (behavior == null) throw new ArgumentNullException("behavior");
+            if (behaviorDefinition == null) throw new ArgumentNullException("behaviorDefinition");
+
+            var settings = behaviorDefinition.Settings;
+            if (settings != null)
+            {
+                var behaviorSettings = settings.Where(setting => behavior.CanSetProperty(setting.Key));
+                foreach (var setting in behaviorSettings)
+                {
+                    behavior.SetProperty(setting.Key, setting.Value);
+                }
+            }
+
+            return behavior;
         }
     }
 }
