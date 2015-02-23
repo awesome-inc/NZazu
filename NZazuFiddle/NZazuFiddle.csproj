@@ -102,7 +102,6 @@
       <Link>Properties\VersionInfo.g.cs</Link>
     </Compile>
     <Compile Include="AvalonEditBehaviour.cs" />
-    <Compile Include="FormDataValidationRule.cs" />
     <Compile Include="FormDataView.xaml.cs">
       <DependentUpon>FormDataView.xaml</DependentUpon>
     </Compile>
