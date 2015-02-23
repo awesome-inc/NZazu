@@ -20,23 +20,19 @@ namespace NZazuFiddle
                 case "Checks\":": Checks.ForEach(data.Add); break;
                 case "Settings\":": Settings.ForEach(data.Add); break;
                 case "Format\":": Format.ForEach(data.Add); break;
-                case "Name\":": GetNames().ForEach(data.Add); break;
+                //case "Name\":": GetNames().ForEach(data.Add); break;
+                case "Behavior\":": GetBehaviors().ForEach(data.Add); break;
             }
         }
 
-        private static List<NzazuCompletionData> GetNames()
-        {
-            return GetBehaviours();
-        }
-
-        private static List<NzazuCompletionData> GetBehaviours()
+        private static List<NzazuCompletionData> GetBehaviors()
         {
             var behaviors = BehaviorExtender.GetBehaviors();
             return
                 behaviors.Select(kvp => new NzazuCompletionData
                 {
                     Text = kvp.Key, 
-                    Replacement = String.Format("\"{0}\"", kvp.Key),
+                    Replacement = String.Format("{{ \"Name\": \"{0}\"}}", kvp.Key),
                     Description = String.Format("Add behavior '{0}'", kvp.Key)
                 }).ToList();
         }

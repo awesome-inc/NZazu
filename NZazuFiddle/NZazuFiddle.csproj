@@ -106,7 +106,6 @@
       <DependentUpon>FormDataView.xaml</DependentUpon>
     </Compile>
     <Compile Include="FormDataViewModel.cs" />
-    <Compile Include="FormDefinitionValidationRule.cs" />
     <Compile Include="FormDefinitionView.xaml.cs">
       <DependentUpon>FormDefinitionView.xaml</DependentUpon>
     </Compile>
@@ -120,7 +119,6 @@
     <Compile Include="IPreviewViewModel.cs" />
     <Compile Include="ISample.cs" />
     <Compile Include="IShell.cs" />
-    <Compile Include="JsonValidationRule.cs" />
     <Compile Include="NZazuAutoCompletion.cs" />
     <Compile Include="NzazuCompletionData.cs" />
     <Compile Include="PreviewView.xaml.cs">

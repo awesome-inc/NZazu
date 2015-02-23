@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Text.RegularExpressions;
 using System.Windows.Controls;
 using System.Windows.Input;
 using FluentAssertions;
@@ -78,6 +79,14 @@ namespace NZazuFiddle.Samples
         {
             private Control _control;
             private KeyEventHandler _handler;
+            private Regex _regex = new Regex("^(http|https)://");
+
+            // ReSharper disable once UnusedMember.Local
+            public string UrlPattern
+            {
+                get { return _regex.ToString(); }
+                set { _regex = new Regex(value); }
+            }
 
             public void AttachTo(INZazuWpfField field, INZazuWpfView view)
             {
@@ -109,7 +118,7 @@ namespace NZazuFiddle.Samples
                 Process.Start(link);
             }
 
-            internal static string GetLinkAtPosition(string text, int position)
+            internal string GetLinkAtPosition(string text, int position)
             {
                 var spaceBefore = text.Substring(0, position).LastIndexOf(" ", StringComparison.Ordinal);
                 if (spaceBefore < 0) spaceBefore = 0;
@@ -122,7 +131,7 @@ namespace NZazuFiddle.Samples
                 var length = spaceAfter - spaceBefore;
                 if (length <= 10) return null;
                 var textUnderCursor = text.Substring(spaceBefore, length);
-                return textUnderCursor.StartsWith("http://") ? textUnderCursor : null;
+                return _regex.IsMatch(textUnderCursor) ? textUnderCursor : null;
             }
         }
 
@@ -140,8 +149,8 @@ namespace NZazuFiddle.Samples
             [TestCase("asdfklj asöfkdljsa fdöakfjl saöljad fösadfa http://google.de", 56, "http://google.de")]
             public void Extract_Url(string text, int position, string expected)
             {
-                var url = OpenUrlOnStringEnterBehavior.GetLinkAtPosition(text, position);
-
+                var sut = new OpenUrlOnStringEnterBehavior();
+                var url = sut.GetLinkAtPosition(text, position);
                 url.Should().Be(expected);
             }
         }
