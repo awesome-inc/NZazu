@@ -5,6 +5,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using System.Windows.Media;
 using FluentAssertions;
 using NSubstitute;
 using NUnit.Framework;
@@ -207,5 +208,46 @@ namespace NZazu.Fields
             sut.IsEditable.Should().BeTrue();
         }
 
+        [Test]
+        public void Respect_generic_settings()
+        {
+            var sut = new NZazuField_With_Description_As_Content_Property("test");
+
+            sut.Settings.Add("ContentStringFormat", "dddd – d - MMMM");
+            sut.Settings.Add("FontFamily", "Century Gothic");
+            sut.Settings.Add("FontWeight", "UltraBold");
+            sut.Settings.Add("FontSize", "24");
+            sut.Settings.Add("Foreground", "BlueViolet");
+            sut.Settings.Add("Margin", "1,2,3,4");
+            sut.Settings.Add("Name", "myControl");
+            sut.Settings.Add("Opacity", "0.75");
+            sut.Settings.Add("Padding", "2.5");
+            sut.Settings.Add("TabIndex", "42");
+            sut.Settings.Add("Uid", "myId");
+            sut.Settings.Add("Visibility", "Collapsed");
+            sut.Settings.Add("HorizontalAlignment", "Left");
+            sut.Settings.Add("VerticalAlignment", "Bottom");
+
+            var control = (ContentControl)sut.ValueControl;
+
+            control.FontFamily.ToString().Should().Be("Century Gothic");
+            control.FontWeight.Should().Be(FontWeights.UltraBold);
+            control.FontSize.Should().Be(24);
+
+            var brush = (SolidColorBrush)control.Foreground;
+            brush.Color.Should().Be(Colors.BlueViolet);
+
+            control.Margin.Should().Be(new Thickness(1,2,3,4));
+            control.Name.Should().Be("myControl");
+            control.Opacity.Should().Be(0.75);
+            control.Padding.Should().Be(new Thickness(2.5));
+            control.ContentStringFormat.Should().Be("dddd – d - MMMM");
+            control.TabIndex.Should().Be(42);
+            control.Uid.Should().Be("myId");
+            control.Visibility.Should().Be(Visibility.Collapsed);
+
+            control.HorizontalAlignment.Should().Be(HorizontalAlignment.Left);
+            control.VerticalAlignment.Should().Be(VerticalAlignment.Bottom);
+        }
     }
 }
