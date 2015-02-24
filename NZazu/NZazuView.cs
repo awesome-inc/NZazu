@@ -141,9 +141,6 @@ namespace NZazu
         private ContentControl Layout { get { return this; } }
         private void InitializeComponent()
         {
-            Focusable = false;
-            IsTabStop = false;
-
             Layout.Focusable = false;
             // cf.: http://compiledexperience.com/blog/posts/using-caliburn-micro-as-a-data-template-selector/
             Layout.IsTabStop = false;

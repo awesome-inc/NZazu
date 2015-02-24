@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows;
+using System.Windows.Controls;
 using FluentAssertions;
 using NSubstitute;
 using NUnit.Framework;
@@ -397,6 +398,22 @@ namespace NZazu
 
             keyCtrl.IsFocused.Should().BeFalse();
             otherCtrl.IsFocused.Should().BeTrue();
+        }
+
+        [Test]
+        public void Have_scrollbars()
+        {
+            var sut = new NZazuView();
+            sut.Should().BeAssignableTo<ScrollViewer>();
+
+            sut.IsTabStop.Should().BeFalse();
+            sut.Focusable.Should().BeFalse();
+
+            sut.VerticalContentAlignment.Should().Be(VerticalAlignment.Stretch);
+            sut.HorizontalContentAlignment.Should().Be(HorizontalAlignment.Stretch);
+
+            ScrollViewer.GetHorizontalScrollBarVisibility(sut).Should().Be(ScrollBarVisibility.Visible);
+            ScrollViewer.GetVerticalScrollBarVisibility(sut).Should().Be(ScrollBarVisibility.Visible);
         }
     }
 }
