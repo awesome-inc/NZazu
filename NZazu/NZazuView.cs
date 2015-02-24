@@ -11,7 +11,7 @@ using NZazu.Fields;
 
 namespace NZazu
 {
-    public class NZazuView : ContentControl, INZazuWpfView
+    public class NZazuView : ScrollViewer, INZazuWpfView
     {
         #region dependency properties
 
@@ -142,7 +142,18 @@ namespace NZazu
         private void InitializeComponent()
         {
             Focusable = false;
-            LostFocus += (s, e) => ApplyChanges();
+            IsTabStop = false;
+
+            Layout.Focusable = false;
+            // cf.: http://compiledexperience.com/blog/posts/using-caliburn-micro-as-a-data-template-selector/
+            Layout.IsTabStop = false;
+            Layout.VerticalContentAlignment = VerticalAlignment.Stretch;
+            Layout.HorizontalContentAlignment = HorizontalAlignment.Stretch;
+
+            SetHorizontalScrollBarVisibility(Layout, ScrollBarVisibility.Visible);
+            SetVerticalScrollBarVisibility(Layout, ScrollBarVisibility.Visible);
+
+            Layout.LostFocus += (s, e) => ApplyChanges();
         }
 
         public void ApplyChanges()
