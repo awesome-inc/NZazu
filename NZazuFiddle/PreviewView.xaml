@@ -7,8 +7,10 @@
              xmlns:nz="http://schemas.nzazu.com/wpf/xaml/nzazu"
              mc:Ignorable="d" 
              d:DataContext="{d:DesignInstance nZazuFiddle:PreviewViewModel}">
-    <nz:NZazuView x:Name="View" 
+    <ScrollViewer HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible">
+        <nz:NZazuView x:Name="View"
             FieldFactory="{Binding FieldFactory}"
             FormDefinition="{Binding Definition}" 
             FormData="{Binding Data, Mode=TwoWay}" />
+    </ScrollViewer>
 </UserControl>
