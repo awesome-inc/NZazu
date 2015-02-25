@@ -36,14 +36,16 @@ namespace NZazu.Contracts
         [Test]
         public void Implement_Equals_based_on_comparing_the_values_map()
         {
-            FormData formData1 = new Dictionary<string, string> { { "user", "John" } };
-            FormData formData2 = new Dictionary<string, string> { { "user", "John" } };
+            FormData formData1 = new Dictionary<string, string> { {"key1","value1"},{"key2","value2"} };
+            FormData formData2 = new Dictionary<string, string> { { "key2", "value2"},{"key1","value1"} };
 
             formData1.Equals(formData2).Should().BeTrue();
+            formData1.Equals((object) formData2).Should().BeTrue();
 
-            formData2.Values["user"] = "Jim";
+            formData2.Values["key1"] = "value2";
 
-            formData1.Should().NotBe(formData2);
+            formData1.Equals(formData2).Should().BeFalse();
+
         }
     }
 }
