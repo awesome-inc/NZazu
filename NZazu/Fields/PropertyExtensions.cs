@@ -1,6 +1,7 @@
 using System;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.Reflection;
 
 namespace NZazu.Fields
@@ -87,7 +88,7 @@ namespace NZazu.Fields
             {
                 var converter = TypeDescriptor.GetConverter(propInfo.PropertyType);
                 if (converter.CanConvertFrom(typeof(string)))
-                    return converter.ConvertFrom(propValue);
+                    return converter.ConvertFrom(null, CultureInfo.InvariantCulture, propValue);
                 return Convert.ChangeType(propValue, propInfo.PropertyType);
 
             }

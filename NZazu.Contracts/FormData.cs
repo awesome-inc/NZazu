@@ -31,7 +31,7 @@ namespace NZazu.Contracts
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
-            return Values.SequenceEqual(other.Values);
+            return Values.Equivalent(other.Values);
         }
 
         public override bool Equals(object obj)
