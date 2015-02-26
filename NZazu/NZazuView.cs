@@ -260,6 +260,8 @@ namespace NZazu
             if (fieldDefinition.Behavior != null && !string.IsNullOrWhiteSpace(fieldDefinition.Behavior.Name))
             {
                 var behavior = fieldBehaviorFactory.CreateFieldBehavior(fieldDefinition.Behavior);
+                if (behavior == null) return;
+
                 INZazuWpfField field;
                 if (!TryGetField(fieldDefinition.Key, out field)) return;
                 behavior.AttachTo(field, this);
