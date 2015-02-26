@@ -24,7 +24,7 @@ namespace NZazu.Contracts
 
         public static implicit operator Dictionary<string, string>(FormData formData)
         {
-            return formData.Values;
+            return formData.Values.ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
         }
 
         public bool Equals(FormData other)
