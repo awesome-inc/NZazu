@@ -4,6 +4,7 @@ using ICSharpCode.AvalonEdit.CodeCompletion;
 
 namespace NZazuFiddle
 {
+    // ReSharper disable once UnusedMember.Global
     public partial class FormDefinitionView
     {
         private CompletionWindow _completionWindow;
