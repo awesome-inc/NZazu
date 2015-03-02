@@ -13,6 +13,7 @@ namespace NZazuFiddle
         private FormData _data;
         private bool _inHandle;
         private INZazuWpfFieldFactory _fieldFactory;
+        private bool _isReadOnly;
 
         public PreviewViewModel(IEventAggregator events, 
             FormDefinition definition, FormData data, 
@@ -58,6 +59,17 @@ namespace NZazuFiddle
             {
                 if (Equals(value, _fieldFactory)) return;
                 _fieldFactory = value;
+                NotifyOfPropertyChange();
+            }
+        }
+
+        public bool IsReadOnly
+        {
+            get { return _isReadOnly; }
+            set
+            {
+                if (value.Equals(_isReadOnly)) return;
+                _isReadOnly = value;
                 NotifyOfPropertyChange();
             }
         }

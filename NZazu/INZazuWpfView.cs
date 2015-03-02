@@ -8,6 +8,7 @@ namespace NZazu
     {
         FormDefinition FormDefinition { get; set; }
         FormData FormData { get; set; }
+        bool IsReadOnly { get; set; }
             
         INZazuWpfFieldFactory FieldFactory { get; set; }
         IResolveLayout ResolveLayout { get; set; }

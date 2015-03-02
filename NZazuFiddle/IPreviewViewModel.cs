@@ -6,5 +6,6 @@ namespace NZazuFiddle
         : IHaveFormDefinition, IHaveFormData
     {
         INZazuWpfFieldFactory FieldFactory { get; }
+        bool IsReadOnly { get; set; }
     }
 }

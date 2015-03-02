@@ -415,5 +415,32 @@ namespace NZazu
             ScrollViewer.GetHorizontalScrollBarVisibility(sut).Should().Be(ScrollBarVisibility.Visible);
             ScrollViewer.GetVerticalScrollBarVisibility(sut).Should().Be(ScrollBarVisibility.Visible);
         }
+
+        [Test]
+        public void Support_IsReadOnly()
+        {
+            var sut = new NZazuView
+            {
+                FormDefinition = new FormDefinition
+                {
+                    Fields = new[]
+                    {
+                        new FieldDefinition {Key = "1", Type = "label"},
+                        new FieldDefinition {Key = "2", Type = "string"},
+                        new FieldDefinition {Key = "3", Type = "date"},
+                        new FieldDefinition {Key = "4", Type = "bool"},
+                        new FieldDefinition {Key = "5", Type = "double"},
+                        new FieldDefinition {Key = "6", Type = "int"},
+                    }
+                }
+            };
+
+            sut.IsReadOnly.Should().BeFalse();
+
+            sut.IsReadOnly = true;
+
+            var controls = sut.FormDefinition.Fields.Select(f => sut.GetField(f.Key));
+            controls.All(c => c.IsReadOnly()).Should().BeTrue();
+        }
     }
 }

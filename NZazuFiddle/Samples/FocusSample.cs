@@ -6,7 +6,7 @@ namespace NZazuFiddle.Samples
     // ReSharper disable once UnusedMember.Global
     class FocusSample : SampleBase
     {
-        public FocusSample() : base(50)
+        public FocusSample() : base(60)
         {
             Sample = new SampleViewModel
             {

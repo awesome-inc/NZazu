@@ -131,6 +131,23 @@ namespace NZazu
             set { SetValue(FormDataProperty, value); }
         }
 
+
+        public static readonly DependencyProperty IsReadOnlyProperty = DependencyProperty.Register(
+            "IsReadOnly", typeof (bool), typeof (NZazuView), new PropertyMetadata(default(bool), IsReadOnlyChanged));
+
+        private static void IsReadOnlyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var view = (NZazuView)d;
+            var isReadOnly = (bool)e.NewValue;
+            view.SetReadOnly(isReadOnly);
+        }
+
+        public bool IsReadOnly
+        {
+            get { return (bool) GetValue(IsReadOnlyProperty); }
+            set { SetValue(IsReadOnlyProperty, value); }
+        }
+
         #endregion
 
         public NZazuView()
@@ -178,11 +195,24 @@ namespace NZazu
                 .ToDictionary(f => f.Key, f => f.Value.StringValue);
         }
 
-
         public ValueCheckResult Validate()
         {
             var result = _fields.Values.Select(f => f.Validate()).FirstOrDefault(vr => !vr.IsValid);
             return result ?? ValueCheckResult.Success;
+        }
+
+        public bool TrySetFocusOn(string focusOn)
+        {
+            INZazuWpfField field;
+            if (String.IsNullOrWhiteSpace(focusOn) || !TryGetField(focusOn, out field)) return false;
+
+            var control = field.ValueControl;
+            if (control == null) return false;
+
+            control.SetFocus();
+            control.DelayedFocus();
+
+            return true;
         }
 
         private readonly IDictionary<string, INZazuWpfField> _fields = new Dictionary<string, INZazuWpfField>();
@@ -208,20 +238,14 @@ namespace NZazu
             layout.DoLayout(Layout, parentFields, resolveLayout);
 
             this.SetFieldValues(FormData.Values);
+
+            SetReadOnly(IsReadOnly);
         }
 
-        public bool TrySetFocusOn(string focusOn)
+        private void SetReadOnly(bool isReadOnly)
         {
-            INZazuWpfField field;
-            if (String.IsNullOrWhiteSpace(focusOn) || !TryGetField(focusOn, out field)) return false;
-
-            var control = field.ValueControl;
-            if (control == null) return false;
-
-            control.SetFocus();
-            control.DelayedFocus();
-
-            return true;
+            foreach (var field in _fields.Values)
+                field.SetReadOnly(isReadOnly);
         }
 
         private void CreateFields(FormDefinition formDefinition, INZazuWpfFieldFactory fieldFactory)
