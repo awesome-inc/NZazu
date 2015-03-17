@@ -91,5 +91,19 @@ namespace NZazu.Extensions
             field.IsReadOnly().Should().BeFalse();
             textBox.IsReadOnly.Should().BeFalse();
         }
+
+        [Test(Description = "especially for group fields"), RequiresSTA]
+        public void Not_Set_ReadOnly_if_not_editable()
+        {
+            var field = Substitute.For<INZazuWpfGroupField>();
+            field.IsEditable.Returns(true);
+
+            var control = new ContentControl();
+            field.ValueControl.Returns(control);
+
+            field.IsReadOnly().Should().BeTrue();
+            field.SetReadOnly(false);
+            field.IsReadOnly().Should().BeTrue();
+        }
     }
 }

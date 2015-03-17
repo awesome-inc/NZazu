@@ -14,7 +14,11 @@ namespace NZazu.Extensions
         public static bool IsReadOnly(this INZazuWpfField field)
         {
             if (field == null) throw new ArgumentNullException("field");
-            if (!field.IsEditable) return true;
+            if (!field.IsEditable) 
+                return true;
+            if (field is INZazuWpfGroupField) 
+                return true;
+
             var control = field.ValueControl;
             if (control == null) return true;
 
@@ -25,7 +29,10 @@ namespace NZazu.Extensions
         public static void SetReadOnly(this INZazuWpfField field, bool isReadOnly)
         {
             if (field == null) throw new ArgumentNullException("field");
-            //if (!field.IsEditable) return;
+            if (!field.IsEditable) 
+                return;
+            if (field is INZazuWpfGroupField) 
+                return;
 
             var control = field.ValueControl;
             if (control == null) return;
