@@ -1,7 +1,6 @@
 ﻿using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
 
 namespace NZazu.Fields
 {
@@ -13,7 +12,7 @@ namespace NZazu.Fields
 
         public override DependencyProperty ContentProperty
         {
-            get { return Selector.SelectedItemProperty; }
+            get { return ComboBox.TextProperty; }
         }
 
         public override string Type { get { return "option"; } }
