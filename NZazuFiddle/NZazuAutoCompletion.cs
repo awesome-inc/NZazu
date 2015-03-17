@@ -36,8 +36,9 @@ namespace NZazuFiddle
         private static void CompleteSettings()
         {
             var map = new Dictionary<string, ICompletionData>();
-            
-            CompleteSettingsFor<Control>(map);
+
+            // ComboBox <- Selector <- ItemsControl <- Control
+            CompleteSettingsFor<ComboBox>(map);
             // TODO: other types? more properties? Is it worth the effort?
 
             foreach (var item in map)

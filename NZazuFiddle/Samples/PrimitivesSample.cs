@@ -68,6 +68,7 @@ namespace NZazuFiddle.Samples
                             Type = "option",
                             Prompt = "Rank",
                             Values = new []{"1","2","3","4","5"},
+                            Settings = new Dictionary<string, string>{{"IsEditable","True"}}
                         }
                     }
                 },

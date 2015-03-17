@@ -1,6 +1,5 @@
 ﻿using System.Linq;
 using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
 using FluentAssertions;
 using NUnit.Framework;
 
@@ -21,20 +20,20 @@ namespace NZazu.Fields
             sut.Type.Should().Be("option");
         }
 
-        [Test]
+        [Test(Description = "https://github.com/awesome-inc/NZazu/issues/68")]
         public void Create_ComboBox()
         {
             var sut = new NZazuOptionsField("test") { Description = "description"};
 
-            sut.ContentProperty.Should().Be(Selector.SelectedItemProperty);
+            sut.ContentProperty.Should().Be(ComboBox.TextProperty);
             var control = (ComboBox)sut.ValueControl;
             control.Should().NotBeNull();
 
             control.ToolTip.Should().Be(sut.Description);
         }
 
-        [Test]
-        public void Bind_Value_to_SelectedItem()
+        [Test(Description = "https://github.com/awesome-inc/NZazu/issues/68")]
+        public void Reflect_changing_Value_in_TextProperty()
         {
             var sut = new NZazuOptionsField("test")
             {
@@ -43,6 +42,7 @@ namespace NZazu.Fields
 
             var control = (ComboBox)sut.ValueControl;
             control.Items.Should().BeEquivalentTo(sut.Options);
+            control.IsEditable.Should().BeFalse();
 
             sut.Value.Should().BeNull();
             control.SelectedItem.Should().BeNull();
@@ -50,20 +50,21 @@ namespace NZazu.Fields
             // value -> selected item
             var expected = sut.Options.First();
             sut.Value = expected;
-            control.SelectedItem.Should().Be(expected);
+            control.Text.Should().Be(expected);
 
             // selected item -> value
             expected = sut.Options.Last();
             control.SelectedItem = expected;
             sut.Value.Should().Be(expected);
 
-            // invalid -> ?
-            sut.Value = "42";
-            sut.Value.Should().Be("42");
-            control.SelectedItem.Should().Be(expected);
+            // custom values
+            expected = "42";
+            sut.Value = expected;
+            sut.Value.Should().Be(expected);
+            control.Text.Should().Be(expected);
 
-            control.SelectedItem = "42";
-            control.SelectedItem.Should().Be(expected);
+            control.SelectedItem = expected;
+            control.Text.Should().Be(expected);
         }
 
         [Test]
