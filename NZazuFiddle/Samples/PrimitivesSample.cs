@@ -33,7 +33,7 @@ namespace NZazuFiddle.Samples
                         {
                             Key = "name",
                             Type = "string",
-                            Prompt = "Name",
+                            Prompt = "Name:",
                             Hint = "Enter name",
                             Description = "Your account name. Only alpha-numeric ..."
                         },
@@ -49,7 +49,7 @@ namespace NZazuFiddle.Samples
                         {
                             Key = "birthday",
                             Type = "date",
-                            Prompt = "Birthday",
+                            Prompt = "Birthday:",
                             Hint = "dd-MM-yyyy",
                             Description = "Enter your birthday (dd-MM-yyyy)",
                             Settings = new Dictionary<string, string>{{"Format","dd-MM-yyyy"}}
@@ -58,9 +58,16 @@ namespace NZazuFiddle.Samples
                         {
                             Key = "weight",
                             Type = "double",
-                            Prompt = "Weight in kg",
+                            Prompt = "Weight [kg]:",
                             Hint = "type your weight with 2 digits after comma",
-                            Settings = new Dictionary<string, string>{{"Format","#.00"}}
+                            Description = "Weight must be between 35 and 200 kg",
+                            Settings = new Dictionary<string, string>
+                            {
+                                {"Format","#.00"}
+                                // cf.: https://wpftoolkit.codeplex.com/wikipage?title=ByteUpDown&referringTitle=NumericUpDown-derived%20controls
+                                ,{"Minimum","35"},{"Maximum","200"}
+                                ,{"ClipValueToMinMax","True"}
+                            }
                         },
                         new FieldDefinition
                         {

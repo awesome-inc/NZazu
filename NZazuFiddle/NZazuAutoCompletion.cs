@@ -4,8 +4,10 @@ using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using ICSharpCode.AvalonEdit.CodeCompletion;
 using NZazu.FieldBehavior;
+using Xceed.Wpf.Toolkit;
 
 namespace NZazuFiddle
 {
@@ -13,14 +15,20 @@ namespace NZazuFiddle
     {
         static NZazuAutoCompletion()
         {
-            CompleteSettings();
+            // cf.: http://stackoverflow.com/questions/722868/sorting-a-list-using-lambda-linq-to-objects
+            var comparer = Comparer<ICompletionData>.Create((i1, i2) => String.Compare(i1.Text, i2.Text, StringComparison.Ordinal));
+
+            Types.Sort(comparer);
+            Checks.Sort(comparer);
+            Settings.Sort(comparer);
+            Format.Sort(comparer);
         }
 
         public static void AutoCompleteFor(this ICollection<ICompletionData> data, string word)
         {
             switch (word)
             {
-                case "Type\":": Types.ForEach(data.Add); break; 
+                case "Type\":": Types.ForEach(data.Add); break;
                 case "Key\":": data.Add(KeyComplete); break;
                 case "Prompt\":": data.Add(PromptComplete); break;
                 case "Hint\":": data.Add(HintComplete); break;
@@ -33,69 +41,17 @@ namespace NZazuFiddle
             }
         }
 
-        private static void CompleteSettings()
-        {
-            var map = new Dictionary<string, ICompletionData>();
-
-            // ComboBox <- Selector <- ItemsControl <- Control
-            CompleteSettingsFor<ComboBox>(map);
-            // TODO: other types? more properties? Is it worth the effort?
-
-            foreach (var item in map)
-            {
-                var existing = Settings.FirstOrDefault(s => s.Text == item.Key);
-                if (existing == null)
-                    Settings.Add(item.Value);
-            }
-        }
-
-        private static void CompleteSettingsFor<TControl>(IDictionary<string, ICompletionData> map) where TControl : Control
-        {
-            var control = (TControl) Activator.CreateInstance(typeof (TControl));
-            var items = typeof(TControl).GetProperties()
-                .Where(HasPublicGetterAndSetter)
-                .ToDictionary(p => p.Name, p => ToAutoCompletion(control, p));
-
-            foreach (var item in items)
-                map[item.Key] = item.Value;
-        }
-
-        private static bool HasPublicGetterAndSetter(PropertyInfo p)
-        {
-            // cf. http://stackoverflow.com/questions/3762456/c-sharp-how-to-check-if-property-setter-is-public
-            return p.GetGetMethod(true).IsPublic && p.CanWrite && p.GetSetMethod(true).IsPublic;
-        }
-
-        static ICompletionData ToAutoCompletion<TControl>(TControl obj, PropertyInfo p) where TControl : Control
-        {
-            var value = p.GetValue(obj);
-            return new NzazuCompletionData
-            {
-                Text = p.Name,
-                Replacement = String.Format("{{ \"{0}\": \"{1}\" }}", p.Name, value),
-                Description = GetDescription(p)
-            };
-        }
-
-        private static string GetDescription(MemberInfo p)
-        {
-            var attribute = p.GetCustomAttribute(typeof (DescriptionAttribute), true) as DescriptionAttribute;
-            return attribute != null ? attribute.Description : String.Empty;
-
-            // TODO: what about metadata extracdtion, cf.: http://blogs.msdn.com/b/jmstall/archive/2012/08/06/reflection-vs-metadata.aspx.
-            // See: p.MetadataToken .... This is way more complicated than simple reflection!
-        }
-
         private static List<NzazuCompletionData> GetBehaviors()
         {
             var behaviors = BehaviorExtender.GetBehaviors();
-            return
-                behaviors.Select(kvp => new NzazuCompletionData
+            return behaviors.Select(kvp => new NzazuCompletionData
                 {
-                    Text = kvp.Key, 
+                    Text = kvp.Key,
                     Replacement = String.Format("{{ \"Name\": \"{0}\"}}", kvp.Key),
                     Description = String.Format("Add behavior '{0}'", kvp.Key)
-                }).ToList();
+                })
+                .OrderBy(c => c.Text)
+                .ToList();
         }
 
         private static readonly ICompletionData KeyComplete =
@@ -138,13 +94,7 @@ namespace NZazuFiddle
             new NzazuCompletionData { Text = "regex", Replacement = "[{ \"Type\": \"regex\", \"Values\": [\"<Hint>\", \"pattern1\", \"pattern2\" ] }]", Description = "The field value must match one of the specified patterns"}
         };
 
-        private static readonly List<ICompletionData> Settings = new List<ICompletionData>
-        {
-            new NzazuCompletionData { Text = "Format", Replacement = "{ \"Format\": \"\" }", Description = "The field format"},
-            new NzazuCompletionData { Text = "Height", Replacement = "{ \"Height\": \"64.3\" }", Description = "The field's height in pixel"},
-            new NzazuCompletionData { Text = "Width", Replacement = "{ \"Width\": \"64.3\" }", Description = "The field's width in pixel"},
-            new NzazuCompletionData { Text = "ShowFormatBar", Replacement = "{ \"ShowFormatBar\": \"True\" }", Description = "Adds an optional richtext format bar for text selections"}
-        };
+        private static readonly List<ICompletionData> Settings = GetSettings();
 
         private static readonly List<ICompletionData> Format = new List<ICompletionData>
         {
@@ -159,7 +109,75 @@ namespace NZazuFiddle
             new NzazuCompletionData { Text = "rtf", Replacement = "\"rtf\"", Description = "Rich text format"},
             new NzazuCompletionData { Text = "plain", Replacement = "\"plain\"", Description = "Plain text"},
             new NzazuCompletionData { Text = "xaml", Replacement = "\"xaml\"", Description = "Xaml"}
-        }; 
+        };
 
+        private static List<ICompletionData> GetSettings()
+        {
+            var map = new Dictionary<string, ICompletionData>();
+
+            // textbox
+            CompleteSettingsFor<TextBox>(map);
+            // options <- Selector <- ItemsControl <- Control
+            CompleteSettingsFor<ComboBox>(map);
+            // bool <-> check box
+            CompleteSettingsFor<ToggleButton>(map);
+            // int,double <-> Numeric up down
+            CompleteSettingsFor<DoubleUpDown>(map);
+            // datetime
+            CompleteSettingsFor<DateTimePicker>(map);
+
+            var settings = new List<ICompletionData>
+            {
+                new NzazuCompletionData { Text = "Format", Replacement = "{ \"Format\": \"\" }", Description = "The field format"},
+                new NzazuCompletionData { Text = "Height", Replacement = "{ \"Height\": \"64.3\" }", Description = "The field's height in pixel"},
+                new NzazuCompletionData { Text = "Width", Replacement = "{ \"Width\": \"64.3\" }", Description = "The field's width in pixel"},
+                new NzazuCompletionData { Text = "ShowFormatBar", Replacement = "{ \"ShowFormatBar\": \"True\" }", Description = "Adds an optional richtext format bar for text selections"}
+            };
+            foreach (var item in map)
+            {
+                var existing = settings.FirstOrDefault(s => s.Text == item.Key);
+                if (existing == null)
+                    settings.Add(item.Value);
+            }
+
+            return settings;
+        }
+
+        private static void CompleteSettingsFor<TControl>(IDictionary<string, ICompletionData> map) where TControl : Control
+        {
+            var control = (TControl)Activator.CreateInstance(typeof(TControl));
+            var items = typeof(TControl).GetProperties()
+                .Where(HasPublicGetterAndSetter)
+                .ToDictionary(p => p.Name, p => ToAutoCompletion(control, p));
+
+            foreach (var item in items)
+                map[item.Key] = item.Value;
+        }
+
+        private static bool HasPublicGetterAndSetter(PropertyInfo p)
+        {
+            // cf. http://stackoverflow.com/questions/3762456/c-sharp-how-to-check-if-property-setter-is-public
+            return p.GetGetMethod(true).IsPublic && p.CanWrite && p.GetSetMethod(true).IsPublic;
+        }
+
+        static ICompletionData ToAutoCompletion<TControl>(TControl obj, PropertyInfo p) where TControl : Control
+        {
+            var value = p.GetValue(obj);
+            return new NzazuCompletionData
+            {
+                Text = p.Name,
+                Replacement = String.Format("{{ \"{0}\": \"{1}\" }}", p.Name, value),
+                Description = GetDescription(p)
+            };
+        }
+
+        private static string GetDescription(MemberInfo p)
+        {
+            var attribute = p.GetCustomAttribute(typeof(DescriptionAttribute), true) as DescriptionAttribute;
+            return attribute != null ? attribute.Description : String.Empty;
+
+            // TODO: what about metadata extraction, cf.: http://blogs.msdn.com/b/jmstall/archive/2012/08/06/reflection-vs-metadata.aspx.
+            // See: p.MetadataToken .... This is way more complicated than simple reflection!
+        }
     }
 }
