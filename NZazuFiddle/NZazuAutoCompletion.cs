@@ -7,6 +7,7 @@ using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using ICSharpCode.AvalonEdit.CodeCompletion;
 using NZazu.FieldBehavior;
+using NZazu.LayoutStrategy;
 using Xceed.Wpf.Toolkit;
 
 namespace NZazuFiddle
@@ -22,6 +23,7 @@ namespace NZazuFiddle
             Checks.Sort(comparer);
             Settings.Sort(comparer);
             Format.Sort(comparer);
+            Layouts.Sort(comparer);
         }
 
         public static void AutoCompleteFor(this ICollection<ICompletionData> data, string word)
@@ -38,6 +40,7 @@ namespace NZazuFiddle
                 case "Format\":": Format.ForEach(data.Add); break;
                 //case "Name\":": GetNames().ForEach(data.Add); break;
                 case "Behavior\":": GetBehaviors().ForEach(data.Add); break;
+                case "Layout\":": Layouts.ForEach(data.Add); break;
             }
         }
 
@@ -77,7 +80,7 @@ namespace NZazuFiddle
             new NzazuCompletionData { Text = "double", Replacement = "\"double\"", Description = "Adds a double field"},
             new NzazuCompletionData { Text = "option", Replacement = "\"option\"", Description = "Adds an option field (choose from Values)"},
             new NzazuCompletionData { Text = "richtext", Replacement = "\"richtext\"", Description = "Adds a richt-text field"},
-            new NzazuCompletionData { Text = "group", Replacement = "\"richtext\"", Description = "Adds a group field"},
+            new NzazuCompletionData { Text = "group", Replacement = "\"group\"", Description = "Adds a group field"},
 
             // checks
             new NzazuCompletionData { Text = "required", Replacement = "\"required\"", Description = "Adds a 'required' check"},
@@ -85,6 +88,13 @@ namespace NZazuFiddle
             new NzazuCompletionData { Text = "range", Replacement = "\"range\"", Description = "Adds a range check"},
             new NzazuCompletionData { Text = "regex", Replacement = "\"regex\"", Description = "Adds a regex checks"}
         };
+
+        private static readonly List<ICompletionData> Layouts = new List<ICompletionData>
+        {
+            new NzazuCompletionData { Text = "grid", Replacement = "\"grid\"", Description = "Grid layout (rows, default)"},
+            new NzazuCompletionData { Text = "stack", Replacement = "\"stack\"", Description = "Stacked Layout (left to right)"},
+        };
+
 
         private static readonly List<ICompletionData> Checks = new List<ICompletionData>
         {
