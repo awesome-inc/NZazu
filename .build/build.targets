@@ -33,7 +33,7 @@
     <CoverageReportDir>$(TestResultsDir)coverage\$(ProjectName)</CoverageReportDir>
 
     <NuspecFile Condition="'$(NuspecFile)'==''">$(ProjectDir)Package.nuspec</NuspecFile>
-    <NugetSourceToDeploy Condition="'$(NugetSourceToDeploy)'==''">https://www.nuget.org/api/v2/package</NugetSourceToDeploy>
+    <NugetSourceToDeploy Condition="'$(NugetSourceToDeploy)'==''">https://www.nuget.org</NugetSourceToDeploy>
 
     <!--verbosity -->
     <!-- NUnit verbosity: Off|Error|Warning|Info|Verbose-->
