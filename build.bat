@@ -18,7 +18,6 @@ if not defined nugetPath (
 :setDefaults
 if not defined Configuration set Configuration=Release
 if not defined EnableNuGetPackageRestore set EnableNuGetPackageRestore=true
-if not defined PackageSources set PackageSources=https://www.nuget.org/api/v2/
 
 set solutionDir=%~dp0%
 if not "%cd%\"=="%solutionDir%" (
