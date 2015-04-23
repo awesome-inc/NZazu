@@ -11,7 +11,7 @@
     <summary>NZazu, a form templating engine.</summary>
     <copyright/>
     <releaseNotes>Revision: $Revision$</releaseNotes>
-    <projectUrl>https://github.com/ThomasMentzel/NZazu</projectUrl>
+    <projectUrl>https://github.com/awesome-inc/NZazu</projectUrl>
     <frameworkAssemblies>
       <frameworkAssembly assemblyName="WindowsBase" targetFramework="" />
       <frameworkAssembly assemblyName="PresentationCore" targetFramework="" />
