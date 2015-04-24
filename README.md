@@ -49,7 +49,7 @@ The field factory creates fields (controls) based on a template definition. By d
 factories are implemented.
 
 - [x] NZazuFieldFactory (main package)
-- [ ] XceedFieldFactory (xceed package)
+- [x] XceedFieldFactory (xceed package)
 
 
 ## INZazuLayoutStrategy
@@ -57,6 +57,6 @@ factories are implemented.
 The layout strategy provides the mechanism to render the generated fields into the **NZazuView**
 
 - [x] GridLayoutStrategy (main package)
-- [ ] StackedLayoutStrategy (main package)
+- [x] StackedLayoutStrategy (main package)
 
 
