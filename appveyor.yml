@@ -1,18 +1,33 @@
 version: 0.2.14.{build}
-environment:
-  apiKey:
-    secure: lrwREUV4nO99AU0A6xVx/MNF0BaJc8A1B8dwEGMLqmYKGqD5E7PJ/IC9RHcle6pk
 nuget:
   disable_publish_on_pr: true
+test: off
 build_script:
 - build.bat NZazu.sln /t:CoverageReport /v:m
 after_build:
 - ps: >-
     $wc = New-Object 'System.Net.WebClient'
     
-    $wc.UploadFile("https://ci.appveyor.com/api/testresults/xunit/$($env:APPVEYOR_JOB_ID)", (Resolve-Path .\testresults\NZazu.Tests.xml))
-before_deploy:
-- nuget setapikey %apiKey% -Verbosity quiet
-deploy_script:
-- build.bat NZazu.sln /t:Deploy /v:m
-test: off
+    $wc.UploadFile("https://ci.appveyor.com/api/testresults/nunit/$($env:APPVEYOR_JOB_ID)", (Resolve-Path .\testresults\NZazu.Tests.xml))
+
+# configuration for "master" branch
+# build in Release mode and deploy to Azure
+-
+  branches:
+    only:
+      - master
+  deploy:
+    provider: Local
+  environment:
+    apiKey:
+      secure: lrwREUV4nO99AU0A6xVx/MNF0BaJc8A1B8dwEGMLqmYKGqD5E7PJ/IC9RHcle6pk
+  before_deploy:
+  - nuget setapikey %apiKey% -Verbosity quiet
+  deploy_script:
+  - build.bat NZazu.sln /t:Deploy /v:m
+
+# "fall back" configuration for all other branches
+# no "branches" section defined
+# do not deploy at all
+-
+  deploy: off
