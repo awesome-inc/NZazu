@@ -1,15 +1,12 @@
-version: 0.2.14.{build}
-test: off
-nuget:
-  disable_publish_on_pr: true
-build_script:
-- build.bat NZazu.sln /t:CoverageReport /v:m
-
-# special configuration for "master" branch
+# configuration for "master" branch
 -
   branches:
     only:
       - master
+  version: 0.2.14.{build}
+  test: off
+  nuget:
+    disable_publish_on_pr: true
   environment:
     apiKey:
       secure: lrwREUV4nO99AU0A6xVx/MNF0BaJc8A1B8dwEGMLqmYKGqD5E7PJ/IC9RHcle6pk
@@ -22,3 +19,12 @@ build_script:
       $wc = New-Object 'System.Net.WebClient'
     
       $wc.UploadFile("https://ci.appveyor.com/api/testresults/nunit/$($env:APPVEYOR_JOB_ID)", (Resolve-Path .\testresults\NZazu.Tests.xml))
+
+# all other branches
+-
+  version: 0.2.14.{build}
+  test: off
+  nuget:
+    disable_publish_on_pr: true
+  build_script:
+  - build.bat NZazu.sln /t:CoverageReport /v:m
