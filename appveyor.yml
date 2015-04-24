@@ -1,6 +1,5 @@
   version: 0.2.14.{build}
   test: off
-  deploy: off
   nuget:
     disable_publish_on_pr: true
 
@@ -12,11 +11,7 @@
   environment:
     apiKey:
       secure: lrwREUV4nO99AU0A6xVx/MNF0BaJc8A1B8dwEGMLqmYKGqD5E7PJ/IC9RHcle6pk
-  version: 0.2.14.{build}
-  nuget:
-    disable_publish_on_pr: true
-  test: off
-  before_deploy:
+  before_build:
   - nuget setapikey %apiKey% -Verbosity quiet
   build_script:
   - build.bat NZazu.sln /t:CoverageReport;Deploy /v:m
@@ -29,6 +24,9 @@
 
 # "fall back" configuration for all other branches
 - 
+  branches:
+    except:
+      - master
   build_script:
   - build.bat NZazu.sln /t:CoverageReport /v:m
   
