@@ -2,6 +2,8 @@
 
 :checkMsBuild
 set msbuild=
+for %%a in (MSBuild.exe) do (set msbuild=%%~$PATH:a)
+if defined msbuild goto checkNuget
 for /D %%a in (%SYSTEMROOT%\Microsoft.NET\Framework\v4.0*) do set msbuild=%%a\MSBuild.exe
 if not defined msbuild (
 	echo error: can't find MSBuild.exe. Is .NET Framework installed?
