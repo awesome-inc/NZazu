@@ -5,7 +5,11 @@ environment:
 nuget:
   disable_publish_on_pr: true
 build_script:
-- build NZazu.sln /t:Package /v:m
+- build NZazu.sln /t:CoverageReport /v:m
+after_build:
+- ps: >-
+    $wc = New-Object 'System.Net.WebClient'
+    $wc.UploadFile("https://ci.appveyor.com/api/testresults/xunit/$($env:APPVEYOR_JOB_ID)", (Resolve-Path .\testresults\NZazu.Tests.xml))
 before_deploy:
 - nuget setapikey %apiKey% -Verbosity quiet
 deploy_script:
