@@ -1,4 +1,7 @@
 # NZazu
+
+[![Build status](https://ci.appveyor.com/api/projects/status/nj8cqgfnqd07csuc/branch/master?svg=true)](https://ci.appveyor.com/project/awesome-inc-build/nzazu/branch/master)
+
 NZazu is a form templating engine which renders a form based on an abstract form definition.
 
 The main view **NZazuView** connects factories, strategies and serializer to be flexible and extensible.
