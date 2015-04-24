@@ -12,20 +12,19 @@ after_build:
 
 
 # configuration for "master" branch
-branches:
-  only:
-    - master
-environment:
-  apiKey:
-    secure: lrwREUV4nO99AU0A6xVx/MNF0BaJc8A1B8dwEGMLqmYKGqD5E7PJ/IC9RHcle6pk
-before_deploy:
-- nuget setapikey %apiKey% -Verbosity quiet
-deploy_script:
-- build.bat NZazu.sln /t:Deploy /v:m
+-
+  branches:
+    only:
+      - master
+  environment:
+    apiKey:
+      secure: lrwREUV4nO99AU0A6xVx/MNF0BaJc8A1B8dwEGMLqmYKGqD5E7PJ/IC9RHcle6pk
+  before_deploy:
+  - nuget setapikey %apiKey% -Verbosity quiet
+  deploy_script:
+  - build.bat NZazu.sln /t:Deploy /v:m
 
 # "fall back" configuration for all other branches
-branches:
-  except:
-    - master
+- 
   deploy: off
   
