@@ -1,11 +1,11 @@
-  version: 0.2.14.{build}
-  test: off
-  nuget:
-    disable_publish_on_pr: true
-  build_script:
-  - build.bat NZazu.sln /t:CoverageReport /v:m
+version: 0.2.14.{build}
+test: off
+nuget:
+  disable_publish_on_pr: true
+build_script:
+- build.bat NZazu.sln /t:CoverageReport /v:m
 
-# configuration for "master" branch
+# special configuration for "master" branch
 -
   branches:
     only:
