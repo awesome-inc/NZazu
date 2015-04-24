@@ -2,6 +2,8 @@
   test: off
   nuget:
     disable_publish_on_pr: true
+  build_script:
+  - build.bat NZazu.sln /t:CoverageReport /v:m
 
 # configuration for "master" branch
 -
@@ -20,13 +22,3 @@
       $wc = New-Object 'System.Net.WebClient'
     
       $wc.UploadFile("https://ci.appveyor.com/api/testresults/nunit/$($env:APPVEYOR_JOB_ID)", (Resolve-Path .\testresults\NZazu.Tests.xml))
-    
-
-# "fall back" configuration for all other branches
-- 
-  branches:
-    except:
-      - master
-  build_script:
-  - build.bat NZazu.sln /t:CoverageReport /v:m
-  
