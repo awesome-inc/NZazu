@@ -1,6 +1,6 @@
-# NZazu
+[![Build status](https://ci.appveyor.com/api/projects/status/nj8cqgfnqd07csuc/branch/master?svg=true)](https://ci.appveyor.com/project/awesome-inc-build/nzazu/branch/master) ![NuGet Version](https://img.shields.io/nuget/v/NZazu.svg?style=flat-square) ![NuGet Version](https://img.shields.io/nuget/dt/NZazu.svg?style=flat-square) [![Issue Stats](http://issuestats.com/github/awesome-inc/NZazu/badge/issue)](http://issuestats.com/github/awesome-inc/NZazu) [![Issue Stats](http://issuestats.com/github/awesome-inc/NZazu/badge/pr)](http://issuestats.com/github/awesome-inc/NZazu) 
 
-[![Build status](https://ci.appveyor.com/api/projects/status/nj8cqgfnqd07csuc/branch/master?svg=true)](https://ci.appveyor.com/project/awesome-inc-build/nzazu/branch/master) ![NuGet Version](https://img.shields.io/nuget/v/NZazu.svg?style=flat-square) ![NuGet Version](https://img.shields.io/nuget/dt/NZazu.svg?style=flat-square)
+# NZazu
 
 **NZazu** is a WPF form templating engine which renders a form based on an abstract form definition. 
 
