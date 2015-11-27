@@ -85,7 +85,7 @@ namespace NZazu.Fields
             if (fieldDefinition == null) throw new ArgumentNullException("fieldDefinition");
             if (groupField == null) return;
 
-            if (!String.IsNullOrWhiteSpace(fieldDefinition.Layout))
+            if (!string.IsNullOrWhiteSpace(fieldDefinition.Layout))
                 groupField.Layout = fieldDefinition.Layout;
 
             if (fieldDefinition.Fields == null || !fieldDefinition.Fields.Any()) return;

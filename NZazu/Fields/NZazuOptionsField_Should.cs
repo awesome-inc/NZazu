@@ -8,7 +8,7 @@ namespace NZazu.Fields
     [TestFixture]
     [RequiresSTA]
     // ReSharper disable InconsistentNaming
-    class NZazuOptionsField_Should
+    internal class NZazuOptionsField_Should
     {
         [Test]
         public void Be_Creatable()

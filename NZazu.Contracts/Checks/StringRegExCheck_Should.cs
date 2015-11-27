@@ -14,7 +14,7 @@ namespace NZazu.Contracts.Checks
             var check = new StringRegExCheck("test", new Regex(@"^.*$", RegexOptions.IgnoreCase));
 
             check.ShouldPass(null);
-            check.ShouldPass(String.Empty);
+            check.ShouldPass(string.Empty);
             check.ShouldPass("\t\r\n");
             check.ShouldPass(" ");
         }

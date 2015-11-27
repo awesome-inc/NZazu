@@ -8,7 +8,7 @@ namespace NZazu.Xceed
 {
     [TestFixture, RequiresSTA]
     // ReSharper disable InconsistentNaming
-    class XceedFieldFactory_Should
+    internal class XceedFieldFactory_Should
     {
         [Test]
         public void Create_WatermarkTextbox()

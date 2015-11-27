@@ -5,7 +5,7 @@ namespace NZazu.LayoutStrategy
 {
     [TestFixture, RequiresSTA]
     // ReSharper disable InconsistentNaming
-    class GridLayoutStrategy_Without_Application_Should
+    internal class GridLayoutStrategy_Without_Application_Should
     {
         [Test]
         public void Be_Creatable()

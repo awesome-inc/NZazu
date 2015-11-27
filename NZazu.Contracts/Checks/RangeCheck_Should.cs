@@ -57,7 +57,7 @@ namespace NZazu.Contracts.Checks
         public void Validate_Value_NullOrWhiteSpace_Passes()
         {
             _check.ShouldPass(null);
-            _check.ShouldPass(String.Empty);
+            _check.ShouldPass(string.Empty);
             _check.ShouldPass("\t\r\n");
             _check.ShouldPass(" ");
         }

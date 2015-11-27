@@ -7,7 +7,7 @@ namespace NZazu.Contracts
 {
     [TestFixture]
     // ReSharper disable InconsistentNaming
-    class CheckFactory_Should
+    internal class CheckFactory_Should
     {
         [Test]
         [TestCase("required", null, typeof(RequiredCheck))]

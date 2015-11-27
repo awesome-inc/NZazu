@@ -16,7 +16,7 @@ namespace NZazu.Fields
     [TestFixture]
     [RequiresSTA]
     // ReSharper disable InconsistentNaming
-    class NZazuField_Should
+    internal class NZazuField_Should
     {
         #region Test fields to verify base class
 
@@ -49,7 +49,7 @@ namespace NZazu.Fields
 
 
         [ExcludeFromCodeCoverage]
-        class GenericDummyField : NZazuField<int>
+        private class GenericDummyField : NZazuField<int>
         {
             public GenericDummyField(string key) : base(key) { }
             public override DependencyProperty ContentProperty { get { throw new NotImplementedException(); } }

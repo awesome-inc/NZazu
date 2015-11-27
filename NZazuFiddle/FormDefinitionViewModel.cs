@@ -44,7 +44,7 @@ namespace NZazuFiddle
             finally { _inHandle = false; }
         }
 
-        static void Safe(Action action, string couldNot)
+        private static void Safe(Action action, string couldNot)
         {
             try { action(); }
             catch (Exception ex) { Trace.TraceWarning("{0}: {1}", couldNot, ex.Message); }

@@ -12,12 +12,12 @@ using Xceed.Wpf.Toolkit;
 
 namespace NZazuFiddle
 {
-    static class NZazuAutoCompletion
+    internal static class NZazuAutoCompletion
     {
         static NZazuAutoCompletion()
         {
             // cf.: http://stackoverflow.com/questions/722868/sorting-a-list-using-lambda-linq-to-objects
-            var comparer = Comparer<ICompletionData>.Create((i1, i2) => String.Compare(i1.Text, i2.Text, StringComparison.Ordinal));
+            var comparer = Comparer<ICompletionData>.Create((i1, i2) => string.Compare(i1.Text, i2.Text, StringComparison.Ordinal));
 
             Types.Sort(comparer);
             Checks.Sort(comparer);
@@ -50,8 +50,8 @@ namespace NZazuFiddle
             return behaviors.Select(kvp => new NzazuCompletionData
                 {
                     Text = kvp.Key,
-                    Replacement = String.Format("{{ \"Name\": \"{0}\"}}", kvp.Key),
-                    Description = String.Format("Add behavior '{0}'", kvp.Key)
+                    Replacement = string.Format("{{ \"Name\": \"{0}\"}}", kvp.Key),
+                    Description = string.Format("Add behavior '{0}'", kvp.Key)
                 })
                 .OrderBy(c => c.Text)
                 .ToList();
@@ -170,13 +170,13 @@ namespace NZazuFiddle
             return p.GetGetMethod(true).IsPublic && p.CanWrite && p.GetSetMethod(true).IsPublic;
         }
 
-        static ICompletionData ToAutoCompletion<TControl>(TControl obj, PropertyInfo p) where TControl : Control
+        private static ICompletionData ToAutoCompletion<TControl>(TControl obj, PropertyInfo p) where TControl : Control
         {
             var value = p.GetValue(obj);
             return new NzazuCompletionData
             {
                 Text = p.Name,
-                Replacement = String.Format("{{ \"{0}\": \"{1}\" }}", p.Name, value),
+                Replacement = string.Format("{{ \"{0}\": \"{1}\" }}", p.Name, value),
                 Description = GetDescription(p)
             };
         }
@@ -184,7 +184,7 @@ namespace NZazuFiddle
         private static string GetDescription(MemberInfo p)
         {
             var attribute = p.GetCustomAttribute(typeof(DescriptionAttribute), true) as DescriptionAttribute;
-            return attribute != null ? attribute.Description : String.Empty;
+            return attribute != null ? attribute.Description : string.Empty;
 
             // TODO: what about metadata extraction, cf.: http://blogs.msdn.com/b/jmstall/archive/2012/08/06/reflection-vs-metadata.aspx.
             // See: p.MetadataToken .... This is way more complicated than simple reflection!

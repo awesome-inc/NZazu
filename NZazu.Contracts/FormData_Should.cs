@@ -6,7 +6,7 @@ namespace NZazu.Contracts
 {
     [TestFixture]
     // ReSharper disable InconsistentNaming
-    class FormData_Should
+    internal class FormData_Should
     {
         [Test]
         public void Support_implicit_casting_from_and_to_dictionaries()

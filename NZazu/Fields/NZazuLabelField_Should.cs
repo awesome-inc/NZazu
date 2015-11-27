@@ -7,7 +7,7 @@ namespace NZazu.Fields
     [TestFixture]
     [RequiresSTA]
     // ReSharper disable InconsistentNaming
-    class NZazuLabelField_Should
+    internal class NZazuLabelField_Should
     {
         [Test]
         public void Create_ValueControl_Matching_Description()

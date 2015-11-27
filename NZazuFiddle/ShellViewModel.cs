@@ -5,7 +5,7 @@ using NZazuFiddle.Samples;
 
 namespace NZazuFiddle
 {
-    sealed class ShellViewModel : Screen,IShell
+    internal sealed class ShellViewModel : Screen,IShell
     {
         private readonly BindableCollection<ISample> _samples = new BindableCollection<ISample>();
         private ISample _selectedSample;

@@ -7,7 +7,7 @@ namespace NZazu
 {
     [TestFixture]
     // ReSharper disable once InconsistentNaming
-    class ResolveFromNameProxy_Should
+    internal class ResolveFromNameProxy_Should
     {
         [Test]
         public void Be_Creatable()

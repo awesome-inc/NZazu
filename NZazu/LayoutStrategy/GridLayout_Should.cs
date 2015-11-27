@@ -11,7 +11,7 @@ namespace NZazu.LayoutStrategy
 {
     [TestFixture, RequiresSTA]
     // ReSharper disable InconsistentNaming
-    class GridLayout_Should
+    internal class GridLayout_Should
     {
         private Application application;
 

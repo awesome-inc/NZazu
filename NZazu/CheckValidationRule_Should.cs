@@ -9,7 +9,7 @@ namespace NZazu
 {
     [TestFixture]
     // ReSharper disable InconsistentNaming
-    class CheckValidationRule_Should
+    internal class CheckValidationRule_Should
     {
         [Test]
         public void Delegate_validation_to_check()

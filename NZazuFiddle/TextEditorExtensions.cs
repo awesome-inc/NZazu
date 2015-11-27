@@ -11,7 +11,7 @@ using ICSharpCode.AvalonEdit.Highlighting.Xshd;
 
 namespace NZazuFiddle
 {
-    static class TextEditorExtensions
+    internal static class TextEditorExtensions
     {
         public static void TabMovesFocus(this TextEditor textEditor)
         {

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using FluentAssertions;
@@ -14,11 +15,12 @@ using NZazu.Extensions;
 namespace NZazu
 {
     [TestFixture]
-    [RequiresSTA]
+    [Apartment(ApartmentState.STA)]
     // ReSharper disable InconsistentNaming
-    class NZazuView_Should
+    internal class NZazuView_Should
     {
         [Test]
+        [STAThread]
         public void Be_Creatable()
         {
             var sut = new NZazuView();
@@ -28,6 +30,7 @@ namespace NZazu
         }
 
         [Test]
+        [STAThread]
         public void Return_field_values_on_GetFieldValues()
         {
             var view = new NZazuView();
@@ -53,6 +56,7 @@ namespace NZazu
         }
 
         [Test]
+        [STAThread]
         public void Recurse_on_group_fields_in_GetFieldValues()
         {
             var view = new NZazuView
@@ -88,6 +92,7 @@ namespace NZazu
         }
 
         [Test]
+        [STAThread]
         public void Handle_FormData_Which_Has_More_Values_Than_Fields()
         {
             var sut = new NZazuView();
@@ -121,6 +126,7 @@ namespace NZazu
         }
 
         [Test]
+        [STAThread]
         public void Update_when_FormDefinition_changed()
         {
             var formDefinition = new FormDefinition { Layout = "grid", Fields = new FieldDefinition[] { } };
@@ -132,6 +138,7 @@ namespace NZazu
         }
 
         [Test]
+        [STAThread]
         public void Update_when_FieldFactory_changed()
         {
             var fieldFactory = Substitute.For<INZazuWpfFieldFactory>();
@@ -143,6 +150,7 @@ namespace NZazu
         }
 
         [Test]
+        [STAThread]
         public void Update_when_LayoutStrategy_changed()
         {
             var layout = Substitute.For<IResolveLayout>();
@@ -153,7 +161,7 @@ namespace NZazu
             });
         }
 
-        static void VerifyUpdate(Action<INZazuWpfView> act)
+        private static void VerifyUpdate(Action<INZazuWpfView> act)
         {
             var formDefinition = new FormDefinition { Fields = new FieldDefinition[] { } };
 
@@ -179,6 +187,7 @@ namespace NZazu
         }
 
         [Test]
+        [STAThread]
         public void Disallow_null_FieldFactory()
         {
             var sut = new NZazuView();
@@ -190,6 +199,7 @@ namespace NZazu
         }
 
         [Test]
+        [STAThread]
         public void Disallow_null_LayoutStrategy()
         {
             var sut = new NZazuView();
@@ -201,6 +211,7 @@ namespace NZazu
         }
 
         [Test]
+        [STAThread]
         public void Set_Field_Values_If_FormData_Changes()
         {
             var view = new NZazuView();
@@ -219,6 +230,7 @@ namespace NZazu
         }
 
         [Test]
+        [STAThread]
         public void Update_FormData_On_LostFocus()
         {
             var view = new NZazuView();
@@ -244,6 +256,7 @@ namespace NZazu
         }
 
         [Test]
+        [STAThread]
         public void Validate_By_Calling_INZazuField_Validate()
         {
             var field = Substitute.For<INZazuWpfField>();
@@ -264,8 +277,8 @@ namespace NZazu
             field.ReceivedWithAnyArgs().Validate();
         }
 
-        [Test]
-        [NUnit.Framework.Description("In real-time scenarios try to preserve formdata when formdefinition changed only marginally")]
+        [Test(Description = "In real-time scenarios try to preserve formdata when formdefinition changed only marginally")]
+        [STAThread]
         public void Preserve_Formdata_if_FormDefinition_changed()
         {
             const string key = "name";
@@ -300,8 +313,8 @@ namespace NZazu
         }
 
 
-        [Test]
-        [NUnit.Framework.Description("In real-time scenarios try to preserve formdat when formdefinition changed only marginally")]
+        [Test(Description = "In real-time scenarios try to preserve formdat when formdefinition changed only marginally")]
+        [STAThread]
         public void Throw_KeyNotFoundException_On_GetField_For_Wrong_Key()
         {
             const string key = "key";
@@ -317,6 +330,7 @@ namespace NZazu
         }
 
         [Test]
+        [STAThread]
         public void Attach_And_Detach_Behavior_To_Fields()
         {
             // lets mock the behavior
@@ -350,6 +364,7 @@ namespace NZazu
         }
 
         [Test]
+        [STAThread]
         public void Skip_skip_fixed_fields_in_GetFieldValues()
         {
             var view = new NZazuView
@@ -373,6 +388,7 @@ namespace NZazu
         }
 
         [Test]
+        [STAThread]
         public void Focus_specified_field_after_changing_FormDefinition()
         {
             var view = new NZazuView
@@ -401,6 +417,7 @@ namespace NZazu
         }
 
         [Test]
+        [STAThread]
         public void Have_scrollbars()
         {
             var sut = new NZazuView();
@@ -417,6 +434,7 @@ namespace NZazu
         }
 
         [Test]
+        [STAThread]
         public void Support_IsReadOnly()
         {
             var sut = new NZazuView

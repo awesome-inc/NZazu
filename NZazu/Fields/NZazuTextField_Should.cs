@@ -8,7 +8,7 @@ namespace NZazu.Fields
     [TestFixture]
     [RequiresSTA]
     // ReSharper disable InconsistentNaming
-    class NZazuTextField_Should
+    internal class NZazuTextField_Should
     {
         [Test]
         public void Be_Creatable()
@@ -62,7 +62,7 @@ namespace NZazu.Fields
 
             textBox.Text.Should().Be("test");
 
-            textBox.Text = String.Empty;
+            textBox.Text = string.Empty;
             sut.StringValue.Should().BeEmpty();
         }
     }

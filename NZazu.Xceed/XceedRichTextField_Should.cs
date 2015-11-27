@@ -11,7 +11,7 @@ namespace NZazu.Xceed
     [TestFixture]
     [RequiresSTA]
     // ReSharper disable InconsistentNaming
-    class XceedRichTextField_Should
+    internal class XceedRichTextField_Should
     {
         [Test]
         public void Be_Creatable()

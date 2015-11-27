@@ -25,10 +25,10 @@ namespace NZazu.Fields
             var parsed = false;
             var result = new DateTime();
 
-            if (!String.IsNullOrWhiteSpace(value))
+            if (!string.IsNullOrWhiteSpace(value))
             {
                 const DateTimeStyles dateTimeStyles = DateTimeStyles.AssumeLocal;
-                parsed = String.IsNullOrWhiteSpace(DateFormat) 
+                parsed = string.IsNullOrWhiteSpace(DateFormat) 
                     ? DateTime.TryParse(value, FormatProvider, dateTimeStyles, out result) 
                     : DateTime.TryParseExact(value, DateFormat, FormatProvider, dateTimeStyles, out result);
             }
@@ -40,10 +40,10 @@ namespace NZazu.Fields
 
         protected override string GetStringValue()
         {
-            if (!Value.HasValue) return String.Empty;
+            if (!Value.HasValue) return string.Empty;
 
             var dateTime = Value.Value;
-            if (String.IsNullOrWhiteSpace(DateFormat))
+            if (string.IsNullOrWhiteSpace(DateFormat))
                 return dateTime.ToString(FormatProvider);
             return dateTime.ToString(DateFormat, FormatProvider);
         }

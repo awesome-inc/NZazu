@@ -24,7 +24,7 @@ namespace NZazu.Xceed
         {
             var control = new DoubleUpDown { ToolTip = Description, Watermark = Hint };
             var formatString = GetSetting("Format");
-            if (!String.IsNullOrWhiteSpace(formatString))
+            if (!string.IsNullOrWhiteSpace(formatString))
                 control.FormatString = formatString;
             return control;
         }
@@ -32,7 +32,7 @@ namespace NZazu.Xceed
         protected override void SetStringValue(string value)
         {
             double result;
-            if (!String.IsNullOrWhiteSpace(value) 
+            if (!string.IsNullOrWhiteSpace(value) 
                 && double.TryParse(value, NumberStyles.Number, FormatProvider, out result))
                 Value = result;
             else
@@ -41,7 +41,7 @@ namespace NZazu.Xceed
 
         protected override string GetStringValue()
         {
-            return Value.HasValue ? Value.Value.ToString(FormatProvider) : String.Empty;
+            return Value.HasValue ? Value.Value.ToString(FormatProvider) : string.Empty;
         }
     }
 }

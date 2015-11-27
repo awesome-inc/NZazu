@@ -6,7 +6,7 @@ namespace NZazu.Xceed
 {
     [TestFixture, RequiresSTA]
     // ReSharper disable InconsistentNaming
-    class XceedDateTimeField_Should
+    internal class XceedDateTimeField_Should
     {
         [Test]
         public void Be_Creatable()

@@ -6,7 +6,7 @@ namespace NZazu
 {
     [TestFixture]
     // ReSharper disable once InconsistentNaming
-    class ResolveLayout_Should
+    internal class ResolveLayout_Should
     {
         [Test]
         public void Be_Creatable()

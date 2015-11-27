@@ -35,7 +35,7 @@ namespace NZazu.Fields
 
         protected NZazuField(string key)
         {
-            if (String.IsNullOrWhiteSpace(key)) throw new ArgumentException("key");
+            if (string.IsNullOrWhiteSpace(key)) throw new ArgumentException("key");
             Key = key;
 
             _labelControl = new Lazy<Control>(GetLabelControl);
@@ -59,7 +59,7 @@ namespace NZazu.Fields
 
         protected internal IValueCheck Check { get; set; }
 
-        protected virtual Control GetLabel() { return !String.IsNullOrWhiteSpace(Prompt) ? new Label { Content = Prompt } : null; }
+        protected virtual Control GetLabel() { return !string.IsNullOrWhiteSpace(Prompt) ? new Label { Content = Prompt } : null; }
         protected abstract Control GetValue();
 
         private Control GetLabelControl()
@@ -130,7 +130,7 @@ namespace NZazu.Fields
 
         protected string GetSetting(string key)
         {
-            String value;
+            string value;
             Settings.TryGetValue(key, out value);
             return value;
         }

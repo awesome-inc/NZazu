@@ -3,7 +3,7 @@ using System.Windows.Controls;
 
 namespace NZazu.Fields
 {
-    class NZazuLabelField : NZazuField
+    internal class NZazuLabelField : NZazuField
     {
         public NZazuLabelField(string key) : base(key)
         {

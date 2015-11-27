@@ -9,7 +9,7 @@ namespace NZazu.Xceed
     [TestFixture]
     [RequiresSTA]
     // ReSharper disable InconsistentNaming
-    class XceedDoubleField_Should
+    internal class XceedDoubleField_Should
     {
         [Test]
         public void Be_Creatable()
@@ -43,7 +43,7 @@ namespace NZazu.Xceed
             sut.StringValue = "1.4";
             control.Value.Should().Be(1.4);
 
-            sut.StringValue = String.Empty;
+            sut.StringValue = string.Empty;
             control.Value.Should().NotHaveValue();
         }
 
@@ -62,7 +62,7 @@ namespace NZazu.Xceed
 
             control.Text = null;
             sut.IsValid().Should().BeTrue();
-            sut.StringValue.Should().Be(String.Empty);
+            sut.StringValue.Should().Be(string.Empty);
         }
 
         [Test]

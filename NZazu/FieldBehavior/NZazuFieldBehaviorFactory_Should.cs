@@ -10,7 +10,7 @@ namespace NZazu.FieldBehavior
     [TestFixture]
     [RequiresSTA]
     // ReSharper disable InconsistentNaming
-    class NZazuFieldBehaviorFactory_Should
+    internal class NZazuFieldBehaviorFactory_Should
     {
         [Test]
         public void Be_Creatable()

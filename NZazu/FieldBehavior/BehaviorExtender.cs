@@ -115,7 +115,7 @@ namespace NZazu.FieldBehavior
             {
                 var sut = new BehaviorExtender();
 
-                sut.Behaviors.Should().Contain(kvp => String.Compare(kvp.Key, "Empty", StringComparison.Ordinal) == 0);
+                sut.Behaviors.Should().Contain(kvp => string.Compare(kvp.Key, "Empty", StringComparison.Ordinal) == 0);
             }
 
             [Test]
@@ -126,10 +126,10 @@ namespace NZazu.FieldBehavior
                 var sut = new BehaviorExtender();
 
                 sut.RegisterType(name, type);
-                sut.Behaviors.Should().Contain(kvp => String.Compare(kvp.Key, name, StringComparison.Ordinal) == 0 && kvp.Value == type);
+                sut.Behaviors.Should().Contain(kvp => string.Compare(kvp.Key, name, StringComparison.Ordinal) == 0 && kvp.Value == type);
 
                 sut.UnregisterType(name);
-                sut.Behaviors.Should().NotContain(kvp => String.Compare(kvp.Key, name, StringComparison.Ordinal) == 0);
+                sut.Behaviors.Should().NotContain(kvp => string.Compare(kvp.Key, name, StringComparison.Ordinal) == 0);
             }
 
             [Test]
@@ -187,7 +187,7 @@ namespace NZazu.FieldBehavior
                 sut.RegisterType(name, type);
 
                 sut.Behaviors.Should()
-                    .Contain(kvp => String.Compare(kvp.Key, name, StringComparison.Ordinal) == 0 && kvp.Value == type);
+                    .Contain(kvp => string.Compare(kvp.Key, name, StringComparison.Ordinal) == 0 && kvp.Value == type);
             }
         }
 

@@ -6,7 +6,7 @@ namespace NZazu.Fields
 {
     [TestFixture, RequiresSTA]
     // ReSharper disable InconsistentNaming
-    class NZazuGroupField_Should
+    internal class NZazuGroupField_Should
     {
         [Test]
         public void Be_Creatable()

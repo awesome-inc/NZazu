@@ -13,7 +13,7 @@ using NZazu.FieldBehavior;
 namespace NZazuFiddle.Samples
 {
     // ReSharper disable once ClassNeverInstantiated.Global
-    class BehaviorSample : SampleBase
+    internal class BehaviorSample : SampleBase
     {
         public BehaviorSample()
             : base(40)
@@ -137,7 +137,7 @@ namespace NZazuFiddle.Samples
 
         [TestFixture]
         // ReSharper disable once InconsistentNaming
-        class OpenUrlOnStringEnterBehavior_Should
+        private class OpenUrlOnStringEnterBehavior_Should
         {
             [Test]
             [TestCase("asdfklj asöfkdljsa fdöakfjl saöljad fösadfa", 6, null)]

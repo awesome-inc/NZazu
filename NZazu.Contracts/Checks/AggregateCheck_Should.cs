@@ -7,7 +7,7 @@ namespace NZazu.Contracts.Checks
 {
     [TestFixture]
     // ReSharper disable InconsistentNaming
-    class AggregateCheck_Should
+    internal class AggregateCheck_Should
     {
         [Test]
         public void Validate_should_run_all_checks()

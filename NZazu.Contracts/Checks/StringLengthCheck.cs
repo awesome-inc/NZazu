@@ -16,7 +16,7 @@ namespace NZazu.Contracts.Checks
         public StringLengthCheck(int min, int max)
         {
             if (min < 0) throw new ArgumentOutOfRangeException("min", "Minimum string length must not be negative.");
-            if (max < min) throw new ArgumentOutOfRangeException(String.Format("min={0} must be less than or equal to max={1}.", min, max));
+            if (max < min) throw new ArgumentOutOfRangeException(string.Format("min={0} must be less than or equal to max={1}.", min, max));
             MinimumLength = min;
             MaximumLength = max;
 
@@ -26,7 +26,7 @@ namespace NZazu.Contracts.Checks
 
         public ValueCheckResult Validate(string value, IFormatProvider formatProvider = null)
         {
-            if (String.IsNullOrWhiteSpace(value)) return ValueCheckResult.Success;
+            if (string.IsNullOrWhiteSpace(value)) return ValueCheckResult.Success;
             
             var length = value.Length;
             if (length < MinimumLength)

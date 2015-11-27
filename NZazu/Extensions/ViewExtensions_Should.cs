@@ -9,7 +9,7 @@ namespace NZazu.Extensions
 {
     [TestFixture]
     // ReSharper disable InconsistentNaming
-    class ViewExtensions_Should
+    internal class ViewExtensions_Should
     {
         [Test]
         public void Set_field_values_on_SetFieldValues()

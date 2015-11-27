@@ -33,7 +33,7 @@ namespace NZazu.Xceed
         private static readonly Regex SpecifierPattern = new Regex(@"[C,F,G,N,P]{1}\d*", RegexOptions.Compiled);
         private static bool IsSupported(string formatString)
         {
-            if (String.IsNullOrWhiteSpace(formatString)) return false;
+            if (string.IsNullOrWhiteSpace(formatString)) return false;
             return SpecifierPattern.IsMatch(formatString);
         }
     }

@@ -5,7 +5,7 @@ namespace NZazu.Contracts
 {
     [TestFixture]
     // ReSharper disable once InconsistentNaming
-    class FormDefinition_Should
+    internal class FormDefinition_Should
     {
         [Test]
         public void Be_Creatable()

@@ -204,7 +204,7 @@ namespace NZazu
         public bool TrySetFocusOn(string focusOn)
         {
             INZazuWpfField field;
-            if (String.IsNullOrWhiteSpace(focusOn) || !TryGetField(focusOn, out field)) return false;
+            if (string.IsNullOrWhiteSpace(focusOn) || !TryGetField(focusOn, out field)) return false;
 
             var control = field.ValueControl;
             if (control == null) return false;

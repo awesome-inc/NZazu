@@ -16,7 +16,7 @@ namespace NZazu.Extensions
             return uiElement.Dispatcher.BeginInvoke(SetFocusAction(uiElement), DispatcherPriority.Render).Task;
         }
 
-        static Action SetFocusAction(UIElement uiElement)
+        private static Action SetFocusAction(UIElement uiElement)
         {
             return () => SetFocus(uiElement);
         }

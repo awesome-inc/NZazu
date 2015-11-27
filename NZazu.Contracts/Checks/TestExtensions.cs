@@ -3,7 +3,7 @@ using FluentAssertions;
 
 namespace NZazu.Contracts.Checks
 {
-    static class TestExtensions
+    internal static class TestExtensions
     {
         public static void ShouldFailWith<TError>(this IValueCheck check, string value, Predicate<TError> matchError = null)
         {

@@ -9,7 +9,7 @@ namespace NZazu.Fields
     [TestFixture]
     [RequiresSTA]
     // ReSharper disable InconsistentNaming
-    class NZazuIntegerField_Should
+    internal class NZazuIntegerField_Should
     {
         [Test]
         public void Be_Creatable()
@@ -120,7 +120,7 @@ namespace NZazu.Fields
 
             textBox.Text = null;
             sut.IsValid().Should().BeTrue();
-            sut.StringValue.Should().Be(String.Empty);
+            sut.StringValue.Should().Be(string.Empty);
         }
     }
 }

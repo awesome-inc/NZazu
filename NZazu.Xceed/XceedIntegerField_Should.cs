@@ -7,7 +7,7 @@ namespace NZazu.Xceed
     [TestFixture]
     [RequiresSTA]
     // ReSharper disable InconsistentNaming
-    class XceedIntegerField_Should
+    internal class XceedIntegerField_Should
     {
         [Test]
         public void Be_Creatable()

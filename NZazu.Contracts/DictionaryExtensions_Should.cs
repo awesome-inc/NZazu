@@ -6,7 +6,7 @@ namespace NZazu.Contracts
 {
     [TestFixture]
     // ReSharper disable once InconsistentNaming
-    class DictionaryExtensions_Should
+    internal class DictionaryExtensions_Should
     {
         [Test]
         public void Remove_Items()
