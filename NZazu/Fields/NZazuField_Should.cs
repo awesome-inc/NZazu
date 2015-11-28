@@ -132,8 +132,8 @@ namespace NZazu.Fields
             var field = new NZazuDummyField("key");
             field.Settings.Should().NotBeNull();
 
-            var propInfo = typeof (NZazuField).GetProperty("Settings");
-            propInfo.GetSetMethod(true).IsPrivate.Should().BeTrue();
+            var propInfo = typeof (NZazuField).GetProperty(nameof(NZazuField.Settings));
+            propInfo.GetSetMethod(true).Should().BeNull();
         }
 
         [Test]

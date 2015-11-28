@@ -7,8 +7,8 @@ namespace NZazu.Contracts.Checks
         private readonly ValueCheckResult _valueTooShort;
         private readonly ValueCheckResult _valueTooLong;
 
-        public int MinimumLength { get; private set; }
-        public int MaximumLength { get; private set; }
+        public int MinimumLength { get; }
+        public int MaximumLength { get; }
 
         // ReSharper disable IntroduceOptionalParameters.Global
         public StringLengthCheck(int min) : this(min, int.MaxValue) { }

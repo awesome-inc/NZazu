@@ -8,8 +8,8 @@ namespace NZazu.Contracts.Checks
         private readonly ValueCheckResult _outOfRange;
         private ValueCheckResult _notAValidNumber = new ValueCheckResult(false, new ArgumentException("The specified value is not a number"));
 
-        public double Minimum { get; private set; }
-        public double Maximum { get; private set; }
+        public double Minimum { get; }
+        public double Maximum { get; }
 
         public RangeCheck(double min, double max)
         {

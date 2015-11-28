@@ -6,9 +6,9 @@ namespace NZazuFiddle
     // ReSharper disable once ClassNeverInstantiated.Global
     public class FiddleViewModel : Screen, IFiddle
     {
-        public IFormDefinitionViewModel Definition { get; private set; }
-        public IFormDataViewModel Data { get; private set; }
-        public IPreviewViewModel Preview { get; private set; }
+        public IFormDefinitionViewModel Definition { get; }
+        public IFormDataViewModel Data { get; }
+        public IPreviewViewModel Preview { get; }
 
         public FiddleViewModel(IFormDefinitionViewModel definition,
             IFormDataViewModel data,

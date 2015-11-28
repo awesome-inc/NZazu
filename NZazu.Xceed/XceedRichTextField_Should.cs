@@ -3,13 +3,14 @@ using System.Globalization;
 using System.Threading;
 using System.Windows.Controls;
 using FluentAssertions;
+using NEdifis.Attributes;
 using NUnit.Framework;
 using Xceed.Wpf.Toolkit;
 using RichTextBox = Xceed.Wpf.Toolkit.RichTextBox;
 
 namespace NZazu.Xceed
 {
-    [TestFixture]
+    [TestFixtureFor(typeof (XceedRichTextField))]
     [Apartment(ApartmentState.STA)]
     // ReSharper disable InconsistentNaming
     internal class XceedRichTextField_Should

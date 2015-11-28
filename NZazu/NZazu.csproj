@@ -70,6 +70,7 @@
     <Compile Include="Extensions\FocusExtensions.cs" />
     <Compile Include="Extensions\FocusExtensions_Should.cs" />
     <Compile Include="FieldBehavior\BehaviorExtender.cs" />
+    <Compile Include="FieldBehavior\BehaviorExtender_Should.cs" />
     <Compile Include="FieldBehavior\EmptyNZazuFieldBehavior.cs" />
     <Compile Include="FieldBehavior\EmptyNZazuFieldBehavior_Should.cs" />
     <Compile Include="FieldBehavior\NZazuFieldBehavior.cs" />
@@ -85,10 +86,12 @@
     <Compile Include="Fields\NZazuOptionsField.cs" />
     <Compile Include="Fields\NZazuOptionsField_Should.cs" />
     <Compile Include="Fields\PropertyExtensions.cs" />
+    <Compile Include="Fields\PropertyExtensions_Should.cs" />
     <Compile Include="IResolveLayout.cs" />
     <Compile Include="INZazuWpfFieldBehavior.cs" />
     <Compile Include="Extensions\ViewExtensions_Should.cs" />
     <Compile Include="LayoutStrategy\GridLayout_Without_Application_Should.cs" />
+    <Compile Include="LayoutStrategy\Layout_Should.cs" />
     <Compile Include="NZazuConventions.cs" />
     <Compile Include="NZazuView.cs" />
     <Compile Include="ResolveFromNameProxy_Should.cs" />

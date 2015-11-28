@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
 using FluentAssertions;
+using NEdifis.Attributes;
 using NUnit.Framework;
 
 namespace NZazu.Contracts
 {
-    [TestFixture]
+    [TestFixtureFor(typeof (FormData))]
     // ReSharper disable InconsistentNaming
     internal class FormData_Should
     {

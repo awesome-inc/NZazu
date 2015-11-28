@@ -2,13 +2,14 @@ using System;
 using System.Globalization;
 using System.Linq;
 using FluentAssertions;
+using NEdifis.Attributes;
 using NUnit.Framework;
 
 namespace NZazu.Contracts.Checks
 {
-    [TestFixture]
+    [TestFixtureFor(typeof(RangeCheck))]
     // ReSharper disable InconsistentNaming
-    public class RangeCheck_Should
+    internal class RangeCheck_Should
     {
         private RangeCheck _check;
 

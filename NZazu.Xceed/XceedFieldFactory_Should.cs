@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using System.Threading;
 using FluentAssertions;
+using NEdifis.Attributes;
 using NUnit.Framework;
 using NZazu.Contracts;
 using Xceed.Wpf.Toolkit;
 
 namespace NZazu.Xceed
 {
-    [TestFixture]
+    [TestFixtureFor(typeof (XceedFieldFactory))]
     [Apartment(ApartmentState.STA)]
     // ReSharper disable InconsistentNaming
     internal class XceedFieldFactory_Should

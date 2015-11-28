@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using FluentAssertions;
-using NUnit.Framework;
 
 namespace NZazu.FieldBehavior
 {
@@ -43,13 +41,13 @@ namespace NZazu.FieldBehavior
         public static IEnumerable<KeyValuePair<string, Type>> GetBehaviors()
         {
             return Instance.Behaviors;
-        } 
+        }
 
         #endregion
 
         private readonly Dictionary<string, Type> _fieldTypes = new Dictionary<string, Type>();
 
-        private BehaviorExtender()
+        internal BehaviorExtender()
         {
             // over here you can add new default behaviors
             _fieldTypes.Add("Empty", typeof(EmptyNZazuFieldBehavior));
@@ -57,134 +55,24 @@ namespace NZazu.FieldBehavior
 
         internal IEnumerable<KeyValuePair<string, Type>> Behaviors => _fieldTypes.ToArray();
 
-        private void RegisterType(string name, Type type)
+        internal void RegisterType(string name, Type type)
         {
             if (_fieldTypes.ContainsKey(name))
             {
-                Trace.TraceInformation("A registration for '{0}' already exists for {1}. Replacing with {2}", name, _fieldTypes[name].Name, type.Name);
+                Trace.TraceInformation("A registration for '{0}' already exists for {1}. Replacing with {2}", name,
+                    _fieldTypes[name].Name, type.Name);
                 _fieldTypes[name] = type;
             }
             else
                 _fieldTypes.Add(name, type);
         }
 
-        private void UnregisterType(string name)
+        internal void UnregisterType(string name)
         {
             if (_fieldTypes.ContainsKey(name))
                 _fieldTypes.Remove(name);
             else
                 Trace.TraceInformation("A registration for '{0}' does not exist. Nothing removed", name);
         }
-
-        #region internal test due to private constructor
-
-        [TestFixture]
-        // ReSharper disable once InconsistentNaming
-        private class BehaviorExtender_Should
-        {
-            #region inner classes for testing
-
-            private class DummyFieldBehavior : EmptyNZazuFieldBehavior { }
-
-            #endregion
-
-            [Test]
-            public void Be_Creatable()
-            {
-                var sut = new BehaviorExtender();
-                sut.Should().NotBeNull();
-            }
-
-            [Test]
-            public void Have_Behavior_As_Immutable_Enumeration()
-            {
-                var sut = new BehaviorExtender();
-
-                sut.Behaviors.Should().BeAssignableTo<IEnumerable<KeyValuePair<string, Type>>>();
-                sut.Should().NotBeNull();
-            }
-
-            [Test]
-            public void Have_Empty_Registration_For_Testing()
-            {
-                var sut = new BehaviorExtender();
-
-                sut.Behaviors.Should().Contain(kvp => string.Compare(kvp.Key, "Empty", StringComparison.Ordinal) == 0);
-            }
-
-            [Test]
-            public void Add_And_Remove_Registration_Of_Additional_Behaviors()
-            {
-                const string name = "Mock";
-                var type = typeof(DummyFieldBehavior);
-                var sut = new BehaviorExtender();
-
-                sut.RegisterType(name, type);
-                sut.Behaviors.Should().Contain(kvp => string.Compare(kvp.Key, name, StringComparison.Ordinal) == 0 && kvp.Value == type);
-
-                sut.UnregisterType(name);
-                sut.Behaviors.Should().NotContain(kvp => string.Compare(kvp.Key, name, StringComparison.Ordinal) == 0);
-            }
-
-            [Test]
-            public void Do_Nothing_On_Remove_Registration_Of_Wrong_Name()
-            {
-                var name = "I do not exist as registration. " + Guid.NewGuid().ToString();
-                var sut = new BehaviorExtender();
-
-                sut.UnregisterType(name);
-            }
-
-            [Test]
-            public void Registration_And_Unregistration_Through_Public_Method()
-            {
-                const string name = "Mock For a Static Thing Which Stays Forever In List";
-                var type = typeof(DummyFieldBehavior);
-
-                // thread-safe?
-                lock (new object())
-                {
-                    Register(name, type);
-                    try
-                    {
-                        var behaviors = GetBehaviors().ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
-                        behaviors[name].Should().Be(type);
-                        behaviors["Empty"].Should().Be(typeof (EmptyNZazuFieldBehavior));
-                    }
-                    finally
-                    {
-                        Unregister(name);
-                    }
-                }
-            }
-
-            [Test]
-            public void Support_type_safe_generic_registration()
-            {
-                lock (new object())
-                {
-                    const string name = "dummy";
-                    IsRegistered(name).Should().BeFalse();
-                    Register<DummyFieldBehavior>(name);
-                    try { IsRegistered(name).Should().BeTrue(); }
-                    finally { Unregister(name); }
-                }
-            }
-
-            [Test]
-            public void Replace_Existing_Registration()
-            {
-                const string name = "Empty";
-                var type = typeof(DummyFieldBehavior);
-                var sut = new BehaviorExtender();
-
-                sut.RegisterType(name, type);
-
-                sut.Behaviors.Should()
-                    .Contain(kvp => string.Compare(kvp.Key, name, StringComparison.Ordinal) == 0 && kvp.Value == type);
-            }
-        }
-
-        #endregion
     }
 }

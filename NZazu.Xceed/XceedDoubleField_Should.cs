@@ -1,13 +1,14 @@
 using System;
 using System.Threading;
 using FluentAssertions;
+using NEdifis.Attributes;
 using NUnit.Framework;
 using NZazu.Extensions;
 using Xceed.Wpf.Toolkit;
 
 namespace NZazu.Xceed
 {
-    [TestFixture]
+    [TestFixtureFor(typeof(XceedDoubleField))]
     [Apartment(ApartmentState.STA)]
     // ReSharper disable InconsistentNaming
     internal class XceedDoubleField_Should

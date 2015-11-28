@@ -23,14 +23,14 @@ namespace NZazu.Fields
         public abstract DependencyProperty ContentProperty { get; }
 
         public abstract string Type { get; }
-        public string Key { get; private set; }
+        public string Key { get; }
         public string Prompt { get; protected internal set; }
         public string Hint { get; protected internal set; }
         public string Description { get; protected internal set; }
 
         public Control LabelControl => _labelControl.Value;
         public Control ValueControl => _valueControl.Value;
-        public Dictionary<string, string> Settings { get; private set; }
+        public Dictionary<string, string> Settings { get; }
         public INZazuWpfFieldBehavior Behavior { get; set; }
 
         protected NZazuField(string key)

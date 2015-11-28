@@ -1,10 +1,11 @@
 ﻿using System;
 using FluentAssertions;
+using NEdifis.Attributes;
 using NUnit.Framework;
 
 namespace NZazu.Contracts.Checks
 {
-    [TestFixture]
+    [TestFixtureFor(typeof (RequiredCheck))]
     // ReSharper disable InconsistentNaming
     internal class RequiredCheck_Should
     {

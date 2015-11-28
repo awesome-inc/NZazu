@@ -1,9 +1,10 @@
 ﻿using FluentAssertions;
+using NEdifis.Attributes;
 using NUnit.Framework;
 
 namespace NZazu.Contracts
 {
-    [TestFixture]
+    [TestFixtureFor(typeof (FieldDefinition))]
     // ReSharper disable once InconsistentNaming
     internal class FieldDefinition_Should
     {

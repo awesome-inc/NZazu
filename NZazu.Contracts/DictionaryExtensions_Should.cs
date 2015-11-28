@@ -1,10 +1,11 @@
 using System.Collections.Generic;
 using FluentAssertions;
+using NEdifis.Attributes;
 using NUnit.Framework;
 
 namespace NZazu.Contracts
 {
-    [TestFixture]
+    [TestFixtureFor(typeof (DictionaryExtensions))]
     // ReSharper disable once InconsistentNaming
     internal class DictionaryExtensions_Should
     {

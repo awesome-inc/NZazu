@@ -1,13 +1,14 @@
 using System;
 using System.Linq;
 using FluentAssertions;
+using NEdifis.Attributes;
 using NUnit.Framework;
 
 namespace NZazu.Contracts.Checks
 {
-    [TestFixture]
+    [TestFixtureFor(typeof (StringLengthCheck))]
     // ReSharper disable InconsistentNaming
-    public class StringLengthCheck_Should
+    internal class StringLengthCheck_Should
     {
         [Test]
         public void Ctor_MaxLEQMin_ShouldThrow()

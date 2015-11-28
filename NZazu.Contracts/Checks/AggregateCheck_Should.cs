@@ -1,11 +1,12 @@
 using System.Globalization;
 using FluentAssertions;
+using NEdifis.Attributes;
 using NSubstitute;
 using NUnit.Framework;
 
 namespace NZazu.Contracts.Checks
 {
-    [TestFixture]
+    [TestFixtureFor(typeof (AggregateCheck))]
     // ReSharper disable InconsistentNaming
     internal class AggregateCheck_Should
     {
