@@ -67,8 +67,8 @@
     <Reference Include="ICSharpCode.AvalonEdit">
       <HintPath>..\packages\AvalonEdit.5.0.2\lib\Net40\ICSharpCode.AvalonEdit.dll</HintPath>
     </Reference>
-    <Reference Include="NEdifis, Version=0.6.1.0, Culture=neutral, PublicKeyToken=68bd55412466663d, processorArchitecture=MSIL">
-      <HintPath>..\packages\NEdifis.0.6.1\lib\net45\NEdifis.dll</HintPath>
+    <Reference Include="NEdifis, Version=0.6.2.0, Culture=neutral, PublicKeyToken=68bd55412466663d, processorArchitecture=MSIL">
+      <HintPath>..\packages\NEdifis.0.6.2\lib\net45\NEdifis.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">

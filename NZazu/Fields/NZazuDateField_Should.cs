@@ -3,12 +3,13 @@ using System.Globalization;
 using System.Threading;
 using System.Windows.Controls;
 using FluentAssertions;
+using NEdifis.Attributes;
 using NUnit.Framework;
 using NZazu.Extensions;
 
 namespace NZazu.Fields
 {
-    [TestFixture]
+    [TestFixtureFor(typeof(NZazuDateField))]
     [Apartment(ApartmentState.STA)]
     // ReSharper disable InconsistentNaming
     internal class NZazuDateField_Should

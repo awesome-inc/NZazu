@@ -1,11 +1,12 @@
 using System;
 using FluentAssertions;
+using NEdifis.Attributes;
 using NSubstitute;
 using NUnit.Framework;
 
 namespace NZazu
 {
-    [TestFixture]
+    [TestFixtureFor(typeof (ResolveFromNameProxy<>))]
     // ReSharper disable once InconsistentNaming
     internal class ResolveFromNameProxy_Should
     {

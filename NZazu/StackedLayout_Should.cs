@@ -5,12 +5,13 @@ using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using FluentAssertions;
+using NEdifis.Attributes;
 using NUnit.Framework;
 using NZazu.Fields;
 
 namespace NZazu
 {
-    [TestFixture]
+    [TestFixtureFor(typeof (StackedLayout))]
     [Apartment(ApartmentState.STA)]
     // ReSharper disable InconsistentNaming
     internal class StackedLayout_Should

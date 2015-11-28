@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Windows.Controls;
 using FluentAssertions;
+using NEdifis.Attributes;
 using NSubstitute;
 using NUnit.Framework;
 using NZazu.Contracts;
@@ -10,7 +11,7 @@ using NZazu.Contracts.Checks;
 
 namespace NZazu.Fields
 {
-    [TestFixture]
+    [TestFixtureFor(typeof (NZazuFieldFactory))]
     [Apartment(ApartmentState.STA)]
     // ReSharper disable InconsistentNaming
     internal class NZazuFieldFactory_Should

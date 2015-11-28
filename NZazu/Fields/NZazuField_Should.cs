@@ -8,13 +8,14 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Media;
 using FluentAssertions;
+using NEdifis.Attributes;
 using NSubstitute;
 using NUnit.Framework;
 using NZazu.Contracts.Checks;
 
 namespace NZazu.Fields
 {
-    [TestFixture]
+    [TestFixtureFor(typeof (NZazuField))]
     [Apartment(ApartmentState.STA)]
     // ReSharper disable InconsistentNaming
     internal class NZazuField_Should

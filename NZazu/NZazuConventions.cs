@@ -16,7 +16,7 @@ namespace NZazu
             {
                 new ExcludeFromCodeCoverageClassHasBecauseAttribute(),
                 new AllClassesNeedATest(),
-                //new TestClassesShouldEndWithShould(),
+                new TestClassesShouldMatchClassToTest(), 
                 new TestClassesShouldBePrivate(),
             });
             // customized

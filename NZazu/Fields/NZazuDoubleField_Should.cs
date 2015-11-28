@@ -4,12 +4,13 @@ using System.Threading;
 using System.Windows.Controls;
 using System.Windows.Data;
 using FluentAssertions;
+using NEdifis.Attributes;
 using NUnit.Framework;
 using NZazu.Extensions;
 
 namespace NZazu.Fields
 {
-    [TestFixture]
+    [TestFixtureFor(typeof(NZazuDoubleField))]
     [Apartment(ApartmentState.STA)]
     // ReSharper disable InconsistentNaming
     internal class NZazuDoubleField_Should

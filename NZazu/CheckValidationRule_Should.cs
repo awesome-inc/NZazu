@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Globalization;
 using FluentAssertions;
+using NEdifis.Attributes;
 using NSubstitute;
 using NUnit.Framework;
 using NZazu.Contracts.Checks;
 
 namespace NZazu
 {
-    [TestFixture]
+    [TestFixtureFor(typeof(CheckValidationRule))]
     // ReSharper disable InconsistentNaming
     internal class CheckValidationRule_Should
     {

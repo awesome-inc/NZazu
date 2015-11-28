@@ -5,13 +5,14 @@ using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using FluentAssertions;
+using NEdifis.Attributes;
 using NSubstitute;
 using NUnit.Framework;
 using NZazu.Fields;
 
 namespace NZazu.LayoutStrategy
 {
-    [TestFixture]
+    [TestFixtureFor(typeof (GridLayout))]
     [Apartment(ApartmentState.STA)]
     // ReSharper disable InconsistentNaming
     internal class GridLayout_Should

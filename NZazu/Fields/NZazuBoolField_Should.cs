@@ -3,11 +3,12 @@ using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using FluentAssertions;
+using NEdifis.Attributes;
 using NUnit.Framework;
 
 namespace NZazu.Fields
 {
-    [TestFixture]
+    [TestFixtureFor(typeof (NZazuBoolField))]
     [Apartment(ApartmentState.STA)]
     // ReSharper disable InconsistentNaming
     internal class NZazuBoolField_Should

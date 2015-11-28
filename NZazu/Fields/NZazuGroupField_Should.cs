@@ -2,11 +2,12 @@ using System;
 using System.Threading;
 using System.Windows.Controls;
 using FluentAssertions;
+using NEdifis.Attributes;
 using NUnit.Framework;
 
 namespace NZazu.Fields
 {
-    [TestFixture]
+    [TestFixtureFor(typeof (NZazuGroupField))]
     [Apartment(ApartmentState.STA)]
     // ReSharper disable InconsistentNaming
     internal class NZazuGroupField_Should

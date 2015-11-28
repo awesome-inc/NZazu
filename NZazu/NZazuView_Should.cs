@@ -6,6 +6,7 @@ using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using FluentAssertions;
+using NEdifis.Attributes;
 using NSubstitute;
 using NUnit.Framework;
 using NZazu.Contracts;
@@ -14,7 +15,7 @@ using NZazu.Extensions;
 
 namespace NZazu
 {
-    [TestFixture]
+    [TestFixtureFor(typeof (NZazuView))]
     [Apartment(ApartmentState.STA)]
     // ReSharper disable InconsistentNaming
     internal class NZazuView_Should

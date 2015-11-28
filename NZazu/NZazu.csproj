@@ -42,8 +42,8 @@
       <HintPath>..\packages\FluentAssertions.4.1.0\lib\net45\FluentAssertions.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="NEdifis, Version=0.6.1.0, Culture=neutral, PublicKeyToken=68bd55412466663d, processorArchitecture=MSIL">
-      <HintPath>..\packages\NEdifis.0.6.1\lib\net45\NEdifis.dll</HintPath>
+    <Reference Include="NEdifis, Version=0.6.2.0, Culture=neutral, PublicKeyToken=68bd55412466663d, processorArchitecture=MSIL">
+      <HintPath>..\packages\NEdifis.0.6.2\lib\net45\NEdifis.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="NSubstitute, Version=1.9.2.0, Culture=neutral, PublicKeyToken=92dd2e9066daa5ca, processorArchitecture=MSIL">
@@ -68,6 +68,7 @@
   <ItemGroup>
     <Compile Include="Extensions\FieldExtensions.cs" />
     <Compile Include="Extensions\FocusExtensions.cs" />
+    <Compile Include="Extensions\FocusExtensions_Should.cs" />
     <Compile Include="FieldBehavior\BehaviorExtender.cs" />
     <Compile Include="FieldBehavior\EmptyNZazuFieldBehavior.cs" />
     <Compile Include="FieldBehavior\EmptyNZazuFieldBehavior_Should.cs" />
@@ -87,6 +88,7 @@
     <Compile Include="IResolveLayout.cs" />
     <Compile Include="INZazuWpfFieldBehavior.cs" />
     <Compile Include="Extensions\ViewExtensions_Should.cs" />
+    <Compile Include="LayoutStrategy\GridLayout_Without_Application_Should.cs" />
     <Compile Include="NZazuConventions.cs" />
     <Compile Include="NZazuView.cs" />
     <Compile Include="ResolveFromNameProxy_Should.cs" />
@@ -118,7 +120,6 @@
     <Compile Include="Fields\NZazuFieldFactory.cs" />
     <Compile Include="Fields\NZazuLabelField_Should.cs" />
     <Compile Include="Fields\NZazuTextField.cs" />
-    <Compile Include="LayoutStrategy\GridLayoutStrategy_Without_Application_Should.cs" />
     <Compile Include="Extensions\ViewExtensions.cs" />
     <Compile Include="Extensions\FieldExtensions_Should.cs" />
     <Compile Include="NZazuView_Should.cs" />
