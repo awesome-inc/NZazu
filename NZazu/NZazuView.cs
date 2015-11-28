@@ -155,7 +155,8 @@ namespace NZazu
             InitializeComponent();
         }
 
-        private ContentControl Layout { get { return this; } }
+        private ContentControl Layout => this;
+
         private void InitializeComponent()
         {
             Layout.Focusable = false;

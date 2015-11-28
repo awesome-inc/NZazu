@@ -15,10 +15,7 @@ namespace NZazu.FieldBehavior
         private static readonly Lazy<BehaviorExtender> instance =
             new Lazy<BehaviorExtender>(() => new BehaviorExtender());
 
-        public static BehaviorExtender Instance
-        {
-            get { return instance.Value; }
-        }
+        public static BehaviorExtender Instance => instance.Value;
 
         // wrapper for comfort. instance method set to private
         public static void Register(string name, Type type)
@@ -58,10 +55,7 @@ namespace NZazu.FieldBehavior
             _fieldTypes.Add("Empty", typeof(EmptyNZazuFieldBehavior));
         }
 
-        internal IEnumerable<KeyValuePair<string, Type>> Behaviors
-        {
-            get { return _fieldTypes.ToArray(); }
-        }
+        internal IEnumerable<KeyValuePair<string, Type>> Behaviors => _fieldTypes.ToArray();
 
         private void RegisterType(string name, Type type)
         {

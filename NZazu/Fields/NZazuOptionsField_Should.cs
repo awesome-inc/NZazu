@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
+using System.Threading;
 using System.Windows.Controls;
 using FluentAssertions;
 using NUnit.Framework;
@@ -6,7 +8,7 @@ using NUnit.Framework;
 namespace NZazu.Fields
 {
     [TestFixture]
-    [RequiresSTA]
+    [Apartment(ApartmentState.STA)]
     // ReSharper disable InconsistentNaming
     internal class NZazuOptionsField_Should
     {
@@ -21,6 +23,7 @@ namespace NZazu.Fields
         }
 
         [Test(Description = "https://github.com/awesome-inc/NZazu/issues/68")]
+        [STAThread]
         public void Create_ComboBox()
         {
             var sut = new NZazuOptionsField("test") { Description = "description"};
@@ -33,6 +36,7 @@ namespace NZazu.Fields
         }
 
         [Test(Description = "https://github.com/awesome-inc/NZazu/issues/68")]
+        [STAThread]
         public void Reflect_changing_Value_in_TextProperty()
         {
             var sut = new NZazuOptionsField("test")

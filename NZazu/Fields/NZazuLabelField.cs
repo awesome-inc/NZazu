@@ -9,19 +9,16 @@ namespace NZazu.Fields
         {
         }
 
-        public override string Type { get { return "label"; } }
+        public override string Type => "label";
 
-        public override bool IsEditable { get { return false; } }
+        public override bool IsEditable => false;
 
         public override string StringValue 
         {
             get { return null; }
             set {} }
 
-        public override DependencyProperty ContentProperty
-        {
-            get { return null; }
-        }
+        public override DependencyProperty ContentProperty => null;
 
         protected override Control GetValue() { return !string.IsNullOrWhiteSpace(Description) ? new Label { Content = Description } : null; }
     }

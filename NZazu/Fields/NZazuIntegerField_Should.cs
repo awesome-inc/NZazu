@@ -1,4 +1,5 @@
 using System;
+using System.Threading;
 using System.Windows.Controls;
 using FluentAssertions;
 using NUnit.Framework;
@@ -7,7 +8,7 @@ using NZazu.Extensions;
 namespace NZazu.Fields
 {
     [TestFixture]
-    [RequiresSTA]
+    [Apartment(ApartmentState.STA)]
     // ReSharper disable InconsistentNaming
     internal class NZazuIntegerField_Should
     {
@@ -22,6 +23,7 @@ namespace NZazu.Fields
         }
 
         [Test]
+        [STAThread]
         public void Create_Control_With_ToolTip_Matching_Description()
         {
             var sut = new NZazuIntegerField("test")
@@ -37,6 +39,7 @@ namespace NZazu.Fields
         }
 
         [Test]
+        [STAThread]
         public void Format_TextBox_From_Value()
         {
             var sut = new NZazuIntegerField("test");
@@ -56,6 +59,7 @@ namespace NZazu.Fields
         }
 
         [Test]
+        [STAThread]
         public void Format_Value_From_TextBox()
         {
             var sut = new NZazuIntegerField("test");
@@ -80,6 +84,7 @@ namespace NZazu.Fields
         }
 
         [Test]
+        [STAThread]
         public void Format_TextBox_From_StringValue()
         {
             var sut = new NZazuIntegerField("test");
@@ -99,6 +104,7 @@ namespace NZazu.Fields
         }
 
         [Test]
+        [STAThread]
         public void Format_StringValue_From_TextBox()
         {
             var sut = new NZazuIntegerField("test");

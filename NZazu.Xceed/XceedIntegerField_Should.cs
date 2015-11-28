@@ -1,3 +1,5 @@
+using System;
+using System.Threading;
 using FluentAssertions;
 using NUnit.Framework;
 using Xceed.Wpf.Toolkit;
@@ -5,7 +7,7 @@ using Xceed.Wpf.Toolkit;
 namespace NZazu.Xceed
 {
     [TestFixture]
-    [RequiresSTA]
+    [Apartment(ApartmentState.STA)]
     // ReSharper disable InconsistentNaming
     internal class XceedIntegerField_Should
     {
@@ -20,6 +22,7 @@ namespace NZazu.Xceed
         }
 
         [Test]
+        [STAThread]
         public void Use_IntegerUpdown()
         {
             var sut = new XceedIntegerField("test");
@@ -37,6 +40,7 @@ namespace NZazu.Xceed
         [TestCase("N2", "N2")]
         [TestCase("P3", "P3")]
         [TestCase("foobar", "")]
+        [STAThread]
         public void Only_use_supported_FormatStrings(string formatString, string expected)
         {
 

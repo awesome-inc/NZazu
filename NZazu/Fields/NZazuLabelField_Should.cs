@@ -1,3 +1,5 @@
+using System;
+using System.Threading;
 using System.Windows.Controls;
 using FluentAssertions;
 using NUnit.Framework;
@@ -5,11 +7,12 @@ using NUnit.Framework;
 namespace NZazu.Fields
 {
     [TestFixture]
-    [RequiresSTA]
+    [Apartment(ApartmentState.STA)]
     // ReSharper disable InconsistentNaming
     internal class NZazuLabelField_Should
     {
         [Test]
+        [STAThread]
         public void Create_ValueControl_Matching_Description()
         {
             var sut = new NZazuLabelField("test")

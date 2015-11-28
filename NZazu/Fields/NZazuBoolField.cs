@@ -23,8 +23,8 @@ namespace NZazu.Fields
             return Value.HasValue ? Value.Value.ToString() : string.Empty;
         }
 
-        public override string Type { get { return "bool"; } }
-        public override DependencyProperty ContentProperty { get { return ToggleButton.IsCheckedProperty; } }
+        public override string Type => "bool";
+        public override DependencyProperty ContentProperty => ToggleButton.IsCheckedProperty;
 
         protected override Control GetValue()
         {

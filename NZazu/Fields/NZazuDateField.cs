@@ -11,8 +11,8 @@ namespace NZazu.Fields
 
         public NZazuDateField(string key) : base(key) { }
 
-        public override string Type { get { return "date"; } }
-        public override DependencyProperty ContentProperty { get { return DatePicker.SelectedDateProperty; } }
+        public override string Type => "date";
+        public override DependencyProperty ContentProperty => DatePicker.SelectedDateProperty;
 
         protected override Control GetValue()
         {

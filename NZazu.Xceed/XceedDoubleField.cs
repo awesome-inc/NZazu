@@ -13,12 +13,9 @@ namespace NZazu.Xceed
         {
         }
 
-        public override DependencyProperty ContentProperty
-        {
-            get { return DoubleUpDown.ValueProperty; }
-        }
+        public override DependencyProperty ContentProperty => DoubleUpDown.ValueProperty;
 
-        public override string Type { get { return "double"; } }
+        public override string Type => "double";
 
         protected override Control GetValue()
         {

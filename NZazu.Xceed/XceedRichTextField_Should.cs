@@ -1,5 +1,6 @@
 using System;
 using System.Globalization;
+using System.Threading;
 using System.Windows.Controls;
 using FluentAssertions;
 using NUnit.Framework;
@@ -9,7 +10,7 @@ using RichTextBox = Xceed.Wpf.Toolkit.RichTextBox;
 namespace NZazu.Xceed
 {
     [TestFixture]
-    [RequiresSTA]
+    [Apartment(ApartmentState.STA)]
     // ReSharper disable InconsistentNaming
     internal class XceedRichTextField_Should
     {
@@ -23,6 +24,7 @@ namespace NZazu.Xceed
         }
 
         [Test]
+        [STAThread]
         public void Override_ContentProperty_to_RichTextBox()
         {
             var field = new XceedRichTextField("key");
@@ -41,6 +43,7 @@ namespace NZazu.Xceed
         }
 
         [Test]
+        [STAThread]
         public void Set_Vertical_Scrollbar()
         {
             var field = new XceedRichTextField("key");
@@ -49,6 +52,7 @@ namespace NZazu.Xceed
         }
 
         [Test]
+        [STAThread]
         public void Respect_Height_Setting()
         {
             var field = new XceedRichTextField("key");
@@ -73,16 +77,17 @@ namespace NZazu.Xceed
         [TestCase("xaml", typeof(XamlFormatter))]
         [TestCase(null, typeof(RtfFormatter))]
         [TestCase("foobar", typeof(RtfFormatter))]
+        [STAThread]
         public void Respect_Format_Setting(string format, Type formatterType)
         {
-            var field = new XceedRichTextField("key");
-            field.Settings["Format"] = format;
+            var field = new XceedRichTextField("key") {Settings = {["Format"] = format}};
 
             var textBox = (RichTextBox)field.ValueControl;
             textBox.TextFormatter.Should().BeOfType(formatterType);
         }
 
         [Test]
+        [STAThread]
         public void Add_optional_RichTextFormatBar()
         {
             var field = new XceedRichTextField("key");
@@ -90,8 +95,7 @@ namespace NZazu.Xceed
             var formatBar = RichTextBoxFormatBarManager.GetFormatBar(textBox);
             formatBar.Should().BeNull();
 
-            field = new XceedRichTextField("key");
-            field.Settings["ShowFormatBar"] = true.ToString();
+            field = new XceedRichTextField("key") {Settings = {["ShowFormatBar"] = true.ToString()}};
 
             textBox = (RichTextBox)field.ValueControl;
             formatBar = RichTextBoxFormatBarManager.GetFormatBar(textBox);

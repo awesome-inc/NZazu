@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Windows.Controls;
 using FluentAssertions;
 using NSubstitute;
@@ -9,7 +10,8 @@ using NZazu.Contracts.Checks;
 
 namespace NZazu.Fields
 {
-    [TestFixture, RequiresSTA]
+    [TestFixture]
+    [Apartment(ApartmentState.STA)]
     // ReSharper disable InconsistentNaming
     internal class NZazuFieldFactory_Should
     {
@@ -32,6 +34,7 @@ namespace NZazu.Fields
         [TestCase("double", typeof(TextBox))]
         [TestCase("group", typeof(ContentControl))]
         [TestCase("option", typeof(ComboBox))]
+        [STAThread]
         public void Support(string fieldType, Type controlType)
         {
             var sut = new NZazuFieldFactory();
@@ -46,6 +49,7 @@ namespace NZazu.Fields
         }
 
         [Test]
+        [STAThread]
         public void Return_Label_If_Not_Supported()
         {
             var sut = new NZazuFieldFactory();

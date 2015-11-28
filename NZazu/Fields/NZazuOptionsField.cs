@@ -10,12 +10,9 @@ namespace NZazu.Fields
         {
         }
 
-        public override DependencyProperty ContentProperty
-        {
-            get { return ComboBox.TextProperty; }
-        }
+        public override DependencyProperty ContentProperty => ComboBox.TextProperty;
 
-        public override string Type { get { return "option"; } }
+        public override string Type => "option";
 
         public string[] Options { get; protected internal set; }
 

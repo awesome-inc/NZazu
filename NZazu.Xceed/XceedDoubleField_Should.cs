@@ -1,4 +1,5 @@
 using System;
+using System.Threading;
 using FluentAssertions;
 using NUnit.Framework;
 using NZazu.Extensions;
@@ -7,7 +8,7 @@ using Xceed.Wpf.Toolkit;
 namespace NZazu.Xceed
 {
     [TestFixture]
-    [RequiresSTA]
+    [Apartment(ApartmentState.STA)]
     // ReSharper disable InconsistentNaming
     internal class XceedDoubleField_Should
     {
@@ -22,6 +23,7 @@ namespace NZazu.Xceed
         }
 
         [Test]
+        [STAThread]
         public void Use_DoubleUpdown()
         {
             var sut = new XceedDoubleField("test");
@@ -32,6 +34,7 @@ namespace NZazu.Xceed
         }
 
         [Test]
+        [STAThread]
         public void Format_ControlValue_From_StringValue()
         {
             var sut = new XceedDoubleField("test");
@@ -48,6 +51,7 @@ namespace NZazu.Xceed
         }
 
         [Test]
+        [STAThread]
         public void Format_StringValue_From_ControlValue()
         {
             var sut = new XceedDoubleField("test");
@@ -66,6 +70,7 @@ namespace NZazu.Xceed
         }
 
         [Test]
+        [STAThread]
         public void Not_Set_null_format_string()
         {
             var sut = new XceedDoubleField("test");

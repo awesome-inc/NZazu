@@ -13,7 +13,7 @@ namespace NZazu.Fields
 {
     public abstract class NZazuField : INZazuWpfField
     {
-        protected IFormatProvider FormatProvider { get { return CultureInfo.InvariantCulture; } }
+        protected IFormatProvider FormatProvider => CultureInfo.InvariantCulture;
 
         private readonly Lazy<Control> _labelControl;
         private readonly Lazy<Control> _valueControl;
@@ -28,8 +28,8 @@ namespace NZazu.Fields
         public string Hint { get; protected internal set; }
         public string Description { get; protected internal set; }
 
-        public Control LabelControl { get { return _labelControl.Value; } }
-        public Control ValueControl { get { return _valueControl.Value; } }
+        public Control LabelControl => _labelControl.Value;
+        public Control ValueControl => _valueControl.Value;
         public Dictionary<string, string> Settings { get; private set; }
         public INZazuWpfFieldBehavior Behavior { get; set; }
 
@@ -167,7 +167,7 @@ namespace NZazu.Fields
             }
         }
 
-        public override bool IsEditable { get { return true; } }
+        public override bool IsEditable => true;
 
         public override string StringValue
         {

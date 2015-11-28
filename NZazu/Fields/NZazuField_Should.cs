@@ -2,6 +2,7 @@ using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -14,7 +15,7 @@ using NZazu.Contracts.Checks;
 namespace NZazu.Fields
 {
     [TestFixture]
-    [RequiresSTA]
+    [Apartment(ApartmentState.STA)]
     // ReSharper disable InconsistentNaming
     internal class NZazuField_Should
     {
@@ -30,8 +31,8 @@ namespace NZazu.Fields
 
             public override bool IsEditable { get { throw new NotImplementedException(); } }
             public override string StringValue { get; set; }
-            public override string Type { get { return null; } }
-            public override DependencyProperty ContentProperty { get { return null; } }
+            public override string Type => null;
+            public override DependencyProperty ContentProperty => null;
             protected override Control GetValue() { return null; }
         }
 
@@ -43,7 +44,7 @@ namespace NZazu.Fields
             {
             }
 
-            public override DependencyProperty ContentProperty { get { return ContentControl.ContentProperty; } }
+            public override DependencyProperty ContentProperty => ContentControl.ContentProperty;
             protected override Control GetValue() { return new ContentControl(); }
         }
 
@@ -63,9 +64,11 @@ namespace NZazu.Fields
         [Test]
         public void Validate_ctor_parameters()
         {
-            new Action(() => new NZazuDummyField("")).Invoking(a => a.Invoke()).ShouldThrow<ArgumentException>();
-            new Action(() => new NZazuDummyField(null)).Invoking(a => a.Invoke()).ShouldThrow<ArgumentException>();
-            new Action(() => new NZazuDummyField("\t\r\n ")).Invoking(a => a.Invoke()).ShouldThrow<ArgumentException>();
+            // ReSharper disable ObjectCreationAsStatement
+            0.Invoking(x => new NZazuDummyField("")).ShouldThrow<ArgumentException>();
+            1.Invoking(x => new NZazuDummyField(null)).ShouldThrow<ArgumentException>();
+            2.Invoking(x => new NZazuDummyField("\t\r\n ")).ShouldThrow<ArgumentException>();
+            // ReSharper restore ObjectCreationAsStatement
         }
 
         [Test]
@@ -77,6 +80,7 @@ namespace NZazu.Fields
         }
 
         [Test]
+        [STAThread]
         public void Create_Label_Matching_Prompt()
         {
             var sut = new NZazuDummyField("test")
@@ -132,6 +136,7 @@ namespace NZazu.Fields
         }
 
         [Test]
+        [STAThread]
         public void Respect_Height_Setting()
         {
             var field = new NZazuField_With_Description_As_Content_Property("key");
@@ -144,6 +149,7 @@ namespace NZazu.Fields
         }
 
         [Test]
+        [STAThread]
         public void Respect_Width_Setting()
         {
             var field = new NZazuField_With_Description_As_Content_Property("key");
@@ -169,6 +175,7 @@ namespace NZazu.Fields
         #region test NZazuDummyField with bi-directional content property
 
         [Test]
+        [STAThread]
         public void Attach_FieldValidationRule_according_to_checks()
         {
             // but we need a dummy content enabled field -> no content, no validation
@@ -209,6 +216,7 @@ namespace NZazu.Fields
         }
 
         [Test]
+        [STAThread]
         public void Respect_generic_settings()
         {
             var sut = new NZazuField_With_Description_As_Content_Property("test");

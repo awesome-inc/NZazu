@@ -12,11 +12,11 @@ namespace NZazu.Fields
             Fields = Enumerable.Empty<INZazuWpfField>();
         }
 
-        public override bool IsEditable { get { return false; } }
+        public override bool IsEditable => false;
         public override string StringValue { get; set; }
 
-        public override DependencyProperty ContentProperty { get { return null; } }
-        public override string Type { get { return "group"; } }
+        public override DependencyProperty ContentProperty => null;
+        public override string Type => "group";
 
         protected override Control GetValue()
         {

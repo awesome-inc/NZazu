@@ -58,8 +58,8 @@ namespace NZazu.Fields
 
         public NZazuDoubleField(string key) : base(key) { }
 
-        public override string Type { get { return "double"; } }
-        public override DependencyProperty ContentProperty { get { return TextBox.TextProperty; } }
+        public override string Type => "double";
+        public override DependencyProperty ContentProperty => TextBox.TextProperty;
 
         protected override Control GetValue()
         {

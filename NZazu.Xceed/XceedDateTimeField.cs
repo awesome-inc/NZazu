@@ -12,10 +12,7 @@ namespace NZazu.Xceed
         {
         }
 
-        public override DependencyProperty ContentProperty
-        {
-            get { return DateTimePicker.ValueProperty; }
-        }
+        public override DependencyProperty ContentProperty => DateTimePicker.ValueProperty;
 
         protected override Control GetValue()
         {

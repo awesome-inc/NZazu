@@ -15,10 +15,7 @@ namespace NZazu.Xceed
         {
         }
 
-        public override DependencyProperty ContentProperty
-        {
-            get { return RichTextBox.TextProperty; }
-        }
+        public override DependencyProperty ContentProperty => RichTextBox.TextProperty;
 
         protected override Control GetValue()
         {

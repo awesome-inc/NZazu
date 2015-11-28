@@ -13,10 +13,7 @@ namespace NZazu.Xceed
         {
         }
 
-        public override DependencyProperty ContentProperty
-        {
-            get { return IntegerUpDown.ValueProperty; }
-        }
+        public override DependencyProperty ContentProperty => IntegerUpDown.ValueProperty;
 
         protected override Control GetValue()
         {
