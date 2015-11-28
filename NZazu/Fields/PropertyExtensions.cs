@@ -1,12 +1,10 @@
 using System;
 using System.ComponentModel;
-using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Reflection;
 
 namespace NZazu.Fields
 {
-    [ExcludeFromCodeCoverage]
     internal static class PropertyExtensions
     {
         public static bool CanSetProperty<T>(this T instance, string propertyName)
@@ -22,7 +20,7 @@ namespace NZazu.Fields
                 // test if a corresponding property exists for the given type.
                 var propInfo = type.GetProperty(parent, BindingFlags.Public | BindingFlags.Instance);
                 if (propInfo == null)
-                    throw new ArgumentNullException(string.Format("Property \"{0}\" does not exist.", propName));
+                    throw new ArgumentNullException($"Property \"{propName}\" does not exist.");
 
                 propName = propName.Substring(p + 1);
                 obj = propInfo.GetValue(obj, null);
@@ -48,7 +46,7 @@ namespace NZazu.Fields
                     // test if a corresponding property exists for the given type.
                     var propInfo = type.GetProperty(propName, BindingFlags.Public | BindingFlags.Instance);
                     if (propInfo == null)
-                        throw new ArgumentNullException(string.Format("Property \"{0}\" does not exist.", propName));
+                        throw new ArgumentNullException($"Property \"{propName}\" does not exist.");
 
                     var childPropName = propertyName.Substring(p + 1);
                     var childItem = propInfo.GetValue(item, null);
@@ -63,7 +61,7 @@ namespace NZazu.Fields
                     // test if a corresponding property exists for the given type.
                     var propInfo = type.GetProperty(propName, BindingFlags.Public | BindingFlags.Instance);
                     if (propInfo == null)
-                        throw new ArgumentNullException(string.Format("Property \"{0}\" does not exist.", propName));
+                        throw new ArgumentNullException($"Property \"{propName}\" does not exist.");
 
                     // deserialize using TypeConverters
                     var outVal = GetConvertedValue(propValue, propInfo);

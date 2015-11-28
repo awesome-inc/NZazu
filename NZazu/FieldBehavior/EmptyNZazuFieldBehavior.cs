@@ -6,8 +6,8 @@ namespace NZazu.FieldBehavior
     {
         public override void AttachTo(INZazuWpfField field, INZazuWpfView view)
         {
-            if (field == null) throw new ArgumentNullException("field");
-            if (view == null) throw new ArgumentNullException("view");
+            if (field == null) throw new ArgumentNullException(nameof(field));
+            if (view == null) throw new ArgumentNullException(nameof(view));
         }
 
         public override void Detach() { }

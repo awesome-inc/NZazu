@@ -29,7 +29,7 @@ namespace NZazu.Fields
 
         public INZazuWpfField CreateField(FieldDefinition fieldDefinition)
         {
-            if (fieldDefinition == null) throw new ArgumentNullException("fieldDefinition");
+            if (fieldDefinition == null) throw new ArgumentNullException(nameof(fieldDefinition));
             var fieldTypeSafe = fieldDefinition.Type ?? DefaultType;
 
             NZazuField field;
@@ -82,7 +82,7 @@ namespace NZazu.Fields
 
         private void ProcessGroupField(FieldDefinition fieldDefinition, NZazuGroupField groupField)
         {
-            if (fieldDefinition == null) throw new ArgumentNullException("fieldDefinition");
+            if (fieldDefinition == null) throw new ArgumentNullException(nameof(fieldDefinition));
             if (groupField == null) return;
 
             if (!string.IsNullOrWhiteSpace(fieldDefinition.Layout))
@@ -94,7 +94,7 @@ namespace NZazu.Fields
 
         private static void CopyValues(FieldDefinition fieldDefinition, NZazuOptionsField optionsField)
         {
-            if (fieldDefinition == null) throw new ArgumentNullException("fieldDefinition");
+            if (fieldDefinition == null) throw new ArgumentNullException(nameof(fieldDefinition));
             if (optionsField == null) return;
             if (fieldDefinition.Values == null || !fieldDefinition.Values.Any()) return;
             optionsField.Options = fieldDefinition.Values;

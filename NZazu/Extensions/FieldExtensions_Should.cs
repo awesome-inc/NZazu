@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Windows.Controls;
 using FluentAssertions;
+using NEdifis.Attributes;
 using NSubstitute;
 using NUnit.Framework;
 using NZazu.Contracts.Checks;
 
 namespace NZazu.Extensions
 {
-    [TestFixture]
+    [TestFixtureFor(typeof (FieldExtensions))]
     // ReSharper disable InconsistentNaming
     internal class FieldExtensions_Should
     {

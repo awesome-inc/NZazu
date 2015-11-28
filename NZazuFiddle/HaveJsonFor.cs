@@ -33,7 +33,7 @@ namespace NZazuFiddle
                 if (Equals(value, _jsonError)) return;
                 _jsonError = value;
                 NotifyOfPropertyChange();
-                NotifyOfPropertyChange("HasJsonError");
+                NotifyOfPropertyChange(nameof(HasJsonError));
             }
         }
     }

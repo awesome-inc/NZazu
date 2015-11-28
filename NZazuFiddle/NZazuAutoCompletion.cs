@@ -50,8 +50,8 @@ namespace NZazuFiddle
             return behaviors.Select(kvp => new NzazuCompletionData
                 {
                     Text = kvp.Key,
-                    Replacement = string.Format("{{ \"Name\": \"{0}\"}}", kvp.Key),
-                    Description = string.Format("Add behavior '{0}'", kvp.Key)
+                    Replacement = $"{{ \"Name\": \"{kvp.Key}\"}}",
+                    Description = $"Add behavior '{kvp.Key}'"
                 })
                 .OrderBy(c => c.Text)
                 .ToList();
@@ -176,7 +176,7 @@ namespace NZazuFiddle
             return new NzazuCompletionData
             {
                 Text = p.Name,
-                Replacement = string.Format("{{ \"{0}\": \"{1}\" }}", p.Name, value),
+                Replacement = $"{{ \"{p.Name}\": \"{value}\" }}",
                 Description = GetDescription(p)
             };
         }

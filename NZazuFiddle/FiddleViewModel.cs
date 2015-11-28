@@ -14,9 +14,9 @@ namespace NZazuFiddle
             IFormDataViewModel data,
             IPreviewViewModel preview)
         {
-            if (definition == null) throw new ArgumentNullException("definition");
-            if (data == null) throw new ArgumentNullException("data");
-            if (preview == null) throw new ArgumentNullException("preview");
+            if (definition == null) throw new ArgumentNullException(nameof(definition));
+            if (data == null) throw new ArgumentNullException(nameof(data));
+            if (preview == null) throw new ArgumentNullException(nameof(preview));
             Definition = definition;
             Data = data;
             Preview = preview;

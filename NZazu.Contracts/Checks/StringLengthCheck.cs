@@ -15,13 +15,15 @@ namespace NZazu.Contracts.Checks
 
         public StringLengthCheck(int min, int max)
         {
-            if (min < 0) throw new ArgumentOutOfRangeException("min", "Minimum string length must not be negative.");
-            if (max < min) throw new ArgumentOutOfRangeException(string.Format("min={0} must be less than or equal to max={1}.", min, max));
+            if (min < 0) throw new ArgumentOutOfRangeException(nameof(min), "Minimum string length must not be negative.");
+            if (max < min) throw new ArgumentOutOfRangeException($"min={min} must be less than or equal to max={max}.");
             MinimumLength = min;
             MaximumLength = max;
 
-            _valueTooShort = new ValueCheckResult(false, new ArgumentException(string.Format("The specified string is too short (at least {0} characters)", MinimumLength)));
-            _valueTooLong = new ValueCheckResult(false, new ArgumentException(string.Format("The specified string is too loong (at most {0} characters)", MaximumLength)));
+            _valueTooShort = new ValueCheckResult(false, new ArgumentException(
+                $"The specified string is too short (at least {MinimumLength} characters)"));
+            _valueTooLong = new ValueCheckResult(false, new ArgumentException(
+                $"The specified string is too loong (at most {MaximumLength} characters)"));
         }
 
         public ValueCheckResult Validate(string value, IFormatProvider formatProvider = null)

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using FluentAssertions;
+using NEdifis.Attributes;
 using NSubstitute;
 using NUnit.Framework;
 using NZazu.Contracts;
@@ -7,7 +8,7 @@ using NZazu.Contracts.Checks;
 
 namespace NZazu.Extensions
 {
-    [TestFixture]
+    [TestFixtureFor(typeof(ViewExtensions))]
     // ReSharper disable InconsistentNaming
     internal class ViewExtensions_Should
     {

@@ -13,12 +13,13 @@ namespace NZazu.Contracts.Checks
 
         public RangeCheck(double min, double max)
         {
-            if (max.CompareTo(min) < 0) throw new ArgumentOutOfRangeException(string.Format("min={0} must be less than or equal to max={1}.", min, max));
+            if (max.CompareTo(min) < 0) throw new ArgumentOutOfRangeException(
+                $"min={min} must be less than or equal to max={max}.");
             Minimum = min;
             Maximum = max;
 
             _outOfRange = new ValueCheckResult(false, new ArgumentOutOfRangeException("value",
-                string.Format("The specified value must be between {0} and {1}", Minimum, Maximum)));
+                $"The specified value must be between {Minimum} and {Maximum}"));
         }
 
         public ValueCheckResult Validate(string value, IFormatProvider formatProvider = null)

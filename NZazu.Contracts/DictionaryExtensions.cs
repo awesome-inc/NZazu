@@ -11,8 +11,8 @@ namespace NZazu.Contracts
             Func<KeyValuePair<TKey, TValue>, bool> predicate)
             where TValue : class
         {
-            if (source == null) throw new ArgumentNullException("source");
-            if (predicate == null) throw new ArgumentNullException("predicate");
+            if (source == null) throw new ArgumentNullException(nameof(source));
+            if (predicate == null) throw new ArgumentNullException(nameof(predicate));
 
             var validItems = source.Where((kvp, i) => !predicate(kvp));
             return validItems.ToDictionary(kvp => kvp.Key, kvp => kvp.Value);

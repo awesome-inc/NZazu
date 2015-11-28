@@ -11,7 +11,7 @@ namespace NZazu.Contracts
     {
         public IValueCheck CreateCheck(CheckDefinition checkDefinition)
         {
-            if (checkDefinition == null) throw new ArgumentNullException("checkDefinition");
+            if (checkDefinition == null) throw new ArgumentNullException(nameof(checkDefinition));
             if (string.IsNullOrWhiteSpace(checkDefinition.Type)) throw new ArgumentException("check type not specified");
             switch (checkDefinition.Type)
             {

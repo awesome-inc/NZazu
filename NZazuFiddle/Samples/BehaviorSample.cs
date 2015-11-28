@@ -90,7 +90,7 @@ namespace NZazuFiddle.Samples
 
             public void AttachTo(INZazuWpfField field, INZazuWpfView view)
             {
-                if (field == null) throw new ArgumentNullException("field");
+                if (field == null) throw new ArgumentNullException(nameof(field));
                 var valueControl = field.ValueControl;
 
                 _control = valueControl;

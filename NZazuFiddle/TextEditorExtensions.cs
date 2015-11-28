@@ -32,7 +32,7 @@ namespace NZazuFiddle
         public static string GetTextBeforeCaret(this TextEditor editor, int words = 2)
         {
             if (editor == null)
-                throw new ArgumentNullException("editor");
+                throw new ArgumentNullException(nameof(editor));
             int endOffset = editor.CaretOffset;
             int startOffset = FindPrevWordStart(editor.Document, endOffset, words);
             if (startOffset < 0)

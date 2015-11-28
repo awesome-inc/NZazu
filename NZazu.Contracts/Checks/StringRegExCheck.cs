@@ -11,8 +11,8 @@ namespace NZazu.Contracts.Checks
 
         public StringRegExCheck(string hint, params Regex[] regex)
         {
-            if (string.IsNullOrWhiteSpace(hint)) throw new ArgumentNullException("hint");
-            if (regex == null) throw new ArgumentNullException("regex");
+            if (string.IsNullOrWhiteSpace(hint)) throw new ArgumentNullException(nameof(hint));
+            if (regex == null) throw new ArgumentNullException(nameof(regex));
             if (!regex.Any()) throw new ArgumentException("No regex patterns specified");
             _regex = regex;
 
