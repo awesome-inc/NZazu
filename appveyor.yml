@@ -15,9 +15,9 @@
       secure: lrwREUV4nO99AU0A6xVx/MNF0BaJc8A1B8dwEGMLqmYKGqD5E7PJ/IC9RHcle6pk
   before_build:
     - ps: gitversion /l console /output buildserver
-  - nuget setapikey %apiKey% -Verbosity quiet
+    - nuget setapikey %apiKey% -Verbosity quiet
   build_script:
-  - build.bat NZazu.sln /t:Test;Deploy /v:m
+    - build.bat NZazu.sln /t:Test;Deploy /v:m
 #  after_build:
 #  - ps: >-
 #      $wc = New-Object 'System.Net.WebClient'
@@ -36,7 +36,7 @@
   before_build:
     - ps: gitversion /l console /output buildserver
   build_script:
-  - build.bat NZazu.sln /t:Test /v:m
+    - build.bat NZazu.sln /t:Test /v:m
 #  after_build:
 #  - ps: >-
 #      $wc = New-Object 'System.Net.WebClient'
