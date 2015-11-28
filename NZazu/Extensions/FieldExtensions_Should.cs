@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Windows.Controls;
 using FluentAssertions;
 using NEdifis.Attributes;
@@ -9,6 +10,7 @@ using NZazu.Contracts.Checks;
 namespace NZazu.Extensions
 {
     [TestFixtureFor(typeof (FieldExtensions))]
+    [Apartment(ApartmentState.STA)]
     // ReSharper disable InconsistentNaming
     internal class FieldExtensions_Should
     {
@@ -96,7 +98,7 @@ namespace NZazu.Extensions
             textBox.IsReadOnly.Should().BeFalse();
         }
 
-        [Test(Description = "especially for group fields"), RequiresSTA]
+        [Test(Description = "especially for group fields")]
         [STAThread]
         public void Not_Set_ReadOnly_if_not_editable()
         {
