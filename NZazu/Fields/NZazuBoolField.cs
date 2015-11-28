@@ -12,7 +12,7 @@ namespace NZazu.Fields
         protected override void SetStringValue(string value)
         {
             bool b;
-            if (!String.IsNullOrWhiteSpace(value) && bool.TryParse(value, out b))
+            if (!string.IsNullOrWhiteSpace(value) && bool.TryParse(value, out b))
                 Value = b;
             else
                 Value = null;
@@ -20,11 +20,11 @@ namespace NZazu.Fields
 
         protected override string GetStringValue()
         {
-            return Value.HasValue ? Value.Value.ToString() : String.Empty;
+            return Value.HasValue ? Value.Value.ToString() : string.Empty;
         }
 
-        public override string Type { get { return "bool"; } }
-        public override DependencyProperty ContentProperty { get { return ToggleButton.IsCheckedProperty; } }
+        public override string Type => "bool";
+        public override DependencyProperty ContentProperty => ToggleButton.IsCheckedProperty;
 
         protected override Control GetValue()
         {

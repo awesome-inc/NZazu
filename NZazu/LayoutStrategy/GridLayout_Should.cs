@@ -1,17 +1,21 @@
+using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using FluentAssertions;
+using NEdifis.Attributes;
 using NSubstitute;
 using NUnit.Framework;
 using NZazu.Fields;
 
 namespace NZazu.LayoutStrategy
 {
-    [TestFixture, RequiresSTA]
+    [TestFixtureFor(typeof (GridLayout))]
+    [Apartment(ApartmentState.STA)]
     // ReSharper disable InconsistentNaming
-    class GridLayout_Should
+    internal class GridLayout_Should
     {
         private Application application;
 
@@ -35,6 +39,7 @@ namespace NZazu.LayoutStrategy
         }
 
         [Test]
+        [STAThread]
         public void Layout_fields_in_a_two_column_grid()
         {
             var sut = new GridLayout();
@@ -69,6 +74,7 @@ namespace NZazu.LayoutStrategy
         }
 
         [Test]
+        [STAThread]
         public void Skip_rows_if_label_and_value_both_empty()
         {
             var sut = new GridLayout();
@@ -92,6 +98,7 @@ namespace NZazu.LayoutStrategy
         }
 
         [Test]
+        [STAThread]
         public void Set_Validation_Error_Template()
         {
             var expectedTemplate = new ControlTemplate();
@@ -120,6 +127,7 @@ namespace NZazu.LayoutStrategy
         }
 
         [Test]
+        [STAThread]
         public void Recurse_on_group_fields()
         {
             var sut = new GridLayout();//null, resolveLayout);
@@ -166,6 +174,7 @@ namespace NZazu.LayoutStrategy
         }
 
         [Test]
+        [STAThread]
         public void Use_resolve_layout_on_groupfields()
         {
             var resolveLayout = Substitute.For<IResolveLayout>();

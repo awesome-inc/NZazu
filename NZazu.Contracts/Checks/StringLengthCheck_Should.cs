@@ -1,13 +1,14 @@
 using System;
 using System.Linq;
 using FluentAssertions;
+using NEdifis.Attributes;
 using NUnit.Framework;
 
 namespace NZazu.Contracts.Checks
 {
-    [TestFixture]
+    [TestFixtureFor(typeof (StringLengthCheck))]
     // ReSharper disable InconsistentNaming
-    public class StringLengthCheck_Should
+    internal class StringLengthCheck_Should
     {
         [Test]
         public void Ctor_MaxLEQMin_ShouldThrow()
@@ -25,7 +26,7 @@ namespace NZazu.Contracts.Checks
         public void IsValid_BelowMin_fails()
         {
             var _check = new StringLengthCheck(4, 6);
-            var candidate = new String('A', _check.MinimumLength - 1);
+            var candidate = new string('A', _check.MinimumLength - 1);
             _check.ShouldFailWith<ArgumentException>(candidate);
         }
 
@@ -33,7 +34,7 @@ namespace NZazu.Contracts.Checks
         public void IsValid_AboveMax_fails()
         {
             var _check = new StringLengthCheck(4, 6);
-            var candidate = new String('A', _check.MaximumLength + 1);
+            var candidate = new string('A', _check.MaximumLength + 1);
             _check.ShouldFailWith<ArgumentException>(candidate);
         }
 
@@ -42,7 +43,7 @@ namespace NZazu.Contracts.Checks
         {
             var _check = new StringLengthCheck(4, 6);
             Enumerable.Range(_check.MinimumLength, _check.MaximumLength - _check.MinimumLength)
-                .Select(val => new String('A', val))
+                .Select(val => new string('A', val))
                 .ToList().ForEach(_check.ShouldPass);
         }
 
@@ -51,7 +52,7 @@ namespace NZazu.Contracts.Checks
         {
             var check = new StringLengthCheck(3, 4);
             check.ShouldPass(null);
-            check.ShouldPass(String.Empty);
+            check.ShouldPass(string.Empty);
             check.ShouldPass("\t\r\n");
             check.ShouldPass(" ");
         }

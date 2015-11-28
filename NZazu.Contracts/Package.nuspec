@@ -11,9 +11,9 @@
     <summary>Contracts for NZazu, a form templating engine.</summary>
     <copyright/>
     <releaseNotes>Revision: $Revision$</releaseNotes>
-    <projectUrl>https://github.com/ThomasMentzel/NZazu</projectUrl>
+    <projectUrl>https://github.com/awesome-inc/NZazu</projectUrl>
   </metadata>
   <files>
-    <file src="bin\Release\NZazu.Contracts.dll" target="lib"/>
+    <file src="bin\Release\NZazu.Contracts.dll" target="lib\net45"/>
   </files>
 </package>

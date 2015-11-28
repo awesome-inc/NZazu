@@ -11,13 +11,13 @@
     <summary>NZazu Support for Xceeds Extended WPF Toolkit.</summary>
     <copyright/>
     <releaseNotes>Revision: $Revision$</releaseNotes>
-    <projectUrl>https://github.com/ThomasMentzel/NZazu</projectUrl>
+    <projectUrl>https://github.com/awesome-inc/NZazu</projectUrl>
     <dependencies>
       <dependency id="NZazu" version="$Version$" />
-      <dependency id="Extended.Wpf.Toolkit" version="2.3" />
+      <dependency id="Extended.Wpf.Toolkit" version="2.5" />
     </dependencies>
   </metadata>
   <files>
-    <file src="bin\Release\NZazu.Xceed.dll" target="lib"/>
+    <file src="bin\Release\NZazu.Xceed.dll" target="lib\net45"/>
   </files>
 </package>

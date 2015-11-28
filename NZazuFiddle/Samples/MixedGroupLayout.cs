@@ -3,7 +3,7 @@ using NZazu.Contracts;
 
 namespace NZazuFiddle.Samples
 {
-    class MixedGroupLayout : SampleBase
+    internal class MixedGroupLayout : SampleBase
     {
         public MixedGroupLayout()
             : base(50)

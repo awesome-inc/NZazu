@@ -11,7 +11,7 @@ namespace NZazuFiddle.Samples
         }
 
         public ISample Sample { get; protected set; }
-        public int Order { get; private set; }
+        public int Order { get; }
 
         protected static IFiddle ToFiddle(FormDefinition formDefinition, FormData formData)
         {

@@ -1,16 +1,21 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading;
 using FluentAssertions;
+using NEdifis.Attributes;
 using NUnit.Framework;
 using NZazu.Contracts;
 using Xceed.Wpf.Toolkit;
 
 namespace NZazu.Xceed
 {
-    [TestFixture, RequiresSTA]
+    [TestFixtureFor(typeof (XceedFieldFactory))]
+    [Apartment(ApartmentState.STA)]
     // ReSharper disable InconsistentNaming
-    class XceedFieldFactory_Should
+    internal class XceedFieldFactory_Should
     {
         [Test]
+        [STAThread]
         public void Create_WatermarkTextbox()
         {
             var sut = new XceedFieldFactory();
@@ -30,6 +35,7 @@ namespace NZazu.Xceed
         }
 
         [Test]
+        [STAThread]
         public void Create_DateTimePicker()
         {
             var sut = new XceedFieldFactory();
@@ -89,6 +95,7 @@ namespace NZazu.Xceed
         }
 
         [Test]
+        [STAThread]
         public void Support_RichTextBox()
         {
             var sut = new XceedFieldFactory();

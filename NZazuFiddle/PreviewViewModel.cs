@@ -19,9 +19,9 @@ namespace NZazuFiddle
             FormDefinition definition, FormData data, 
             INZazuWpfFieldFactory fieldFactory = null)
         {
-            if (events == null) throw new ArgumentNullException("events");
-            if (definition == null) throw new ArgumentNullException("definition");
-            if (data == null) throw new ArgumentNullException("data");
+            if (events == null) throw new ArgumentNullException(nameof(events));
+            if (definition == null) throw new ArgumentNullException(nameof(definition));
+            if (data == null) throw new ArgumentNullException(nameof(data));
             _events = events;
             _events.Subscribe(this);
             _definition = definition;
@@ -79,9 +79,7 @@ namespace NZazuFiddle
             base.OnActivate();
 
             var view = GetView() as PreviewView;
-            if (view == null) return;
-
-            view.View.TrySetFocusOn(Definition.FocusOn);
+            view?.View.TrySetFocusOn(Definition.FocusOn);
         }
 
         public void Handle(FormDefinition definition)

@@ -1,17 +1,20 @@
+using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using FluentAssertions;
+using NEdifis.Attributes;
 using NUnit.Framework;
 using NZazu.Fields;
 
 namespace NZazu
 {
-    [TestFixture]
-    [RequiresSTA]
+    [TestFixtureFor(typeof (StackedLayout))]
+    [Apartment(ApartmentState.STA)]
     // ReSharper disable InconsistentNaming
-    class StackedLayout_Should
+    internal class StackedLayout_Should
     {
         private Application application;
 
@@ -35,6 +38,7 @@ namespace NZazu
         }
 
         [Test]
+        [STAThread]
         public void Be_Creatable()
         {
             var sut = new StackedLayout();
@@ -44,6 +48,7 @@ namespace NZazu
         }
 
         [Test(Description = "the stack panel should allign control groups from lest to right")]
+        [STAThread]
         public void Align_Horizontally_And_Vertical_Top()
         {
             var sut = new StackedLayout();
@@ -63,6 +68,7 @@ namespace NZazu
         }
 
         [Test]
+        [STAThread]
         public void Skip_rows_if_label_and_value_both_empty()
         {
             var sut = new StackedLayout();
@@ -86,6 +92,7 @@ namespace NZazu
         }
 
         [Test]
+        [STAThread]
         public void Add_controls()
         {
             var sut = new StackedLayout();
@@ -110,6 +117,7 @@ namespace NZazu
         }
 
         [Test]
+        [STAThread]
         public void Set_Validation_Error_Template()
         {
             var expectedTemplate = new ControlTemplate();
@@ -136,7 +144,5 @@ namespace NZazu
                 .All(f => Validation.GetErrorTemplate(f.ValueControl) == expectedTemplate)
                 .Should().BeTrue();
         }
-
-
     }
 }

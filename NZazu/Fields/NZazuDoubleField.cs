@@ -7,7 +7,7 @@ using System.Windows.Data;
 
 namespace NZazu.Fields
 {
-    class NZazuDoubleField : NZazuField<double?>
+    internal class NZazuDoubleField : NZazuField<double?>
     {
         #region converter
 
@@ -30,7 +30,7 @@ namespace NZazu.Fields
 
                 var cultureSafe = _culture ?? culture ?? Thread.CurrentThread.CurrentUICulture;
                 var result = (double?)value;
-                return (result.HasValue ? result.Value.ToString(_format, cultureSafe) : String.Empty) + _attachDot;
+                return (result.HasValue ? result.Value.ToString(_format, cultureSafe) : string.Empty) + _attachDot;
             }
 
             public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
@@ -58,8 +58,8 @@ namespace NZazu.Fields
 
         public NZazuDoubleField(string key) : base(key) { }
 
-        public override string Type { get { return "double"; } }
-        public override DependencyProperty ContentProperty { get { return TextBox.TextProperty; } }
+        public override string Type => "double";
+        public override DependencyProperty ContentProperty => TextBox.TextProperty;
 
         protected override Control GetValue()
         {
@@ -70,7 +70,7 @@ namespace NZazu.Fields
         protected override void SetStringValue(string value)
         {
             double result;
-            if (!String.IsNullOrWhiteSpace(value) &&
+            if (!string.IsNullOrWhiteSpace(value) &&
                 double.TryParse(value, NumberStyles.Number, FormatProvider, out result))
                 Value = result;
             else
@@ -79,7 +79,7 @@ namespace NZazu.Fields
 
         protected override string GetStringValue()
         {
-            return Value.HasValue ? Value.Value.ToString(FormatProvider) : String.Empty;
+            return Value.HasValue ? Value.Value.ToString(FormatProvider) : string.Empty;
         }
 
         protected override Binding DecorateBinding(Binding binding)

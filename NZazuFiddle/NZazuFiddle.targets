@@ -1,11 +1,25 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 
- <PropertyGroup>
-   <ApplicationVersion>$(PackageVersion)</ApplicationVersion>
- </PropertyGroup>
-
   <Target Name="Deploy" DependsOnTargets="Publish" />
+
+  <Target Name="NZazu_SetSetClickOnceVersion" 
+    Condition="'$(ApplicationVersion)'==''"
+    AfterTargets="UpdateAssemblyInfo" 
+    BeforeTargets="_DeploymentComputeClickOnceManifestInfo">
+    <CreateProperty Value="$(GitVersion_MajorMinorPatch).$(Build)">
+      <Output TaskParameter="Value" PropertyName="ApplicationVersion"/>
+    </CreateProperty>
+    <Message Text="ApplicationVersion: $(ApplicationVersion)"/>
+  </Target>
+  
+  <PropertyGroup>
+    <!-- <Build>42</Build> -->
+    <CoverageFailOnTargetFail>false</CoverageFailOnTargetFail>
+    <DeployFailOnBuildNotSet>false</DeployFailOnBuildNotSet>
+    <UseNUnit3>true</UseNUnit3>
+    <NUnitResultFormat>nunit3</NUnitResultFormat>
+  </PropertyGroup>
 
   <PropertyGroup>
     <BuildDir Condition="'$(BuildDir)' == ''">$(SolutionDir)publish</BuildDir>
@@ -29,7 +43,7 @@
 
     <InstallUrl>$(PublishUrl)</InstallUrl>
     <UpdateUrl>$(PublishUrl)</UpdateUrl>
-    <SupportUrl>https://github.com/ThomasMentzel/NZazu</SupportUrl>
+    <SupportUrl>https://github.com/awesome-inc/NZazu</SupportUrl>
     
     <ProductName>$(ProjectName)</ProductName>
     <PublisherName>NZazu</PublisherName>
@@ -69,20 +83,4 @@
     </BootstrapperPackage>
   </ItemGroup>
   
-  <Target Name="UpdateClickOnce">
-    <PropertyGroup>
-      <!-- NOTE: must not contain double slashes -->
-      <ClickOnceApplicationDir>$(PublishDir)Application Files\$(ProductName)_$(Major)_$(Minor)_$(Patch)_$(Build)</ClickOnceApplicationDir>
-    </PropertyGroup>
-  
-    <GetFrameworkSdkPath>
-      <Output TaskParameter="Path" PropertyName="WindowsSdkPath" />
-    </GetFrameworkSdkPath>
-    <Message Text="Update application manifests..." Importance="high" />
-    <Exec Command="mage.exe -u &quot;$(ClickOnceApplicationDir)\$(ProductName).exe.manifest&quot; -FromDirectory &quot;$(ClickOnceApplicationDir)&quot;" WorkingDirectory="$(WindowsSdkPath)\bin\NETFX 4.0 Tools" StandardOutputImportance="low" />
-    <Message Text="Update deployment manifests..." Importance="high" />
-    <!-- NOTE: path must not contain double slashes -->
-    <Exec Command="mage.exe -u &quot;$(PublishDir)$(ProductName).application&quot; -n $(ProductName) -pub $(PublisherName) -appm &quot;$(ClickOnceApplicationDir)\$(ProductName).exe.manifest&quot;" WorkingDirectory="$(WindowsSdkPath)\bin\NETFX 4.0 Tools" StandardOutputImportance="low" />
-  </Target>
-
 </Project>

@@ -8,7 +8,7 @@ namespace NZazu
 
         public ResolveFromNameProxy(Func<string, T> factory)
         {
-            if (factory == null) throw new ArgumentNullException("factory");
+            if (factory == null) throw new ArgumentNullException(nameof(factory));
             _factory = factory;
         }
 

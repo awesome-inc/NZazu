@@ -1,8 +1,20 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 
+	<ItemGroup>
+		 <Compile Include="$(SolutionDir)SolutionInfo.cs">
+			<Link>Properties\SolutionInfo.cs</Link>
+		</Compile>
+	</ItemGroup>
+
+	<!-- ## Using NUnit 3 -->
 	<PropertyGroup>
-		<PackageVersion>0.2.14.$(Build)</PackageVersion>
+		<UseNUnit3>true</UseNUnit3>
+		<NUnitResultFormat>nunit3</NUnitResultFormat>
 	</PropertyGroup>
+
+	<!-- ## Automatically import project-specific overrides (place this last) -->
+	<Import Project="$(ProjectDir)\$(ProjectName).targets" 
+     Condition="Exists('$(ProjectDir)\$(ProjectName).targets') And '$(NCrunch)' != '1'"/>
 
 </Project>

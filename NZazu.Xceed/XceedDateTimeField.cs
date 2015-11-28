@@ -12,16 +12,13 @@ namespace NZazu.Xceed
         {
         }
 
-        public override DependencyProperty ContentProperty
-        {
-            get { return DateTimePicker.ValueProperty; }
-        }
+        public override DependencyProperty ContentProperty => DateTimePicker.ValueProperty;
 
         protected override Control GetValue()
         {
             var control = new DateTimePicker { ToolTip = Description, Watermark = Hint };
             DateFormat = GetSetting("Format");
-            if (!String.IsNullOrWhiteSpace(DateFormat))
+            if (!string.IsNullOrWhiteSpace(DateFormat))
             {
                 control.Format = DateTimeFormat.Custom;
                 control.FormatString = DateFormat;

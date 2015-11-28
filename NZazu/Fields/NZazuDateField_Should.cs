@@ -1,16 +1,18 @@
 using System;
 using System.Globalization;
+using System.Threading;
 using System.Windows.Controls;
 using FluentAssertions;
+using NEdifis.Attributes;
 using NUnit.Framework;
 using NZazu.Extensions;
 
 namespace NZazu.Fields
 {
-    [TestFixture]
-    [RequiresSTA]
+    [TestFixtureFor(typeof(NZazuDateField))]
+    [Apartment(ApartmentState.STA)]
     // ReSharper disable InconsistentNaming
-    class NZazuDateField_Should
+    internal class NZazuDateField_Should
     {
         [Test]
         public void Be_Creatable()
@@ -23,6 +25,7 @@ namespace NZazu.Fields
         }
 
         [Test]
+        [STAThread]
         public void Create_Control_With_ToolTip_Matching_Description()
         {
             var sut = new NZazuDateField("test")
@@ -39,6 +42,7 @@ namespace NZazu.Fields
 
         [Test]
         //[SetUICulture("en-US")]
+        [STAThread]
         public void Format_UIText_From_Value()
         {
             // ReSharper disable once UseObjectOrCollectionInitializer
@@ -66,6 +70,7 @@ namespace NZazu.Fields
         }
 
         [Test]
+        [STAThread]
         public void Format_SelectedDate_From_Value()
         {
             var sut = new NZazuDateField("test");
@@ -83,6 +88,7 @@ namespace NZazu.Fields
         }
 
         [Test]
+        [STAThread]
         public void Format_Value_From_TextBox()
         {
             var sut = new NZazuDateField("test");
@@ -101,6 +107,7 @@ namespace NZazu.Fields
         }
 
         [Test]
+        [STAThread]
         public void Format_TextBox_From_StringValue()
         {
             var sut = new NZazuDateField("test");
@@ -113,11 +120,12 @@ namespace NZazu.Fields
             sut.StringValue = now.ToString(CultureInfo.InvariantCulture);
             datePicker.SelectedDate.Should().Be(now);
 
-            sut.StringValue = String.Empty;
+            sut.StringValue = string.Empty;
             datePicker.SelectedDate.Should().NotHaveValue();
         }
 
         [Test]
+        [STAThread]
         public void Format_StringValue_From_TextBox()
         {
             var sut = new NZazuDateField("test");
@@ -133,7 +141,7 @@ namespace NZazu.Fields
 
             datePicker.Text = null;
             sut.IsValid().Should().BeTrue();
-            sut.StringValue.Should().Be(String.Empty);
+            sut.StringValue.Should().Be(string.Empty);
         }
 
         [Test]

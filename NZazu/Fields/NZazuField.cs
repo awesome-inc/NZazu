@@ -13,7 +13,7 @@ namespace NZazu.Fields
 {
     public abstract class NZazuField : INZazuWpfField
     {
-        protected IFormatProvider FormatProvider { get { return CultureInfo.InvariantCulture; } }
+        protected IFormatProvider FormatProvider => CultureInfo.InvariantCulture;
 
         private readonly Lazy<Control> _labelControl;
         private readonly Lazy<Control> _valueControl;
@@ -23,19 +23,19 @@ namespace NZazu.Fields
         public abstract DependencyProperty ContentProperty { get; }
 
         public abstract string Type { get; }
-        public string Key { get; private set; }
+        public string Key { get; }
         public string Prompt { get; protected internal set; }
         public string Hint { get; protected internal set; }
         public string Description { get; protected internal set; }
 
-        public Control LabelControl { get { return _labelControl.Value; } }
-        public Control ValueControl { get { return _valueControl.Value; } }
-        public Dictionary<string, string> Settings { get; private set; }
+        public Control LabelControl => _labelControl.Value;
+        public Control ValueControl => _valueControl.Value;
+        public Dictionary<string, string> Settings { get; }
         public INZazuWpfFieldBehavior Behavior { get; set; }
 
         protected NZazuField(string key)
         {
-            if (String.IsNullOrWhiteSpace(key)) throw new ArgumentException("key");
+            if (string.IsNullOrWhiteSpace(key)) throw new ArgumentException("key");
             Key = key;
 
             _labelControl = new Lazy<Control>(GetLabelControl);
@@ -59,7 +59,7 @@ namespace NZazu.Fields
 
         protected internal IValueCheck Check { get; set; }
 
-        protected virtual Control GetLabel() { return !String.IsNullOrWhiteSpace(Prompt) ? new Label { Content = Prompt } : null; }
+        protected virtual Control GetLabel() { return !string.IsNullOrWhiteSpace(Prompt) ? new Label { Content = Prompt } : null; }
         protected abstract Control GetValue();
 
         private Control GetLabelControl()
@@ -130,7 +130,7 @@ namespace NZazu.Fields
 
         protected string GetSetting(string key)
         {
-            String value;
+            string value;
             Settings.TryGetValue(key, out value);
             return value;
         }
@@ -167,7 +167,7 @@ namespace NZazu.Fields
             }
         }
 
-        public override bool IsEditable { get { return true; } }
+        public override bool IsEditable => true;
 
         public override string StringValue
         {

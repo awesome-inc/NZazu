@@ -4,7 +4,7 @@ using NZazu.Contracts;
 namespace NZazuFiddle.Samples
 {
     // ReSharper disable once UnusedMember.Global
-    class FocusSample : SampleBase
+    internal class FocusSample : SampleBase
     {
         public FocusSample() : base(60)
         {

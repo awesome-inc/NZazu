@@ -3,25 +3,22 @@ using System.Windows.Controls;
 
 namespace NZazu.Fields
 {
-    class NZazuLabelField : NZazuField
+    internal class NZazuLabelField : NZazuField
     {
         public NZazuLabelField(string key) : base(key)
         {
         }
 
-        public override string Type { get { return "label"; } }
+        public override string Type => "label";
 
-        public override bool IsEditable { get { return false; } }
+        public override bool IsEditable => false;
 
         public override string StringValue 
         {
             get { return null; }
             set {} }
 
-        public override DependencyProperty ContentProperty
-        {
-            get { return null; }
-        }
+        public override DependencyProperty ContentProperty => null;
 
         protected override Control GetValue() { return !string.IsNullOrWhiteSpace(Description) ? new Label { Content = Description } : null; }
     }

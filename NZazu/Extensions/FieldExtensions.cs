@@ -7,13 +7,13 @@ namespace NZazu.Extensions
     {
         public static bool IsValid(this INZazuWpfField field)
         {
-            if (field == null) throw new ArgumentNullException("field");
+            if (field == null) throw new ArgumentNullException(nameof(field));
             return field.Validate().IsValid;
         }
 
         public static bool IsReadOnly(this INZazuWpfField field)
         {
-            if (field == null) throw new ArgumentNullException("field");
+            if (field == null) throw new ArgumentNullException(nameof(field));
             if (!field.IsEditable) 
                 return true;
             if (field is INZazuWpfGroupField) 
@@ -28,7 +28,7 @@ namespace NZazu.Extensions
 
         public static void SetReadOnly(this INZazuWpfField field, bool isReadOnly)
         {
-            if (field == null) throw new ArgumentNullException("field");
+            if (field == null) throw new ArgumentNullException(nameof(field));
             if (!field.IsEditable) 
                 return;
             if (field is INZazuWpfGroupField) 

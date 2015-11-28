@@ -9,7 +9,7 @@ namespace NZazu.FieldBehavior
     {
         public INZazuWpfFieldBehavior CreateFieldBehavior(BehaviorDefinition behaviorDefinition)
         {
-            if (behaviorDefinition == null) throw new ArgumentNullException("behaviorDefinition");
+            if (behaviorDefinition == null) throw new ArgumentNullException(nameof(behaviorDefinition));
             if (string.IsNullOrWhiteSpace(behaviorDefinition.Name)) throw new ArgumentException("BehaviorDefinition.Name should be set");
 
             var behaviorTypes = BehaviorExtender.Instance.Behaviors.ToArray();
@@ -26,8 +26,8 @@ namespace NZazu.FieldBehavior
 
         private static INZazuWpfFieldBehavior Decorate(INZazuWpfFieldBehavior behavior, BehaviorDefinition behaviorDefinition)
         {
-            if (behavior == null) throw new ArgumentNullException("behavior");
-            if (behaviorDefinition == null) throw new ArgumentNullException("behaviorDefinition");
+            if (behavior == null) throw new ArgumentNullException(nameof(behavior));
+            if (behaviorDefinition == null) throw new ArgumentNullException(nameof(behaviorDefinition));
 
             var settings = behaviorDefinition.Settings;
             if (settings != null)

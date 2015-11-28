@@ -2,13 +2,14 @@ using System;
 using System.Globalization;
 using System.Linq;
 using FluentAssertions;
+using NEdifis.Attributes;
 using NUnit.Framework;
 
 namespace NZazu.Contracts.Checks
 {
-    [TestFixture]
+    [TestFixtureFor(typeof(RangeCheck))]
     // ReSharper disable InconsistentNaming
-    public class RangeCheck_Should
+    internal class RangeCheck_Should
     {
         private RangeCheck _check;
 
@@ -57,7 +58,7 @@ namespace NZazu.Contracts.Checks
         public void Validate_Value_NullOrWhiteSpace_Passes()
         {
             _check.ShouldPass(null);
-            _check.ShouldPass(String.Empty);
+            _check.ShouldPass(string.Empty);
             _check.ShouldPass("\t\r\n");
             _check.ShouldPass(" ");
         }

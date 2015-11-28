@@ -1,12 +1,16 @@
+using System;
+using System.Threading;
 using System.Windows.Controls;
 using FluentAssertions;
+using NEdifis.Attributes;
 using NUnit.Framework;
 
 namespace NZazu.Fields
 {
-    [TestFixture, RequiresSTA]
+    [TestFixtureFor(typeof (NZazuGroupField))]
+    [Apartment(ApartmentState.STA)]
     // ReSharper disable InconsistentNaming
-    class NZazuGroupField_Should
+    internal class NZazuGroupField_Should
     {
         [Test]
         public void Be_Creatable()
@@ -26,6 +30,7 @@ namespace NZazu.Fields
         }
 
         [Test]
+        [STAThread]
         public void Create_ContentControl()
         {
             var sut = new NZazuGroupField("key");

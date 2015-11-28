@@ -15,8 +15,8 @@ namespace NZazu.LayoutStrategy
         public override void DoLayout(ContentControl contentControl, IEnumerable<INZazuWpfField> fields, 
             IResolveLayout resolveLayout = null)
         {
-            if (contentControl == null) throw new ArgumentNullException("contentControl");
-            if (fields == null) throw new ArgumentNullException("fields");
+            if (contentControl == null) throw new ArgumentNullException(nameof(contentControl));
+            if (fields == null) throw new ArgumentNullException(nameof(fields));
 
             var grid = new Grid { Margin = new Thickness(5) };
 

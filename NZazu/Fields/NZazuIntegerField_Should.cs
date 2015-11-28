@@ -1,15 +1,17 @@
 using System;
+using System.Threading;
 using System.Windows.Controls;
 using FluentAssertions;
+using NEdifis.Attributes;
 using NUnit.Framework;
 using NZazu.Extensions;
 
 namespace NZazu.Fields
 {
-    [TestFixture]
-    [RequiresSTA]
+    [TestFixtureFor(typeof (NZazuIntegerField))]
+    [Apartment(ApartmentState.STA)]
     // ReSharper disable InconsistentNaming
-    class NZazuIntegerField_Should
+    internal class NZazuIntegerField_Should
     {
         [Test]
         public void Be_Creatable()
@@ -22,6 +24,7 @@ namespace NZazu.Fields
         }
 
         [Test]
+        [STAThread]
         public void Create_Control_With_ToolTip_Matching_Description()
         {
             var sut = new NZazuIntegerField("test")
@@ -37,6 +40,7 @@ namespace NZazu.Fields
         }
 
         [Test]
+        [STAThread]
         public void Format_TextBox_From_Value()
         {
             var sut = new NZazuIntegerField("test");
@@ -56,6 +60,7 @@ namespace NZazu.Fields
         }
 
         [Test]
+        [STAThread]
         public void Format_Value_From_TextBox()
         {
             var sut = new NZazuIntegerField("test");
@@ -80,6 +85,7 @@ namespace NZazu.Fields
         }
 
         [Test]
+        [STAThread]
         public void Format_TextBox_From_StringValue()
         {
             var sut = new NZazuIntegerField("test");
@@ -99,6 +105,7 @@ namespace NZazu.Fields
         }
 
         [Test]
+        [STAThread]
         public void Format_StringValue_From_TextBox()
         {
             var sut = new NZazuIntegerField("test");
@@ -120,7 +127,7 @@ namespace NZazu.Fields
 
             textBox.Text = null;
             sut.IsValid().Should().BeTrue();
-            sut.StringValue.Should().Be(String.Empty);
+            sut.StringValue.Should().Be(string.Empty);
         }
     }
 }

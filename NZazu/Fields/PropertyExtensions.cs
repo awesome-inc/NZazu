@@ -1,13 +1,11 @@
 using System;
 using System.ComponentModel;
-using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Reflection;
 
 namespace NZazu.Fields
 {
-    [ExcludeFromCodeCoverage]
-    static class PropertyExtensions
+    internal static class PropertyExtensions
     {
         public static bool CanSetProperty<T>(this T instance, string propertyName)
         {
@@ -15,14 +13,14 @@ namespace NZazu.Fields
             var type = instance.GetType();
             var propName = propertyName;
 
-            int p = propName.IndexOf('.');
+            var p = propName.IndexOf('.');
             while (p != -1) // handle child-property
             {
                 var parent = propName.Substring(0, p);
                 // test if a corresponding property exists for the given type.
                 var propInfo = type.GetProperty(parent, BindingFlags.Public | BindingFlags.Instance);
                 if (propInfo == null)
-                    throw new ArgumentNullException(String.Format("Property \"{0}\" does not exist.", propName));
+                    throw new ArgumentException($"Property '{propName}' does not exist.");
 
                 propName = propName.Substring(p + 1);
                 obj = propInfo.GetValue(obj, null);
@@ -48,7 +46,7 @@ namespace NZazu.Fields
                     // test if a corresponding property exists for the given type.
                     var propInfo = type.GetProperty(propName, BindingFlags.Public | BindingFlags.Instance);
                     if (propInfo == null)
-                        throw new ArgumentNullException(String.Format("Property \"{0}\" does not exist.", propName));
+                        throw new ArgumentException($"Property '{propertyName}' does not exist.");
 
                     var childPropName = propertyName.Substring(p + 1);
                     var childItem = propInfo.GetValue(item, null);
@@ -63,7 +61,7 @@ namespace NZazu.Fields
                     // test if a corresponding property exists for the given type.
                     var propInfo = type.GetProperty(propName, BindingFlags.Public | BindingFlags.Instance);
                     if (propInfo == null)
-                        throw new ArgumentNullException(String.Format("Property \"{0}\" does not exist.", propName));
+                        throw new ArgumentException($"Property '{propName}' does not exist.");
 
                     // deserialize using TypeConverters
                     var outVal = GetConvertedValue(propValue, propInfo);
@@ -87,10 +85,10 @@ namespace NZazu.Fields
             try
             {
                 var converter = TypeDescriptor.GetConverter(propInfo.PropertyType);
-                if (converter.CanConvertFrom(typeof(string)))
-                    return converter.ConvertFrom(null, CultureInfo.InvariantCulture, propValue);
-                return Convert.ChangeType(propValue, propInfo.PropertyType);
-
+                return converter.CanConvertFrom(typeof(string)) 
+                    // ReSharper disable once AssignNullToNotNullAttribute
+                    ? converter.ConvertFrom(null, CultureInfo.InvariantCulture, propValue) 
+                    : Convert.ChangeType(propValue, propInfo.PropertyType);
             }
             catch (Exception)
             {

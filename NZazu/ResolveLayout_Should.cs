@@ -1,12 +1,13 @@
 ﻿using FluentAssertions;
+using NEdifis.Attributes;
 using NUnit.Framework;
 using NZazu.LayoutStrategy;
 
 namespace NZazu
 {
-    [TestFixture]
+    [TestFixtureFor(typeof (ResolveLayout))]
     // ReSharper disable once InconsistentNaming
-    class ResolveLayout_Should
+    internal class ResolveLayout_Should
     {
         [Test]
         public void Be_Creatable()

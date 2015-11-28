@@ -4,8 +4,8 @@
     {
         public static readonly ValueCheckResult Success = new ValueCheckResult(true);
 
-        public bool IsValid { get; private set; }
-        public object Error { get; private set; }
+        public bool IsValid { get; }
+        public object Error { get; }
 
         public ValueCheckResult(bool isValid, object error = null)
         {
