@@ -2,21 +2,23 @@ using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Media;
 using FluentAssertions;
+using NEdifis.Attributes;
 using NSubstitute;
 using NUnit.Framework;
 using NZazu.Contracts.Checks;
 
 namespace NZazu.Fields
 {
-    [TestFixture]
-    [RequiresSTA]
+    [TestFixtureFor(typeof (NZazuField))]
+    [Apartment(ApartmentState.STA)]
     // ReSharper disable InconsistentNaming
-    class NZazuField_Should
+    internal class NZazuField_Should
     {
         #region Test fields to verify base class
 
@@ -30,8 +32,8 @@ namespace NZazu.Fields
 
             public override bool IsEditable { get { throw new NotImplementedException(); } }
             public override string StringValue { get; set; }
-            public override string Type { get { return null; } }
-            public override DependencyProperty ContentProperty { get { return null; } }
+            public override string Type => null;
+            public override DependencyProperty ContentProperty => null;
             protected override Control GetValue() { return null; }
         }
 
@@ -43,13 +45,13 @@ namespace NZazu.Fields
             {
             }
 
-            public override DependencyProperty ContentProperty { get { return ContentControl.ContentProperty; } }
+            public override DependencyProperty ContentProperty => ContentControl.ContentProperty;
             protected override Control GetValue() { return new ContentControl(); }
         }
 
 
         [ExcludeFromCodeCoverage]
-        class GenericDummyField : NZazuField<int>
+        private class GenericDummyField : NZazuField<int>
         {
             public GenericDummyField(string key) : base(key) { }
             public override DependencyProperty ContentProperty { get { throw new NotImplementedException(); } }
@@ -63,9 +65,11 @@ namespace NZazu.Fields
         [Test]
         public void Validate_ctor_parameters()
         {
-            new Action(() => new NZazuDummyField("")).Invoking(a => a.Invoke()).ShouldThrow<ArgumentException>();
-            new Action(() => new NZazuDummyField(null)).Invoking(a => a.Invoke()).ShouldThrow<ArgumentException>();
-            new Action(() => new NZazuDummyField("\t\r\n ")).Invoking(a => a.Invoke()).ShouldThrow<ArgumentException>();
+            // ReSharper disable ObjectCreationAsStatement
+            0.Invoking(x => new NZazuDummyField("")).ShouldThrow<ArgumentException>();
+            1.Invoking(x => new NZazuDummyField(null)).ShouldThrow<ArgumentException>();
+            2.Invoking(x => new NZazuDummyField("\t\r\n ")).ShouldThrow<ArgumentException>();
+            // ReSharper restore ObjectCreationAsStatement
         }
 
         [Test]
@@ -77,6 +81,7 @@ namespace NZazu.Fields
         }
 
         [Test]
+        [STAThread]
         public void Create_Label_Matching_Prompt()
         {
             var sut = new NZazuDummyField("test")
@@ -127,11 +132,12 @@ namespace NZazu.Fields
             var field = new NZazuDummyField("key");
             field.Settings.Should().NotBeNull();
 
-            var propInfo = typeof (NZazuField).GetProperty("Settings");
-            propInfo.GetSetMethod(true).IsPrivate.Should().BeTrue();
+            var propInfo = typeof (NZazuField).GetProperty(nameof(NZazuField.Settings));
+            propInfo.GetSetMethod(true).Should().BeNull();
         }
 
         [Test]
+        [STAThread]
         public void Respect_Height_Setting()
         {
             var field = new NZazuField_With_Description_As_Content_Property("key");
@@ -144,6 +150,7 @@ namespace NZazu.Fields
         }
 
         [Test]
+        [STAThread]
         public void Respect_Width_Setting()
         {
             var field = new NZazuField_With_Description_As_Content_Property("key");
@@ -169,6 +176,7 @@ namespace NZazu.Fields
         #region test NZazuDummyField with bi-directional content property
 
         [Test]
+        [STAThread]
         public void Attach_FieldValidationRule_according_to_checks()
         {
             // but we need a dummy content enabled field -> no content, no validation
@@ -209,6 +217,7 @@ namespace NZazu.Fields
         }
 
         [Test]
+        [STAThread]
         public void Respect_generic_settings()
         {
             var sut = new NZazuField_With_Description_As_Content_Property("test");

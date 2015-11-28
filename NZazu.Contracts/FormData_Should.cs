@@ -1,12 +1,13 @@
 ﻿using System.Collections.Generic;
 using FluentAssertions;
+using NEdifis.Attributes;
 using NUnit.Framework;
 
 namespace NZazu.Contracts
 {
-    [TestFixture]
+    [TestFixtureFor(typeof (FormData))]
     // ReSharper disable InconsistentNaming
-    class FormData_Should
+    internal class FormData_Should
     {
         [Test]
         public void Support_implicit_casting_from_and_to_dictionaries()

@@ -1,12 +1,13 @@
 using System;
 using System.Text.RegularExpressions;
+using NEdifis.Attributes;
 using NUnit.Framework;
 
 namespace NZazu.Contracts.Checks
 {
-    [TestFixture]
+    [TestFixtureFor(typeof (StringRegExCheck))]
     // ReSharper disable InconsistentNaming
-    public class StringRegExCheck_Should
+    internal class StringRegExCheck_Should
     {
         [Test]
         public void IsValid_null_or_whitespace_should_pass()
@@ -14,7 +15,7 @@ namespace NZazu.Contracts.Checks
             var check = new StringRegExCheck("test", new Regex(@"^.*$", RegexOptions.IgnoreCase));
 
             check.ShouldPass(null);
-            check.ShouldPass(String.Empty);
+            check.ShouldPass(string.Empty);
             check.ShouldPass("\t\r\n");
             check.ShouldPass(" ");
         }

@@ -13,6 +13,8 @@
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WarningLevel>4</WarningLevel>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -32,17 +34,25 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="FluentAssertions">
-      <HintPath>..\packages\FluentAssertions.3.2.2\lib\net45\FluentAssertions.dll</HintPath>
+    <Reference Include="FluentAssertions, Version=4.1.0.0, Culture=neutral, PublicKeyToken=33f2691a05b67b6a, processorArchitecture=MSIL">
+      <HintPath>..\packages\FluentAssertions.4.1.0\lib\net45\FluentAssertions.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="FluentAssertions.Core">
-      <HintPath>..\packages\FluentAssertions.3.2.2\lib\net45\FluentAssertions.Core.dll</HintPath>
+    <Reference Include="FluentAssertions.Core, Version=4.1.0.0, Culture=neutral, PublicKeyToken=33f2691a05b67b6a, processorArchitecture=MSIL">
+      <HintPath>..\packages\FluentAssertions.4.1.0\lib\net45\FluentAssertions.Core.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="NSubstitute">
-      <HintPath>..\packages\NSubstitute.1.8.1.0\lib\net45\NSubstitute.dll</HintPath>
+    <Reference Include="NEdifis, Version=0.6.2.0, Culture=neutral, PublicKeyToken=68bd55412466663d, processorArchitecture=MSIL">
+      <HintPath>..\packages\NEdifis.0.6.2\lib\net45\NEdifis.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="nunit.framework">
-      <HintPath>..\packages\NUnit.2.6.4\lib\nunit.framework.dll</HintPath>
+    <Reference Include="NSubstitute, Version=1.9.2.0, Culture=neutral, PublicKeyToken=92dd2e9066daa5ca, processorArchitecture=MSIL">
+      <HintPath>..\packages\NSubstitute.1.9.2.0\lib\net45\NSubstitute.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="nunit.framework, Version=3.0.5797.27534, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
+      <HintPath>..\packages\NUnit.3.0.0\lib\net45\nunit.framework.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Xml" />
@@ -58,7 +68,9 @@
   <ItemGroup>
     <Compile Include="Extensions\FieldExtensions.cs" />
     <Compile Include="Extensions\FocusExtensions.cs" />
+    <Compile Include="Extensions\FocusExtensions_Should.cs" />
     <Compile Include="FieldBehavior\BehaviorExtender.cs" />
+    <Compile Include="FieldBehavior\BehaviorExtender_Should.cs" />
     <Compile Include="FieldBehavior\EmptyNZazuFieldBehavior.cs" />
     <Compile Include="FieldBehavior\EmptyNZazuFieldBehavior_Should.cs" />
     <Compile Include="FieldBehavior\NZazuFieldBehavior.cs" />
@@ -74,9 +86,13 @@
     <Compile Include="Fields\NZazuOptionsField.cs" />
     <Compile Include="Fields\NZazuOptionsField_Should.cs" />
     <Compile Include="Fields\PropertyExtensions.cs" />
+    <Compile Include="Fields\PropertyExtensions_Should.cs" />
     <Compile Include="IResolveLayout.cs" />
     <Compile Include="INZazuWpfFieldBehavior.cs" />
     <Compile Include="Extensions\ViewExtensions_Should.cs" />
+    <Compile Include="LayoutStrategy\GridLayout_Without_Application_Should.cs" />
+    <Compile Include="LayoutStrategy\Layout_Should.cs" />
+    <Compile Include="NZazuConventions.cs" />
     <Compile Include="NZazuView.cs" />
     <Compile Include="ResolveFromNameProxy_Should.cs" />
     <Compile Include="ResolveLayout.cs" />
@@ -85,12 +101,6 @@
     <Compile Include="ResolveLayout_Should.cs" />
     <Compile Include="StackedLayout.cs" />
     <Compile Include="StackedLayout_Should.cs" />
-    <Compile Include="..\SolutionInfo.cs">
-      <Link>Properties\SolutionInfo.cs</Link>
-    </Compile>
-    <Compile Include="..\VersionInfo.g.cs">
-      <Link>Properties\VersionInfo.g.cs</Link>
-    </Compile>
     <Compile Include="CheckValidationRule_Should.cs" />
     <Compile Include="Fields\NZazuBoolField_Should.cs" />
     <Compile Include="Fields\NZazuField.cs" />
@@ -113,7 +123,6 @@
     <Compile Include="Fields\NZazuFieldFactory.cs" />
     <Compile Include="Fields\NZazuLabelField_Should.cs" />
     <Compile Include="Fields\NZazuTextField.cs" />
-    <Compile Include="LayoutStrategy\GridLayoutStrategy_Without_Application_Should.cs" />
     <Compile Include="Extensions\ViewExtensions.cs" />
     <Compile Include="Extensions\FieldExtensions_Should.cs" />
     <Compile Include="NZazuView_Should.cs" />
@@ -126,6 +135,7 @@
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
+    <None Include="app.config" />
     <None Include="Package.nuspec" />
     <None Include="packages.config" />
     <AppDesigner Include="Properties\" />
@@ -141,7 +151,15 @@
     <Resource Include="Images\error.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="$(SolutionDir)\.build\build.targets" />
+  <Import Project="..\packages\GitVersionTask.3.3.0\build\dotnet\GitVersionTask.targets" Condition="Exists('..\packages\GitVersionTask.3.3.0\build\dotnet\GitVersionTask.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\GitVersionTask.3.3.0\build\dotnet\GitVersionTask.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\GitVersionTask.3.3.0\build\dotnet\GitVersionTask.targets'))" />
+    <Error Condition="!Exists('..\packages\OneClickBuild.1.7.2\build\OneClickBuild.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\OneClickBuild.1.7.2\build\OneClickBuild.targets'))" />
+  </Target>
+  <Import Project="..\packages\OneClickBuild.1.7.2\build\OneClickBuild.targets" Condition="Exists('..\packages\OneClickBuild.1.7.2\build\OneClickBuild.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

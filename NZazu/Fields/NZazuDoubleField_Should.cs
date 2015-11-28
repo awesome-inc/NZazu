@@ -4,15 +4,16 @@ using System.Threading;
 using System.Windows.Controls;
 using System.Windows.Data;
 using FluentAssertions;
+using NEdifis.Attributes;
 using NUnit.Framework;
 using NZazu.Extensions;
 
 namespace NZazu.Fields
 {
-    [TestFixture]
-    [RequiresSTA]
+    [TestFixtureFor(typeof(NZazuDoubleField))]
+    [Apartment(ApartmentState.STA)]
     // ReSharper disable InconsistentNaming
-    class NZazuDoubleField_Should
+    internal class NZazuDoubleField_Should
     {
         [Test]
         public void Be_Creatable()
@@ -82,6 +83,7 @@ namespace NZazu.Fields
         #endregion
 
         [Test]
+        [STAThread]
         public void Create_Control_With_ToolTip_Matching_Description()
         {
             var sut = new NZazuDoubleField("test")
@@ -98,10 +100,11 @@ namespace NZazu.Fields
 
         [Test]
         [SetUICulture("en-US")]
+        [STAThread]
         public void Support_Format()
         {
             var sut = new NZazuDoubleField("test");
-            ((INZazuWpfField)sut).Settings["Format"] = "0.##";
+            sut.Settings["Format"] = "0.##";
             var control = (TextBox)sut.ValueControl;
 
             sut.Value.Should().NotHaveValue();
@@ -119,6 +122,7 @@ namespace NZazu.Fields
 
         [Test]
         [SetUICulture("en-US")]
+        [STAThread]
         public void Format_TextBox_From_Value()
         {
             var sut = new NZazuDoubleField("test");
@@ -142,6 +146,7 @@ namespace NZazu.Fields
 
         [Test]
         [SetUICulture("en-US")]
+        [STAThread]
         public void Format_Value_From_TextBox()
         {
             var sut = new NZazuDoubleField("test");
@@ -161,6 +166,7 @@ namespace NZazu.Fields
 
         [Test]
         [SetUICulture("en-US")]
+        [STAThread]
         public void Format_TextBox_From_StringValue()
         {
             var sut = new NZazuDoubleField("test");
@@ -178,6 +184,7 @@ namespace NZazu.Fields
 
         [Test]
         [SetUICulture("en-US")]
+        [STAThread]
         public void Format_StringValue_From_TextBox()
         {
             var sut = new NZazuDoubleField("test");
@@ -192,7 +199,7 @@ namespace NZazu.Fields
 
             control.Text = null;
             sut.IsValid().Should().BeTrue();
-            sut.StringValue.Should().Be(String.Empty);
+            sut.StringValue.Should().Be(string.Empty);
         }
     }
 }

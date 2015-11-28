@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Threading;
+using NEdifis.Attributes;
 
 namespace NZazu.Extensions
 {
@@ -11,12 +12,12 @@ namespace NZazu.Extensions
         // cf.: https://wpf.codeplex.com/workitem/13476
         public static Task DelayedFocus(this UIElement uiElement)
         {
-            if (uiElement == null) throw new ArgumentNullException("uiElement");
+            if (uiElement == null) throw new ArgumentNullException(nameof(uiElement));
 
             return uiElement.Dispatcher.BeginInvoke(SetFocusAction(uiElement), DispatcherPriority.Render).Task;
         }
 
-        static Action SetFocusAction(UIElement uiElement)
+        private static Action SetFocusAction(UIElement uiElement)
         {
             return () => SetFocus(uiElement);
         }

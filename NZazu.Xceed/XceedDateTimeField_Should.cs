@@ -1,12 +1,16 @@
+using System;
+using System.Threading;
 using FluentAssertions;
+using NEdifis.Attributes;
 using NUnit.Framework;
 using Xceed.Wpf.Toolkit;
 
 namespace NZazu.Xceed
 {
-    [TestFixture, RequiresSTA]
+    [TestFixtureFor(typeof (XceedDateTimeField))]
+    [Apartment(ApartmentState.STA)]
     // ReSharper disable InconsistentNaming
-    class XceedDateTimeField_Should
+    internal class XceedDateTimeField_Should
     {
         [Test]
         public void Be_Creatable()
@@ -26,6 +30,7 @@ namespace NZazu.Xceed
         }
 
         [Test]
+        [STAThread]
         public void Use_Format_Settings()
         {
             var sut = new XceedDateTimeField("date");

@@ -15,8 +15,8 @@ namespace NZazuFiddle
         public FormDefinitionViewModel(IEventAggregator events, 
             FormDefinition definition)
         {
-            if (events == null) throw new ArgumentNullException("events");
-            if (definition == null) throw new ArgumentNullException("definition");
+            if (events == null) throw new ArgumentNullException(nameof(events));
+            if (definition == null) throw new ArgumentNullException(nameof(definition));
             _events = events;
             _events.Subscribe(this);
             _definition = definition;
@@ -30,7 +30,7 @@ namespace NZazuFiddle
                 if (Equals(value, _definition)) return;
                 _definition = value;
                 NotifyOfPropertyChange();
-                NotifyOfPropertyChange("Json");
+                NotifyOfPropertyChange(nameof(Json));
                 if (value == null || _inHandle) return;
                 Safe(() => _events.PublishOnUIThread(_definition), "Could not set form definition");
             }
@@ -44,7 +44,7 @@ namespace NZazuFiddle
             finally { _inHandle = false; }
         }
 
-        static void Safe(Action action, string couldNot)
+        private static void Safe(Action action, string couldNot)
         {
             try { action(); }
             catch (Exception ex) { Trace.TraceWarning("{0}: {1}", couldNot, ex.Message); }

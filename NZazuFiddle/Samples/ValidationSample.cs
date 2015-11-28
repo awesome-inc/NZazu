@@ -4,7 +4,7 @@ using NZazu.Contracts;
 namespace NZazuFiddle.Samples
 {
     // ReSharper disable once UnusedMember.Global
-    class ValidationSample : SampleBase
+    internal class ValidationSample : SampleBase
     {
         public ValidationSample() : base(30)
         {

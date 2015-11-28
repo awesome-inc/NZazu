@@ -11,10 +11,10 @@ namespace NZazuFiddle
         public string Replacement { get; set; }
 
         public object Description { get; set; }
-        public System.Windows.Media.ImageSource Image { get { return null; } }
+        public System.Windows.Media.ImageSource Image => null;
 
         // Use this property if you want to show a fancy UIElement in the list.
-        public object Content { get { return Text; } }
+        public object Content => Text;
         public double Priority { get; set; }
 
         public void Complete(TextArea textArea, ISegment completionSegment,

@@ -155,7 +155,8 @@ namespace NZazu
             InitializeComponent();
         }
 
-        private ContentControl Layout { get { return this; } }
+        private ContentControl Layout => this;
+
         private void InitializeComponent()
         {
             Layout.Focusable = false;
@@ -204,7 +205,7 @@ namespace NZazu
         public bool TrySetFocusOn(string focusOn)
         {
             INZazuWpfField field;
-            if (String.IsNullOrWhiteSpace(focusOn) || !TryGetField(focusOn, out field)) return false;
+            if (string.IsNullOrWhiteSpace(focusOn) || !TryGetField(focusOn, out field)) return false;
 
             var control = field.ValueControl;
             if (control == null) return false;

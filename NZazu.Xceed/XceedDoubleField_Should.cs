@@ -1,15 +1,17 @@
 using System;
+using System.Threading;
 using FluentAssertions;
+using NEdifis.Attributes;
 using NUnit.Framework;
 using NZazu.Extensions;
 using Xceed.Wpf.Toolkit;
 
 namespace NZazu.Xceed
 {
-    [TestFixture]
-    [RequiresSTA]
+    [TestFixtureFor(typeof(XceedDoubleField))]
+    [Apartment(ApartmentState.STA)]
     // ReSharper disable InconsistentNaming
-    class XceedDoubleField_Should
+    internal class XceedDoubleField_Should
     {
         [Test]
         public void Be_Creatable()
@@ -22,6 +24,7 @@ namespace NZazu.Xceed
         }
 
         [Test]
+        [STAThread]
         public void Use_DoubleUpdown()
         {
             var sut = new XceedDoubleField("test");
@@ -32,6 +35,7 @@ namespace NZazu.Xceed
         }
 
         [Test]
+        [STAThread]
         public void Format_ControlValue_From_StringValue()
         {
             var sut = new XceedDoubleField("test");
@@ -43,11 +47,12 @@ namespace NZazu.Xceed
             sut.StringValue = "1.4";
             control.Value.Should().Be(1.4);
 
-            sut.StringValue = String.Empty;
+            sut.StringValue = string.Empty;
             control.Value.Should().NotHaveValue();
         }
 
         [Test]
+        [STAThread]
         public void Format_StringValue_From_ControlValue()
         {
             var sut = new XceedDoubleField("test");
@@ -62,10 +67,11 @@ namespace NZazu.Xceed
 
             control.Text = null;
             sut.IsValid().Should().BeTrue();
-            sut.StringValue.Should().Be(String.Empty);
+            sut.StringValue.Should().Be(string.Empty);
         }
 
         [Test]
+        [STAThread]
         public void Not_Set_null_format_string()
         {
             var sut = new XceedDoubleField("test");

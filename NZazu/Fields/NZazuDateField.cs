@@ -11,8 +11,8 @@ namespace NZazu.Fields
 
         public NZazuDateField(string key) : base(key) { }
 
-        public override string Type { get { return "date"; } }
-        public override DependencyProperty ContentProperty { get { return DatePicker.SelectedDateProperty; } }
+        public override string Type => "date";
+        public override DependencyProperty ContentProperty => DatePicker.SelectedDateProperty;
 
         protected override Control GetValue()
         {
@@ -25,10 +25,10 @@ namespace NZazu.Fields
             var parsed = false;
             var result = new DateTime();
 
-            if (!String.IsNullOrWhiteSpace(value))
+            if (!string.IsNullOrWhiteSpace(value))
             {
                 const DateTimeStyles dateTimeStyles = DateTimeStyles.AssumeLocal;
-                parsed = String.IsNullOrWhiteSpace(DateFormat) 
+                parsed = string.IsNullOrWhiteSpace(DateFormat) 
                     ? DateTime.TryParse(value, FormatProvider, dateTimeStyles, out result) 
                     : DateTime.TryParseExact(value, DateFormat, FormatProvider, dateTimeStyles, out result);
             }
@@ -40,10 +40,10 @@ namespace NZazu.Fields
 
         protected override string GetStringValue()
         {
-            if (!Value.HasValue) return String.Empty;
+            if (!Value.HasValue) return string.Empty;
 
             var dateTime = Value.Value;
-            if (String.IsNullOrWhiteSpace(DateFormat))
+            if (string.IsNullOrWhiteSpace(DateFormat))
                 return dateTime.ToString(FormatProvider);
             return dateTime.ToString(DateFormat, FormatProvider);
         }

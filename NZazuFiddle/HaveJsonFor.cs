@@ -23,7 +23,7 @@ namespace NZazuFiddle
             }
         }
 
-        public bool HasJsonError { get { return JsonError != null; } }
+        public bool HasJsonError => JsonError != null;
 
         public string JsonError
         {
@@ -33,7 +33,7 @@ namespace NZazuFiddle
                 if (Equals(value, _jsonError)) return;
                 _jsonError = value;
                 NotifyOfPropertyChange();
-                NotifyOfPropertyChange("HasJsonError");
+                NotifyOfPropertyChange(nameof(HasJsonError));
             }
         }
     }

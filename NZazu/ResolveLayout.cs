@@ -16,7 +16,7 @@ namespace NZazu
 
         public INZazuWpfLayoutStrategy Resolve(string name)
         {
-            if (String.IsNullOrWhiteSpace(name)) return Default;
+            if (string.IsNullOrWhiteSpace(name)) return Default;
             INZazuWpfLayoutStrategy layout;
             return _layouts.TryGetValue(name, out layout) ? layout : Default;
         }

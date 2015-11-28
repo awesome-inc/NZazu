@@ -1,14 +1,16 @@
 using System;
+using System.Threading;
 using System.Windows.Controls;
 using FluentAssertions;
+using NEdifis.Attributes;
 using NUnit.Framework;
 
 namespace NZazu.Fields
 {
-    [TestFixture]
-    [RequiresSTA]
+    [TestFixtureFor(typeof (NZazuTextField))]
+    [Apartment(ApartmentState.STA)]
     // ReSharper disable InconsistentNaming
-    class NZazuTextField_Should
+    internal class NZazuTextField_Should
     {
         [Test]
         public void Be_Creatable()
@@ -22,6 +24,7 @@ namespace NZazu.Fields
         }
 
         [Test]
+        [STAThread]
         public void Create_TextBox_with_ToolTip_Matching_Description()
         {
             var sut = new NZazuTextField("test")
@@ -37,6 +40,7 @@ namespace NZazu.Fields
         }
 
         [Test]
+        [STAThread]
         public void Create_ValueControl_Even_If_Empty_Hint()
         {
             var sut = new NZazuTextField("test");
@@ -47,6 +51,7 @@ namespace NZazu.Fields
         }
 
         [Test]
+        [STAThread]
         public void Get_Set_Value_should_propagate_to_ValueControl_Without_LostFocus()
         {
             var sut = new NZazuTextField("test");
@@ -62,7 +67,7 @@ namespace NZazu.Fields
 
             textBox.Text.Should().Be("test");
 
-            textBox.Text = String.Empty;
+            textBox.Text = string.Empty;
             sut.StringValue.Should().BeEmpty();
         }
     }

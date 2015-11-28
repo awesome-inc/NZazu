@@ -8,7 +8,7 @@ namespace NZazu.Contracts.Checks
 
         public ValueCheckResult Validate(string value, IFormatProvider formatProvider = null)
         {
-            return String.IsNullOrWhiteSpace(value) ? FieldMissing : ValueCheckResult.Success;
+            return string.IsNullOrWhiteSpace(value) ? FieldMissing : ValueCheckResult.Success;
         }
     }
 }

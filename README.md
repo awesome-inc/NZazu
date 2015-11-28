@@ -1,8 +1,15 @@
+[![Build status](https://ci.appveyor.com/api/projects/status/nj8cqgfnqd07csuc?svg=true)](https://ci.appveyor.com/project/awesome-inc-build/nzazu/branch/master) ![NuGet Version](https://img.shields.io/nuget/v/NZazu.svg) ![NuGet Version](https://img.shields.io/nuget/dt/NZazu.svg) [![Issue Stats](http://issuestats.com/github/awesome-inc/NZazu/badge/issue)](http://issuestats.com/github/awesome-inc/NZazu) [![Issue Stats](http://issuestats.com/github/awesome-inc/NZazu/badge/pr)](http://issuestats.com/github/awesome-inc/NZazu) 
+
 # NZazu
 
-[![Build status](https://ci.appveyor.com/api/projects/status/nj8cqgfnqd07csuc/branch/master?svg=true)](https://ci.appveyor.com/project/awesome-inc-build/nzazu/branch/master)
+**NZazu** is a WPF form templating engine which renders a form based on an abstract form definition. 
 
-NZazu is a form templating engine which renders a form based on an abstract form definition.
+## NZazuFiddle 
+The sample application **NZazuFiddle** can be used for designing forms in real-time
+
+![](NZazuFiddle.png)
+
+## NZazuView
 
 The main view **NZazuView** connects factories, strategies and serializer to be flexible and extensible.
 
@@ -58,5 +65,3 @@ The layout strategy provides the mechanism to render the generated fields into t
 
 - [x] GridLayoutStrategy (main package)
 - [x] StackedLayoutStrategy (main package)
-
-

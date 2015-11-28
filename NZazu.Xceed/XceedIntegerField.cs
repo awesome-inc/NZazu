@@ -13,10 +13,7 @@ namespace NZazu.Xceed
         {
         }
 
-        public override DependencyProperty ContentProperty
-        {
-            get { return IntegerUpDown.ValueProperty; }
-        }
+        public override DependencyProperty ContentProperty => IntegerUpDown.ValueProperty;
 
         protected override Control GetValue()
         {
@@ -33,7 +30,7 @@ namespace NZazu.Xceed
         private static readonly Regex SpecifierPattern = new Regex(@"[C,F,G,N,P]{1}\d*", RegexOptions.Compiled);
         private static bool IsSupported(string formatString)
         {
-            if (String.IsNullOrWhiteSpace(formatString)) return false;
+            if (string.IsNullOrWhiteSpace(formatString)) return false;
             return SpecifierPattern.IsMatch(formatString);
         }
     }

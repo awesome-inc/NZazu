@@ -11,8 +11,8 @@ namespace NZazu.Contracts.Checks
 
         public StringRegExCheck(string hint, params Regex[] regex)
         {
-            if (String.IsNullOrWhiteSpace(hint)) throw new ArgumentNullException("hint");
-            if (regex == null) throw new ArgumentNullException("regex");
+            if (string.IsNullOrWhiteSpace(hint)) throw new ArgumentNullException(nameof(hint));
+            if (regex == null) throw new ArgumentNullException(nameof(regex));
             if (!regex.Any()) throw new ArgumentException("No regex patterns specified");
             _regex = regex;
 
@@ -21,7 +21,7 @@ namespace NZazu.Contracts.Checks
 
         public ValueCheckResult Validate(string value, IFormatProvider formatProvider = null)
         {
-            if (String.IsNullOrWhiteSpace(value)) return ValueCheckResult.Success;
+            if (string.IsNullOrWhiteSpace(value)) return ValueCheckResult.Success;
             var anyMatch = _regex.Any(r => r.IsMatch(value));
             return anyMatch ? ValueCheckResult.Success : _noMatch;
         }

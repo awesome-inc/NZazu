@@ -4,7 +4,7 @@ using NZazu.Contracts;
 namespace NZazuFiddle.Samples
 {
     // ReSharper disable once UnusedMember.Global
-    class PrimitivesSample : SampleBase
+    internal class PrimitivesSample : SampleBase
     {
         public PrimitivesSample() : base(10)
         {

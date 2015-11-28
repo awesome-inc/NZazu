@@ -11,7 +11,7 @@ namespace NZazu
 
         public CheckValidationRule(IValueCheck check)
         {
-            if (check == null) throw new ArgumentNullException("check");
+            if (check == null) throw new ArgumentNullException(nameof(check));
             _check = check;
         }
 

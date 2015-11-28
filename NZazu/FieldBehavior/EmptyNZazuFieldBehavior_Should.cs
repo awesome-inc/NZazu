@@ -1,14 +1,14 @@
 using System;
 using FluentAssertions;
+using NEdifis.Attributes;
 using NSubstitute;
 using NUnit.Framework;
 
 namespace NZazu.FieldBehavior
 {
-    [TestFixture]
-    [RequiresSTA]
+    [TestFixtureFor(typeof (EmptyNZazuFieldBehavior))]
     // ReSharper disable once InconsistentNaming
-    class EmptyNZazuFieldBehavior_Should
+    internal class EmptyNZazuFieldBehavior_Should
     {
         [Test]
         public void Be_Creatable()

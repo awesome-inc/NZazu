@@ -2,15 +2,15 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using FluentAssertions;
+using NEdifis.Attributes;
 using NUnit.Framework;
 using NZazu.Contracts;
 
 namespace NZazu.FieldBehavior
 {
-    [TestFixture]
-    [RequiresSTA]
+    [TestFixtureFor(typeof (NZazuFieldBehaviorFactory))]
     // ReSharper disable InconsistentNaming
-    class NZazuFieldBehaviorFactory_Should
+    internal class NZazuFieldBehaviorFactory_Should
     {
         [Test]
         public void Be_Creatable()
@@ -128,10 +128,12 @@ namespace NZazu.FieldBehavior
             public void AttachTo(INZazuWpfField field, INZazuWpfView view) { }
             public void Detach() { }
 
+            // ReSharper disable UnusedAutoPropertyAccessor.Local
             public int AnInt { get; set; }
             public string AString { get; set; }
             public double ADouble { get; set; }
             public bool ABool { get; set; }
+            // ReSharper restore UnusedAutoPropertyAccessor.Local
         }
     }
 }

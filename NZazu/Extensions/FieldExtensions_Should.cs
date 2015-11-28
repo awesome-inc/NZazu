@@ -1,14 +1,18 @@
-﻿using System.Windows.Controls;
+﻿using System;
+using System.Threading;
+using System.Windows.Controls;
 using FluentAssertions;
+using NEdifis.Attributes;
 using NSubstitute;
 using NUnit.Framework;
 using NZazu.Contracts.Checks;
 
 namespace NZazu.Extensions
 {
-    [TestFixture]
+    [TestFixtureFor(typeof (FieldExtensions))]
+    [Apartment(ApartmentState.STA)]
     // ReSharper disable InconsistentNaming
-    class FieldExtensions_Should
+    internal class FieldExtensions_Should
     {
         [Test]
         public void Return_False_If_Validate_Has_Exception()
@@ -32,7 +36,8 @@ namespace NZazu.Extensions
             field.ReceivedWithAnyArgs().Validate();
         }
 
-        [Test, RequiresSTA]
+        [Test]
+        [STAThread]
         public void Return_ReadOnly_if_not_editable_not_enabled_or_read_only()
         {
             var field = Substitute.For<INZazuWpfField>();
@@ -63,7 +68,8 @@ namespace NZazu.Extensions
             field.IsReadOnly().Should().Be(true, "field.control is read only");
         }
 
-        [Test, RequiresSTA]
+        [Test]
+        [STAThread]
         public void Set_ReadOnly_if_editable_via_enabled_or_read_only()
         {
             var field = Substitute.For<INZazuWpfField>();
@@ -92,7 +98,8 @@ namespace NZazu.Extensions
             textBox.IsReadOnly.Should().BeFalse();
         }
 
-        [Test(Description = "especially for group fields"), RequiresSTA]
+        [Test(Description = "especially for group fields")]
+        [STAThread]
         public void Not_Set_ReadOnly_if_not_editable()
         {
             var field = Substitute.For<INZazuWpfGroupField>();

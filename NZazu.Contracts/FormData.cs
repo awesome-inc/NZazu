@@ -8,7 +8,7 @@ namespace NZazu.Contracts
     #pragma warning disable 659
     public class FormData : IEquatable<FormData>
     {
-        public Dictionary<string, string> Values { get; private set; }
+        public Dictionary<string, string> Values { get; }
 
         public FormData(Dictionary<string, string> values = null)
         {
