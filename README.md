@@ -1,12 +1,17 @@
-[![Build status](https://ci.appveyor.com/api/projects/status/nj8cqgfnqd07csuc?svg=true)](https://ci.appveyor.com/project/awesome-inc-build/nzazu/branch/master) ![NuGet Version](https://img.shields.io/nuget/v/NZazu.svg) ![NuGet Version](https://img.shields.io/nuget/dt/NZazu.svg) [![Issue Stats](http://issuestats.com/github/awesome-inc/NZazu/badge/issue)](http://issuestats.com/github/awesome-inc/NZazu) [![Issue Stats](http://issuestats.com/github/awesome-inc/NZazu/badge/pr)](http://issuestats.com/github/awesome-inc/NZazu) 
-
 # NZazu
-
-[![Join the chat at https://gitter.im/awesome-inc/NZazu](https://badges.gitter.im/awesome-inc/NZazu.svg)](https://gitter.im/awesome-inc/NZazu?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 **NZazu** is a WPF form templating engine which renders a form based on an abstract form definition. 
 
+[![Join the chat at https://gitter.im/awesome-inc/NZazu](https://badges.gitter.im/awesome-inc/NZazu.svg)](https://gitter.im/awesome-inc/NZazu?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![Build status](https://ci.appveyor.com/api/projects/status/nj8cqgfnqd07csuc?svg=true)](https://ci.appveyor.com/project/awesome-inc-build/nzazu/branch/master) 
+
+![NuGet Version](https://img.shields.io/nuget/v/NZazu.svg) 
+![NuGet Version](https://img.shields.io/nuget/dt/NZazu.svg) 
+
+[![Issue Stats](http://issuestats.com/github/awesome-inc/NZazu/badge/issue)](http://issuestats.com/github/awesome-inc/NZazu) [![Issue Stats](http://issuestats.com/github/awesome-inc/NZazu/badge/pr)](http://issuestats.com/github/awesome-inc/NZazu) 
+
 ## NZazuFiddle 
+
 The sample application **NZazuFiddle** can be used for designing forms in real-time
 
 ![](NZazuFiddle.png)
