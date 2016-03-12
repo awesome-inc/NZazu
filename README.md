@@ -2,6 +2,8 @@
 
 # NZazu
 
+[![Join the chat at https://gitter.im/awesome-inc/NZazu](https://badges.gitter.im/awesome-inc/NZazu.svg)](https://gitter.im/awesome-inc/NZazu?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 **NZazu** is a WPF form templating engine which renders a form based on an abstract form definition. 
 
 ## NZazuFiddle 
