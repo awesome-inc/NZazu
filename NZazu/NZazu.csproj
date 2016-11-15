@@ -78,6 +78,7 @@
     <Compile Include="FieldBehavior\NZazuFieldBehaviorFactory_Should.cs" />
     <Compile Include="Fields\NZazuDataTableField.cs" />
     <Compile Include="Fields\NZazuDateField.cs" />
+    <Compile Include="Fields\NZazuDataTableField_Should.cs" />
     <Compile Include="Fields\NZazuDateField_Should.cs" />
     <Compile Include="Fields\NZazuDoubleField.cs" />
     <Compile Include="Fields\NZazuDoubleField_Should.cs" />
@@ -88,7 +89,6 @@
     <Compile Include="Fields\NZazuOptionsField_Should.cs" />
     <Compile Include="Fields\PropertyExtensions.cs" />
     <Compile Include="Fields\PropertyExtensions_Should.cs" />
-    <Compile Include="INZazuWpfDataTableField.cs" />
     <Compile Include="IResolveLayout.cs" />
     <Compile Include="INZazuWpfFieldBehavior.cs" />
     <Compile Include="Extensions\ViewExtensions_Should.cs" />
@@ -112,7 +112,7 @@
     <Compile Include="Fields\NZazuTextField_Should.cs" />
     <Compile Include="CheckValidationRule.cs" />
     <Compile Include="INZazuWpfFieldBehaviorFactory.cs" />
-    <Compile Include="INzazuWpfGroupField.cs" />
+    <Compile Include="INZazuWpfControlContainer.cs" />
     <Compile Include="IResolveFromName.cs" />
     <Compile Include="LayoutStrategy\GridLayout.cs" />
     <Compile Include="INZazuWpfField.cs" />

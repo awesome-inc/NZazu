@@ -102,7 +102,7 @@ namespace NZazu.Extensions
         [STAThread]
         public void Not_Set_ReadOnly_if_not_editable()
         {
-            var field = Substitute.For<INZazuWpfGroupField>();
+            var field = Substitute.For<INZazuWpfControlContainer>();
             field.IsEditable.Returns(true);
 
             var control = new ContentControl();

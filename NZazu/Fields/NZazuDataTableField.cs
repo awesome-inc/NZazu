@@ -2,10 +2,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using NZazu.Contracts;
 
 namespace NZazu.Fields
 {
-    public class NZazuDataTableField : NZazuField, INZazuWpfDataTableField
+    public class NZazuDataTableField
+        : NZazuField
+        , INZazuWpfControlContainer
     {
         public NZazuDataTableField(string key) : base(key)
         {
@@ -23,7 +26,12 @@ namespace NZazu.Fields
             return new ContentControl { Focusable = false };
         }
 
-        public IEnumerable<INZazuWpfField> Fields { get; protected internal set; }
-        public string Layout { get; protected internal set; }
+        public void CreateChildControls(INZazuWpfFieldFactory factory, FieldDefinition containerDefinition)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public IEnumerable<INZazuWpfField> Fields { get; set; }
+        public string Layout { get; set; }
     }
 }

@@ -170,7 +170,7 @@ namespace NZazu.Fields
                 Key = "group1", Type = "group",
                 Fields = fields
             };
-            var field = (INZazuWpfGroupField)sut.CreateField(fieldDefinition);
+            var field = (INZazuWpfControlContainer)sut.CreateField(fieldDefinition);
 
             field.Should().NotBeNull();
 
@@ -188,7 +188,7 @@ namespace NZazu.Fields
                 Type = "group",
                 Layout = "grid"
             };
-            var field = (INZazuWpfGroupField)sut.CreateField(fieldDefinition);
+            var field = (INZazuWpfControlContainer)sut.CreateField(fieldDefinition);
 
             field.Layout.Should().Be(fieldDefinition.Layout);
         }

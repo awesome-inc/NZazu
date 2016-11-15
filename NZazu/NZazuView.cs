@@ -253,17 +253,17 @@ namespace NZazu
             {
                 var field = fieldFactory.CreateField(f);
                 _fields.Add(f.Key, field);
-                AddGroupFieldKeys(field as INZazuWpfGroupField);
+                AddGroupFieldKeys(field as INZazuWpfControlContainer);
             });
         }
 
-        private void AddGroupFieldKeys(INZazuWpfGroupField groupField)
+        private void AddGroupFieldKeys(INZazuWpfControlContainer groupField)
         {
             if (groupField == null) return;
             foreach (var field in groupField.Fields)
             {
                 _fields.Add(field.Key, field);
-                AddGroupFieldKeys(field as INZazuWpfGroupField);
+                AddGroupFieldKeys(field as INZazuWpfControlContainer);
             }
         }
 

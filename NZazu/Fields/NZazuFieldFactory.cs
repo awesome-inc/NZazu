@@ -55,8 +55,8 @@ namespace NZazu.Fields
 
             CopySettings(field, fieldDefinition);
 
-            // todo mentzel does this makes sense? imho should the group field add the fields using the factory
-            ProcessGroupField(fieldDefinition, field as NZazuGroupField);
+            if (field is INZazuWpfControlContainer)
+                ((INZazuWpfControlContainer)field).CreateChildControls(this, fieldDefinition);
 
             CopyValues(fieldDefinition, field as NZazuOptionsField);
 
@@ -66,10 +66,10 @@ namespace NZazu.Fields
         private IValueCheck CreateCheck(IEnumerable<CheckDefinition> checkDefinitions)
         {
             if (checkDefinitions == null) return null;
- 
+
             var checks = checkDefinitions.Select(c => _checkFactory.CreateCheck(c)).ToArray();
-            return checks.Length == 1 
-                ? checks.First() 
+            return checks.Length == 1
+                ? checks.First()
                 : new AggregateCheck(checks.ToArray());
         }
 
@@ -80,18 +80,6 @@ namespace NZazu.Fields
                 foreach (var kvp in fieldDefinition.Settings)
                     field.Settings[kvp.Key] = kvp.Value;
             }
-        }
-
-        private void ProcessGroupField(FieldDefinition fieldDefinition, NZazuGroupField groupField)
-        {
-            if (fieldDefinition == null) throw new ArgumentNullException(nameof(fieldDefinition));
-            if (groupField == null) return;
-
-            if (!string.IsNullOrWhiteSpace(fieldDefinition.Layout))
-                groupField.Layout = fieldDefinition.Layout;
-
-            if (fieldDefinition.Fields == null || !fieldDefinition.Fields.Any()) return;
-            groupField.Fields = fieldDefinition.Fields.Select(CreateField).ToArray();
         }
 
         private static void CopyValues(FieldDefinition fieldDefinition, NZazuOptionsField optionsField)
