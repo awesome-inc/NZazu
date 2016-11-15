@@ -55,6 +55,7 @@ namespace NZazu.Fields
 
             CopySettings(field, fieldDefinition);
 
+            // todo mentzel does this makes sense? imho should the group field add the fields using the factory
             ProcessGroupField(fieldDefinition, field as NZazuGroupField);
 
             CopyValues(fieldDefinition, field as NZazuOptionsField);
