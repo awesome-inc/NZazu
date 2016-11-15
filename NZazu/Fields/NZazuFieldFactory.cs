@@ -24,6 +24,7 @@ namespace NZazu.Fields
             FieldTypes.Add("date", typeof(NZazuDateField));
             FieldTypes.Add("double", typeof(NZazuDoubleField));
             FieldTypes.Add("group", typeof(NZazuGroupField));
+            FieldTypes.Add("datatable", typeof(NZazuDataTableField));
             FieldTypes.Add("option", typeof(NZazuOptionsField));
         }
 

@@ -2,9 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
-using NZazu.LayoutStrategy;
 
-namespace NZazu
+namespace NZazu.LayoutStrategy
 {
     public class StackedLayout : Layout
     {
@@ -12,7 +11,9 @@ namespace NZazu
         {
         }
 
-        public override void DoLayout(ContentControl contentControl, IEnumerable<INZazuWpfField> fields, 
+        public override void DoLayout(
+            ContentControl contentControl, 
+            IEnumerable<INZazuWpfField> fields, 
             IResolveLayout resolveLayout = null)
         {
             if (contentControl == null) throw new ArgumentNullException(nameof(contentControl));

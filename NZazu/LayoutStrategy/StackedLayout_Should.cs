@@ -9,7 +9,7 @@ using NEdifis.Attributes;
 using NUnit.Framework;
 using NZazu.Fields;
 
-namespace NZazu
+namespace NZazu.LayoutStrategy
 {
     [TestFixtureFor(typeof (StackedLayout))]
     [Apartment(ApartmentState.STA)]

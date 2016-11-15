@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
@@ -227,8 +226,7 @@ namespace NZazu
             DisposeFields();
 
             // make sure at least the minimum is set for render the layout
-            if (formDefinition == null) return;
-            if (formDefinition.Fields == null) return;
+            if (formDefinition?.Fields == null) return;
 
             CreateFields(formDefinition, fieldFactory);
             AttachBehavior(formDefinition, fieldBehaviorFactory);
@@ -293,8 +291,7 @@ namespace NZazu
                 field.Behavior = behavior;
             }
 
-            if (fieldDefinition.Fields == null) return;
-            fieldDefinition.Fields.ToList().ForEach(f => AttachBehavior(fieldBehaviorFactory, f));
+            fieldDefinition.Fields?.ToList().ForEach(f => AttachBehavior(fieldBehaviorFactory, f));
         }
 
 

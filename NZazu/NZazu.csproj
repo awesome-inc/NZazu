@@ -99,8 +99,8 @@
     <Compile Include="LayoutStrategy\Layout.cs" />
     <Compile Include="ResolveFromNameProxy.cs" />
     <Compile Include="ResolveLayout_Should.cs" />
-    <Compile Include="StackedLayout.cs" />
-    <Compile Include="StackedLayout_Should.cs" />
+    <Compile Include="LayoutStrategy\StackedLayout.cs" />
+    <Compile Include="LayoutStrategy\StackedLayout_Should.cs" />
     <Compile Include="CheckValidationRule_Should.cs" />
     <Compile Include="Fields\NZazuBoolField_Should.cs" />
     <Compile Include="Fields\NZazuField.cs" />
