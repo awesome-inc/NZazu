@@ -35,11 +35,11 @@ namespace NZazu.Fields
 
             NZazuField field;
             if (FieldTypes.ContainsKey(fieldTypeSafe))
-                field = (NZazuField)Activator.CreateInstance(FieldTypes[fieldTypeSafe], fieldDefinition.Key);
+                field = (NZazuField)Activator.CreateInstance(FieldTypes[fieldTypeSafe], fieldDefinition.Key, fieldDefinition);
             else
             {
                 Trace.TraceWarning("The specified field type is not supported: " + fieldTypeSafe);
-                field = (NZazuField)Activator.CreateInstance(FieldTypes[DefaultType], fieldDefinition.Key);
+                field = (NZazuField)Activator.CreateInstance(FieldTypes[DefaultType], fieldDefinition.Key, fieldDefinition);
             }
 
             return Decorate(field, fieldDefinition);

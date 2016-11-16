@@ -7,6 +7,7 @@ using System.Windows.Controls;
 using FluentAssertions;
 using NEdifis.Attributes;
 using NUnit.Framework;
+using NZazu.Contracts;
 using NZazu.Fields;
 
 namespace NZazu.LayoutStrategy
@@ -56,7 +57,7 @@ namespace NZazu.LayoutStrategy
             var container = new ContentControl();
             var fields = new NZazuField[]
             {
-                new NZazuLabelField("label1"),
+                new NZazuLabelField("label1", new FieldDefinition()),
             };
 
             sut.DoLayout(container, fields);
@@ -76,9 +77,9 @@ namespace NZazu.LayoutStrategy
             var container = new ContentControl();
             var fields = new NZazuField[]
             {
-                new NZazuLabelField("label1"),
-                new NZazuTextField("string1"),
-                new NZazuBoolField("bool1")
+                new NZazuLabelField("label1", new FieldDefinition()),
+                new NZazuTextField("string1", new FieldDefinition()),
+                new NZazuBoolField("bool1", new FieldDefinition())
             };
 
             sut.DoLayout(container, fields);
@@ -100,9 +101,9 @@ namespace NZazu.LayoutStrategy
             var container = new ContentControl();
             var fields = new NZazuField[]
             {
-                new NZazuLabelField("label1") {Prompt = "heading"},
-                new NZazuTextField("string1"),
-                new NZazuBoolField("bool1")
+                new NZazuLabelField("label1", new FieldDefinition()) {Prompt = "heading"},
+                new NZazuTextField("string1", new FieldDefinition()),
+                new NZazuBoolField("bool1", new FieldDefinition())
             };
 
             sut.DoLayout(container, fields);
@@ -126,9 +127,9 @@ namespace NZazu.LayoutStrategy
             var container = new ContentControl();
             var fields = new NZazuField[]
             {
-                new NZazuLabelField("label1"),
-                new NZazuTextField("string1"),
-                new NZazuBoolField("bool1")
+                new NZazuLabelField("label1", new FieldDefinition()),
+                new NZazuTextField("string1", new FieldDefinition()),
+                new NZazuBoolField("bool1", new FieldDefinition())
             };
 
             fields

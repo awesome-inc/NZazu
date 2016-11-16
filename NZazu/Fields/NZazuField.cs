@@ -7,12 +7,14 @@ using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using NZazu.Contracts;
 using NZazu.Contracts.Checks;
 
 namespace NZazu.Fields
 {
     public abstract class NZazuField : INZazuWpfField
     {
+        protected readonly FieldDefinition Definition;
         protected IFormatProvider FormatProvider => CultureInfo.InvariantCulture;
 
         private readonly Lazy<Control> _labelControl;
@@ -33,9 +35,12 @@ namespace NZazu.Fields
         public Dictionary<string, string> Settings { get; }
         public INZazuWpfFieldBehavior Behavior { get; set; }
 
-        protected NZazuField(string key)
+        protected NZazuField(string key, FieldDefinition definition)
         {
+            if (definition == null) throw new ArgumentNullException(nameof(definition));
+            if (definition == null) throw new ArgumentNullException(nameof(definition));
             if (string.IsNullOrWhiteSpace(key)) throw new ArgumentException("key");
+            Definition = definition;
             Key = key;
 
             _labelControl = new Lazy<Control>(GetLabelControl);
@@ -45,10 +50,10 @@ namespace NZazu.Fields
 
         public ValueCheckResult Validate()
         {
-            var bindingExpression = ContentProperty != null 
-                ? ValueControl.GetBindingExpression(ContentProperty) 
+            var bindingExpression = ContentProperty != null
+                ? ValueControl.GetBindingExpression(ContentProperty)
                 : null;
-            if (bindingExpression != null && bindingExpression.HasError) 
+            if (bindingExpression != null && bindingExpression.HasError)
                 return new ValueCheckResult(false, "UI has errors. Value could not be converted");
 
             if (Check == null) return ValueCheckResult.Success;
@@ -135,7 +140,7 @@ namespace NZazu.Fields
             return value;
         }
 
-        protected internal T? GetSetting<T>(string key) where T:struct
+        protected internal T? GetSetting<T>(string key) where T : struct
         {
             try
             {
@@ -150,10 +155,7 @@ namespace NZazu.Fields
     {
         private T _value;
 
-        protected NZazuField(string key)
-            : base(key)
-        {
-        }
+        protected NZazuField(string key, FieldDefinition definition) : base(key, definition) { }
 
         public T Value
         {

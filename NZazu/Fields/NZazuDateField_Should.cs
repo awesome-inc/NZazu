@@ -1,10 +1,12 @@
 using System;
 using System.Globalization;
+using System.Linq;
 using System.Threading;
 using System.Windows.Controls;
 using FluentAssertions;
 using NEdifis.Attributes;
 using NUnit.Framework;
+using NZazu.Contracts;
 using NZazu.Extensions;
 
 namespace NZazu.Fields
@@ -17,7 +19,7 @@ namespace NZazu.Fields
         [Test]
         public void Be_Creatable()
         {
-            var sut = new NZazuDateField("test");
+            var sut = new NZazuDateField("test", new FieldDefinition());
 
             sut.Should().NotBeNull();
             sut.Should().BeAssignableTo<INZazuWpfField>();
@@ -28,7 +30,7 @@ namespace NZazu.Fields
         [STAThread]
         public void Create_Control_With_ToolTip_Matching_Description()
         {
-            var sut = new NZazuDateField("test")
+            var sut = new NZazuDateField("test", new FieldDefinition())
             {
                 Hint = "superhero",
                 Description = "check this if you are a registered superhero"
@@ -46,7 +48,7 @@ namespace NZazu.Fields
         public void Format_UIText_From_Value()
         {
             // ReSharper disable once UseObjectOrCollectionInitializer
-            var sut = new NZazuDateField("test");
+            var sut = new NZazuDateField("test", new FieldDefinition());
             const string dateFormat = "yyyy_MM_dd";
             sut.Settings.Add("Format", dateFormat);
             var datePicker = (DatePicker)sut.ValueControl;
@@ -73,7 +75,7 @@ namespace NZazu.Fields
         [STAThread]
         public void Format_SelectedDate_From_Value()
         {
-            var sut = new NZazuDateField("test");
+            var sut = new NZazuDateField("test", new FieldDefinition());
             var datePicker = (DatePicker)sut.ValueControl;
 
             sut.Value.Should().NotHaveValue();
@@ -91,7 +93,7 @@ namespace NZazu.Fields
         [STAThread]
         public void Format_Value_From_TextBox()
         {
-            var sut = new NZazuDateField("test");
+            var sut = new NZazuDateField("test", new FieldDefinition());
             var datePicker = (DatePicker)sut.ValueControl;
 
             sut.Value.Should().NotHaveValue();
@@ -110,7 +112,7 @@ namespace NZazu.Fields
         [STAThread]
         public void Format_TextBox_From_StringValue()
         {
-            var sut = new NZazuDateField("test");
+            var sut = new NZazuDateField("test", new FieldDefinition());
             var datePicker = (DatePicker)sut.ValueControl;
 
             sut.StringValue.Should().BeNullOrEmpty();
@@ -128,7 +130,7 @@ namespace NZazu.Fields
         [STAThread]
         public void Format_StringValue_From_TextBox()
         {
-            var sut = new NZazuDateField("test");
+            var sut = new NZazuDateField("test", new FieldDefinition());
             var datePicker = (DatePicker)sut.ValueControl;
 
             var now = DateTime.Now.Date;
@@ -147,7 +149,7 @@ namespace NZazu.Fields
         [Test]
         public void Consider_DateFormat_in_StringValue()
         {
-            var sut = new NZazuDateField("test");
+            var sut = new NZazuDateField("test", new FieldDefinition());
 
             // DateFormat unspecified
             var date = DateTime.UtcNow;

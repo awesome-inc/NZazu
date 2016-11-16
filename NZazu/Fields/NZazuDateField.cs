@@ -1,7 +1,9 @@
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
+using NZazu.Contracts;
 
 namespace NZazu.Fields
 {
@@ -9,7 +11,7 @@ namespace NZazu.Fields
     {
         public string DateFormat { get; protected internal set; }
 
-        public NZazuDateField(string key) : base(key) { }
+        public NZazuDateField(string key, FieldDefinition definition) : base(key, definition) { }
 
         public override string Type => "date";
         public override DependencyProperty ContentProperty => DatePicker.SelectedDateProperty;

@@ -1,6 +1,8 @@
 using System;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
+using NZazu.Contracts;
 using NZazu.Fields;
 using Xceed.Wpf.Toolkit;
 
@@ -8,9 +10,7 @@ namespace NZazu.Xceed
 {
     public class XceedDateTimeField : NZazuDateField
     {
-        public XceedDateTimeField(string key) : base(key)
-        {
-        }
+        public XceedDateTimeField(string key, FieldDefinition definition) : base(key, definition) { }
 
         public override DependencyProperty ContentProperty => DateTimePicker.ValueProperty;
 

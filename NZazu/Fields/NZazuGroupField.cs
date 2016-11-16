@@ -9,10 +9,7 @@ namespace NZazu.Fields
 {
     public class NZazuGroupField : NZazuField, INZazuWpfControlContainer
     {
-        public NZazuGroupField(string key) : base(key)
-        {
-            //Fields = Enumerable.Empty<INZazuWpfField>();
-        }
+        public NZazuGroupField(string key, FieldDefinition definition) : base(key, definition) { }
 
         public override bool IsEditable => false;
         public override string StringValue { get; set; }
@@ -36,7 +33,6 @@ namespace NZazu.Fields
             if (containerDefinition.Fields == null || !containerDefinition.Fields.Any()) return;
 
             this.Fields = containerDefinition.Fields.Select(factory.CreateField).ToArray();
-
         }
     }
 }

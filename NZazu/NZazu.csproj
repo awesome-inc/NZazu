@@ -76,6 +76,10 @@
     <Compile Include="FieldBehavior\NZazuFieldBehavior.cs" />
     <Compile Include="FieldBehavior\NZazuFieldBehaviorFactory.cs" />
     <Compile Include="FieldBehavior\NZazuFieldBehaviorFactory_Should.cs" />
+    <Compile Include="Fields\Controls\DynamicDataTable.xaml.cs">
+      <DependentUpon>DynamicDataTable.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Fields\Controls\DynamicDataTable_Should.cs" />
     <Compile Include="Fields\NZazuDataTableField.cs" />
     <Compile Include="Fields\NZazuDateField.cs" />
     <Compile Include="Fields\NZazuDataTableField_Should.cs" />
@@ -128,6 +132,10 @@
     <Compile Include="Extensions\ViewExtensions.cs" />
     <Compile Include="Extensions\FieldExtensions_Should.cs" />
     <Compile Include="NZazuView_Should.cs" />
+    <Page Include="Fields\Controls\DynamicDataTable.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Themes\Generic.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

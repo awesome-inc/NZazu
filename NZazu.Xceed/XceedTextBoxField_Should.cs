@@ -1,13 +1,15 @@
 ﻿using System;
+using System.Linq;
 using System.Threading;
 using FluentAssertions;
 using NEdifis.Attributes;
 using NUnit.Framework;
+using NZazu.Contracts;
 using Xceed.Wpf.Toolkit;
 
 namespace NZazu.Xceed
 {
-    [TestFixtureFor(typeof (XceedTextBoxField))]
+    [TestFixtureFor(typeof(XceedTextBoxField))]
     [Apartment(ApartmentState.STA)]
     // ReSharper disable InconsistentNaming
     internal class XceedTextBoxField_Should
@@ -15,7 +17,7 @@ namespace NZazu.Xceed
         [Test]
         public void Be_Creatable()
         {
-            var sut = new XceedTextBoxField("test");
+            var sut = new XceedTextBoxField("test", new FieldDefinition());
             sut.Should().NotBeNull();
             sut.Should().BeAssignableTo<INZazuWpfField>();
 
@@ -26,7 +28,7 @@ namespace NZazu.Xceed
         [STAThread]
         public void Create_TextBox_with_ToolTip_Matching_Description()
         {
-            var sut = new XceedTextBoxField("test", "description", "hint");
+            var sut = new XceedTextBoxField("test", "description", "hint", new FieldDefinition());
 
             sut.Description.Should().Be("description");
             sut.Hint.Should().Be("hint");

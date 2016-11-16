@@ -5,6 +5,7 @@ using System.Windows.Controls;
 using FluentAssertions;
 using NEdifis.Attributes;
 using NUnit.Framework;
+using NZazu.Contracts;
 
 namespace NZazu.Fields
 {
@@ -16,7 +17,7 @@ namespace NZazu.Fields
         [Test]
         public void Be_Creatable()
         {
-            var sut = new NZazuOptionsField("test");
+            var sut = new NZazuOptionsField("test", new FieldDefinition());
 
             sut.Should().NotBeNull();
             sut.Should().BeAssignableTo<INZazuWpfField>();
@@ -27,7 +28,7 @@ namespace NZazu.Fields
         [STAThread]
         public void Create_ComboBox()
         {
-            var sut = new NZazuOptionsField("test") { Description = "description"};
+            var sut = new NZazuOptionsField("test", new FieldDefinition()) { Description = "description"};
 
             sut.ContentProperty.Should().Be(ComboBox.TextProperty);
             var control = (ComboBox)sut.ValueControl;
@@ -40,7 +41,7 @@ namespace NZazu.Fields
         [STAThread]
         public void Reflect_changing_Value_in_TextProperty()
         {
-            var sut = new NZazuOptionsField("test")
+            var sut = new NZazuOptionsField("test", new FieldDefinition())
             {
                 Options = new[] { "1", "2", "3", "4", "5"}
             };
@@ -75,7 +76,7 @@ namespace NZazu.Fields
         [Test]
         public void Identify_Value_with_StringValue()
         {
-            var sut = new NZazuOptionsField("test");
+            var sut = new NZazuOptionsField("test", new FieldDefinition());
 
             sut.Value.Should().BeNull();
             sut.StringValue.Should().Be(sut.Value);

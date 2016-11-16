@@ -1,13 +1,14 @@
-using System;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
+using NZazu.Contracts;
 
 namespace NZazu.Fields
 {
     public class NZazuBoolField : NZazuField<bool?>
     {
-        public NZazuBoolField(string key) : base(key) { }
+        public NZazuBoolField(string key, FieldDefinition definition) : base(key, definition) { }
 
         protected override void SetStringValue(string value)
         {
@@ -20,7 +21,7 @@ namespace NZazu.Fields
 
         protected override string GetStringValue()
         {
-            return Value.HasValue ? Value.Value.ToString() : string.Empty;
+            return Value?.ToString() ?? string.Empty;
         }
 
         public override string Type => "bool";

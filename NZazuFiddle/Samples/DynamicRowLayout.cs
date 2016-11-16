@@ -17,8 +17,15 @@ namespace NZazuFiddle.Samples
                     {
                         new FieldDefinition
                         {
+                            Key = "hi",
+                            Type = "string",
+                            Prompt = "Enter ",
+                            Description = "Awesome ",
+                        },
+                        new FieldDefinition
+                        {
                             Key = "datatable",
-                            Type = "group",
+                            Type = "datatable",
                             Prompt = "Enter your data",
                             Description = "Awesome table",
                             Fields = new[]

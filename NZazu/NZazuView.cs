@@ -280,7 +280,7 @@ namespace NZazu
 
         private void AttachBehavior(INZazuWpfFieldBehaviorFactory fieldBehaviorFactory, FieldDefinition fieldDefinition)
         {
-            if (fieldDefinition.Behavior != null && !string.IsNullOrWhiteSpace(fieldDefinition.Behavior.Name))
+            if (!string.IsNullOrWhiteSpace(fieldDefinition.Behavior?.Name))
             {
                 var behavior = fieldBehaviorFactory.CreateFieldBehavior(fieldDefinition.Behavior);
                 if (behavior == null) return;
@@ -304,7 +304,7 @@ namespace NZazu
         {
             foreach (var field in fields)
             {
-                if (field == null || field.Behavior == null) continue;
+                if (field?.Behavior == null) continue;
                 field.Behavior.Detach();
                 field.Behavior = null;
             }

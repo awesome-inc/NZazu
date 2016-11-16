@@ -3,35 +3,28 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using NZazu.Contracts;
+using NZazu.Fields.Controls;
 
 namespace NZazu.Fields
 {
     public class NZazuDataTableField
         : NZazuField
-        , INZazuWpfControlContainer
     {
-        public NZazuDataTableField(string key) : base(key)
+        private readonly DynamicDataTable _clientControl;
+
+        public NZazuDataTableField(string key, FieldDefinition definition) : base(key, definition)
         {
-            Fields = Enumerable.Empty<INZazuWpfField>();
+            _clientControl = new DynamicDataTable();
         }
 
         public override bool IsEditable => false;
         public override string StringValue { get; set; }
-
-        public override DependencyProperty ContentProperty => null;
+        public override DependencyProperty ContentProperty => DynamicDataTable.ValuesAsJsonProperty;
         public override string Type => "datatable";
 
         protected override Control GetValue()
         {
-            return new ContentControl { Focusable = false };
+            return _clientControl;
         }
-
-        public void CreateChildControls(INZazuWpfFieldFactory factory, FieldDefinition containerDefinition)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public IEnumerable<INZazuWpfField> Fields { get; set; }
-        public string Layout { get; set; }
     }
 }

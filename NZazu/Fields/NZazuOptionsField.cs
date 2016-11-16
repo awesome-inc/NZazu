@@ -1,14 +1,14 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using NZazu.Contracts;
 
 namespace NZazu.Fields
 {
     public class NZazuOptionsField : NZazuField<string>
     {
-        public NZazuOptionsField(string key) : base(key)
-        {
-        }
+        public NZazuOptionsField(string key, FieldDefinition definition) : base(key, definition) { }
 
         public override DependencyProperty ContentProperty => ComboBox.TextProperty;
 

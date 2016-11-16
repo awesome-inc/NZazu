@@ -1,13 +1,12 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
+using NZazu.Contracts;
 
 namespace NZazu.Fields
 {
     public class NZazuTextField : NZazuField<string>
     {
-        public NZazuTextField(string key) : base(key)
-        {
-        }
+        public NZazuTextField(string key, FieldDefinition definition) : base(key, definition) { }
 
         protected override void SetStringValue(string value) { Value = value; }
         protected override string GetStringValue() { return Value; }

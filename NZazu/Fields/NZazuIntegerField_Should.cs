@@ -1,9 +1,11 @@
 using System;
+using System.Linq;
 using System.Threading;
 using System.Windows.Controls;
 using FluentAssertions;
 using NEdifis.Attributes;
 using NUnit.Framework;
+using NZazu.Contracts;
 using NZazu.Extensions;
 
 namespace NZazu.Fields
@@ -16,7 +18,7 @@ namespace NZazu.Fields
         [Test]
         public void Be_Creatable()
         {
-            var sut = new NZazuIntegerField("test");
+            var sut = new NZazuIntegerField("test", new FieldDefinition());
 
             sut.Should().NotBeNull();
             sut.Should().BeAssignableTo<INZazuWpfField>();
@@ -27,7 +29,7 @@ namespace NZazu.Fields
         [STAThread]
         public void Create_Control_With_ToolTip_Matching_Description()
         {
-            var sut = new NZazuIntegerField("test")
+            var sut = new NZazuIntegerField("test", new FieldDefinition())
             {
                 Hint = "superhero",
                 Description = "check this if you are a registered superhero"
@@ -43,7 +45,7 @@ namespace NZazu.Fields
         [STAThread]
         public void Format_TextBox_From_Value()
         {
-            var sut = new NZazuIntegerField("test");
+            var sut = new NZazuIntegerField("test", new FieldDefinition());
             var textBox = (TextBox)sut.ValueControl;
 
             sut.Value.Should().NotHaveValue();
@@ -63,7 +65,7 @@ namespace NZazu.Fields
         [STAThread]
         public void Format_Value_From_TextBox()
         {
-            var sut = new NZazuIntegerField("test");
+            var sut = new NZazuIntegerField("test", new FieldDefinition());
             var textBox = (TextBox)sut.ValueControl;
 
             sut.Value.Should().NotHaveValue();
@@ -88,7 +90,7 @@ namespace NZazu.Fields
         [STAThread]
         public void Format_TextBox_From_StringValue()
         {
-            var sut = new NZazuIntegerField("test");
+            var sut = new NZazuIntegerField("test", new FieldDefinition());
             var textBox = (TextBox)sut.ValueControl;
 
             sut.StringValue.Should().BeNullOrEmpty();
@@ -108,7 +110,7 @@ namespace NZazu.Fields
         [STAThread]
         public void Format_StringValue_From_TextBox()
         {
-            var sut = new NZazuIntegerField("test");
+            var sut = new NZazuIntegerField("test", new FieldDefinition());
             var textBox = (TextBox)sut.ValueControl;
 
             textBox.Text = "7";
