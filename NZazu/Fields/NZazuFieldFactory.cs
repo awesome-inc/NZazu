@@ -55,8 +55,8 @@ namespace NZazu.Fields
 
             CopySettings(field, fieldDefinition);
 
-            if (field is INZazuWpfControlContainer)
-                ((INZazuWpfControlContainer)field).CreateChildControls(this, fieldDefinition);
+            if (field is INZazuWpfFieldContainer)
+                ((INZazuWpfFieldContainer)field).CreateChildControls(this, fieldDefinition);
 
             CopyValues(fieldDefinition, field as NZazuOptionsField);
 

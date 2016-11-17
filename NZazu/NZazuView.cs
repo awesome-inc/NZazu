@@ -10,6 +10,7 @@ using NZazu.Fields;
 
 namespace NZazu
 {
+    // todo check if it makes sense to put some of the logic to the NZazuField
     public class NZazuView : ScrollViewer, INZazuWpfView
     {
         #region dependency properties
@@ -253,17 +254,17 @@ namespace NZazu
             {
                 var field = fieldFactory.CreateField(f);
                 _fields.Add(f.Key, field);
-                AddGroupFieldKeys(field as INZazuWpfControlContainer);
+                AddGroupFieldKeys(field as INZazuWpfFieldContainer);
             });
         }
 
-        private void AddGroupFieldKeys(INZazuWpfControlContainer groupField)
+        private void AddGroupFieldKeys(INZazuWpfFieldContainer groupField)
         {
             if (groupField == null) return;
             foreach (var field in groupField.Fields)
             {
                 _fields.Add(field.Key, field);
-                AddGroupFieldKeys(field as INZazuWpfControlContainer);
+                AddGroupFieldKeys(field as INZazuWpfFieldContainer);
             }
         }
 

@@ -16,7 +16,7 @@ namespace NZazu.Extensions
             if (field == null) throw new ArgumentNullException(nameof(field));
             if (!field.IsEditable) 
                 return true;
-            if (field is INZazuWpfControlContainer) 
+            if (field is INZazuWpfFieldContainer) 
                 return true;
 
             var control = field.ValueControl;
@@ -31,7 +31,7 @@ namespace NZazu.Extensions
             if (field == null) throw new ArgumentNullException(nameof(field));
             if (!field.IsEditable) 
                 return;
-            if (field is INZazuWpfControlContainer) 
+            if (field is INZazuWpfFieldContainer) 
                 return;
 
             var control = field.ValueControl;

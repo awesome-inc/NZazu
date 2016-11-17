@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Windows;
 using System.Windows.Controls;
 using NZazu.Contracts.Checks;
 
@@ -20,6 +21,7 @@ namespace NZazu
         Control ValueControl { get; }
         Dictionary<string, string> Settings { get; }
         INZazuWpfFieldBehavior Behavior { get; set; }
+        DependencyProperty ContentProperty { get; }
     }
 
     public interface INZazuWpfField<T> : INZazuWpfField

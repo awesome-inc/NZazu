@@ -3,7 +3,7 @@ using NZazu.Contracts;
 
 namespace NZazu
 {
-    public interface INZazuWpfControlContainer : INZazuWpfField
+    public interface INZazuWpfFieldContainer : INZazuWpfField
     {
         void CreateChildControls(INZazuWpfFieldFactory factory, FieldDefinition containerDefinition);
         IEnumerable<INZazuWpfField> Fields { get; set; }

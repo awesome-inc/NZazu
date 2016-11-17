@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using System.Threading;
 using System.Windows.Controls;
 using FluentAssertions;
@@ -21,7 +20,7 @@ namespace NZazu.Fields
             sut.Should().NotBeNull();
 
             sut.Should().BeAssignableTo<INZazuWpfField>();
-            sut.Should().BeAssignableTo<INZazuWpfControlContainer>();
+            sut.Should().BeAssignableTo<INZazuWpfFieldContainer>();
         }
 
         [Test]

@@ -7,7 +7,7 @@ using NZazu.Contracts;
 
 namespace NZazu.Fields
 {
-    public class NZazuGroupField : NZazuField, INZazuWpfControlContainer
+    public class NZazuGroupField : NZazuField, INZazuWpfFieldContainer
     {
         public NZazuGroupField(string key, FieldDefinition definition) : base(key, definition) { }
 

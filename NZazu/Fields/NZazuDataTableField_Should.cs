@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using System.Threading;
 using System.Windows.Controls;
 using FluentAssertions;
@@ -27,10 +26,10 @@ namespace NZazu.Fields
         }
 
         [Test]
-        public void Support_direct_binding_or_validation()
+        public void Not_Support_direct_binding_or_validation_Right_Now()
         {
             var sut = new NZazuDataTableField("key", new FieldDefinition());
-            sut.ContentProperty.Should().NotBe(null);
+            sut.ContentProperty.Should().Be(null);
         }
 
         [Test]
