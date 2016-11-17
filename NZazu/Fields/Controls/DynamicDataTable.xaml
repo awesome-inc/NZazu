@@ -11,6 +11,10 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="28" />
         </Grid.RowDefinitions>
-        <Button Grid.Row="1"> Add Row</Button>
+        <Grid x:Name="LayoutGrid"/>
+        <StackPanel Grid.Row="1" Orientation="Horizontal">
+            <Button>Add</Button>
+            <Button>Remove</Button>
+        </StackPanel>
     </Grid>
 </UserControl>

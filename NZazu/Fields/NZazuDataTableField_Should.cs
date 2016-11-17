@@ -22,6 +22,8 @@ namespace NZazu.Fields
             sut.Should().NotBeNull();
             sut.Should().BeAssignableTo<INZazuWpfField>();
             sut.Type.Should().Be("datatable");
+
+            sut.IsEditable.Should().BeTrue();
         }
 
         [Test]
@@ -47,7 +49,7 @@ namespace NZazu.Fields
         public void Not_be_Editable()
         {
             var sut = new NZazuDataTableField("test", new FieldDefinition());
-            sut.IsEditable.Should().BeFalse();
+            sut.IsEditable.Should().BeTrue();
         }
     }
 }
