@@ -80,6 +80,7 @@
       <DependentUpon>DynamicDataTable.xaml</DependentUpon>
     </Compile>
     <Compile Include="Fields\Controls\DynamicDataTable_Should.cs" />
+    <Compile Include="Fields\IRequireFactory.cs" />
     <Compile Include="Fields\NZazuDataTableField.cs" />
     <Compile Include="Fields\NZazuDateField.cs" />
     <Compile Include="Fields\NZazuDataTableField_Should.cs" />
@@ -93,6 +94,7 @@
     <Compile Include="Fields\NZazuOptionsField_Should.cs" />
     <Compile Include="Fields\PropertyExtensions.cs" />
     <Compile Include="Fields\PropertyExtensions_Should.cs" />
+    <Compile Include="INZazuDataSerializer.cs" />
     <Compile Include="IResolveLayout.cs" />
     <Compile Include="INZazuWpfFieldBehavior.cs" />
     <Compile Include="Extensions\ViewExtensions_Should.cs" />
@@ -132,6 +134,9 @@
     <Compile Include="Extensions\ViewExtensions.cs" />
     <Compile Include="Extensions\FieldExtensions_Should.cs" />
     <Compile Include="NZazuView_Should.cs" />
+    <Compile Include="Serializer\IRequireSerializer.cs" />
+    <Compile Include="Serializer\NZazuXmlSerializer.cs" />
+    <Compile Include="Serializer\NZazuXmlSerializer_Should.cs" />
     <Page Include="Fields\Controls\DynamicDataTable.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

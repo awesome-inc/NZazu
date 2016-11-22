@@ -5,14 +5,16 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Xml.Linq;
 using NZazu.Contracts;
 using NZazu.Fields.Controls;
+using NZazu.Serializer;
 
 namespace NZazu.Fields
 {
     public class NZazuDataTableField
         : NZazuField
+        , IRequireFactory
+        , IRequireSerializer
     {
         #region crappy code to create a new row after tabbing the last field
 
@@ -45,11 +47,14 @@ namespace NZazu.Fields
 
         #endregion
 
+        public INZazuDataSerializer Serializer { get; set; }
+        public INZazuWpfFieldFactory FieldFactory { get; set; }
+
         private readonly DynamicDataTable _clientControl;
         private readonly IDictionary<string, INZazuWpfField> _fields = new Dictionary<string, INZazuWpfField>();
         private int _tabOrder;
 
-        private Button addBtn;
+        private Button _addBtn;
 
         public NZazuDataTableField(string key, FieldDefinition definition) : base(key, definition)
         {
@@ -68,7 +73,8 @@ namespace NZazu.Fields
                 var column = grid.ColumnDefinitions.Count - 1;
 
                 // set the header column ;)
-                var lbl = new Label() { Content = field.Prompt, ToolTip = field.Description, Background = Brushes.Silver };
+                var lbl = new Label() { Content = field.Prompt, ToolTip = field.Description, Background = Brushes.Silver, FontWeight = FontWeights.Bold };
+                if (string.IsNullOrEmpty(Description)) lbl.ToolTip = field.Prompt;
                 grid.Children.Add(lbl);
                 Grid.SetRow(lbl, 0);
                 Grid.SetColumn(lbl, column); // the last one ;)
@@ -93,9 +99,9 @@ namespace NZazu.Fields
         private void CreateButtonsOn(Panel panel)
         {
             // add button
-            addBtn = new Button { Content = "Add", TabIndex = _tabOrder + 1 };
-            addBtn.Click += AddBtnOnClick;
-            panel.Children.Add(addBtn);
+            _addBtn = new Button { Content = "Add", TabIndex = _tabOrder + 1 };
+            _addBtn.Click += AddBtnOnClick;
+            panel.Children.Add(_addBtn);
         }
 
         private void AddBtnOnClick(object sender, RoutedEventArgs routedEventArgs)
@@ -121,11 +127,10 @@ namespace NZazu.Fields
                 columnCounter++;
             }
 
-            addBtn.TabIndex = _tabOrder + 1;
+            _addBtn.TabIndex = _tabOrder + 1;
         }
 
         #endregion
-
 
         public override bool IsEditable => true;
 
@@ -151,23 +156,12 @@ namespace NZazu.Fields
                     child => child.GetValue(_fields.Single(x => Equals(x.Value.ValueControl, child)).Value.ContentProperty)
                  );
 
-            // todo: extract to interface and implementation and create json project!
-            // cf: http://stackoverflow.com/questions/12554186/how-to-serialize-deserialize-to-dictionaryint-string-from-custom-xml-not-us
-            var xElem = new XElement(
-                "items",
-                data.Where(x => x.Value != null).Select(x => new XElement("item", new XAttribute("id", x.Key), new XAttribute("value", x.Value)))
-             );
-            return xElem.ToString();
-
+            return Serializer.Serialize(data);
         }
 
         private void UpdateGridValues(string value)
         {
-            // clear table??
-
-            var xElem2 = XElement.Parse(value);
-            var newDict = xElem2.Descendants("item")
-                .ToDictionary(x => (string)x.Attribute("id"), x => (string)x.Attribute("value"));
+            var newDict = Serializer.Deserialize(value);
 
             var iterations = 0;
             if (newDict.Count > 0)

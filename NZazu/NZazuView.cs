@@ -7,6 +7,7 @@ using NZazu.Contracts.Checks;
 using NZazu.Extensions;
 using NZazu.FieldBehavior;
 using NZazu.Fields;
+using NZazu.Serializer;
 
 namespace NZazu
 {
@@ -49,6 +50,7 @@ namespace NZazu
         {
             var view = (NZazuView)d;
             var fieldFactory = (INZazuWpfFieldFactory)e.NewValue;
+            fieldFactory.Serializer = view.Serializer;
             view.UpdateFields(view.FormDefinition, fieldFactory, view.FieldBehaviorFactory, view.ResolveLayout);
         }
 
@@ -63,8 +65,7 @@ namespace NZazu
 
         public static readonly DependencyProperty FieldBehaviorFactoryProperty = DependencyProperty.Register(
             "FieldBehaviorFactory", typeof(INZazuWpfFieldBehaviorFactory), typeof(NZazuView),
-            new PropertyMetadata(new NZazuFieldBehaviorFactory(),
-                FieldBehaviorFactoryChanged, FieldBehaviorFactoryCoerceCallback));
+            new PropertyMetadata(new NZazuFieldBehaviorFactory(), FieldBehaviorFactoryChanged, FieldBehaviorFactoryCoerceCallback));
 
         public INZazuWpfFieldBehaviorFactory FieldBehaviorFactory
         {
@@ -84,6 +85,32 @@ namespace NZazu
             var view = (NZazuView)d;
             var fieldBehaviorFactory = (INZazuWpfFieldBehaviorFactory)basevalue;
             return fieldBehaviorFactory ?? view.FieldBehaviorFactory;
+        }
+
+        // ############# Serializer
+
+        public static readonly DependencyProperty SerializerProperty = DependencyProperty.Register(
+            "Serializer", typeof(INZazuDataSerializer), typeof(NZazuView),
+            new PropertyMetadata(new NZazuXmlSerializer(), SerializerChanged, SerializerCoerceCallback));
+
+        private static object SerializerCoerceCallback(DependencyObject d, object basevalue)
+        {
+            var view = (NZazuView)d;
+            var serializer = (INZazuDataSerializer)basevalue;
+            return serializer ?? view.Serializer;
+        }
+
+        private static void SerializerChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var view = (NZazuView)d;
+            var value = (INZazuDataSerializer)e.NewValue;
+            if (view.FieldFactory != null) view.FieldFactory.Serializer = value;
+        }
+
+        public INZazuDataSerializer Serializer
+        {
+            get { return (INZazuDataSerializer)GetValue(SerializerProperty); }
+            set { SetValue(SerializerProperty, value); }
         }
 
         // ############# ResolveLayout
@@ -132,8 +159,10 @@ namespace NZazu
         }
 
 
+        // ############# IsReadOnly
+
         public static readonly DependencyProperty IsReadOnlyProperty = DependencyProperty.Register(
-            "IsReadOnly", typeof (bool), typeof (NZazuView), new PropertyMetadata(default(bool), IsReadOnlyChanged));
+            "IsReadOnly", typeof(bool), typeof(NZazuView), new PropertyMetadata(default(bool), IsReadOnlyChanged));
 
         private static void IsReadOnlyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
@@ -144,7 +173,7 @@ namespace NZazu
 
         public bool IsReadOnly
         {
-            get { return (bool) GetValue(IsReadOnlyProperty); }
+            get { return (bool)GetValue(IsReadOnlyProperty); }
             set { SetValue(IsReadOnlyProperty, value); }
         }
 
@@ -193,6 +222,7 @@ namespace NZazu
         {
             return _fields
                 .Where(f => f.Value.IsEditable)
+                .Where(f => !string.IsNullOrEmpty(f.Value.StringValue))
                 .ToDictionary(f => f.Key, f => f.Value.StringValue);
         }
 
@@ -250,6 +280,7 @@ namespace NZazu
 
         private void CreateFields(FormDefinition formDefinition, INZazuWpfFieldFactory fieldFactory)
         {
+            //fieldFactory.Serializer = this.Serializer;
             formDefinition.Fields.ToList().ForEach(f =>
             {
                 var field = fieldFactory.CreateField(f);
@@ -260,7 +291,7 @@ namespace NZazu
 
         private void AddGroupFieldKeys(INZazuWpfFieldContainer groupField)
         {
-            if (groupField == null) return;
+            if (groupField?.Fields == null) return;
             foreach (var field in groupField.Fields)
             {
                 _fields.Add(field.Key, field);

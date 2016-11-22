@@ -4,11 +4,14 @@ using System.Diagnostics;
 using System.Linq;
 using NZazu.Contracts;
 using NZazu.Contracts.Checks;
+using NZazu.Serializer;
 
 namespace NZazu.Fields
 {
     public class NZazuFieldFactory : INZazuWpfFieldFactory
     {
+        public INZazuDataSerializer Serializer { get; set; }
+
         private readonly ICheckFactory _checkFactory;
         protected readonly Dictionary<string, Type> FieldTypes = new Dictionary<string, Type>();
         private const string DefaultType = "label";
@@ -41,6 +44,14 @@ namespace NZazu.Fields
                 Trace.TraceWarning("The specified field type is not supported: " + fieldTypeSafe);
                 field = (NZazuField)Activator.CreateInstance(FieldTypes[DefaultType], fieldDefinition.Key, fieldDefinition);
             }
+
+            var safeRequireFactory = field as IRequireSerializer;
+            if (safeRequireFactory != null)
+                safeRequireFactory.Serializer = Serializer;
+
+            var safeField = field as IRequireFactory;
+            if (safeField != null)
+                safeField.FieldFactory = this;
 
             return Decorate(field, fieldDefinition);
         }
