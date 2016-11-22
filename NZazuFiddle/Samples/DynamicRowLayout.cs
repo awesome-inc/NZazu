@@ -9,19 +9,55 @@ namespace NZazuFiddle.Samples
         {
             Sample = new SampleViewModel
             {
-                Name = "Dynamic Rows",
+                Name = "Radio Transmission",
                 Description = "Test for a dynamic table with columns defined as fields",
                 Fiddle = ToFiddle(new FormDefinition
                 {
                     Fields = new[]
                     {
+
+
                         new FieldDefinition
                         {
-                            Key = "hi",
-                            Type = "string",
-                            Prompt = "Enter ",
-                            Description = "Awesome ",
+                            Key="group_activity",
+                            Type="group",
+                            Prompt = "Activity",
+                            Layout = "stack",
+                            Fields = new []
+                            {
+                                new FieldDefinition
+                                {
+                                    Key = "group_activity_stack_left",
+                                    Type = "group",
+                                    Settings = new Dictionary<string, string>() { {"Width","300" } },
+                                    Fields = new []
+                                    {
+                                        new FieldDefinition
+                                        {
+                                            Key = "dtg",
+                                            Type = "date",
+                                            Prompt = "DTG",
+                                            Description = "Date of the incident",
+                                        },
+                                    }
+                                },
+                                new FieldDefinition
+                                {
+                                    Key = "group_activity_stack_right",
+                                    Type = "group",
+                                    Fields = new []
+                                    {
+                                        new FieldDefinition
+                                        {
+                                            Key = "frequency",
+                                            Type = "double",
+                                            Prompt = "Frequency",
+                                        },
+                                    }
+                                }
+                            }
                         },
+
                         new FieldDefinition
                         {
                             Key = "datatable",
