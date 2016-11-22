@@ -169,10 +169,12 @@ namespace NZazu.Fields
             var newDict = xElem2.Descendants("item")
                 .ToDictionary(x => (string)x.Attribute("id"), x => (string)x.Attribute("value"));
 
-            var iterations = newDict
-                .Max(x => int.Parse(x.Key.Split(new[] { "__" }, StringSplitOptions.RemoveEmptyEntries)[1]));
+            var iterations = 0;
+            if (newDict.Count > 0)
+                iterations = newDict
+                    .Max(x => int.Parse(x.Key.Split(new[] { "__" }, StringSplitOptions.RemoveEmptyEntries)[1]));
 
-            while (_clientControl.Grid.RowDefinitions.Count<=iterations)
+            while (_clientControl.Grid.RowDefinitions.Count <= iterations)
                 AddBtnOnClick(null, null);
 
             foreach (var field in _fields)
