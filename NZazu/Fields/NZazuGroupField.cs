@@ -20,7 +20,10 @@ namespace NZazu.Fields
 
         protected override Control GetValue()
         {
-            return new ContentControl {Focusable = false};
+            if (string.IsNullOrEmpty(Description))
+                return new ContentControl { Focusable = false };
+            else
+                return new GroupBox { Focusable = false, Header = Description };
         }
 
         public void CreateChildControls(INZazuWpfFieldFactory factory, FieldDefinition containerDefinition)
