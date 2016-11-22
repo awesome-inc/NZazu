@@ -50,59 +50,15 @@ namespace NZazu.Fields
         public INZazuDataSerializer Serializer { get; set; }
         public INZazuWpfFieldFactory FieldFactory { get; set; }
 
-        private readonly DynamicDataTable _clientControl;
+        private DynamicDataTable _clientControl;
         private readonly IDictionary<string, INZazuWpfField> _fields = new Dictionary<string, INZazuWpfField>();
         private int _tabOrder;
 
         private Button _addBtn;
 
-        public NZazuDataTableField(string key, FieldDefinition definition) : base(key, definition)
-        {
-            _clientControl = new DynamicDataTable();
-            var grid = _clientControl.Grid;
-
-            // header
-            grid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(24.0) });
-            grid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(24) });
-            foreach (var field in Definition.Fields ?? Enumerable.Empty<FieldDefinition>())
-            {
-                // create column with default width
-                var width = 135; // default Width
-                if (field.Settings != null && field.Settings.ContainsKey("Width")) width = int.Parse(field.Settings["Width"]);
-                grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(width) });
-                var column = grid.ColumnDefinitions.Count - 1;
-
-                // set the header column ;)
-                var lbl = new Label() { Content = field.Prompt, ToolTip = field.Description, Background = Brushes.Silver, FontWeight = FontWeights.Bold };
-                if (string.IsNullOrEmpty(Description)) lbl.ToolTip = field.Prompt;
-                grid.Children.Add(lbl);
-                Grid.SetRow(lbl, 0);
-                Grid.SetColumn(lbl, column); // the last one ;)
-
-                // we create a first empty row :)
-                var ctrl = new NZazuFieldFactory(new CheckFactory()).CreateField(field);
-                ctrl.ValueControl.Name = field.Key + "__1";
-                ctrl.ValueControl.TabIndex = _tabOrder++;
-                grid.Children.Add(ctrl.ValueControl);
-                Grid.SetRow(ctrl.ValueControl, 1);
-                Grid.SetColumn(ctrl.ValueControl, column);
-
-                _fields.Add(field.Key + "__1", ctrl);
-                ChangeLastAddedFieldTo(ctrl.ValueControl);
-            }
-
-            CreateButtonsOn(_clientControl.Panel);
-        }
+        public NZazuDataTableField(string key, FieldDefinition definition) : base(key, definition) { }
 
         #region buttons
-
-        private void CreateButtonsOn(Panel panel)
-        {
-            // add button
-            _addBtn = new Button { Content = "Add", TabIndex = _tabOrder + 1 };
-            _addBtn.Click += AddBtnOnClick;
-            panel.Children.Add(_addBtn);
-        }
 
         private void AddBtnOnClick(object sender, RoutedEventArgs routedEventArgs)
         {
@@ -115,7 +71,7 @@ namespace NZazu.Fields
                 var rowNo = grid.RowDefinitions.Count - 1; // I added already one ;)
 
                 // we create a first empty row :)
-                var ctrl = new NZazuFieldFactory(new CheckFactory()).CreateField(field);
+                var ctrl = FieldFactory.CreateField(field);
                 ctrl.ValueControl.Name = field.Key + "__" + rowNo;
                 ctrl.ValueControl.TabIndex = _tabOrder++;
                 grid.Children.Add(ctrl.ValueControl);
@@ -186,7 +142,65 @@ namespace NZazu.Fields
 
         protected override Control GetValue()
         {
+            if (_clientControl != null) return _clientControl;
+
+            _clientControl = new DynamicDataTable();
+            CreateClientControlsOn(_clientControl.Grid);
+            CreateButtonsOn(_clientControl.Panel);
             return _clientControl;
         }
+
+        private void CreateClientControlsOn(Grid grid)
+        {
+            // header
+            grid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(24.0) });
+            grid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(24) });
+            foreach (var field in Definition.Fields ?? Enumerable.Empty<FieldDefinition>())
+            {
+                // create column with default width
+                var width = 135; // default Width
+                if (field.Settings != null && field.Settings.ContainsKey("Width")) width = int.Parse(field.Settings["Width"]);
+                grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(width) });
+                var column = grid.ColumnDefinitions.Count - 1;
+
+                // set the header column ;)
+                var lbl = new Label()
+                {
+                    Content = field.Prompt,
+                    ToolTip = field.Description,
+                    Background = Brushes.Silver,
+                    FontWeight = FontWeights.Bold
+                };
+                if (string.IsNullOrEmpty(Description)) lbl.ToolTip = field.Prompt;
+                grid.Children.Add(lbl);
+                Grid.SetRow(lbl, 0);
+                Grid.SetColumn(lbl, column); // the last one ;)
+
+                // we create a first empty row :)
+                var ctrl = FieldFactory.CreateField(field);
+                ctrl.ValueControl.Name = field.Key + "__1";
+                ctrl.ValueControl.TabIndex = _tabOrder++;
+                grid.Children.Add(ctrl.ValueControl);
+                Grid.SetRow(ctrl.ValueControl, 1);
+                Grid.SetColumn(ctrl.ValueControl, column);
+
+                _fields.Add(field.Key + "__1", ctrl);
+                ChangeLastAddedFieldTo(ctrl.ValueControl);
+            }
+        }
+
+        #region create _clientControl
+
+
+
+        private void CreateButtonsOn(Panel panel)
+        {
+            // add button
+            _addBtn = new Button { Content = "Add", TabIndex = _tabOrder + 1 };
+            _addBtn.Click += AddBtnOnClick;
+            panel.Children.Add(_addBtn);
+        }
+
+        #endregion
     }
 }
