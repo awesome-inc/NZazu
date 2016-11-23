@@ -186,7 +186,6 @@ namespace NZazu.LayoutStrategy
 
             var sut = new GridLayout();
 
-
             var container = new ContentControl();
             var fields1 = new NZazuField[]
             {
@@ -207,7 +206,7 @@ namespace NZazu.LayoutStrategy
             };
 
             sut.DoLayout(container, groups, resolveLayout);
-            
+
             stackLayout.Received().DoLayout(Arg.Any<ContentControl>(), fields1, resolveLayout);
             //gridLayout.Received().DoLayout(Arg.Any<ContentControl>(), fields2);
         }

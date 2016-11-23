@@ -8,7 +8,7 @@ using NZazu.Contracts;
 
 namespace NZazu.Fields
 {
-    [TestFixtureFor(typeof (NZazuGroupField))]
+    [TestFixtureFor(typeof(NZazuGroupField))]
     [Apartment(ApartmentState.STA)]
     // ReSharper disable InconsistentNaming
     internal class NZazuGroupField_Should
@@ -21,6 +21,11 @@ namespace NZazu.Fields
 
             sut.Should().BeAssignableTo<INZazuWpfField>();
             sut.Should().BeAssignableTo<INZazuWpfFieldContainer>();
+
+            // at least nobodyd cares about these values
+            sut.StringValue.Should().BeNullOrEmpty();
+            sut.StringValue = "foo";
+            sut.StringValue.Should().Be("foo");
         }
 
         [Test]
@@ -36,6 +41,18 @@ namespace NZazu.Fields
         {
             var sut = new NZazuGroupField("key", new FieldDefinition());
             var contentControl = (ContentControl)sut.ValueControl;
+
+            contentControl.Should().NotBeNull();
+
+            contentControl.Focusable.Should().BeFalse("group fields should not have a tab stop of their own");
+        }
+
+        [Test]
+        [STAThread]
+        public void Create_Groupbox()
+        {
+            var sut = new NZazuGroupField("key", new FieldDefinition()) { Description = "Header" };
+            var contentControl = (GroupBox)sut.ValueControl;
 
             contentControl.Should().NotBeNull();
 

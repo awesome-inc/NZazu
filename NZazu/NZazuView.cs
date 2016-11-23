@@ -198,6 +198,9 @@ namespace NZazu
             SetVerticalScrollBarVisibility(Layout, ScrollBarVisibility.Visible);
 
             Layout.LostFocus += (s, e) => ApplyChanges();
+
+            Serializer = new NZazuXmlSerializer();
+            FieldFactory = new NZazuFieldFactory(new CheckFactory());
         }
 
         public void ApplyChanges()
@@ -260,7 +263,7 @@ namespace NZazu
             if (formDefinition?.Fields == null) return;
 
             CreateFields(formDefinition, fieldFactory);
-            AttachBehavior(formDefinition, fieldBehaviorFactory);
+            AttachBehavior(formDefinition.Fields, fieldBehaviorFactory);
 
             var layout = resolveLayout.Resolve(formDefinition.Layout);
 
@@ -305,9 +308,9 @@ namespace NZazu
             _fields.Clear();
         }
 
-        private void AttachBehavior(FormDefinition formDefinition, INZazuWpfFieldBehaviorFactory fieldBehaviorFactory)
+        private void AttachBehavior(FieldDefinition[] fields, INZazuWpfFieldBehaviorFactory fieldBehaviorFactory)
         {
-            formDefinition.Fields.ToList().ForEach(f => AttachBehavior(fieldBehaviorFactory, f));
+            fields.ToList().ForEach(f => AttachBehavior(fieldBehaviorFactory, f));
         }
 
         private void AttachBehavior(INZazuWpfFieldBehaviorFactory fieldBehaviorFactory, FieldDefinition fieldDefinition)

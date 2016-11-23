@@ -12,6 +12,9 @@ using NUnit.Framework;
 using NZazu.Contracts;
 using NZazu.Contracts.Checks;
 using NZazu.Extensions;
+using NZazu.FieldBehavior;
+using NZazu.Fields;
+using NZazu.Serializer;
 
 namespace NZazu
 {
@@ -28,6 +31,29 @@ namespace NZazu
 
             sut.Should().NotBeNull();
             sut.Should().BeAssignableTo<INZazuWpfView>();
+
+            // and have default values
+            sut.Serializer.Should().BeAssignableTo<NZazuXmlSerializer>();
+            sut.FieldFactory.Should().BeAssignableTo<NZazuFieldFactory>();
+            sut.FieldBehaviorFactory.Should().BeAssignableTo<NZazuFieldBehaviorFactory>();
+        }
+
+        [Test]
+        [STAThread]
+        public void Pass_Serializer_To_Factory()
+        {
+            var sut = new NZazuView();
+
+            // and have default values
+            sut.Serializer.Should().BeAssignableTo<NZazuXmlSerializer>();
+            sut.FieldFactory.Should().BeAssignableTo<NZazuFieldFactory>();
+            sut.FieldFactory.Serializer.Should().Be(sut.Serializer);
+
+            sut.FieldFactory = new NZazuFieldFactory(new CheckFactory());
+            sut.FieldFactory.Serializer.Should().Be(sut.Serializer);
+
+            sut.Serializer = new NZazuXmlSerializer();
+            sut.FieldFactory.Serializer.Should().Be(sut.Serializer);
         }
 
         [Test]

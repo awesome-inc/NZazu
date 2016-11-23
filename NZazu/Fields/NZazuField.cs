@@ -48,7 +48,7 @@ namespace NZazu.Fields
             Settings = new Dictionary<string, string>();
         }
 
-        public ValueCheckResult Validate()
+        public virtual ValueCheckResult Validate()
         {
             var bindingExpression = ContentProperty != null
                 ? ValueControl.GetBindingExpression(ContentProperty)

@@ -8,10 +8,11 @@ using NSubstitute;
 using NUnit.Framework;
 using NZazu.Contracts;
 using NZazu.Contracts.Checks;
+using NZazu.Serializer;
 
 namespace NZazu.Fields
 {
-    [TestFixtureFor(typeof (NZazuFieldFactory))]
+    [TestFixtureFor(typeof(NZazuFieldFactory))]
     [Apartment(ApartmentState.STA)]
     // ReSharper disable InconsistentNaming
     internal class NZazuFieldFactory_Should
@@ -33,7 +34,6 @@ namespace NZazu.Fields
         [TestCase("int", typeof(TextBox))]
         [TestCase("date", typeof(DatePicker))]
         [TestCase("double", typeof(TextBox))]
-        [TestCase("group", typeof(ContentControl))]
         [TestCase("option", typeof(ComboBox))]
         [STAThread]
         public void Support(string fieldType, Type controlType)
@@ -41,6 +41,23 @@ namespace NZazu.Fields
             var sut = new NZazuFieldFactory();
 
             var field = sut.CreateField(new FieldDefinition { Key = "test", Type = fieldType, Description = "test" });
+
+            field.Should().NotBeNull();
+            field.Type.Should().Be(fieldType ?? "label"); // because of the fallback in case of null
+
+            var control = field.ValueControl;
+            control.Should().BeOfType(controlType);
+        }
+
+        [Test]
+        [TestCase("group", null, typeof(ContentControl))]
+        [TestCase("group", "header", typeof(GroupBox))]
+        [STAThread]
+        public void Support_GroupBox(string fieldType, string description, Type controlType)
+        {
+            var sut = new NZazuFieldFactory();
+
+            var field = sut.CreateField(new FieldDefinition { Key = "test", Type = fieldType, Description = description });
 
             field.Should().NotBeNull();
             field.Type.Should().Be(fieldType ?? "label"); // because of the fallback in case of null
@@ -131,6 +148,22 @@ namespace NZazu.Fields
         }
 
         [Test]
+        public void Copy_Serializer_And_Factory_from_FieldDefinition()
+        {
+            var sut = new NZazuFieldFactory();
+            sut.Serializer = Substitute.For<INZazuDataSerializer>();
+            var fieldDefinition = new FieldDefinition { Key = "test", Type = "datatable" };
+            var field = (NZazuField)sut.CreateField(fieldDefinition);
+            field.Should().BeAssignableTo<IRequireFactory>();
+            field.Should().BeAssignableTo<IRequireSerializer>();
+            field.Settings.Should().NotBeNull();
+            field.Settings.Should().BeEmpty();
+
+            ((IRequireFactory)field).FieldFactory.Should().Be(sut);
+            ((IRequireSerializer)field).Serializer.Should().Be(sut.Serializer);
+        }
+
+        [Test]
         public void Does_Not_Attach_Behavior_To_Field()
         {
             // because view has the resolver and attaches the behavior
@@ -156,18 +189,19 @@ namespace NZazu.Fields
                 new FieldDefinition
                 {
                     Key = "first",
-                    Type = "string", 
+                    Type = "string",
                 },
                 new FieldDefinition
                 {
                     Key = "second",
-                    Type = "string", 
+                    Type = "string",
                 }
             };
 
             var fieldDefinition = new FieldDefinition
             {
-                Key = "group1", Type = "group",
+                Key = "group1",
+                Type = "group",
                 Fields = fields
             };
             var field = (INZazuWpfFieldContainer)sut.CreateField(fieldDefinition);
@@ -200,8 +234,9 @@ namespace NZazu.Fields
 
             var fieldDefinition = new FieldDefinition
             {
-                Key = "test", Type = "option",
-                Values = new[] { "1","2","3"}
+                Key = "test",
+                Type = "option",
+                Values = new[] { "1", "2", "3" }
             };
 
             var field = (NZazuOptionsField)sut.CreateField(fieldDefinition);

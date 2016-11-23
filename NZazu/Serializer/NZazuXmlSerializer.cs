@@ -7,7 +7,7 @@ namespace NZazu.Serializer
     public class NZazuXmlSerializer
         : INZazuDataSerializer
     {
-        public string Serialize(Dictionary<string, object> data)
+        public string Serialize(Dictionary<string, string> data)
         {
             // cf: http://stackoverflow.com/questions/12554186/how-to-serialize-deserialize-to-dictionaryint-string-from-custom-xml-not-us
             var xElem = new XElement(

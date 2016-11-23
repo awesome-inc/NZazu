@@ -6,6 +6,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using NZazu.Contracts;
+using NZazu.Contracts.Checks;
 using NZazu.Fields.Controls;
 using NZazu.Serializer;
 
@@ -109,7 +110,7 @@ namespace NZazu.Fields
                         y => y.Key == x.Name.Split(new[] { "__" }, StringSplitOptions.RemoveEmptyEntries)[0]) != null)
                 .ToDictionary(
                     child => child.Name,
-                    child => child.GetValue(_fields.Single(x => Equals(x.Value.ValueControl, child)).Value.ContentProperty)
+                    child => _fields.Single(x => Equals(x.Value.ValueControl, child)).Value.StringValue
                  );
 
             return Serializer.Serialize(data);
@@ -146,6 +147,7 @@ namespace NZazu.Fields
 
             _clientControl = new DynamicDataTable();
             CreateClientControlsOn(_clientControl.Grid);
+            // somewhere here i need to attach the behaviour
             CreateButtonsOn(_clientControl.Panel);
             return _clientControl;
         }
@@ -191,8 +193,6 @@ namespace NZazu.Fields
 
         #region create _clientControl
 
-
-
         private void CreateButtonsOn(Panel panel)
         {
             // add button
@@ -202,5 +202,20 @@ namespace NZazu.Fields
         }
 
         #endregion
+
+        public override ValueCheckResult Validate()
+        {
+            var result = base.Validate();
+
+            foreach (var field in _fields)
+            {
+                if (!field.Value.IsEditable) continue;
+
+                var iterRes = field.Value.Validate();
+                if (!iterRes.IsValid)
+                    result = new ValueCheckResult(false, iterRes.Error);
+            }
+            return result;
+        }
     }
 }
