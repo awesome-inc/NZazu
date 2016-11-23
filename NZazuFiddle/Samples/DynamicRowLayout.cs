@@ -43,6 +43,13 @@ namespace NZazuFiddle.Samples
                                             Type = "string",
                                             Prompt = "Sensor",
                                             Description = "Sensor for the signal",
+                                            Checks = new []
+                                            {
+                                                new CheckDefinition
+                                                {
+                                                    Type = "required"
+                                                }
+                                            }
                                         },
                                         new FieldDefinition
                                         {
@@ -72,6 +79,25 @@ namespace NZazuFiddle.Samples
                                             Key = "bandwidth",
                                             Type = "double",
                                             Prompt = "Bandwidth",
+                                        },
+                                        new FieldDefinition
+                                        {
+                                            Key = "email",
+                                            Type = "string",
+                                            Prompt = "Email Source",
+                                            Description = "Source address",
+                                            Checks = new []
+                                            {
+                                                new CheckDefinition
+                                                {
+                                                    Type = "required"
+                                                },
+                                                new CheckDefinition
+                                                {
+                                                    Type = "regex",
+                                                    Values = new  []{"Must be a valid e-mail address","^.+@.+\\..+$"}
+                                                }
+                                            }
                                         },
                                     }
                                 }
@@ -180,7 +206,7 @@ namespace NZazuFiddle.Samples
                                             Key = "table_bearings_icon",
                                             Type = "option",
                                             Prompt = "Icon",
-                                            Settings = new Dictionary<string, string> { {"Width", "24" } }
+                                            Settings = new Dictionary<string, string> { {"Width", "24" } },
                                         },
                                         new FieldDefinition
                                         {
@@ -192,7 +218,14 @@ namespace NZazuFiddle.Samples
                                         {
                                             Key = "table_bearings_bearing",
                                             Type = "double",
-                                            Prompt = "Bearing"
+                                            Prompt = "Bearing",
+                                            Checks = new []
+                                                {
+                                                    new CheckDefinition
+                                                    {
+                                                        Type = "required"
+                                                    }
+                                                }
                                         },
                                         new FieldDefinition
                                         {
@@ -204,13 +237,27 @@ namespace NZazuFiddle.Samples
                                         {
                                             Key = "table_bearings_lat",
                                             Type = "double",
-                                            Prompt = "Latitude"
+                                            Prompt = "Latitude",
+                                            Checks = new []
+                                                {
+                                                    new CheckDefinition
+                                                    {
+                                                        Type = "required"
+                                                    }
+                                                }
                                         },
                                         new FieldDefinition
                                         {
                                             Key = "table_bearings_lon",
                                             Type = "double",
-                                            Prompt = "Longitude"
+                                            Prompt = "Longitude",
+                                            Checks = new []
+                                                {
+                                                    new CheckDefinition
+                                                    {
+                                                        Type = "required"
+                                                    }
+                                                }
                                         },
                                     }
                                 }
@@ -260,6 +307,10 @@ namespace NZazuFiddle.Samples
                                             Key = "table_transcript_gist",
                                             Type = "string",
                                             Prompt = "Gist",
+                                            Behavior = new BehaviorDefinition
+                                            {
+                                                Name = "OpenUrlOnStringEnter"
+                                            }
                                         },
                                         new FieldDefinition
                                         {
