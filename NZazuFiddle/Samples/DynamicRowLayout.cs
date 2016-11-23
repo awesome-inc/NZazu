@@ -36,6 +36,12 @@ namespace NZazuFiddle.Samples
                                             Type = "date",
                                             Prompt = "DTG",
                                             Description = "Date of the incident",
+                                            Settings = new Dictionary<string, string>
+                                            {
+                                                {"Format", "ddHHmm\\ZMMMyy" },
+                                                {"HorizontalAlignment", "Left" },
+                                                {"Width","230" }
+                                            }
                                         },
                                         new FieldDefinition
                                         {
