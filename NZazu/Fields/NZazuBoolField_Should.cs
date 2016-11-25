@@ -18,7 +18,7 @@ namespace NZazu.Fields
         [STAThread]
         public void Be_Creatable()
         {
-            var sut = new NZazuBoolField("test", new FieldDefinition());
+            var sut = new NZazuBoolField(new FieldDefinition { Key = "bool01" });
 
             sut.Should().NotBeNull();
             sut.Should().BeAssignableTo<INZazuWpfField>();
@@ -30,7 +30,7 @@ namespace NZazu.Fields
         [STAThread]
         public void Not_Create_Empty_Label()
         {
-            var sut = new NZazuBoolField("test", new FieldDefinition());
+            var sut = new NZazuBoolField(new FieldDefinition { Key = "bool01" });
             sut.LabelControl.Should().BeNull();
         }
 
@@ -38,7 +38,7 @@ namespace NZazu.Fields
         [STAThread]
         public void Create_Label_Matching_Prompt()
         {
-            var sut = new NZazuBoolField("test", new FieldDefinition())
+            var sut = new NZazuBoolField(new FieldDefinition { Key = "bool01" })
             {
                 Prompt = "superhero"
             };
@@ -52,7 +52,7 @@ namespace NZazu.Fields
         [STAThread]
         public void Create_ValueControl_Matching_Description()
         {
-            var sut = new NZazuBoolField("test", new FieldDefinition())
+            var sut = new NZazuBoolField(new FieldDefinition { Key = "bool01" })
             {
                 Hint = "superhero",
                 Description = "check this if you are a registered superhero"
@@ -68,7 +68,7 @@ namespace NZazu.Fields
         [STAThread]
         public void Create_ValueControl_Even_If_Empty_Hint()
         {
-            var sut = new NZazuBoolField("test", new FieldDefinition());
+            var sut = new NZazuBoolField(new FieldDefinition { Key = "bool01" });
 
             var label = (CheckBox)sut.ValueControl;
             label.Should().NotBeNull();
@@ -79,7 +79,7 @@ namespace NZazu.Fields
         [STAThread]
         public void Get_Set_Value_should_propagate_to_ValueControl()
         {
-            var sut = new NZazuBoolField("test", new FieldDefinition());
+            var sut = new NZazuBoolField(new FieldDefinition { Key = "bool01" });
             sut.StringValue.Should().BeEmpty();
             var checkBox = (CheckBox)sut.ValueControl;
 
@@ -110,7 +110,7 @@ namespace NZazu.Fields
         [STAThread]
         public void Support_ThreeState_by_default()
         {
-            var sut = new NZazuBoolField("test", new FieldDefinition());
+            var sut = new NZazuBoolField(new FieldDefinition { Key = "bool01" });
 
             ((CheckBox)sut.ValueControl).IsThreeState.Should().BeTrue();
         }
@@ -119,7 +119,7 @@ namespace NZazu.Fields
         [STAThread]
         public void Center_checkboxes_vertically()
         {
-            var sut = new NZazuBoolField("test", new FieldDefinition());
+            var sut = new NZazuBoolField(new FieldDefinition { Key = "bool01" });
             var checkBox = (CheckBox)sut.ValueControl;
             checkBox.VerticalContentAlignment.Should().Be(VerticalAlignment.Center);
         }

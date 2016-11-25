@@ -54,7 +54,7 @@ namespace NZazu.Fields
 
         private Button _addBtn;
 
-        public NZazuDataTableField(string key, FieldDefinition definition) : base(key, definition) { }
+        public NZazuDataTableField(FieldDefinition definition) : base(definition) { }
 
         #region buttons
 

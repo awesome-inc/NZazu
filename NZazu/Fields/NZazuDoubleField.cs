@@ -57,7 +57,7 @@ namespace NZazu.Fields
 
         #endregion
 
-        public NZazuDoubleField(string key, FieldDefinition definition) : base(key, definition) { }
+        public NZazuDoubleField(FieldDefinition definition) : base(definition) { }
 
         public override string Type => "double";
         public override DependencyProperty ContentProperty => TextBox.TextProperty;

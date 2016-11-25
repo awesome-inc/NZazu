@@ -11,7 +11,7 @@ namespace NZazu.Xceed
 {
     public class XceedIntegerField : NZazuIntegerField
     {
-        public XceedIntegerField(string key, FieldDefinition definition) : base(key, definition) { }
+        public XceedIntegerField(FieldDefinition definition) : base(definition) { }
 
         public override DependencyProperty ContentProperty => IntegerUpDown.ValueProperty;
 

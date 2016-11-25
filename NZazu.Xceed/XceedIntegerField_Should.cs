@@ -17,7 +17,7 @@ namespace NZazu.Xceed
         [Test]
         public void Be_Creatable()
         {
-            var sut = new XceedIntegerField("test", new FieldDefinition());
+            var sut = new XceedIntegerField(new FieldDefinition {Key="test"});
 
             sut.Should().NotBeNull();
             sut.Should().BeAssignableTo<INZazuWpfField>();
@@ -28,7 +28,7 @@ namespace NZazu.Xceed
         [STAThread]
         public void Use_IntegerUpdown()
         {
-            var sut = new XceedIntegerField("test", new FieldDefinition());
+            var sut = new XceedIntegerField(new FieldDefinition {Key="test"});
             sut.ContentProperty.Should().Be(IntegerUpDown.ValueProperty);
 
             var control = (IntegerUpDown) sut.ValueControl;
@@ -47,7 +47,7 @@ namespace NZazu.Xceed
         public void Only_use_supported_FormatStrings(string formatString, string expected)
         {
 
-            var sut = new XceedIntegerField("test", new FieldDefinition());
+            var sut = new XceedIntegerField(new FieldDefinition {Key="test"});
             sut.Settings.Add("Format", formatString);
 
             var control = (IntegerUpDown)sut.ValueControl;

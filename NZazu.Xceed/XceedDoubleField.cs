@@ -11,7 +11,7 @@ namespace NZazu.Xceed
 {
     public class XceedDoubleField : NZazuField<double?>
     {
-        public XceedDoubleField(string key, FieldDefinition definition) : base(key, definition) { }
+        public XceedDoubleField(FieldDefinition definition) : base(definition) { }
 
         public override DependencyProperty ContentProperty => DoubleUpDown.ValueProperty;
 
@@ -29,7 +29,7 @@ namespace NZazu.Xceed
         protected override void SetStringValue(string value)
         {
             double result;
-            if (!string.IsNullOrWhiteSpace(value) 
+            if (!string.IsNullOrWhiteSpace(value)
                 && double.TryParse(value, NumberStyles.Number, FormatProvider, out result))
                 Value = result;
             else

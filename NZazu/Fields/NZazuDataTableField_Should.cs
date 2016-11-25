@@ -16,7 +16,7 @@ namespace NZazu.Fields
         [Test]
         public void Be_Creatable()
         {
-            var sut = new NZazuDataTableField("test", new FieldDefinition());
+            var sut = new NZazuDataTableField(new FieldDefinition { Key = "table01" });
 
             sut.Should().NotBeNull();
             sut.Should().BeAssignableTo<INZazuWpfField>();
@@ -26,7 +26,7 @@ namespace NZazu.Fields
         [Test]
         public void Not_Support_direct_binding_or_validation_Right_Now()
         {
-            var sut = new NZazuDataTableField("key", new FieldDefinition());
+            var sut = new NZazuDataTableField(new FieldDefinition { Key = "table01" });
             sut.ContentProperty.Should().Be(null);
         }
 
@@ -34,7 +34,7 @@ namespace NZazu.Fields
         [STAThread]
         public void Create_ContentControl()
         {
-            var sut = new NZazuDataTableField("key", new FieldDefinition());
+            var sut = new NZazuDataTableField(new FieldDefinition { Key = "table01" });
             var contentControl = (ContentControl)sut.ValueControl;
 
             contentControl.Should().NotBeNull();
@@ -45,8 +45,18 @@ namespace NZazu.Fields
         [Test]
         public void Not_be_Editable()
         {
-            var sut = new NZazuDataTableField("test", new FieldDefinition());
+            var sut = new NZazuDataTableField(new FieldDefinition { Key = "table01" });
             sut.IsEditable.Should().BeFalse();
+        }
+
+        [Test]
+        [STAThread]
+        public void Hanlde_Add()
+        {
+            var sut = new NZazuDataTableField(new FieldDefinition
+            {
+                Key = "key"
+            });
         }
     }
 }

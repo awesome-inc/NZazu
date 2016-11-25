@@ -9,7 +9,7 @@ namespace NZazu.Fields
 {
     public class NZazuGroupField : NZazuField, INZazuWpfFieldContainer
     {
-        public NZazuGroupField(string key, FieldDefinition definition) : base(key, definition) { }
+        public NZazuGroupField(FieldDefinition definition) : base(definition) { }
 
         public override bool IsEditable => false;
         public override string StringValue { get; set; }

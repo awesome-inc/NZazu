@@ -10,7 +10,7 @@ namespace NZazu.Xceed
 {
     public class XceedDateTimeField : NZazuDateField
     {
-        public XceedDateTimeField(string key, FieldDefinition definition) : base(key, definition) { }
+        public XceedDateTimeField(FieldDefinition definition) : base(definition) { }
 
         public override DependencyProperty ContentProperty => DateTimePicker.ValueProperty;
 

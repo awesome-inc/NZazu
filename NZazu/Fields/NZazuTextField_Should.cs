@@ -16,7 +16,7 @@ namespace NZazu.Fields
         [Test]
         public void Be_Creatable()
         {
-            var sut = new NZazuTextField("test", new FieldDefinition());
+            var sut = new NZazuTextField(new FieldDefinition {Key="test"});
 
             sut.Should().NotBeNull();
             sut.Should().BeAssignableTo<INZazuWpfField>();
@@ -28,7 +28,7 @@ namespace NZazu.Fields
         [STAThread]
         public void Create_TextBox_with_ToolTip_Matching_Description()
         {
-            var sut = new NZazuTextField("test", new FieldDefinition())
+            var sut = new NZazuTextField(new FieldDefinition {Key="test"})
             {
                 Hint = "superhero",
                 Description = "check this if you are a registered superhero"
@@ -44,7 +44,7 @@ namespace NZazu.Fields
         [STAThread]
         public void Create_ValueControl_Even_If_Empty_Hint()
         {
-            var sut = new NZazuTextField("test", new FieldDefinition());
+            var sut = new NZazuTextField(new FieldDefinition {Key="test"});
 
             var textBox = (TextBox)sut.ValueControl;
             textBox.Should().NotBeNull();
@@ -55,7 +55,7 @@ namespace NZazu.Fields
         [STAThread]
         public void Get_Set_Value_should_propagate_to_ValueControl_Without_LostFocus()
         {
-            var sut = new NZazuTextField("test", new FieldDefinition());
+            var sut = new NZazuTextField(new FieldDefinition {Key="test"});
             var textBox = (TextBox)sut.ValueControl;
             textBox.Should().NotBeNull();
 

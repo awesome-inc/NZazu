@@ -6,7 +6,7 @@ namespace NZazu.Fields
 {
     internal class NZazuLabelField : NZazuField
     {
-        public NZazuLabelField(string key, FieldDefinition definition) : base(key, definition) { }
+        public NZazuLabelField(FieldDefinition definition) : base(definition) { }
 
         public override string Type => "label";
 

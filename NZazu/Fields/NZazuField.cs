@@ -35,13 +35,14 @@ namespace NZazu.Fields
         public Dictionary<string, string> Settings { get; }
         public INZazuWpfFieldBehavior Behavior { get; set; }
 
-        protected NZazuField(string key, FieldDefinition definition)
+        protected NZazuField(FieldDefinition definition)
         {
             if (definition == null) throw new ArgumentNullException(nameof(definition));
             if (definition == null) throw new ArgumentNullException(nameof(definition));
-            if (string.IsNullOrWhiteSpace(key)) throw new ArgumentException("key");
+            if (string.IsNullOrWhiteSpace(definition.Key)) throw new ArgumentException("key");
             Definition = definition;
-            Key = key;
+            Key = definition.Key;
+            Description = definition.Description;
 
             _labelControl = new Lazy<Control>(GetLabelControl);
             _valueControl = new Lazy<Control>(GetValueControl);
@@ -162,7 +163,7 @@ namespace NZazu.Fields
     {
         private T _value;
 
-        protected NZazuField(string key, FieldDefinition definition) : base(key, definition) { }
+        protected NZazuField(FieldDefinition definition) : base(definition) { }
 
         public T Value
         {

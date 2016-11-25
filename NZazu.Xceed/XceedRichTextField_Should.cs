@@ -20,7 +20,7 @@ namespace NZazu.Xceed
         [Test]
         public void Be_Creatable()
         {
-            var sut = new XceedRichTextField("test", new FieldDefinition());
+            var sut = new XceedRichTextField(new FieldDefinition {Key="test"});
 
             sut.Should().NotBeNull();
             sut.Should().BeAssignableTo<INZazuWpfField>();
@@ -30,7 +30,7 @@ namespace NZazu.Xceed
         [STAThread]
         public void Override_ContentProperty_to_RichTextBox()
         {
-            var field = new XceedRichTextField("key", new FieldDefinition());
+            var field = new XceedRichTextField(new FieldDefinition {Key="key"});
             field.ContentProperty.Should().Be(RichTextBox.TextProperty);
 
             var textBox = (RichTextBox)field.ValueControl;
@@ -49,7 +49,7 @@ namespace NZazu.Xceed
         [STAThread]
         public void Set_Vertical_Scrollbar()
         {
-            var field = new XceedRichTextField("key", new FieldDefinition());
+            var field = new XceedRichTextField(new FieldDefinition {Key="key"});
             var textBox = (RichTextBox)field.ValueControl;
             textBox.VerticalScrollBarVisibility.Should().Be(ScrollBarVisibility.Auto);
         }
@@ -58,7 +58,7 @@ namespace NZazu.Xceed
         [STAThread]
         public void Respect_Height_Setting()
         {
-            var field = new XceedRichTextField("key", new FieldDefinition());
+            var field = new XceedRichTextField(new FieldDefinition {Key="key"});
             var expectedHeight = 2 * XceedRichTextField.DefaultHeight;
             field.Settings.Add("Height", expectedHeight.ToString(CultureInfo.InvariantCulture));
 
@@ -66,7 +66,7 @@ namespace NZazu.Xceed
             textBox.MinHeight.Should().Be(expectedHeight);
             textBox.MaxHeight.Should().Be(expectedHeight);
 
-            field = new XceedRichTextField("key", new FieldDefinition());
+            field = new XceedRichTextField(new FieldDefinition {Key="key"});
             expectedHeight = XceedRichTextField.DefaultHeight;
             field.Settings.Add("Height", "not a number");
 
@@ -83,7 +83,7 @@ namespace NZazu.Xceed
         [STAThread]
         public void Respect_Format_Setting(string format, Type formatterType)
         {
-            var field = new XceedRichTextField("key", new FieldDefinition()) { Settings = { ["Format"] = format } };
+            var field = new XceedRichTextField(new FieldDefinition {Key="key"}) { Settings = { ["Format"] = format } };
 
             var textBox = (RichTextBox)field.ValueControl;
             textBox.TextFormatter.Should().BeOfType(formatterType);
@@ -93,12 +93,12 @@ namespace NZazu.Xceed
         [STAThread]
         public void Add_optional_RichTextFormatBar()
         {
-            var field = new XceedRichTextField("key", new FieldDefinition());
+            var field = new XceedRichTextField(new FieldDefinition {Key="key"});
             var textBox = (RichTextBox)field.ValueControl;
             var formatBar = RichTextBoxFormatBarManager.GetFormatBar(textBox);
             formatBar.Should().BeNull();
 
-            field = new XceedRichTextField("key", new FieldDefinition()) { Settings = { ["ShowFormatBar"] = true.ToString() } };
+            field = new XceedRichTextField(new FieldDefinition {Key="key"}) { Settings = { ["ShowFormatBar"] = true.ToString() } };
 
             textBox = (RichTextBox)field.ValueControl;
             formatBar = RichTextBoxFormatBarManager.GetFormatBar(textBox);

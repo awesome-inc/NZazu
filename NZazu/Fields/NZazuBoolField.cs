@@ -7,7 +7,7 @@ namespace NZazu.Fields
 {
     public class NZazuBoolField : NZazuField<bool?>
     {
-        public NZazuBoolField(string key, FieldDefinition definition) : base(key, definition) { }
+        public NZazuBoolField(FieldDefinition definition) : base(definition) { }
 
         protected override void SetStringValue(string value)
         {

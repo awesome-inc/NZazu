@@ -10,7 +10,7 @@ namespace NZazu.Fields
     {
         public string DateFormat { get; protected internal set; }
 
-        public NZazuDateField(string key, FieldDefinition definition) : base(key, definition) { }
+        public NZazuDateField(FieldDefinition definition) : base(definition) { }
 
         public override string Type => "date";
         public override DependencyProperty ContentProperty => DatePicker.SelectedDateProperty;

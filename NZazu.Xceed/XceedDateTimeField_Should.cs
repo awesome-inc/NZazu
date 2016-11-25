@@ -17,7 +17,7 @@ namespace NZazu.Xceed
         [Test]
         public void Be_Creatable()
         {
-            var sut = new XceedDateTimeField("test", new FieldDefinition());
+            var sut = new XceedDateTimeField(new FieldDefinition {Key="test"});
 
             sut.Should().NotBeNull();
             sut.Should().BeAssignableTo<INZazuWpfField>();
@@ -27,7 +27,7 @@ namespace NZazu.Xceed
         [Test]
         public void Override_ContentProperty()
         {
-            var sut = new XceedDateTimeField("date", new FieldDefinition());
+            var sut = new XceedDateTimeField(new FieldDefinition { Key = "date" });
             sut.ContentProperty.Should().Be(DateTimePicker.ValueProperty);
         }
 
@@ -35,7 +35,7 @@ namespace NZazu.Xceed
         [STAThread]
         public void Use_Format_Settings()
         {
-            var sut = new XceedDateTimeField("date", new FieldDefinition());
+            var sut = new XceedDateTimeField(new FieldDefinition { Key = "date" });
             const string dateFormat = "yyyy/MM/dd";
             sut.Settings.Add("Format", dateFormat);
 
@@ -43,7 +43,7 @@ namespace NZazu.Xceed
             control.Format.Should().Be(DateTimeFormat.Custom);
             control.FormatString.Should().Be(dateFormat);
 
-            sut = new XceedDateTimeField("date", new FieldDefinition());
+            sut = new XceedDateTimeField(new FieldDefinition { Key = "date" });
             control = (DateTimePicker)sut.ValueControl;
             control.Format.Should().Be(DateTimeFormat.FullDateTime);
             control.FormatString.Should().BeNull();

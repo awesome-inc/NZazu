@@ -17,7 +17,7 @@ namespace NZazu.Xceed
         [Test]
         public void Be_Creatable()
         {
-            var sut = new XceedTextBoxField("test", new FieldDefinition());
+            var sut = new XceedTextBoxField(new FieldDefinition { Key = "test" });
             sut.Should().NotBeNull();
             sut.Should().BeAssignableTo<INZazuWpfField>();
 
@@ -28,7 +28,7 @@ namespace NZazu.Xceed
         [STAThread]
         public void Create_TextBox_with_ToolTip_Matching_Description()
         {
-            var sut = new XceedTextBoxField("test", "description", "hint", new FieldDefinition());
+            var sut = new XceedTextBoxField("description", "hint", new FieldDefinition { Key = "textbox01" });
 
             sut.Description.Should().Be("description");
             sut.Hint.Should().Be("hint");

@@ -7,7 +7,7 @@ namespace NZazu.Fields
 {
     public class NZazuIntegerField : NZazuField<int?>
     {
-        public NZazuIntegerField(string key, FieldDefinition definition) : base(key, definition) { }
+        public NZazuIntegerField(FieldDefinition definition) : base(definition) { }
 
         public override string Type => "int";
         public override DependencyProperty ContentProperty => TextBox.TextProperty;

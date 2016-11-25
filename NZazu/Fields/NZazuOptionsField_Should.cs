@@ -17,7 +17,7 @@ namespace NZazu.Fields
         [Test]
         public void Be_Creatable()
         {
-            var sut = new NZazuOptionsField("test", new FieldDefinition());
+            var sut = new NZazuOptionsField(new FieldDefinition {Key="test"});
 
             sut.Should().NotBeNull();
             sut.Should().BeAssignableTo<INZazuWpfField>();
@@ -28,7 +28,7 @@ namespace NZazu.Fields
         [STAThread]
         public void Create_ComboBox()
         {
-            var sut = new NZazuOptionsField("test", new FieldDefinition()) { Description = "description"};
+            var sut = new NZazuOptionsField(new FieldDefinition {Key="test"}) { Description = "description"};
 
             sut.ContentProperty.Should().Be(ComboBox.TextProperty);
             var control = (ComboBox)sut.ValueControl;
@@ -41,7 +41,7 @@ namespace NZazu.Fields
         [STAThread]
         public void Reflect_changing_Value_in_TextProperty()
         {
-            var sut = new NZazuOptionsField("test", new FieldDefinition())
+            var sut = new NZazuOptionsField(new FieldDefinition {Key="test"})
             {
                 Options = new[] { "1", "2", "3", "4", "5"}
             };
@@ -76,7 +76,7 @@ namespace NZazu.Fields
         [Test]
         public void Identify_Value_with_StringValue()
         {
-            var sut = new NZazuOptionsField("test", new FieldDefinition());
+            var sut = new NZazuOptionsField(new FieldDefinition {Key="test"});
 
             sut.Value.Should().BeNull();
             sut.StringValue.Should().Be(sut.Value);

@@ -7,7 +7,7 @@ namespace NZazu.Fields
 {
     public class NZazuOptionsField : NZazuField<string>
     {
-        public NZazuOptionsField(string key, FieldDefinition definition) : base(key, definition) { }
+        public NZazuOptionsField(FieldDefinition definition) : base(definition) { }
 
         public override DependencyProperty ContentProperty => ComboBox.TextProperty;
 

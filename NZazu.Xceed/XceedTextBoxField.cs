@@ -8,15 +8,14 @@ namespace NZazu.Xceed
 {
     public class XceedTextBoxField : NZazuTextField
     {
-        internal XceedTextBoxField(string key,
-            string description, string hint, FieldDefinition definition)
-            : base(key, definition)
+        internal XceedTextBoxField(string description, string hint, FieldDefinition definition)
+            : base(definition)
         {
             Description = description;
             Hint = hint;
         }
 
-        public XceedTextBoxField(string key, FieldDefinition definition) : base(key, definition) { }
+        public XceedTextBoxField(FieldDefinition definition) : base(definition) { }
 
         protected override Control GetValue()
         {
