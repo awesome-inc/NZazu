@@ -1,24 +1,29 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using NZazu.Contracts;
-using NZazu.Contracts.Checks;
+using NZazu.FieldBehavior;
 using NZazu.Serializer;
 
 namespace NZazu.Fields
 {
     public class NZazuFieldFactory : INZazuWpfFieldFactory
     {
-        public INZazuDataSerializer Serializer { get; set; }
+        public INZazuWpfFieldBehaviorFactory BehaviorFactory { get; }
+        public ICheckFactory CheckFactory { get; }
+        public INZazuDataSerializer Serializer { get; }
 
-        private readonly ICheckFactory _checkFactory;
         protected readonly Dictionary<string, Type> FieldTypes = new Dictionary<string, Type>();
         private const string DefaultType = "label";
 
-        public NZazuFieldFactory(ICheckFactory checkFactory = null)
+        public NZazuFieldFactory(
+            INZazuWpfFieldBehaviorFactory behaviorFactory = null,
+            ICheckFactory checkFactory = null,
+            INZazuDataSerializer serializer = null)
         {
-            _checkFactory = checkFactory ?? new CheckFactory();
+            BehaviorFactory = behaviorFactory ?? new NZazuFieldBehaviorFactory();
+            CheckFactory = checkFactory ?? new CheckFactory();
+            Serializer = serializer ?? new NZazuXmlSerializer();
 
             FieldTypes.Add("label", typeof(NZazuLabelField));
             FieldTypes.Add("string", typeof(NZazuTextField));
@@ -45,60 +50,20 @@ namespace NZazu.Fields
                 field = (NZazuField)Activator.CreateInstance(FieldTypes[DefaultType], fieldDefinition.Key, fieldDefinition);
             }
 
-            var safeRequireFactory = field as IRequireSerializer;
-            if (safeRequireFactory != null)
-                safeRequireFactory.Serializer = Serializer;
-
             var safeField = field as IRequireFactory;
             if (safeField != null)
                 safeField.FieldFactory = this;
 
-            return Decorate(field, fieldDefinition);
-        }
+            // TODO refactoring stuff ....
+            var fieldContainer = field as INZazuWpfFieldContainer;
+            fieldContainer?.CreateChildControls(this, fieldDefinition);
 
-        private NZazuField Decorate(NZazuField field, FieldDefinition fieldDefinition)
-        {
-            field.Prompt = fieldDefinition.Prompt;
-            field.Hint = fieldDefinition.Hint;
-            field.Description = fieldDefinition.Description;
-
-            field.Check = CreateCheck(fieldDefinition.Checks);
-
-            CopySettings(field, fieldDefinition);
-
-            if (field is INZazuWpfFieldContainer)
-                ((INZazuWpfFieldContainer)field).CreateChildControls(this, fieldDefinition);
-
-            CopyValues(fieldDefinition, field as NZazuOptionsField);
-
-            return field;
-        }
-
-        private IValueCheck CreateCheck(IEnumerable<CheckDefinition> checkDefinitions)
-        {
-            if (checkDefinitions == null) return null;
-
-            var checks = checkDefinitions.Select(c => _checkFactory.CreateCheck(c)).ToArray();
-            return checks.Length == 1
-                ? checks.First()
-                : new AggregateCheck(checks.ToArray());
-        }
-
-        private static void CopySettings(NZazuField field, FieldDefinition fieldDefinition)
-        {
-            if (fieldDefinition.Settings != null)
-            {
-                foreach (var kvp in fieldDefinition.Settings)
-                    field.Settings[kvp.Key] = kvp.Value;
-            }
-        }
-
-        private static void CopyValues(FieldDefinition fieldDefinition, NZazuOptionsField optionsField)
-        {
-            if (fieldDefinition == null) throw new ArgumentNullException(nameof(fieldDefinition));
-            if (optionsField == null) return;
-            if (fieldDefinition.Values == null || !fieldDefinition.Values.Any()) return;
-            optionsField.Options = fieldDefinition.Values;
+            return field
+                .DecorateLabels(fieldDefinition)
+                .ApplySettings(fieldDefinition)
+                .AddOptionValues(fieldDefinition)
+                .AddChecks(fieldDefinition.Checks, CheckFactory)
+                .AddBehavior(fieldDefinition.Behavior, BehaviorFactory);
         }
     }
 }

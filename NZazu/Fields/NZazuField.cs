@@ -133,14 +133,14 @@ namespace NZazu.Fields
         /// <returns></returns>
         protected virtual Binding DecorateBinding(Binding binding) { return binding; }
 
-        protected string GetSetting(string key)
+        protected virtual string GetSetting(string key)
         {
             string value;
             Settings.TryGetValue(key, out value);
             return value;
         }
 
-        protected internal T? GetSetting<T>(string key) where T : struct
+        protected internal virtual T? GetSetting<T>(string key) where T : struct
         {
             try
             {
@@ -148,6 +148,13 @@ namespace NZazu.Fields
                 return (T)Convert.ChangeType(str, typeof(T), CultureInfo.InvariantCulture);
             }
             catch (Exception) { return null; }
+        }
+
+        public virtual void DisposeField()
+        {
+            if (Behavior == null) return;
+            Behavior.Detach();
+            Behavior = null;
         }
     }
 

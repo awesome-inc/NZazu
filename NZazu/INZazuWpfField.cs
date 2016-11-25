@@ -22,6 +22,8 @@ namespace NZazu
         Dictionary<string, string> Settings { get; }
         INZazuWpfFieldBehavior Behavior { get; set; }
         DependencyProperty ContentProperty { get; }
+
+        void DisposeField();
     }
 
     public interface INZazuWpfField<T> : INZazuWpfField

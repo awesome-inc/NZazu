@@ -5,6 +5,9 @@ namespace NZazu
     public interface INZazuWpfFieldFactory
     {
         INZazuWpfField CreateField(FieldDefinition fieldDefinition);
-        INZazuDataSerializer Serializer { get; set; }
+
+        INZazuWpfFieldBehaviorFactory BehaviorFactory { get; }
+        ICheckFactory CheckFactory { get; }
+        INZazuDataSerializer Serializer { get; }
     }
 }

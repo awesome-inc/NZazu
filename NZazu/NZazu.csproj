@@ -80,6 +80,8 @@
       <DependentUpon>DynamicDataTable.xaml</DependentUpon>
     </Compile>
     <Compile Include="Fields\Controls\DynamicDataTable_Should.cs" />
+    <Compile Include="Fields\FieldFactoryExtensions.cs" />
+    <Compile Include="Fields\FieldFactoryExtensions_Should.cs" />
     <Compile Include="Fields\IRequireFactory.cs" />
     <Compile Include="Fields\NZazuDataTableField.cs" />
     <Compile Include="Fields\NZazuDateField.cs" />
@@ -134,7 +136,6 @@
     <Compile Include="Extensions\ViewExtensions.cs" />
     <Compile Include="Extensions\FieldExtensions_Should.cs" />
     <Compile Include="NZazuView_Should.cs" />
-    <Compile Include="Serializer\IRequireSerializer.cs" />
     <Compile Include="Serializer\NZazuXmlSerializer.cs" />
     <Compile Include="Serializer\NZazuXmlSerializer_Should.cs" />
     <Page Include="Fields\Controls\DynamicDataTable.xaml">

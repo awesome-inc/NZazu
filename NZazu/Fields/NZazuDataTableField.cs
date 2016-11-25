@@ -8,14 +8,12 @@ using System.Windows.Media;
 using NZazu.Contracts;
 using NZazu.Contracts.Checks;
 using NZazu.Fields.Controls;
-using NZazu.Serializer;
 
 namespace NZazu.Fields
 {
     public class NZazuDataTableField
         : NZazuField
         , IRequireFactory
-        , IRequireSerializer
     {
         #region crappy code to create a new row after tabbing the last field
 
@@ -48,7 +46,6 @@ namespace NZazu.Fields
 
         #endregion
 
-        public INZazuDataSerializer Serializer { get; set; }
         public INZazuWpfFieldFactory FieldFactory { get; set; }
 
         private DynamicDataTable _clientControl;
@@ -89,7 +86,7 @@ namespace NZazu.Fields
 
         #endregion
 
-        public override bool IsEditable => true;
+        public override bool IsEditable => false;
 
         public override string StringValue
         {
@@ -113,12 +110,12 @@ namespace NZazu.Fields
                     child => _fields.Single(x => Equals(x.Value.ValueControl, child)).Value.StringValue
                  );
 
-            return Serializer.Serialize(data);
+            return FieldFactory.Serializer.Serialize(data);
         }
 
         private void UpdateGridValues(string value)
         {
-            var newDict = Serializer.Deserialize(value);
+            var newDict = FieldFactory.Serializer.Deserialize(value);
 
             var iterations = 0;
             if (newDict.Count > 0)

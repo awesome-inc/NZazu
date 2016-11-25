@@ -11,7 +11,6 @@ using NZazu.Serializer;
 
 namespace NZazu
 {
-    // todo check if it makes sense to put some of the logic to the NZazuField
     public class NZazuView : ScrollViewer, INZazuWpfView
     {
         #region dependency properties
@@ -31,7 +30,7 @@ namespace NZazu
         {
             var view = (NZazuView)d;
             var formDefinition = (FormDefinition)e.NewValue;
-            view.UpdateFields(formDefinition, view.FieldFactory, view.FieldBehaviorFactory, view.ResolveLayout);
+            view.UpdateFields(formDefinition, view.FieldFactory, view.ResolveLayout);
             view.TrySetFocusOn(formDefinition.FocusOn);
         }
 
@@ -50,8 +49,7 @@ namespace NZazu
         {
             var view = (NZazuView)d;
             var fieldFactory = (INZazuWpfFieldFactory)e.NewValue;
-            fieldFactory.Serializer = view.Serializer;
-            view.UpdateFields(view.FormDefinition, fieldFactory, view.FieldBehaviorFactory, view.ResolveLayout);
+            view.UpdateFields(view.FormDefinition, fieldFactory, view.ResolveLayout);
         }
 
         private static object FieldFactoryCoerceCallback(DependencyObject d, object basevalue)
@@ -59,58 +57,6 @@ namespace NZazu
             var view = (NZazuView)d;
             var fieldFactory = (INZazuWpfFieldFactory)basevalue;
             return fieldFactory ?? view.FieldFactory;
-        }
-
-        // ############# FieldBehaviorFactory
-
-        public static readonly DependencyProperty FieldBehaviorFactoryProperty = DependencyProperty.Register(
-            "FieldBehaviorFactory", typeof(INZazuWpfFieldBehaviorFactory), typeof(NZazuView),
-            new PropertyMetadata(new NZazuFieldBehaviorFactory(), FieldBehaviorFactoryChanged, FieldBehaviorFactoryCoerceCallback));
-
-        public INZazuWpfFieldBehaviorFactory FieldBehaviorFactory
-        {
-            get { return (INZazuWpfFieldBehaviorFactory)GetValue(FieldBehaviorFactoryProperty); }
-            set { SetValue(FieldBehaviorFactoryProperty, value); }
-        }
-
-        private static void FieldBehaviorFactoryChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            var view = (NZazuView)d;
-            var fieldBehaviorFactory = (INZazuWpfFieldBehaviorFactory)e.NewValue;
-            view.UpdateFields(view.FormDefinition, view.FieldFactory, fieldBehaviorFactory, view.ResolveLayout);
-        }
-
-        private static object FieldBehaviorFactoryCoerceCallback(DependencyObject d, object basevalue)
-        {
-            var view = (NZazuView)d;
-            var fieldBehaviorFactory = (INZazuWpfFieldBehaviorFactory)basevalue;
-            return fieldBehaviorFactory ?? view.FieldBehaviorFactory;
-        }
-
-        // ############# Serializer
-
-        public static readonly DependencyProperty SerializerProperty = DependencyProperty.Register(
-            "Serializer", typeof(INZazuDataSerializer), typeof(NZazuView),
-            new PropertyMetadata(new NZazuXmlSerializer(), SerializerChanged, SerializerCoerceCallback));
-
-        private static object SerializerCoerceCallback(DependencyObject d, object basevalue)
-        {
-            var view = (NZazuView)d;
-            var serializer = (INZazuDataSerializer)basevalue;
-            return serializer ?? view.Serializer;
-        }
-
-        private static void SerializerChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            var view = (NZazuView)d;
-            var value = (INZazuDataSerializer)e.NewValue;
-            if (view.FieldFactory != null) view.FieldFactory.Serializer = value;
-        }
-
-        public INZazuDataSerializer Serializer
-        {
-            get { return (INZazuDataSerializer)GetValue(SerializerProperty); }
-            set { SetValue(SerializerProperty, value); }
         }
 
         // ############# ResolveLayout
@@ -129,7 +75,7 @@ namespace NZazu
         {
             var view = (NZazuView)d;
             var layoutStrategy = (IResolveLayout)e.NewValue;
-            view.UpdateFields(view.FormDefinition, view.FieldFactory, view.FieldBehaviorFactory, layoutStrategy);
+            view.UpdateFields(view.FormDefinition, view.FieldFactory, layoutStrategy);
         }
 
         private static object ResolveLayoutCoerceCallback(DependencyObject d, object basevalue)
@@ -199,8 +145,7 @@ namespace NZazu
 
             Layout.LostFocus += (s, e) => ApplyChanges();
 
-            Serializer = new NZazuXmlSerializer();
-            FieldFactory = new NZazuFieldFactory(new CheckFactory());
+            FieldFactory = new NZazuFieldFactory(new NZazuFieldBehaviorFactory(), new CheckFactory(), new NZazuXmlSerializer());
         }
 
         public void ApplyChanges()
@@ -213,6 +158,7 @@ namespace NZazu
             INZazuWpfField field;
             if (TryGetField(key, out field))
                 return field;
+
             throw new KeyNotFoundException();
         }
 
@@ -254,7 +200,6 @@ namespace NZazu
         private void UpdateFields(
             FormDefinition formDefinition,
             INZazuWpfFieldFactory fieldFactory,
-            INZazuWpfFieldBehaviorFactory fieldBehaviorFactory,
             IResolveLayout resolveLayout)
         {
             DisposeFields();
@@ -263,7 +208,6 @@ namespace NZazu
             if (formDefinition?.Fields == null) return;
 
             CreateFields(formDefinition, fieldFactory);
-            AttachBehavior(formDefinition.Fields, fieldBehaviorFactory);
 
             var layout = resolveLayout.Resolve(formDefinition.Layout);
 
@@ -286,6 +230,7 @@ namespace NZazu
             //fieldFactory.Serializer = this.Serializer;
             formDefinition.Fields.ToList().ForEach(f =>
             {
+                // create field
                 var field = fieldFactory.CreateField(f);
                 _fields.Add(f.Key, field);
                 AddGroupFieldKeys(field as INZazuWpfFieldContainer);
@@ -304,45 +249,10 @@ namespace NZazu
 
         private void DisposeFields()
         {
-            DetachBehavior();
+            foreach (var field in _fields.Values)
+                field.DisposeField();
+
             _fields.Clear();
-        }
-
-        private void AttachBehavior(FieldDefinition[] fields, INZazuWpfFieldBehaviorFactory fieldBehaviorFactory)
-        {
-            fields.ToList().ForEach(f => AttachBehavior(fieldBehaviorFactory, f));
-        }
-
-        private void AttachBehavior(INZazuWpfFieldBehaviorFactory fieldBehaviorFactory, FieldDefinition fieldDefinition)
-        {
-            if (!string.IsNullOrWhiteSpace(fieldDefinition.Behavior?.Name))
-            {
-                var behavior = fieldBehaviorFactory.CreateFieldBehavior(fieldDefinition.Behavior);
-                if (behavior == null) return;
-
-                INZazuWpfField field;
-                if (!TryGetField(fieldDefinition.Key, out field)) return;
-                behavior.AttachTo(field, this);
-                field.Behavior = behavior;
-            }
-
-            fieldDefinition.Fields?.ToList().ForEach(f => AttachBehavior(fieldBehaviorFactory, f));
-        }
-
-
-        private void DetachBehavior()
-        {
-            DetachBehavior(_fields.Values);
-        }
-
-        private static void DetachBehavior(IEnumerable<INZazuWpfField> fields)
-        {
-            foreach (var field in fields)
-            {
-                if (field?.Behavior == null) continue;
-                field.Behavior.Detach();
-                field.Behavior = null;
-            }
         }
     }
 }
