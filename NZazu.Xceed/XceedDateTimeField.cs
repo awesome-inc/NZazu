@@ -14,19 +14,16 @@ namespace NZazu.Xceed
 
         public override DependencyProperty ContentProperty => DateTimePicker.ValueProperty;
 
-        protected internal override Control Value
+        protected override Control GetValue()
         {
-            get
+            var control = new DateTimePicker { ToolTip = Description, Watermark = Hint };
+            DateFormat = GetSetting("Format");
+            if (!string.IsNullOrWhiteSpace(DateFormat))
             {
-                var control = new DateTimePicker { ToolTip = Description, Watermark = Hint };
-                DateFormat = GetSetting("Format");
-                if (!string.IsNullOrWhiteSpace(DateFormat))
-                {
-                    control.Format = DateTimeFormat.Custom;
-                    control.FormatString = DateFormat;
-                }
-                return control;
+                control.Format = DateTimeFormat.Custom;
+                control.FormatString = DateFormat;
             }
+            return control;
         }
     }
 }

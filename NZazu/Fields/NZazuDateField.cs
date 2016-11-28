@@ -15,13 +15,10 @@ namespace NZazu.Fields
         public override string Type => "date";
         public override DependencyProperty ContentProperty => DatePicker.SelectedDateProperty;
 
-        protected internal override Control Value
+        protected override Control GetValue()
         {
-            get
-            {
-                DateFormat = GetSetting("Format");
-                return new DatePicker { ToolTip = Description };
-            }
+            DateFormat = GetSetting("Format");
+            return new DatePicker {ToolTip = Description};
         }
 
         protected override void SetStringValue(string value)

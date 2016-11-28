@@ -58,7 +58,7 @@ namespace NZazu.Fields
 
         #region buttons
 
-        internal void AddBtnOnClick(object sender, RoutedEventArgs routedEventArgs)
+        private void AddBtnOnClick(object sender, RoutedEventArgs routedEventArgs)
         {
             var grid = _clientControl.Grid;
 
@@ -138,18 +138,15 @@ namespace NZazu.Fields
         public override DependencyProperty ContentProperty => null;
         public override string Type => "datatable";
 
-        protected internal override Control Value
+        protected override Control GetValue()
         {
-            get
-            {
-                if (_clientControl != null) return _clientControl;
+            if (_clientControl != null) return _clientControl;
 
-                _clientControl = new DynamicDataTable();
-                CreateClientControlsOn(_clientControl.Grid);
-                // somewhere here i need to attach the behaviour
-                CreateButtonsOn(_clientControl.Panel);
-                return _clientControl;
-            }
+            _clientControl = new DynamicDataTable();
+            CreateClientControlsOn(_clientControl.Grid);
+            // somewhere here i need to attach the behaviour
+            CreateButtonsOn(_clientControl.Panel);
+            return _clientControl;
         }
 
         private void CreateClientControlsOn(Grid grid)

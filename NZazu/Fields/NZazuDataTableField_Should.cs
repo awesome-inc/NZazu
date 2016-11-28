@@ -3,7 +3,6 @@ using System.Threading;
 using System.Windows.Controls;
 using FluentAssertions;
 using NEdifis.Attributes;
-using NSubstitute;
 using NUnit.Framework;
 using NZazu.Contracts;
 
@@ -54,26 +53,10 @@ namespace NZazu.Fields
         [STAThread]
         public void Hanlde_Add()
         {
-            var behaviorFactory = Substitute.For<INZazuWpfFieldBehaviorFactory>();
-            var checkFactory = Substitute.For<ICheckFactory>();
-            var serializer = Substitute.For<INZazuDataSerializer>();
-
             var sut = new NZazuDataTableField(new FieldDefinition
             {
-                Key = "key",
-                Fields = new[]
-                {
-                    new FieldDefinition
-                    {
-                        Key = "test01",
-                        Type = "string"
-                    }
-                }
-            })
-            { FieldFactory = new NZazuFieldFactory(behaviorFactory, checkFactory, serializer) };
-            var ctrl = sut.Value;
-
-            sut.AddBtnOnClick(null, null);
+                Key = "key"
+            });
         }
     }
 }

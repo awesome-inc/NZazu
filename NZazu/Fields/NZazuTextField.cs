@@ -15,10 +15,6 @@ namespace NZazu.Fields
 
         public override DependencyProperty ContentProperty => TextBox.TextProperty;
 
-        protected internal override Control Value
-        {
-            get
-            { return new TextBox { ToolTip = Description }; }
-        }
+        protected override Control GetValue() { return new TextBox { ToolTip = Description }; }
     }
 }

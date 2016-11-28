@@ -16,25 +16,22 @@ namespace NZazu.Xceed
 
         public override DependencyProperty ContentProperty => RichTextBox.TextProperty;
 
-        protected override Control Value
+        protected override Control GetValue()
         {
-            get
+            var control = new RichTextBox
             {
-                var control = new RichTextBox
-                {
-                    ToolTip = Description,
-                    VerticalScrollBarVisibility = ScrollBarVisibility.Auto,
-                    MinHeight = DefaultHeight,
-                    MaxHeight = DefaultHeight,
-                    TextFormatter = GetFormatter(GetSetting("Format"))
-                };
+                ToolTip = Description,
+                VerticalScrollBarVisibility = ScrollBarVisibility.Auto,
+                MinHeight = DefaultHeight,
+                MaxHeight = DefaultHeight,
+                TextFormatter = GetFormatter(GetSetting("Format"))
+            };
 
-                var showFormatBar = GetSetting<bool>("ShowFormatBar");
-                if (showFormatBar == true)
-                    RichTextBoxFormatBarManager.SetFormatBar(control, new RichTextBoxFormatBar());
+            var showFormatBar = GetSetting<bool>("ShowFormatBar");
+            if (showFormatBar == true)
+                RichTextBoxFormatBarManager.SetFormatBar(control, new RichTextBoxFormatBar());
 
-                return control;
-            }
+            return control;
         }
 
         private static ITextFormatter GetFormatter(string format)
