@@ -17,9 +17,12 @@ namespace NZazu.Xceed
 
         public XceedTextBoxField(FieldDefinition definition) : base(definition) { }
 
-        protected override Control GetValue()
+        protected internal override Control Value
         {
-            return new WatermarkTextBox { ToolTip = Description, Watermark = Hint };
+            get
+            {
+                return new WatermarkTextBox { ToolTip = Description, Watermark = Hint };
+            }
         }
     }
 }

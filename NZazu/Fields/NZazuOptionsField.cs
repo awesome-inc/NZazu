@@ -15,16 +15,19 @@ namespace NZazu.Fields
 
         public string[] Options { get; protected internal set; }
 
-        protected override Control GetValue()
+        protected internal override Control Value
         {
-            var control = new ComboBox { ToolTip = Description};
-            if (Options != null)
+            get
             {
-                foreach (var option in Options)
-                    control.Items.Add(option);
-                control.SelectedItem = Options.FirstOrDefault();
+                var control = new ComboBox { ToolTip = Description };
+                if (Options != null)
+                {
+                    foreach (var option in Options)
+                        control.Items.Add(option);
+                    control.SelectedItem = Options.FirstOrDefault();
+                }
+                return control;
             }
-            return control;
         }
 
         protected override void SetStringValue(string value) { Value = value; }

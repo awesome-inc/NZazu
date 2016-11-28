@@ -15,15 +15,18 @@ namespace NZazu.Xceed
 
         public override DependencyProperty ContentProperty => IntegerUpDown.ValueProperty;
 
-        protected override Control GetValue()
+        protected internal override Control Value
         {
-            var control = new IntegerUpDown {ToolTip = Description, Watermark = Hint};
-            var formatString = GetSetting("Format");
-            if (IsSupported(formatString))
+            get
             {
-                control.FormatString = formatString;
+                var control = new IntegerUpDown { ToolTip = Description, Watermark = Hint };
+                var formatString = GetSetting("Format");
+                if (IsSupported(formatString))
+                {
+                    control.FormatString = formatString;
+                }
+                return control;
             }
-            return control;
         }
 
         // cf.: http://wpftoolkit.codeplex.com/wikipage?title=IntegerUpDown&referringTitle=NumericUpDown-derived%20controls#formatstring

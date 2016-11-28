@@ -18,12 +18,15 @@ namespace NZazu.Fields
         public string Layout { get; set; }
         public IEnumerable<INZazuWpfField> Fields { get; set; }
 
-        protected override Control GetValue()
+        protected internal override Control Value
         {
-            if (string.IsNullOrEmpty(Description))
-                return new ContentControl { Focusable = false };
-            else
-                return new GroupBox { Focusable = false, Header = Description };
+            get
+            {
+                if (string.IsNullOrEmpty(Description))
+                    return new ContentControl { Focusable = false };
+                else
+                    return new GroupBox { Focusable = false, Header = Description };
+            }
         }
 
         public void CreateChildControls(INZazuWpfFieldFactory factory, FieldDefinition containerDefinition)

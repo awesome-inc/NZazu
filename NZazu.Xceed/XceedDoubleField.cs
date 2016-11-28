@@ -17,13 +17,16 @@ namespace NZazu.Xceed
 
         public override string Type => "double";
 
-        protected override Control GetValue()
+        protected internal override Control Value
         {
-            var control = new DoubleUpDown { ToolTip = Description, Watermark = Hint };
-            var formatString = GetSetting("Format");
-            if (!string.IsNullOrWhiteSpace(formatString))
-                control.FormatString = formatString;
-            return control;
+            get
+            {
+                var control = new DoubleUpDown { ToolTip = Description, Watermark = Hint };
+                var formatString = GetSetting("Format");
+                if (!string.IsNullOrWhiteSpace(formatString))
+                    control.FormatString = formatString;
+                return control;
+            }
         }
 
         protected override void SetStringValue(string value)

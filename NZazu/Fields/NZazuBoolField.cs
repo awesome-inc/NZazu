@@ -26,14 +26,19 @@ namespace NZazu.Fields
         public override string Type => "bool";
         public override DependencyProperty ContentProperty => ToggleButton.IsCheckedProperty;
 
-        protected override Control GetValue()
+        public override Control Value
         {
-            return new CheckBox
+            get
             {
-                Content = Hint, ToolTip = Description, 
-                IsChecked = null, IsThreeState = true,
-                VerticalContentAlignment = VerticalAlignment.Center
-            };
+                return new CheckBox
+                {
+                    Content = Hint,
+                    ToolTip = Description,
+                    IsChecked = null,
+                    IsThreeState = true,
+                    VerticalContentAlignment = VerticalAlignment.Center
+                };
+            }
         }
     }
 }

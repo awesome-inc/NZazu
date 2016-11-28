@@ -66,7 +66,7 @@ namespace NZazu.Fields
         protected internal IValueCheck Check { get; set; }
 
         protected virtual Control GetLabel() { return !string.IsNullOrWhiteSpace(Prompt) ? new Label { Content = Prompt } : null; }
-        protected abstract Control GetValue();
+        public abstract Control Value { get; }
 
         private Control GetLabelControl()
         {
@@ -75,7 +75,7 @@ namespace NZazu.Fields
 
         private Control GetValueControl()
         {
-            var control = GetValue();
+            var control = Value;
             ApplySettings(control);
             return DecorateValidation(control);
         }
@@ -165,7 +165,7 @@ namespace NZazu.Fields
 
         protected NZazuField(FieldDefinition definition) : base(definition) { }
 
-        public T Value
+        public override Control Value
         {
             get { return _value; }
             set
