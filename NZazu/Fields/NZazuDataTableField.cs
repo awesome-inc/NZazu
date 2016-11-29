@@ -86,15 +86,16 @@ namespace NZazu.Fields
 
         #endregion
 
-        public override bool IsEditable => false;
+        public override bool IsEditable => true;
 
-        public override string StringValue
+        protected override void SetStringValue(string value)
         {
-            get
-            {
-                return GetGridValues();
-            }
-            set { UpdateGridValues(value); }
+            UpdateGridValues(value);
+        }
+
+        protected override string GetStringValue()
+        {
+            return GetGridValues();
         }
 
         private string GetGridValues()

@@ -29,7 +29,9 @@ namespace NZazu.Fields
             public NZazuDummyField(FieldDefinition definition) : base(definition) { }
 
             public override bool IsEditable { get { throw new NotImplementedException(); } }
-            public override string StringValue { get; set; }
+            private string _stringValue;
+            protected override void SetStringValue(string value) { _stringValue = value; }
+            protected override string GetStringValue() { return _stringValue; }
             public override string Type => null;
             public override DependencyProperty ContentProperty => null;
             protected override Control GetValue() { return null; }
@@ -63,7 +65,7 @@ namespace NZazu.Fields
             // ReSharper disable ObjectCreationAsStatement
             0.Invoking(x => new NZazuDummyField(new FieldDefinition { Key = "" })).ShouldThrow<ArgumentException>();
             1.Invoking(x => new NZazuDummyField(new FieldDefinition())).ShouldThrow<ArgumentException>();
-            2.Invoking(x => new NZazuDummyField(new FieldDefinition { Key = "\t\r\n "})).ShouldThrow<ArgumentException>();
+            2.Invoking(x => new NZazuDummyField(new FieldDefinition { Key = "\t\r\n " })).ShouldThrow<ArgumentException>();
             // ReSharper restore ObjectCreationAsStatement
         }
 
@@ -79,7 +81,7 @@ namespace NZazu.Fields
         [STAThread]
         public void Create_Label_Matching_Prompt()
         {
-            var sut = new NZazuDummyField(new FieldDefinition {Key="test"})
+            var sut = new NZazuDummyField(new FieldDefinition { Key = "test" })
             {
                 Prompt = "superhero"
             };
@@ -92,7 +94,7 @@ namespace NZazu.Fields
         [Test]
         public void Set_And_Get_Value()
         {
-            var sut = new NZazuDummyField(new FieldDefinition {Key="test"});
+            var sut = new NZazuDummyField(new FieldDefinition { Key = "test" });
             sut.StringValue.Should().BeNull();
 
             sut.StringValue = "test";
@@ -104,7 +106,7 @@ namespace NZazu.Fields
         public void Pass_Validation_To_Checks()
         {
             var check = Substitute.For<IValueCheck>();
-            var sut = new NZazuDummyField(new FieldDefinition {Key="test"}) { Description = "description", Check = check };
+            var sut = new NZazuDummyField(new FieldDefinition { Key = "test" }) { Description = "description", Check = check };
             sut.Validate();
 
             check.ReceivedWithAnyArgs().Validate(Arg.Any<string>());
@@ -116,7 +118,7 @@ namespace NZazu.Fields
             var check = Substitute.For<IValueCheck>();
             check.Validate(Arg.Any<string>(), Arg.Any<IFormatProvider>()).Returns(new ValueCheckResult(false, "test"));
 
-            var sut = new NZazuDummyField(new FieldDefinition {Key="test"}) { Description = "description", Check = check };
+            var sut = new NZazuDummyField(new FieldDefinition { Key = "test" }) { Description = "description", Check = check };
             sut.Validate().IsValid.Should().BeFalse();
             check.ReceivedWithAnyArgs().Validate(Arg.Any<string>());
         }
@@ -178,7 +180,7 @@ namespace NZazu.Fields
             var check = Substitute.For<IValueCheck>();
             check.Validate(Arg.Any<string>()).Returns(new ValueCheckResult(false, "test"));
 
-            var sut = new NZazuField_With_Description_As_Content_Property(new FieldDefinition {Key="test"})
+            var sut = new NZazuField_With_Description_As_Content_Property(new FieldDefinition { Key = "test" })
             { Description = "description", Check = check };
 
             var expectedRule = new CheckValidationRule(check)
@@ -207,7 +209,7 @@ namespace NZazu.Fields
         [Test]
         public void Be_Editable()
         {
-            var sut = new GenericDummyField(new FieldDefinition {Key="test"});
+            var sut = new GenericDummyField(new FieldDefinition { Key = "test" });
             sut.IsEditable.Should().BeTrue();
         }
 
@@ -215,7 +217,7 @@ namespace NZazu.Fields
         [STAThread]
         public void Respect_generic_settings()
         {
-            var sut = new NZazuField_With_Description_As_Content_Property(new FieldDefinition {Key="test"});
+            var sut = new NZazuField_With_Description_As_Content_Property(new FieldDefinition { Key = "test" });
 
             sut.Settings.Add("ContentStringFormat", "dddd – d - MMMM");
             sut.Settings.Add("FontFamily", "Century Gothic");

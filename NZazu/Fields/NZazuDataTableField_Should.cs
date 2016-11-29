@@ -43,10 +43,10 @@ namespace NZazu.Fields
         }
 
         [Test]
-        public void Not_be_Editable()
+        public void Be_Editable_To_Make_Sure_GetSet_StringValue_Are_Called()
         {
             var sut = new NZazuDataTableField(new FieldDefinition { Key = "table01" });
-            sut.IsEditable.Should().BeFalse();
+            sut.IsEditable.Should().BeTrue();
         }
 
         [Test]

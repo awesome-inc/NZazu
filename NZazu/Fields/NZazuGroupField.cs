@@ -12,7 +12,9 @@ namespace NZazu.Fields
         public NZazuGroupField(FieldDefinition definition) : base(definition) { }
 
         public override bool IsEditable => false;
-        public override string StringValue { get; set; }
+        private string _stringValue;
+        protected override void SetStringValue(string value) { _stringValue = value; }
+        protected override string GetStringValue() { return _stringValue; }
         public override DependencyProperty ContentProperty => null;
         public override string Type => "group";
         public string Layout { get; set; }

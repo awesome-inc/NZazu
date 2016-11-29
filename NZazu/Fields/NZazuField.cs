@@ -21,7 +21,14 @@ namespace NZazu.Fields
         private readonly Lazy<Control> _valueControl;
 
         public abstract bool IsEditable { get; }
-        public abstract string StringValue { get; set; }
+        public string StringValue
+        {
+            get { return GetStringValue(); }
+            set { SetStringValue(value); }
+        }
+
+        protected abstract void SetStringValue(string value);
+        protected abstract string GetStringValue();
         public abstract DependencyProperty ContentProperty { get; }
 
         public abstract string Type { get; }
@@ -178,15 +185,6 @@ namespace NZazu.Fields
         }
 
         public override bool IsEditable => true;
-
-        public override string StringValue
-        {
-            get { return GetStringValue(); }
-            set { SetStringValue(value); }
-        }
-
-        protected abstract void SetStringValue(string value);
-        protected abstract string GetStringValue();
 
         public event PropertyChangedEventHandler PropertyChanged = (sender, e) => { };
 
