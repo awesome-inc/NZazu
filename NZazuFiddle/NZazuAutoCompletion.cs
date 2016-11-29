@@ -7,7 +7,6 @@ using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using ICSharpCode.AvalonEdit.CodeCompletion;
 using NZazu.FieldBehavior;
-using NZazu.LayoutStrategy;
 using Xceed.Wpf.Toolkit;
 
 namespace NZazuFiddle

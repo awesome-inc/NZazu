@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.23107.0
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NZazu.Contracts", "NZazu.Contracts\NZazu.Contracts.csproj", "{4D469864-C26E-483E-99DB-DE7305EAAA4F}"
 EndProject
@@ -22,6 +22,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NZazuFiddle", "NZazuFiddle\NZazuFiddle.csproj", "{ECCA4134-EE75-46B5-AA0D-5FA2C0EA8939}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NZazu.Xceed", "NZazu.Xceed\NZazu.Xceed.csproj", "{940EECDE-3453-4EA0-B052-15AB18A8119D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NZazu.JsonSerializer", "NZazu.JsonSerializer\NZazu.JsonSerializer.csproj", "{103E20C8-639E-4AB0-82D4-3C84FD8E2C52}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +47,10 @@ Global
 		{940EECDE-3453-4EA0-B052-15AB18A8119D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{940EECDE-3453-4EA0-B052-15AB18A8119D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{940EECDE-3453-4EA0-B052-15AB18A8119D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{103E20C8-639E-4AB0-82D4-3C84FD8E2C52}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{103E20C8-639E-4AB0-82D4-3C84FD8E2C52}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{103E20C8-639E-4AB0-82D4-3C84FD8E2C52}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{103E20C8-639E-4AB0-82D4-3C84FD8E2C52}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

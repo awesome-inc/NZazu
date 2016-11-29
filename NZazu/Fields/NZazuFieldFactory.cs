@@ -34,6 +34,7 @@ namespace NZazu.Fields
             FieldTypes.Add("group", typeof(NZazuGroupField));
             FieldTypes.Add("datatable", typeof(NZazuDataTableField));
             FieldTypes.Add("option", typeof(NZazuOptionsField));
+            FieldTypes.Add("imageViewer", typeof(NZazuImageViewerField));
         }
 
         public INZazuWpfField CreateField(FieldDefinition fieldDefinition)

@@ -129,6 +129,12 @@ namespace NZazuFiddle.Samples
                                     Type = "string",
                                     Prompt = "Modulation Subcarrier",
                                     Settings = new Dictionary<string, string>() { {"Width", "300" } }
+                                },
+                                new FieldDefinition
+                                {
+                                    Key = "modeparameter_image",
+                                    Type = "imageviewer",
+                                    Prompt = "Image",
                                 }
                             }
                         },
@@ -329,7 +335,12 @@ namespace NZazuFiddle.Samples
                             }
                         },
                     }
-                }, new FormData())
+                },
+                new FormData(new Dictionary<string, string>
+                    {
+                        { "modeparameter_image", "http://www.clipartlord.com/wp-content/uploads/2014/11/tank11.png" }
+                    })
+                )
             };
         }
     }

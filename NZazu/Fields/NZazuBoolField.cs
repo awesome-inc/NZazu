@@ -30,8 +30,10 @@ namespace NZazu.Fields
         {
             return new CheckBox
             {
-                Content = Hint, ToolTip = Description, 
-                IsChecked = null, IsThreeState = true,
+                Content = Hint,
+                ToolTip = Description,
+                IsChecked = null,
+                IsThreeState = true,
                 VerticalContentAlignment = VerticalAlignment.Center
             };
         }
