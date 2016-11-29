@@ -6,6 +6,7 @@ using NEdifis.Attributes;
 using NUnit.Framework;
 using NZazu.Contracts;
 
+#pragma warning disable 618
 namespace NZazu.Fields
 {
     [TestFixtureFor(typeof(NZazuDataTableField))]
@@ -21,6 +22,30 @@ namespace NZazu.Fields
             sut.Should().NotBeNull();
             sut.Should().BeAssignableTo<INZazuWpfField>();
             sut.Type.Should().Be("datatable");
+
+        }
+
+        [Test]
+        [STAThread]
+        public void Serialize_And_Deserialize()
+        {
+            // ReSharper disable once UseObjectOrCollectionInitializer
+            var sut = new NZazuDataTableField(new FieldDefinition
+            {
+                Key = "table01",
+                Fields = new[]
+                {
+                    new FieldDefinition {Key = "table01_field01", Type = "string"}
+                }
+            });
+            sut.FieldFactory = new NZazuFieldFactory();
+            var justToMakeTheCall = sut.ValueControl;
+
+            const string value = "<items />";
+            sut.StringValue = value;
+            sut.StringValue.Should().Be(value);
+
+            sut.Validate().IsValid.Should().BeTrue();
         }
 
         [Test]
@@ -57,6 +82,8 @@ namespace NZazu.Fields
             {
                 Key = "key"
             });
+
         }
+
     }
 }

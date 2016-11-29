@@ -28,7 +28,7 @@ namespace NZazu.JsonSerializer
                 {"John", "Smith"},
             };
 
-            var sut = new NZazuXmlSerializer();
+            var sut = new NZazuJsonSerializer();
 
             var actual = sut.Serialize(data);
             var expected = sut.Deserialize(actual);

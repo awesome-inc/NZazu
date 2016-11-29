@@ -21,6 +21,12 @@ namespace NZazu.Fields
 
             sut.Key.Should().Be("test");
             sut.ValueControl.Should().BeAssignableTo<ContentControl>();
+            sut.Type.Should().Be("imageViewer");
+            sut.IsEditable.Should().BeTrue();
+
+            const string value = "http://heise.de";
+            sut.StringValue = value;
+            sut.StringValue.Should().Be(value);
         }
     }
 }
