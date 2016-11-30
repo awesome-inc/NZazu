@@ -1,12 +1,18 @@
 using System;
 using System.Threading;
+using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
+using WindowsInput;
+using WindowsInput.Native;
 using FluentAssertions;
 using NEdifis.Attributes;
 using NUnit.Framework;
 using NZazu.Contracts;
+using NZazu.Fields.Controls;
 
 #pragma warning disable 618
+
 namespace NZazu.Fields
 {
     [TestFixtureFor(typeof(NZazuDataTableField))]
@@ -76,14 +82,32 @@ namespace NZazu.Fields
 
         [Test]
         [STAThread]
-        public void Hanlde_Add()
+        public void Handle_Add()
         {
             var sut = new NZazuDataTableField(new FieldDefinition
             {
-                Key = "key"
-            });
+                Key = "key",
+                Type = "datatable",
+                Fields = new[]
+                {
+                    new FieldDefinition
+                    {
+                        Key = "cell01",
+                        Type = "string"
+                    }
+                }
+            })
+            {
+                FieldFactory = new NZazuFieldFactory()
+            };
 
+            var ctrl = (DynamicDataTable)sut.ValueControl;
+            var lastadded = ctrl.LayoutGrid.Children[1];
+            var btn = ctrl.ButtonPanel.Children[0];
+
+            //sut.LastAddedFieldOnPreviewKeyDown(lastadded, new KeyEventArgs(
+            //        Keyboard.PrimaryDevice,
+            //        PresentationSource.FromDependencyObject(lastadded), 0, Key.Tab));
         }
-
     }
 }

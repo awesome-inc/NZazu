@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -45,10 +46,26 @@ namespace NZazu.Fields
                     ToolTip = Description,
                 }
             };
+            _clientControl.PreviewKeyDown += ClientControl_PreviewKeyDown;
 
             SetStringValue(_stringValue);
 
             return _clientControl;
+        }
+
+        private void ClientControl_PreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            if (e.Key != System.Windows.Input.Key.Space) return;
+
+            var options = Definition.Values;
+            var currentValueIsAt = -1;
+            for (var i = 0; i < options.Length - 1; i++)
+                if (string.Compare(options[i], GetStringValue(), StringComparison.CurrentCultureIgnoreCase) == 0)
+                    { currentValueIsAt = i; break; }
+
+            var newValue = (currentValueIsAt + 1) % (options.Length - 1);
+
+            this.StringValue = options[newValue];
         }
     }
 }

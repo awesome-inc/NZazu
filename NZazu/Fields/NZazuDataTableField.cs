@@ -22,7 +22,7 @@ namespace NZazu.Fields
         private Control _lastAddedField;
 
         private void ChangeLastAddedFieldTo(Control newField)
-        {
+        {   
             if (_lastAddedField != null)
                 _lastAddedField.PreviewKeyDown -= LastAddedFieldOnPreviewKeyDown;
             _lastAddedField = newField;
@@ -30,7 +30,7 @@ namespace NZazu.Fields
                 _lastAddedField.PreviewKeyDown += LastAddedFieldOnPreviewKeyDown;
         }
 
-        private void LastAddedFieldOnPreviewKeyDown(object sender, KeyEventArgs e)
+        internal void LastAddedFieldOnPreviewKeyDown(object sender, KeyEventArgs e)
         {
             // double check sender
             if (!ReferenceEquals(sender, _lastAddedField)) return;
