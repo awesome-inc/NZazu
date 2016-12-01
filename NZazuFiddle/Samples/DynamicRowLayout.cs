@@ -133,7 +133,7 @@ namespace NZazuFiddle.Samples
                                 new FieldDefinition
                                 {
                                     Key = "modeparameter_image",
-                                    Type = "imageviewer",
+                                    Type = "imageViewer",
                                     Prompt = "Image",
                                 }
                             }
@@ -166,7 +166,8 @@ namespace NZazuFiddle.Samples
                                             Settings = new Dictionary<string, string>
                                             {
                                                 {"Width", "24" },
-                                                {"AllowCustomValues" , "false" }
+                                                {"AllowCustomValues" , "false" },
+                                                {"AllowNullValues" , "true" },
                                             }
                                         },
                                         new FieldDefinition

@@ -29,6 +29,7 @@ namespace NZazuFiddle
             _definition = definition;
             _data = data;
             _fieldFactory = fieldFactory ?? new XceedFieldFactory(serializer: new NZazuJsonSerializer());
+            _fieldFactory = fieldFactory ?? new XceedFieldFactory();
         }
 
         public FormDefinition Definition

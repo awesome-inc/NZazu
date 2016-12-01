@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -30,6 +31,7 @@ namespace NZazu.Fields
                 _lastAddedField.PreviewKeyDown += LastAddedFieldOnPreviewKeyDown;
         }
 
+        [ExcludeFromCodeCoverage]
         internal void LastAddedFieldOnPreviewKeyDown(object sender, KeyEventArgs e)
         {
             // double check sender

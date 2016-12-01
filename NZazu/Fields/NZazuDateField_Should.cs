@@ -154,7 +154,7 @@ namespace NZazu.Fields
             var date = DateTime.UtcNow;
             var dateStr = date.ToString(CultureInfo.InvariantCulture);
             sut.StringValue = dateStr;
-            sut.Value.Should().BeCloseTo(date, 999, "parsing truncates millis");
+            sut.Value.Should().BeCloseTo(date, 1000, "parsing truncates millis");
 
             date += TimeSpan.FromSeconds(1);
             dateStr = date.ToString(CultureInfo.InvariantCulture);

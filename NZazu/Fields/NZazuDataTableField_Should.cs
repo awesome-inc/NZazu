@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
@@ -35,6 +36,10 @@ namespace NZazu.Fields
         [STAThread]
         public void Serialize_And_Deserialize()
         {
+            var factory = new NZazuFieldFactory();
+            var data = new Dictionary<string, string> { { "table01_field01__1", "hello" }, { "table01_field01__2", "world" } };
+            var dataSerialized = factory.Serializer.Serialize(data);
+
             // ReSharper disable once UseObjectOrCollectionInitializer
             var sut = new NZazuDataTableField(new FieldDefinition
             {
@@ -44,13 +49,48 @@ namespace NZazu.Fields
                     new FieldDefinition {Key = "table01_field01", Type = "string"}
                 }
             });
-            sut.FieldFactory = new NZazuFieldFactory();
+            sut.FieldFactory = factory;
             var justToMakeTheCall = sut.ValueControl;
 
-            const string value = "<items />";
-            sut.StringValue = value;
-            sut.StringValue.Should().Be(value);
+            sut.StringValue = dataSerialized;
+            var actual = factory.Serializer.Deserialize(sut.StringValue);
+            foreach (var dta in data)
+                actual.Should().Contain(dta);
 
+            sut.Validate().IsValid.Should().BeTrue();
+        }
+
+        [Test]
+        [STAThread]
+        public void Validate()
+        {
+            var factory = new NZazuFieldFactory();
+            var data = new Dictionary<string, string> { { "table01_field01__1", "" }, { "table01_field01__2", "world" } };
+            var dataSerialized = factory.Serializer.Serialize(data);
+
+            // ReSharper disable once UseObjectOrCollectionInitializer
+            var sut = new NZazuDataTableField(new FieldDefinition
+            {
+                Key = "table01",
+                Fields = new[]
+                {
+                    new FieldDefinition
+                    {
+                        Key = "table01_field01", Type = "string",
+                        Checks = new []{ new CheckDefinition {Type = "required" } }
+                    }
+                }
+            });
+            sut.FieldFactory = factory;
+            var justToMakeTheCall = sut.ValueControl;
+
+            sut.StringValue = dataSerialized;
+            sut.Validate().IsValid.Should().BeFalse();
+
+            // now change the data
+            data = new Dictionary<string, string> { { "table01_field01__1", "hello" }, { "table01_field01__2", "world" } };
+            dataSerialized = factory.Serializer.Serialize(data);
+            sut.StringValue = dataSerialized;
             sut.Validate().IsValid.Should().BeTrue();
         }
 
