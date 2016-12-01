@@ -54,8 +54,9 @@ namespace NZazu.Fields
             //    _customValue = value;
 
             // set the image to the uri
-            if ((Image)((ContentControl)_clientControl)?.Content == null) return;
-            ((Image)((ContentControl)_clientControl).Content).Source = string.IsNullOrEmpty(_stringValue)
+            var image = ((_clientControl as ContentControl)?.Content as Border)?.Child as Image;
+            if (image == null) return;
+            image.Source = string.IsNullOrEmpty(_stringValue)
                 ? BitmapSource.Create(2, 2, 96, 96, PixelFormats.Indexed1, new BitmapPalette(new List<Color> { Colors.Transparent }), new byte[] { 0, 0, 0, 0 }, 1)
                 // ReSharper disable once AssignNullToNotNullAttribute
                 : new BitmapImage(new Uri(value));
@@ -72,17 +73,23 @@ namespace NZazu.Fields
         {
             if (_clientControl != null) return _clientControl;
 
-            var image = new Image
+            _clientControl = new ContentControl
             {
-                ToolTip = Description,
+                Content = new Border
+                {
+                    BorderBrush = Brushes.Silver,
+                    BorderThickness = new Thickness(1),
+                    Child = new Image
+                    {
+                        ToolTip = Description,
+                        Focusable = true,
+
+                    }
+                }
             };
-
-            _clientControl = new ContentControl { Content = image };
             _clientControl.PreviewKeyDown += ClientControl_PreviewKeyDown;
-
             _clientControl.PreviewMouseWheel += ClientControl_MouseWheel;
             _clientControl.PreviewMouseLeftButtonUp += ClientControl_MouseLeftButtonUp;
-
 
             SetStringValue(_stringValue);
 
@@ -92,7 +99,7 @@ namespace NZazu.Fields
         [ExcludeFromCodeCoverage]
         private void ClientControl_MouseWheel(object sender, System.Windows.Input.MouseWheelEventArgs e)
         {
-            ToggleValues();
+            ToggleValues(e.Delta < 0);
         }
 
         [ExcludeFromCodeCoverage]
@@ -111,7 +118,7 @@ namespace NZazu.Fields
             ToggleValues();
         }
 
-        internal void ToggleValues()
+        internal void ToggleValues(bool toggleBack = false)
         {
             var allowNullValues = GetSetting<bool>("AllowNullValues");
             var allowCustomValues = GetSetting<bool>("AllowCustomValues");
@@ -128,14 +135,23 @@ namespace NZazu.Fields
                     break;
                 }
 
-            if (allowNullValues != null && allowNullValues.Value && (currentValueIsAt == options.Length - 1))
-            {
+            // just in case no options are given (and no custom value!)
+            if (options.Length == 0) {
                 StringValue = null;
+                return;
             }
+
+            if (toggleBack)
+                if (allowNullValues != null && allowNullValues.Value && (currentValueIsAt == 0))
+                    StringValue = null;
+                else
+                    StringValue = options[(Math.Max(currentValueIsAt, 0) + options.Length - 1) % (options.Length)];
             else
-            {
+                if (allowNullValues != null && allowNullValues.Value && (currentValueIsAt == options.Length - 1))
+                StringValue = null;
+            else
                 StringValue = options[(currentValueIsAt + 1) % (options.Length)];
-            }
+            //StringValue = options.Length == 0 ? null : options[(currentValueIsAt + 1) % (options.Length)];
         }
     }
 }
