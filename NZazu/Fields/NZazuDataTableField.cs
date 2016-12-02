@@ -7,6 +7,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using FontAwesome.Sharp;
+using NEdifis.Attributes;
 using NZazu.Contracts;
 using NZazu.Contracts.Checks;
 using NZazu.Fields.Controls;
@@ -32,7 +33,6 @@ namespace NZazu.Fields
                 _lastAddedField.PreviewKeyDown += LastAddedFieldOnPreviewKeyDown;
         }
 
-        [ExcludeFromCodeCoverage]
         internal void LastAddedFieldOnPreviewKeyDown(object sender, KeyEventArgs e)
         {
             // double check sender
@@ -56,16 +56,20 @@ namespace NZazu.Fields
         private readonly KeyBinding _deleteRowShortcut1 = new KeyBinding { Key = System.Windows.Input.Key.OemMinus, Modifiers = ModifierKeys.Control };
         private readonly KeyBinding _deleteRowShortcut2 = new KeyBinding { Key = System.Windows.Input.Key.Delete, Modifiers = ModifierKeys.Control };
 
-        private void AttachShortcutsTo(Control ctrl)
+        private void AttachShortcutsTo(UIElement ctrl)
         {
+            if (ctrl == null) throw new ArgumentNullException(nameof(ctrl));
             ctrl.PreviewKeyDown += ValueControl_PreviewKeyDown;
         }
 
         private void RemoveShortcutsFrom(UIElement ctrl)
         {
+            if (ctrl == null) throw new ArgumentNullException(nameof(ctrl));
             ctrl.PreviewKeyDown -= ValueControl_PreviewKeyDown;
         }
 
+        [ExcludeFromCodeCoverage]
+        [Because("I need to find out how to test shortcuts with modifier keys")]
         private void ValueControl_PreviewKeyDown(object sender, KeyEventArgs e)
         {
             if (_addRowAboveShortcut1.Gesture.Matches(sender, e) || _addRowAboveShortcut2.Gesture.Matches(sender, e))
@@ -74,7 +78,7 @@ namespace NZazu.Fields
                 DeleteRow(sender);
         }
 
-        private void DeleteRow(object sender)
+        internal void DeleteRow(object sender)
         {
             var ctrl = sender as Control;
             if (ctrl == null) return;
@@ -133,7 +137,7 @@ namespace NZazu.Fields
             newFields.ToList().ForEach(x => _fields.Add(x));
         }
 
-        private void AddRowAbove(object sender)
+        internal void AddRowAbove(object sender)
         {
             var ctrl = sender as Control;
             if (ctrl == null) return;
@@ -185,11 +189,13 @@ namespace NZazu.Fields
 
         #region buttons
 
+        [ExcludeFromCodeCoverage]
         private void AddBtnOnClick(object sender, RoutedEventArgs routedEventArgs)
         {
             AddNewRow();
         }
 
+        [ExcludeFromCodeCoverage]
         private void DelBtnOnClick(object sender, RoutedEventArgs routedEventArgs)
         {
             var lastField = _clientControl.LayoutGrid.Children.Cast<UIElement>()
@@ -210,9 +216,7 @@ namespace NZazu.Fields
                 rowNo = grid.RowDefinitions.Count - 1;
             }
             else
-            { // TODO this method should move the fields on insert!
                 rowNo = row;
-            }
 
             var columnCounter = 0;
             foreach (var field in (Definition.Fields ?? Enumerable.Empty<FieldDefinition>()).ToArray())
@@ -279,7 +283,7 @@ namespace NZazu.Fields
                     .Max(x => int.Parse(x.Key.Split(new[] { "__" }, StringSplitOptions.RemoveEmptyEntries)[1]));
 
             while (_clientControl.LayoutGrid.RowDefinitions.Count <= iterations)
-                AddBtnOnClick(null, null);
+                AddNewRow();
 
             foreach (var field in _fields)
             {
@@ -341,7 +345,7 @@ namespace NZazu.Fields
             // add button
             _addBtn = new Button
             {
-                Content = new IconBlock { Icon = IconChar.PlusCircle },
+                Content = new IconBlock { Icon = IconChar.PlusCircle, Foreground = Brushes.DarkGreen },
                 TabIndex = _tabOrder + 1,
                 FontFamily = new FontFamily("/FontAwesome.Sharp;component/fonts/#FontAwesome"),
                 Width = 24
@@ -352,7 +356,7 @@ namespace NZazu.Fields
             // del button
             _delBtn = new Button
             {
-                Content = new IconBlock { Icon = IconChar.MinusCircle },
+                Content = new IconBlock { Icon = IconChar.MinusCircle, Foreground = Brushes.DarkRed },
                 TabIndex = _tabOrder + 2,
                 FontFamily = new FontFamily("/FontAwesome.Sharp;component/fonts/#FontAwesome"),
                 Width = 24

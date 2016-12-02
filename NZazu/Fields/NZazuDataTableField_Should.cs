@@ -1,12 +1,18 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading;
+using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Forms;
+using System.Windows.Input;
+using System.Windows.Media;
 using FluentAssertions;
 using NEdifis.Attributes;
 using NUnit.Framework;
 using NZazu.Contracts;
 using NZazu.Fields.Controls;
+using KeyEventArgs = System.Windows.Input.KeyEventArgs;
 
 #pragma warning disable 618
 
@@ -54,6 +60,7 @@ namespace NZazu.Fields
                 actual.Should().Contain(dta);
 
             sut.Validate().IsValid.Should().BeTrue();
+            ((DynamicDataTable)sut.ValueControl).LayoutGrid.RowDefinitions.Count.Should().Be(3);
         }
 
         [Test]
@@ -119,7 +126,7 @@ namespace NZazu.Fields
 
         [Test]
         [STAThread]
-        public void Handle_Add()
+        public void Handle_Add_An_Tab()
         {
             var sut = new NZazuDataTableField(new FieldDefinition
             {
@@ -140,11 +147,98 @@ namespace NZazu.Fields
 
             var ctrl = (DynamicDataTable)sut.ValueControl;
             var lastadded = ctrl.LayoutGrid.Children[1];
-            var btn = ctrl.ButtonPanel.Children[0];
+            lastadded.Should().NotBeNull();
 
-            //sut.LastAddedFieldOnPreviewKeyDown(lastadded, new KeyEventArgs(
-            //        Keyboard.PrimaryDevice,
-            //        PresentationSource.FromDependencyObject(lastadded), 0, Key.Tab));
+            // lets see if it adds a row
+            ctrl.LayoutGrid.RowDefinitions.Count.Should().Be(2);
+            sut.LastAddedFieldOnPreviewKeyDown(lastadded, new KeyEventArgs(
+                    Keyboard.PrimaryDevice,
+                    new FakePresentationSource(), 0, Key.Tab));
+            ctrl.LayoutGrid.RowDefinitions.Count.Should().Be(3);
+        }
+
+        [Test]
+        [STAThread]
+        public void Handle_Delete_Button()
+        {
+            var sut = new NZazuDataTableField(new FieldDefinition
+            {
+                Key = "key",
+                Type = "datatable",
+                Fields = new[]
+                {
+                    new FieldDefinition
+                    {
+                        Key = "cell01",
+                        Type = "string"
+                    }
+                }
+            })
+            {
+                FieldFactory = new NZazuFieldFactory()
+            };
+            var ctrl = (DynamicDataTable)sut.ValueControl;
+
+            var data = new Dictionary<string, string> { { "table01_field01__1", "hello" }, { "table01_field01__2", "world" } };
+            var dataSerialized = sut.FieldFactory.Serializer.Serialize(data);
+            sut.StringValue = dataSerialized;
+
+            var lastadded = ctrl.LayoutGrid.Children[1];
+            lastadded.Should().NotBeNull();
+
+            // lets see if it adds a row
+            ctrl.LayoutGrid.RowDefinitions.Count.Should().Be(3);
+            sut.DeleteRow(lastadded);
+            ctrl.LayoutGrid.RowDefinitions.Count.Should().Be(2);
+        }
+
+        [Test]
+        [STAThread]
+        public void Handle_Add_Button()
+        {
+            var sut = new NZazuDataTableField(new FieldDefinition
+            {
+                Key = "key",
+                Type = "datatable",
+                Fields = new[]
+                {
+                    new FieldDefinition
+                    {
+                        Key = "cell01",
+                        Type = "string"
+                    }
+                }
+            })
+            {
+                FieldFactory = new NZazuFieldFactory()
+            };
+            var ctrl = (DynamicDataTable)sut.ValueControl;
+
+            var data = new Dictionary<string, string> { { "table01_field01__1", "hello" }, { "table01_field01__2", "world" } };
+            var dataSerialized = sut.FieldFactory.Serializer.Serialize(data);
+            sut.StringValue = dataSerialized;
+
+            var lastadded = ctrl.LayoutGrid.Children[2];
+            lastadded.Should().NotBeNull();
+
+            // lets see if it adds a row
+            ctrl.LayoutGrid.RowDefinitions.Count.Should().Be(3);
+            sut.AddRowAbove(lastadded);
+            ctrl.LayoutGrid.RowDefinitions.Count.Should().Be(4);
+        }
+
+        [ExcludeFromCodeCoverage]
+        [Because("just for event testing")]
+        private class FakePresentationSource : PresentationSource
+        {
+            protected override CompositionTarget GetCompositionTargetCore()
+            {
+                return null;
+            }
+
+            public override Visual RootVisual { get; set; }
+
+            public override bool IsDisposed => false;
         }
     }
 }
