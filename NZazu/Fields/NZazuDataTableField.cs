@@ -33,6 +33,7 @@ namespace NZazu.Fields
                 _lastAddedField.PreviewKeyDown += LastAddedFieldOnPreviewKeyDown;
         }
 
+        [ExcludeFromCodeCoverage]
         internal void LastAddedFieldOnPreviewKeyDown(object sender, KeyEventArgs e)
         {
             // double check sender
@@ -234,6 +235,7 @@ namespace NZazu.Fields
                 _fields.Add(ctrl.ValueControl.Name, ctrl);
                 if (row == -1) // only if added new row
                     ChangeLastAddedFieldTo(ctrl.ValueControl);
+
                 columnCounter++;
             }
 

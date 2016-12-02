@@ -1,18 +1,12 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Threading;
-using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Forms;
-using System.Windows.Input;
-using System.Windows.Media;
 using FluentAssertions;
 using NEdifis.Attributes;
 using NUnit.Framework;
 using NZazu.Contracts;
 using NZazu.Fields.Controls;
-using KeyEventArgs = System.Windows.Input.KeyEventArgs;
 
 #pragma warning disable 618
 
@@ -126,39 +120,6 @@ namespace NZazu.Fields
 
         [Test]
         [STAThread]
-        public void Handle_Add_An_Tab()
-        {
-            var sut = new NZazuDataTableField(new FieldDefinition
-            {
-                Key = "key",
-                Type = "datatable",
-                Fields = new[]
-                {
-                    new FieldDefinition
-                    {
-                        Key = "cell01",
-                        Type = "string"
-                    }
-                }
-            })
-            {
-                FieldFactory = new NZazuFieldFactory()
-            };
-
-            var ctrl = (DynamicDataTable)sut.ValueControl;
-            var lastadded = ctrl.LayoutGrid.Children[1];
-            lastadded.Should().NotBeNull();
-
-            // lets see if it adds a row
-            ctrl.LayoutGrid.RowDefinitions.Count.Should().Be(2);
-            sut.LastAddedFieldOnPreviewKeyDown(lastadded, new KeyEventArgs(
-                    Keyboard.PrimaryDevice,
-                    new FakePresentationSource(), 0, Key.Tab));
-            ctrl.LayoutGrid.RowDefinitions.Count.Should().Be(3);
-        }
-
-        [Test]
-        [STAThread]
         public void Handle_Delete_Button()
         {
             var sut = new NZazuDataTableField(new FieldDefinition
@@ -225,20 +186,6 @@ namespace NZazu.Fields
             ctrl.LayoutGrid.RowDefinitions.Count.Should().Be(3);
             sut.AddRowAbove(lastadded);
             ctrl.LayoutGrid.RowDefinitions.Count.Should().Be(4);
-        }
-
-        [ExcludeFromCodeCoverage]
-        [Because("just for event testing")]
-        private class FakePresentationSource : PresentationSource
-        {
-            protected override CompositionTarget GetCompositionTargetCore()
-            {
-                return null;
-            }
-
-            public override Visual RootVisual { get; set; }
-
-            public override bool IsDisposed => false;
         }
     }
 }
