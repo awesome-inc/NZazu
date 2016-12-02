@@ -6,6 +6,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using FontAwesome.Sharp;
 using NZazu.Contracts;
 using NZazu.Contracts.Checks;
 using NZazu.Fields.Controls;
@@ -20,9 +21,9 @@ namespace NZazu.Fields
 
 #pragma warning disable 612
         [Obsolete]
-        private Control _lastAddedField;
+        private UIElement _lastAddedField;
 
-        private void ChangeLastAddedFieldTo(Control newField)
+        private void ChangeLastAddedFieldTo(UIElement newField)
         {
             if (_lastAddedField != null)
                 _lastAddedField.PreviewKeyDown -= LastAddedFieldOnPreviewKeyDown;
@@ -48,7 +49,7 @@ namespace NZazu.Fields
 
         #endregion
 
-        #region shortcuts
+        #region shortcuts and insert/delete line
 
         private readonly KeyBinding _addRowAboveShortcut1 = new KeyBinding { Key = System.Windows.Input.Key.OemPlus, Modifiers = ModifierKeys.Control };
         private readonly KeyBinding _addRowAboveShortcut2 = new KeyBinding { Key = System.Windows.Input.Key.Insert, Modifiers = ModifierKeys.Control };
@@ -97,6 +98,11 @@ namespace NZazu.Fields
 
             var row2Delete = _clientControl.LayoutGrid.RowDefinitions.Count - 1;
             _clientControl.LayoutGrid.RowDefinitions.RemoveAt(row2Delete);
+
+            // lets assume the last control in _fields is the lastAddedField
+            ChangeLastAddedFieldTo(_clientControl.LayoutGrid.Children.Cast<UIElement>()
+                .First(x => Grid.GetRow(x) == _clientControl.LayoutGrid.RowDefinitions.Count - 1 &&
+                            Grid.GetColumn(x) == _clientControl.LayoutGrid.ColumnDefinitions.Count - 1));
         }
 
         // renumber all the fields so they are back in order again
@@ -173,6 +179,7 @@ namespace NZazu.Fields
         private int _tabOrder;
 
         private Button _addBtn;
+        private Button _delBtn;
 
         public NZazuDataTableField(FieldDefinition definition) : base(definition) { }
 
@@ -181,6 +188,15 @@ namespace NZazu.Fields
         private void AddBtnOnClick(object sender, RoutedEventArgs routedEventArgs)
         {
             AddNewRow();
+        }
+
+        private void DelBtnOnClick(object sender, RoutedEventArgs routedEventArgs)
+        {
+            var lastField = _clientControl.LayoutGrid.Children.Cast<UIElement>()
+                .First(x => Grid.GetRow(x) == _clientControl.LayoutGrid.RowDefinitions.Count - 1 &&
+                            Grid.GetColumn(x) == _clientControl.LayoutGrid.ColumnDefinitions.Count - 1);
+
+            DeleteRow(lastField);
         }
 
         private void AddNewRow(int row = -1)
@@ -219,6 +235,8 @@ namespace NZazu.Fields
 
             if (_addBtn != null)
                 _addBtn.TabIndex = _tabOrder + 1;
+            if (_delBtn != null)
+                _delBtn.TabIndex = _tabOrder + 2;
         }
 
         #endregion
@@ -321,9 +339,26 @@ namespace NZazu.Fields
         private void CreateButtonsOn(Panel panel)
         {
             // add button
-            _addBtn = new Button { Content = "Add", TabIndex = _tabOrder + 1 };
+            _addBtn = new Button
+            {
+                Content = new IconBlock { Icon = IconChar.PlusCircle },
+                TabIndex = _tabOrder + 1,
+                FontFamily = new FontFamily("/FontAwesome.Sharp;component/fonts/#FontAwesome"),
+                Width = 24
+            };
             _addBtn.Click += AddBtnOnClick;
             panel.Children.Add(_addBtn);
+
+            // del button
+            _delBtn = new Button
+            {
+                Content = new IconBlock { Icon = IconChar.MinusCircle },
+                TabIndex = _tabOrder + 2,
+                FontFamily = new FontFamily("/FontAwesome.Sharp;component/fonts/#FontAwesome"),
+                Width = 24
+            };
+            _delBtn.Click += DelBtnOnClick;
+            panel.Children.Add(_delBtn);
         }
 
         #endregion
