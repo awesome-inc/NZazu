@@ -9,10 +9,6 @@ namespace NZazu.Fields.Controls
     /// </summary>
     public partial class DynamicDataTable
     {
-        // Expose the grid & panel
-        public Grid Grid => LayoutGrid;
-        public StackPanel Panel => ButtonPanel;
-
         public DynamicDataTable()
         {
             InitializeComponent();

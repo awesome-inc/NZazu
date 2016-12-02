@@ -1,11 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading;
-using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Input;
-using WindowsInput;
-using WindowsInput.Native;
 using FluentAssertions;
 using NEdifis.Attributes;
 using NUnit.Framework;
@@ -29,7 +25,6 @@ namespace NZazu.Fields
             sut.Should().NotBeNull();
             sut.Should().BeAssignableTo<INZazuWpfField>();
             sut.Type.Should().Be("datatable");
-
         }
 
         [Test]
@@ -50,6 +45,7 @@ namespace NZazu.Fields
                 }
             });
             sut.FieldFactory = factory;
+            // ReSharper disable once UnusedVariable
             var justToMakeTheCall = sut.ValueControl;
 
             sut.StringValue = dataSerialized;
@@ -82,6 +78,7 @@ namespace NZazu.Fields
                 }
             });
             sut.FieldFactory = factory;
+            // ReSharper disable once UnusedVariable
             var justToMakeTheCall = sut.ValueControl;
 
             sut.StringValue = dataSerialized;
