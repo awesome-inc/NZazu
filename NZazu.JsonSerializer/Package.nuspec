@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>NZazu.JsonSerializer</id>
+    <version>$Version$</version>
+    <title>NZazu.JsonSerializer</title>
+    <authors>tmentzel, mkoertgen</authors>
+    <owners>tmentzel, mkoertgen</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>NZazu Support for a Newtonsoft Json Serializer.</description>
+    <summary>NZazu Support for a Newtonsoft Json Serializer.</summary>
+    <copyright/>
+    <releaseNotes>Revision: $Revision$</releaseNotes>
+    <projectUrl>https://github.com/awesome-inc/NZazu</projectUrl>
+    <dependencies>
+      <dependency id="Newtonsoft.Json" version="7.0.1" />
+      <dependency id="NZazu.Contracts" version="$Version$" />
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="bin\Release\NZazu.JsonSerializer.dll" target="lib\net45"/>
+  </files>
+</package>
