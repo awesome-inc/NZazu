@@ -5,8 +5,11 @@ namespace NZazu.Xceed
 {
     public class XceedFieldFactory : NZazuFieldFactory
     {
-        public XceedFieldFactory(ICheckFactory checkFactory = null) 
-            : base(checkFactory)
+        public XceedFieldFactory(
+            INZazuWpfFieldBehaviorFactory behaviorFactory = null,
+            ICheckFactory checkFactory = null,
+            INZazuDataSerializer serializer = null)
+            : base(behaviorFactory, checkFactory, serializer)
         {
             FieldTypes["string"] = typeof(XceedTextBoxField);
             FieldTypes["date"] = typeof(XceedDateTimeField);

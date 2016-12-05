@@ -1,7 +1,9 @@
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
+using NZazu.Contracts;
 using NZazu.Fields;
 using Xceed.Wpf.Toolkit;
 
@@ -9,9 +11,7 @@ namespace NZazu.Xceed
 {
     public class XceedDoubleField : NZazuField<double?>
     {
-        public XceedDoubleField(string key) : base(key)
-        {
-        }
+        public XceedDoubleField(FieldDefinition definition) : base(definition) { }
 
         public override DependencyProperty ContentProperty => DoubleUpDown.ValueProperty;
 
@@ -29,7 +29,7 @@ namespace NZazu.Xceed
         protected override void SetStringValue(string value)
         {
             double result;
-            if (!string.IsNullOrWhiteSpace(value) 
+            if (!string.IsNullOrWhiteSpace(value)
                 && double.TryParse(value, NumberStyles.Number, FormatProvider, out result))
                 Value = result;
             else

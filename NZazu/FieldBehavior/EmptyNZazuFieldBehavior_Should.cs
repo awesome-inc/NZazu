@@ -6,7 +6,7 @@ using NUnit.Framework;
 
 namespace NZazu.FieldBehavior
 {
-    [TestFixtureFor(typeof (EmptyNZazuFieldBehavior))]
+    [TestFixtureFor(typeof(EmptyNZazuFieldBehavior))]
     // ReSharper disable once InconsistentNaming
     internal class EmptyNZazuFieldBehavior_Should
     {
@@ -24,25 +24,19 @@ namespace NZazu.FieldBehavior
         {
             var sut = new EmptyNZazuFieldBehavior();
 
-            var field = Substitute.For<INZazuWpfField>();
-            var view = Substitute.For<INZazuWpfView>();
-            sut.Invoking(x => x.AttachTo(null,null)).ShouldThrow<ArgumentNullException>();
-            sut.Invoking(x => x.AttachTo(field, null)).ShouldThrow<ArgumentNullException>();
-            sut.Invoking(x => x.AttachTo(null, view)).ShouldThrow<ArgumentNullException>();
+            sut.Invoking(x => x.AttachTo(null)).ShouldThrow<ArgumentNullException>();
         }
 
         [Test]
         public void Do_Nothing()
         {
             var field = Substitute.For<INZazuWpfField>();
-            var view = Substitute.For<INZazuWpfView>();
             var sut = new EmptyNZazuFieldBehavior();
 
-            sut.AttachTo(field, view);
+            sut.AttachTo(field);
             sut.Detach();
 
             field.ReceivedCalls().Should().BeEmpty();
-            view.ReceivedCalls().Should().BeEmpty();
         }
     }
 }

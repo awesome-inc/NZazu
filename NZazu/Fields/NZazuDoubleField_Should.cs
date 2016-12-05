@@ -6,6 +6,7 @@ using System.Windows.Data;
 using FluentAssertions;
 using NEdifis.Attributes;
 using NUnit.Framework;
+using NZazu.Contracts;
 using NZazu.Extensions;
 
 namespace NZazu.Fields
@@ -18,7 +19,7 @@ namespace NZazu.Fields
         [Test]
         public void Be_Creatable()
         {
-            var sut = new NZazuDoubleField("test");
+            var sut = new NZazuDoubleField(new FieldDefinition {Key="test"});
 
             sut.Should().NotBeNull();
             sut.Should().BeAssignableTo<INZazuWpfField>();
@@ -86,7 +87,7 @@ namespace NZazu.Fields
         [STAThread]
         public void Create_Control_With_ToolTip_Matching_Description()
         {
-            var sut = new NZazuDoubleField("test")
+            var sut = new NZazuDoubleField(new FieldDefinition {Key="test"})
             {
                 Hint = "superhero",
                 Description = "check this if you are a registered superhero"
@@ -103,7 +104,7 @@ namespace NZazu.Fields
         [STAThread]
         public void Support_Format()
         {
-            var sut = new NZazuDoubleField("test");
+            var sut = new NZazuDoubleField(new FieldDefinition {Key="test"});
             sut.Settings["Format"] = "0.##";
             var control = (TextBox)sut.ValueControl;
 
@@ -125,7 +126,7 @@ namespace NZazu.Fields
         [STAThread]
         public void Format_TextBox_From_Value()
         {
-            var sut = new NZazuDoubleField("test");
+            var sut = new NZazuDoubleField(new FieldDefinition {Key="test"});
             var control = (TextBox)sut.ValueControl;
 
             sut.Value.Should().NotHaveValue();
@@ -149,7 +150,7 @@ namespace NZazu.Fields
         [STAThread]
         public void Format_Value_From_TextBox()
         {
-            var sut = new NZazuDoubleField("test");
+            var sut = new NZazuDoubleField(new FieldDefinition {Key="test"});
             var control = (TextBox)sut.ValueControl;
 
             sut.Value.Should().NotHaveValue();
@@ -169,7 +170,7 @@ namespace NZazu.Fields
         [STAThread]
         public void Format_TextBox_From_StringValue()
         {
-            var sut = new NZazuDoubleField("test");
+            var sut = new NZazuDoubleField(new FieldDefinition {Key="test"});
             var control = (TextBox)sut.ValueControl;
 
             sut.StringValue.Should().BeNullOrEmpty();
@@ -187,7 +188,7 @@ namespace NZazu.Fields
         [STAThread]
         public void Format_StringValue_From_TextBox()
         {
-            var sut = new NZazuDoubleField("test");
+            var sut = new NZazuDoubleField(new FieldDefinition {Key="test"});
             var control = (TextBox)sut.ValueControl;
 
             control.Text = "1.4";

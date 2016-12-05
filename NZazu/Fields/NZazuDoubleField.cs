@@ -4,6 +4,7 @@ using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using NZazu.Contracts;
 
 namespace NZazu.Fields
 {
@@ -56,7 +57,7 @@ namespace NZazu.Fields
 
         #endregion
 
-        public NZazuDoubleField(string key) : base(key) { }
+        public NZazuDoubleField(FieldDefinition definition) : base(definition) { }
 
         public override string Type => "double";
         public override DependencyProperty ContentProperty => TextBox.TextProperty;

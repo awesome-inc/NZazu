@@ -1,22 +1,19 @@
 using System.Windows;
 using System.Windows.Controls;
+using NZazu.Contracts;
 
 namespace NZazu.Fields
 {
     internal class NZazuLabelField : NZazuField
     {
-        public NZazuLabelField(string key) : base(key)
-        {
-        }
+        public NZazuLabelField(FieldDefinition definition) : base(definition) { }
 
         public override string Type => "label";
 
         public override bool IsEditable => false;
 
-        public override string StringValue 
-        {
-            get { return null; }
-            set {} }
+        protected override void SetStringValue(string value) { }
+        protected override string GetStringValue() { return null; }
 
         public override DependencyProperty ContentProperty => null;
 

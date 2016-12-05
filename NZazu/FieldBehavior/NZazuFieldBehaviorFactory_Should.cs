@@ -8,7 +8,7 @@ using NZazu.Contracts;
 
 namespace NZazu.FieldBehavior
 {
-    [TestFixtureFor(typeof (NZazuFieldBehaviorFactory))]
+    [TestFixtureFor(typeof(NZazuFieldBehaviorFactory))]
     // ReSharper disable InconsistentNaming
     internal class NZazuFieldBehaviorFactory_Should
     {
@@ -41,7 +41,7 @@ namespace NZazu.FieldBehavior
         // ReSharper disable once ClassNeverInstantiated.Local
         private class SimpleInterfaceImplementation : INZazuWpfFieldBehavior
         {
-            public void AttachTo(INZazuWpfField field, INZazuWpfView view) { }
+            public void AttachTo(INZazuWpfField field) { }
             public void Detach() { }
         }
 
@@ -59,7 +59,7 @@ namespace NZazu.FieldBehavior
                 behavior.Should().BeAssignableTo<SimpleInterfaceImplementation>();
 
                 // just to get code coverage
-                behavior.AttachTo(null, null);
+                behavior.AttachTo(null);
                 behavior.Detach();
             }
             finally
@@ -118,14 +118,14 @@ namespace NZazu.FieldBehavior
             {
                 BehaviorExtender.Unregister(behaviorName);
             }
-            
+
         }
 
         [ExcludeFromCodeCoverage]
         // ReSharper disable once ClassNeverInstantiated.Local
         private class BehaviorWithSettings : INZazuWpfFieldBehavior
         {
-            public void AttachTo(INZazuWpfField field, INZazuWpfView view) { }
+            public void AttachTo(INZazuWpfField field) { }
             public void Detach() { }
 
             // ReSharper disable UnusedAutoPropertyAccessor.Local

@@ -8,6 +8,8 @@
 
             TextEditor.SyntaxFrom("NZazuFiddle.NZazu.xshd");
             TextEditor.TabMovesFocus();
+
+            
         }
     }
 }

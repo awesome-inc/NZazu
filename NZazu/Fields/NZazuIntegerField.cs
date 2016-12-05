@@ -1,13 +1,13 @@
-using System;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
+using NZazu.Contracts;
 
 namespace NZazu.Fields
 {
     public class NZazuIntegerField : NZazuField<int?>
     {
-        public NZazuIntegerField(string key) : base(key) { }
+        public NZazuIntegerField(FieldDefinition definition) : base(definition) { }
 
         public override string Type => "int";
         public override DependencyProperty ContentProperty => TextBox.TextProperty;

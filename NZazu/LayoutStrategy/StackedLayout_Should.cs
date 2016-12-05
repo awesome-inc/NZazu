@@ -7,11 +7,12 @@ using System.Windows.Controls;
 using FluentAssertions;
 using NEdifis.Attributes;
 using NUnit.Framework;
+using NZazu.Contracts;
 using NZazu.Fields;
 
-namespace NZazu
+namespace NZazu.LayoutStrategy
 {
-    [TestFixtureFor(typeof (StackedLayout))]
+    [TestFixtureFor(typeof(StackedLayout))]
     [Apartment(ApartmentState.STA)]
     // ReSharper disable InconsistentNaming
     internal class StackedLayout_Should
@@ -56,7 +57,7 @@ namespace NZazu
             var container = new ContentControl();
             var fields = new NZazuField[]
             {
-                new NZazuLabelField("label1"),
+                new NZazuLabelField(new FieldDefinition {Key="label01"}),
             };
 
             sut.DoLayout(container, fields);
@@ -76,9 +77,9 @@ namespace NZazu
             var container = new ContentControl();
             var fields = new NZazuField[]
             {
-                new NZazuLabelField("label1"),
-                new NZazuTextField("string1"),
-                new NZazuBoolField("bool1")
+                new NZazuLabelField(new FieldDefinition {Key="lable01"}),
+                new NZazuTextField(new FieldDefinition {Key="text01"}),
+                new NZazuBoolField(new FieldDefinition {Key="bool01"})
             };
 
             sut.DoLayout(container, fields);
@@ -100,9 +101,9 @@ namespace NZazu
             var container = new ContentControl();
             var fields = new NZazuField[]
             {
-                new NZazuLabelField("label1") {Prompt = "heading"},
-                new NZazuTextField("string1"),
-                new NZazuBoolField("bool1")
+                new NZazuLabelField(new FieldDefinition {Key="label01"}) {Prompt = "heading"},
+                new NZazuTextField(new FieldDefinition {Key="text01"}),
+                new NZazuBoolField(new FieldDefinition {Key="bool01"})
             };
 
             sut.DoLayout(container, fields);
@@ -126,9 +127,9 @@ namespace NZazu
             var container = new ContentControl();
             var fields = new NZazuField[]
             {
-                new NZazuLabelField("label1"),
-                new NZazuTextField("string1"),
-                new NZazuBoolField("bool1")
+                new NZazuLabelField(new FieldDefinition {Key="label01"}),
+                new NZazuTextField(new FieldDefinition {Key="text01"}),
+                new NZazuBoolField(new FieldDefinition {Key="bool01"})
             };
 
             fields

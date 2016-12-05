@@ -27,7 +27,7 @@ namespace NZazu.LayoutStrategy
             Control control, INZazuWpfField field)
         {
             var contentControl = control as ContentControl;
-            var groupField = field as INZazuWpfGroupField;
+            var groupField = field as INZazuWpfFieldContainer;
             if (groupField == null || contentControl == null) return;
             var layout = SafeResolve(resolveLayout, groupField.Layout);
             layout.DoLayout(contentControl, groupField.Fields, resolveLayout);

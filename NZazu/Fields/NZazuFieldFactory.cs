@@ -1,21 +1,29 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using NZazu.Contracts;
-using NZazu.Contracts.Checks;
+using NZazu.FieldBehavior;
+using NZazu.Serializer;
 
 namespace NZazu.Fields
 {
     public class NZazuFieldFactory : INZazuWpfFieldFactory
     {
-        private readonly ICheckFactory _checkFactory;
+        public INZazuWpfFieldBehaviorFactory BehaviorFactory { get; }
+        public ICheckFactory CheckFactory { get; }
+        public INZazuDataSerializer Serializer { get; }
+
         protected readonly Dictionary<string, Type> FieldTypes = new Dictionary<string, Type>();
         private const string DefaultType = "label";
 
-        public NZazuFieldFactory(ICheckFactory checkFactory = null)
+        public NZazuFieldFactory(
+            INZazuWpfFieldBehaviorFactory behaviorFactory = null,
+            ICheckFactory checkFactory = null,
+            INZazuDataSerializer serializer = null)
         {
-            _checkFactory = checkFactory ?? new CheckFactory();
+            BehaviorFactory = behaviorFactory ?? new NZazuFieldBehaviorFactory();
+            CheckFactory = checkFactory ?? new CheckFactory();
+            Serializer = serializer ?? new NZazuXmlSerializer();
 
             FieldTypes.Add("label", typeof(NZazuLabelField));
             FieldTypes.Add("string", typeof(NZazuTextField));
@@ -24,7 +32,9 @@ namespace NZazu.Fields
             FieldTypes.Add("date", typeof(NZazuDateField));
             FieldTypes.Add("double", typeof(NZazuDoubleField));
             FieldTypes.Add("group", typeof(NZazuGroupField));
+            FieldTypes.Add("datatable", typeof(NZazuDataTableField));
             FieldTypes.Add("option", typeof(NZazuOptionsField));
+            FieldTypes.Add("imageViewer", typeof(NZazuImageViewerField));
         }
 
         public INZazuWpfField CreateField(FieldDefinition fieldDefinition)
@@ -34,70 +44,27 @@ namespace NZazu.Fields
 
             NZazuField field;
             if (FieldTypes.ContainsKey(fieldTypeSafe))
-                field = (NZazuField)Activator.CreateInstance(FieldTypes[fieldTypeSafe], fieldDefinition.Key);
+                field = (NZazuField)Activator.CreateInstance(FieldTypes[fieldTypeSafe], fieldDefinition);
             else
             {
                 Trace.TraceWarning("The specified field type is not supported: " + fieldTypeSafe);
-                field = (NZazuField)Activator.CreateInstance(FieldTypes[DefaultType], fieldDefinition.Key);
+                field = (NZazuField)Activator.CreateInstance(FieldTypes[DefaultType], fieldDefinition);
             }
 
-            return Decorate(field, fieldDefinition);
-        }
+            var safeField = field as IRequireFactory;
+            if (safeField != null)
+                safeField.FieldFactory = this;
 
-        private NZazuField Decorate(NZazuField field, FieldDefinition fieldDefinition)
-        {
-            field.Prompt = fieldDefinition.Prompt;
-            field.Hint = fieldDefinition.Hint;
-            field.Description = fieldDefinition.Description;
+            // TODO refactoring stuff ....
+            var fieldContainer = field as INZazuWpfFieldContainer;
+            fieldContainer?.CreateChildControls(this, fieldDefinition);
 
-            field.Check = CreateCheck(fieldDefinition.Checks);
-
-            CopySettings(field, fieldDefinition);
-
-            ProcessGroupField(fieldDefinition, field as NZazuGroupField);
-
-            CopyValues(fieldDefinition, field as NZazuOptionsField);
-
-            return field;
-        }
-
-        private IValueCheck CreateCheck(IEnumerable<CheckDefinition> checkDefinitions)
-        {
-            if (checkDefinitions == null) return null;
- 
-            var checks = checkDefinitions.Select(c => _checkFactory.CreateCheck(c)).ToArray();
-            return checks.Length == 1 
-                ? checks.First() 
-                : new AggregateCheck(checks.ToArray());
-        }
-
-        private static void CopySettings(NZazuField field, FieldDefinition fieldDefinition)
-        {
-            if (fieldDefinition.Settings != null)
-            {
-                foreach (var kvp in fieldDefinition.Settings)
-                    field.Settings[kvp.Key] = kvp.Value;
-            }
-        }
-
-        private void ProcessGroupField(FieldDefinition fieldDefinition, NZazuGroupField groupField)
-        {
-            if (fieldDefinition == null) throw new ArgumentNullException(nameof(fieldDefinition));
-            if (groupField == null) return;
-
-            if (!string.IsNullOrWhiteSpace(fieldDefinition.Layout))
-                groupField.Layout = fieldDefinition.Layout;
-
-            if (fieldDefinition.Fields == null || !fieldDefinition.Fields.Any()) return;
-            groupField.Fields = fieldDefinition.Fields.Select(CreateField).ToArray();
-        }
-
-        private static void CopyValues(FieldDefinition fieldDefinition, NZazuOptionsField optionsField)
-        {
-            if (fieldDefinition == null) throw new ArgumentNullException(nameof(fieldDefinition));
-            if (optionsField == null) return;
-            if (fieldDefinition.Values == null || !fieldDefinition.Values.Any()) return;
-            optionsField.Options = fieldDefinition.Values;
+            return field
+                .DecorateLabels(fieldDefinition)
+                .ApplySettings(fieldDefinition)
+                .AddOptionValues(fieldDefinition)
+                .AddChecks(fieldDefinition.Checks, CheckFactory)
+                .AddBehavior(fieldDefinition.Behavior, BehaviorFactory);
         }
     }
 }

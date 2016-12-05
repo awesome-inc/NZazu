@@ -7,19 +7,28 @@ using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using NZazu.Contracts;
 using NZazu.Contracts.Checks;
 
 namespace NZazu.Fields
 {
     public abstract class NZazuField : INZazuWpfField
     {
+        protected readonly FieldDefinition Definition;
         protected IFormatProvider FormatProvider => CultureInfo.InvariantCulture;
 
         private readonly Lazy<Control> _labelControl;
         private readonly Lazy<Control> _valueControl;
 
         public abstract bool IsEditable { get; }
-        public abstract string StringValue { get; set; }
+        public string StringValue
+        {
+            get { return GetStringValue(); }
+            set { SetStringValue(value); }
+        }
+
+        protected abstract void SetStringValue(string value);
+        protected abstract string GetStringValue();
         public abstract DependencyProperty ContentProperty { get; }
 
         public abstract string Type { get; }
@@ -33,22 +42,26 @@ namespace NZazu.Fields
         public Dictionary<string, string> Settings { get; }
         public INZazuWpfFieldBehavior Behavior { get; set; }
 
-        protected NZazuField(string key)
+        protected NZazuField(FieldDefinition definition)
         {
-            if (string.IsNullOrWhiteSpace(key)) throw new ArgumentException("key");
-            Key = key;
+            if (definition == null) throw new ArgumentNullException(nameof(definition));
+            if (definition == null) throw new ArgumentNullException(nameof(definition));
+            if (string.IsNullOrWhiteSpace(definition.Key)) throw new ArgumentException("key");
+            Definition = definition;
+            Key = definition.Key;
+            Description = definition.Description;
 
             _labelControl = new Lazy<Control>(GetLabelControl);
             _valueControl = new Lazy<Control>(GetValueControl);
             Settings = new Dictionary<string, string>();
         }
 
-        public ValueCheckResult Validate()
+        public virtual ValueCheckResult Validate()
         {
-            var bindingExpression = ContentProperty != null 
-                ? ValueControl.GetBindingExpression(ContentProperty) 
+            var bindingExpression = ContentProperty != null
+                ? ValueControl.GetBindingExpression(ContentProperty)
                 : null;
-            if (bindingExpression != null && bindingExpression.HasError) 
+            if (bindingExpression != null && bindingExpression.HasError)
                 return new ValueCheckResult(false, "UI has errors. Value could not be converted");
 
             if (Check == null) return ValueCheckResult.Success;
@@ -128,14 +141,14 @@ namespace NZazu.Fields
         /// <returns></returns>
         protected virtual Binding DecorateBinding(Binding binding) { return binding; }
 
-        protected string GetSetting(string key)
+        protected virtual string GetSetting(string key)
         {
             string value;
             Settings.TryGetValue(key, out value);
             return value;
         }
 
-        protected internal T? GetSetting<T>(string key) where T:struct
+        protected internal virtual T? GetSetting<T>(string key) where T : struct
         {
             try
             {
@@ -144,16 +157,20 @@ namespace NZazu.Fields
             }
             catch (Exception) { return null; }
         }
+
+        public virtual void DisposeField()
+        {
+            if (Behavior == null) return;
+            Behavior.Detach();
+            Behavior = null;
+        }
     }
 
     public abstract class NZazuField<T> : NZazuField, INZazuWpfField<T>, INotifyPropertyChanged
     {
         private T _value;
 
-        protected NZazuField(string key)
-            : base(key)
-        {
-        }
+        protected NZazuField(FieldDefinition definition) : base(definition) { }
 
         public T Value
         {
@@ -168,15 +185,6 @@ namespace NZazu.Fields
         }
 
         public override bool IsEditable => true;
-
-        public override string StringValue
-        {
-            get { return GetStringValue(); }
-            set { SetStringValue(value); }
-        }
-
-        protected abstract void SetStringValue(string value);
-        protected abstract string GetStringValue();
 
         public event PropertyChangedEventHandler PropertyChanged = (sender, e) => { };
 

@@ -66,8 +66,8 @@ namespace NZazuFiddle.Samples
                 },
                 new Dictionary<string, string>
                 {
-                    { "comment", "type in a url like http://google.de and open it with Ctrl+Enter" }, 
-                    { "nested.comment", "type in a url like http://google.de and open it with Ctrl+Enter" }, 
+                    { "comment", "type in a url like http://google.de and open it with Ctrl+Enter" },
+                    { "nested.comment", "type in a url like http://google.de and open it with Ctrl+Enter" },
                 })
             };
         }
@@ -88,7 +88,7 @@ namespace NZazuFiddle.Samples
                 set { _regex = new Regex(value); }
             }
 
-            public void AttachTo(INZazuWpfField field, INZazuWpfView view)
+            public void AttachTo(INZazuWpfField field)
             {
                 if (field == null) throw new ArgumentNullException(nameof(field));
                 var valueControl = field.ValueControl;

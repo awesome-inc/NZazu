@@ -38,7 +38,6 @@ namespace NZazu.LayoutStrategy
 
                     Grid.SetColumn(labelElement, 0);
                     Grid.SetRow(labelElement, row);
-                    
                     grid.Children.Add(labelElement);
                 }
 
