@@ -51,7 +51,9 @@ namespace NZazu.Fields
             return field;
         }
 
-        public static NZazuField AddBehavior(this NZazuField field, BehaviorDefinition behaviorDefinition, INZazuWpfFieldBehaviorFactory behaviorFactory)
+        public static NZazuField AddBehavior(
+            this NZazuField field, BehaviorDefinition behaviorDefinition,
+            INZazuWpfFieldBehaviorFactory behaviorFactory, INZazuWpfView view)
         {
             if (behaviorDefinition == null) return field;
 
@@ -59,7 +61,7 @@ namespace NZazu.Fields
             var behavior = behaviorFactory.CreateFieldBehavior(behaviorDefinition);
             if (behavior == null) return field;
 
-            behavior.AttachTo(field);
+            behavior.AttachTo(field, view);
             field.Behavior = behavior;
 
             return field;

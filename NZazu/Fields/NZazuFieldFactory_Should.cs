@@ -265,7 +265,7 @@ namespace NZazu.Fields
             var sut = new NZazuFieldFactory(behaviorFactory, checkFactory, serializer);
             var fld1 = sut.CreateField(fieldDefintion);
 
-            behavior.Received(1).AttachTo(Arg.Any<INZazuWpfField>());
+            behavior.Received(1).AttachTo(Arg.Any<INZazuWpfField>(),Arg.Any<INZazuWpfView>());
             behavior.ClearReceivedCalls();
 
             fld1.DisposeField();
