@@ -28,7 +28,7 @@ namespace NZazu.Fields
 
         protected override string GetStringValue()
         {
-            return Value.HasValue ? Value.Value.ToString(CultureInfo.InvariantCulture) : string.Empty;
+            return Value?.ToString(CultureInfo.InvariantCulture) ?? string.Empty;
         }
     }
 }

@@ -2,6 +2,7 @@
 using FluentAssertions;
 using NEdifis.Attributes;
 using NUnit.Framework;
+using NZazu.Contracts;
 
 namespace NZazu.Serializer
 {

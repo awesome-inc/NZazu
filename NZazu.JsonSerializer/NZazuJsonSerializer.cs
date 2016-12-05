@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Newtonsoft.Json;
+using NZazu.Contracts;
 
 namespace NZazu.JsonSerializer
 {
