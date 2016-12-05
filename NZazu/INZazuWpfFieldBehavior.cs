@@ -2,7 +2,9 @@
 {
     public interface INZazuWpfFieldBehavior
     {
-        void AttachTo(INZazuWpfField field);//, INZazuWpfView view);
+        // we inject the view because sometimes a behavior might access other parts from the view
+        // e.g. a MailTo-Behavior on STRG+ENTER required the value of the field "subject".
+        void AttachTo(INZazuWpfField field, INZazuWpfView view);
         void Detach();
     }
 }

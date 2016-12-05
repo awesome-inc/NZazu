@@ -12,6 +12,7 @@ namespace NZazu.Fields
         public INZazuWpfFieldBehaviorFactory BehaviorFactory { get; }
         public ICheckFactory CheckFactory { get; }
         public INZazuDataSerializer Serializer { get; }
+        public INZazuWpfView View { get; set; }
 
         protected readonly Dictionary<string, Type> FieldTypes = new Dictionary<string, Type>();
         private const string DefaultType = "label";
@@ -64,7 +65,7 @@ namespace NZazu.Fields
                 .ApplySettings(fieldDefinition)
                 .AddOptionValues(fieldDefinition)
                 .AddChecks(fieldDefinition.Checks, CheckFactory)
-                .AddBehavior(fieldDefinition.Behavior, BehaviorFactory);
+                .AddBehavior(fieldDefinition.Behavior, BehaviorFactory, View);
         }
     }
 }

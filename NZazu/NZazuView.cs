@@ -49,6 +49,7 @@ namespace NZazu
         {
             var view = (NZazuView)d;
             var fieldFactory = (INZazuWpfFieldFactory)e.NewValue;
+            fieldFactory.View = view;
             view.UpdateFields(view.FormDefinition, fieldFactory, view.ResolveLayout);
         }
 

@@ -88,7 +88,7 @@ namespace NZazuFiddle.Samples
                 set { _regex = new Regex(value); }
             }
 
-            public void AttachTo(INZazuWpfField field)
+            public void AttachTo(INZazuWpfField field, INZazuWpfView view)
             {
                 if (field == null) throw new ArgumentNullException(nameof(field));
                 var valueControl = field.ValueControl;

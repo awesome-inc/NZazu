@@ -9,7 +9,7 @@ namespace NZazuFiddle.Samples
         {
             Sample = new SampleViewModel
             {
-                Name = "Radio Transmission",
+                Name = "Radio Transmission Incident",
                 Description = "Test for a dynamic table with columns defined as fields",
                 Fiddle = ToFiddle(new FormDefinition
                 {
@@ -35,7 +35,7 @@ namespace NZazuFiddle.Samples
                                             Key = "dtg",
                                             Type = "date",
                                             Prompt = "DTG",
-                                            Description = "Date of the incident",
+                                            Description = "Date as date time geoup because it is easier to read",
                                             Settings = new Dictionary<string, string>
                                             {
                                                 {"Format", "ddHHmm\\ZMMMyy" },
@@ -48,7 +48,7 @@ namespace NZazuFiddle.Samples
                                             Key = "sensor",
                                             Type = "string",
                                             Prompt = "Sensor",
-                                            Description = "Sensor for the signal",
+                                            Description = "Which sensor had a warnung",
                                             Checks = new []
                                             {
                                                 new CheckDefinition
@@ -61,8 +61,8 @@ namespace NZazuFiddle.Samples
                                         {
                                             Key = "transmission_mode",
                                             Type = "option",
-                                            Values = new []{"Foo", "Bar"},
-                                            Prompt = "Sensor",
+                                            Values = new []{"Low", "High","Vertical", "Horizontal"},
+                                            Prompt = "Transmission Mode",
                                             Description = "Sensor for the signal",
                                         },
                                     }
@@ -90,8 +90,8 @@ namespace NZazuFiddle.Samples
                                         {
                                             Key = "email",
                                             Type = "string",
-                                            Prompt = "Email Source",
-                                            Description = "Source address",
+                                            Prompt = "Email",
+                                            Description = "Email address",
                                             Checks = new []
                                             {
                                                 new CheckDefinition
