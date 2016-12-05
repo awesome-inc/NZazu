@@ -24,7 +24,7 @@ namespace NZazu.FieldBehavior
         {
             var sut = new EmptyNZazuFieldBehavior();
 
-            sut.Invoking(x => x.AttachTo(null)).ShouldThrow<ArgumentNullException>();
+            sut.Invoking(x => x.AttachTo(null, null)).ShouldThrow<ArgumentNullException>();
         }
 
         [Test]
@@ -33,7 +33,7 @@ namespace NZazu.FieldBehavior
             var field = Substitute.For<INZazuWpfField>();
             var sut = new EmptyNZazuFieldBehavior();
 
-            sut.AttachTo(field);
+            sut.AttachTo(field, null);
             sut.Detach();
 
             field.ReceivedCalls().Should().BeEmpty();
