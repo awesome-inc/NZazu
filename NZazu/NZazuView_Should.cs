@@ -12,10 +12,13 @@ using NUnit.Framework;
 using NZazu.Contracts;
 using NZazu.Contracts.Checks;
 using NZazu.Extensions;
+using NZazu.FieldBehavior;
+using NZazu.Fields;
+using NZazu.Serializer;
 
 namespace NZazu
 {
-    [TestFixtureFor(typeof (NZazuView))]
+    [TestFixtureFor(typeof(NZazuView))]
     [Apartment(ApartmentState.STA)]
     // ReSharper disable InconsistentNaming
     internal class NZazuView_Should
@@ -28,6 +31,11 @@ namespace NZazu
 
             sut.Should().NotBeNull();
             sut.Should().BeAssignableTo<INZazuWpfView>();
+
+            // and have default values
+            sut.FieldFactory.Serializer.Should().BeAssignableTo<NZazuXmlSerializer>();
+            sut.FieldFactory.Should().BeAssignableTo<NZazuFieldFactory>();
+            sut.FieldFactory.BehaviorFactory.Should().BeAssignableTo<NZazuFieldBehaviorFactory>();
         }
 
         [Test]
@@ -82,7 +90,7 @@ namespace NZazu
 
             var expected = new Dictionary<string, string>
             {
-                { "name", "John" }, 
+                { "name", "John" },
                 { "group.name", "Jim" },
             };
 
@@ -324,44 +332,13 @@ namespace NZazu
             var fieldDefinition = new FieldDefinition { Key = key, Type = "string", Prompt = "Name" };
             var formDefinition = new FormDefinition { Fields = new[] { fieldDefinition } };
             var formData = new FormData(new Dictionary<string, string> { { key, value } });
+            var factory = Substitute.For<INZazuWpfFieldFactory>();
+            var behavior = Substitute.For<INZazuWpfFieldBehaviorFactory>();
+            factory.BehaviorFactory.Returns(behavior);
 
-            var sut = new NZazuView { FormDefinition = formDefinition, FormData = formData };
+            var sut = new NZazuView { FormDefinition = formDefinition, FormData = formData, FieldFactory = factory };
             new Action(() => sut.GetField("I do not exist")).Invoking(a => a()).ShouldThrow<KeyNotFoundException>();
 
-        }
-
-        [Test]
-        [STAThread]
-        public void Attach_And_Detach_Behavior_To_Fields()
-        {
-            // lets mock the behavior
-            var behaviorDefinition = new BehaviorDefinition { Name = "Empty" };
-            var behavior = Substitute.For<INZazuWpfFieldBehavior>();
-
-            var fields = new[]
-            {
-                new FieldDefinition { Key = "a", Type = "string", Behavior = behaviorDefinition },
-                new FieldDefinition { Key = "b", Type = "group", 
-                    Fields = new []
-                    {
-                        new FieldDefinition { Key= "b.a", Type = "string", Behavior = behaviorDefinition}
-                    }}
-            };
-            var formDefinition = new FormDefinition { Fields = fields };
-
-            var behaviorFactory = Substitute.For<INZazuWpfFieldBehaviorFactory>();
-            behaviorFactory.CreateFieldBehavior(Arg.Any<BehaviorDefinition>()).ReturnsForAnyArgs(behavior);
-
-            // make sure an attach happens
-            var sut = new NZazuView { FieldBehaviorFactory = behaviorFactory, FormDefinition = formDefinition };
-            sut.Should().NotBeNull();
-
-            behavior.Received(2).AttachTo(Arg.Any<INZazuWpfField>(), sut);
-            behavior.ClearReceivedCalls();
-
-            // now lets create a ner form and detach the existing behavior
-            sut.FormDefinition = new FormDefinition { Fields = fields };
-            behavior.ReceivedWithAnyArgs(2).Detach();
         }
 
         [Test]

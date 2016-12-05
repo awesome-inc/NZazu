@@ -11,7 +11,9 @@ namespace NZazuFiddle
 
         public string Json
         {
-            get { return JsonConvert.SerializeObject(Model, Formatting.Indented); }
+            get { return JsonConvert.SerializeObject(Model, Formatting.Indented
+                , new JsonSerializerSettings { DefaultValueHandling = DefaultValueHandling.Ignore }
+                ); }
             set
             {
                 try

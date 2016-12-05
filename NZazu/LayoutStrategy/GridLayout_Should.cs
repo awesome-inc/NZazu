@@ -8,11 +8,12 @@ using FluentAssertions;
 using NEdifis.Attributes;
 using NSubstitute;
 using NUnit.Framework;
+using NZazu.Contracts;
 using NZazu.Fields;
 
 namespace NZazu.LayoutStrategy
 {
-    [TestFixtureFor(typeof (GridLayout))]
+    [TestFixtureFor(typeof(GridLayout))]
     [Apartment(ApartmentState.STA)]
     // ReSharper disable InconsistentNaming
     internal class GridLayout_Should
@@ -47,9 +48,9 @@ namespace NZazu.LayoutStrategy
             var container = new ContentControl();
             var fields = new NZazuField[]
             {
-                new NZazuLabelField("label1") { Prompt="label prompt", Description = "label text"}, 
-                new NZazuTextField("string1") { Prompt="text prompt", Description = "text tooltip"}, 
-                new NZazuBoolField("bool1") { Prompt="bool prompt", Description = "checkbox tooltip"}
+                new NZazuLabelField(new FieldDefinition {Key = "label01"}) { Prompt="label prompt", Description = "label text"},
+                new NZazuTextField(new FieldDefinition {Key = "text01"}) { Prompt="text prompt", Description = "text tooltip"},
+                new NZazuBoolField(new FieldDefinition {Key = "bool01"}) { Prompt="bool prompt", Description = "checkbox tooltip"}
             };
             sut.DoLayout(container, fields);
 
@@ -82,9 +83,9 @@ namespace NZazu.LayoutStrategy
             var container = new ContentControl();
             var fields = new NZazuField[]
             {
-                new NZazuLabelField("label1"),
-                new NZazuTextField("string1"),
-                new NZazuBoolField("bool1")
+                new NZazuLabelField(new FieldDefinition {Key = "label01"}),
+                new NZazuTextField(new FieldDefinition {Key = "text01"}),
+                new NZazuBoolField(new FieldDefinition {Key = "bool01"})
             };
 
             sut.DoLayout(container, fields);
@@ -107,9 +108,9 @@ namespace NZazu.LayoutStrategy
             var container = new ContentControl();
             var fields = new NZazuField[]
             {
-                new NZazuLabelField("label1"),
-                new NZazuTextField("string1"),
-                new NZazuBoolField("bool1")
+                new NZazuLabelField(new FieldDefinition {Key = "label01"}),
+                new NZazuTextField(new FieldDefinition {Key = "text01"}),
+                new NZazuBoolField(new FieldDefinition {Key = "bool01"})
             };
 
             fields
@@ -135,20 +136,20 @@ namespace NZazu.LayoutStrategy
             var container = new ContentControl();
             var fields1 = new NZazuField[]
             {
-                new NZazuLabelField("label1") { Description = "label1"},
-                new NZazuTextField("string1"),
-                new NZazuBoolField("bool1")
+                new NZazuLabelField(new FieldDefinition {Key = "label01",Prompt = "Hello",Description = "Hello"}),
+                new NZazuTextField(new FieldDefinition {Key = "text01",Prompt = "Hello",Description = "Hello"}),
+                new NZazuBoolField(new FieldDefinition {Key = "bool01",Prompt = "Hello",Description = "Hello"})
             };
             var fields2 = new NZazuField[]
             {
-                new NZazuLabelField("label2")  { Description = "label2"},
-                new NZazuTextField("string2"),
-                new NZazuBoolField("bool2")
+                new NZazuLabelField(new FieldDefinition {Key = "label02",Prompt = "Hello",Description = "Hello"}),
+                new NZazuTextField(new FieldDefinition {Key = "text02",Prompt = "Hello",Description = "Hello"}),
+                new NZazuBoolField(new FieldDefinition {Key = "bool02",Prompt = "Hello",Description = "Hello"})
             };
             var groups = new[]
             {
-                new NZazuGroupField("group1") { Fields = fields1 },
-                new NZazuGroupField("group2") { Fields = fields2 }
+                new NZazuGroupField(new FieldDefinition {Key = "stack01"}) {  Fields = fields1 },
+                new NZazuGroupField(new FieldDefinition {Key = "group01"}) { Fields = fields2 }
             };
 
             sut.DoLayout(container, groups);
@@ -185,30 +186,28 @@ namespace NZazu.LayoutStrategy
 
             var sut = new GridLayout();
 
-
             var container = new ContentControl();
             var fields1 = new NZazuField[]
             {
-                new NZazuLabelField("label1") { Description = "label1"},
-                new NZazuTextField("string1"),
-                new NZazuBoolField("bool1")
+                new NZazuLabelField(new FieldDefinition {Key = "label01"}),
+                new NZazuTextField(new FieldDefinition {Key = "text01"}),
+                new NZazuBoolField(new FieldDefinition {Key="bool01"})
             };
             var fields2 = new NZazuField[]
             {
-                new NZazuLabelField("label2")  { Description = "label2"},
-                new NZazuTextField("string2"),
-                new NZazuBoolField("bool2")
+                new NZazuLabelField(new FieldDefinition {Key="label01"})  { Description = "label2"},
+                new NZazuTextField(new FieldDefinition {Key="text01"}),
+                new NZazuBoolField(new FieldDefinition {Key="bool01"})
             };
             var groups = new[]
             {
-                new NZazuGroupField("stack") { Fields = fields1, Layout = "stack"},
-                new NZazuGroupField("grid") { Fields = fields2, Layout = "grid"}
+                new NZazuGroupField(new FieldDefinition {Key="stack01"}) { Fields = fields1, Layout = "stack"},
+                new NZazuGroupField(new FieldDefinition {Key="grid01"}) { Fields = fields2, Layout = "grid"}
             };
 
             sut.DoLayout(container, groups, resolveLayout);
-            
+
             stackLayout.Received().DoLayout(Arg.Any<ContentControl>(), fields1, resolveLayout);
-            //gridLayout.Received().DoLayout(Arg.Any<ContentControl>(), fields2);
         }
     }
 }

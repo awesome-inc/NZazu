@@ -2,7 +2,7 @@
 {
     public interface INZazuWpfFieldBehavior
     {
-        void AttachTo(INZazuWpfField field, INZazuWpfView view);
+        void AttachTo(INZazuWpfField field);//, INZazuWpfView view);
         void Detach();
     }
 }

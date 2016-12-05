@@ -1,7 +1,9 @@
 ﻿using System;
 using Caliburn.Micro;
+using Newtonsoft.Json;
 using NZazu;
 using NZazu.Contracts;
+using NZazu.JsonSerializer;
 using NZazu.Xceed;
 
 namespace NZazuFiddle
@@ -15,8 +17,8 @@ namespace NZazuFiddle
         private INZazuWpfFieldFactory _fieldFactory;
         private bool _isReadOnly;
 
-        public PreviewViewModel(IEventAggregator events, 
-            FormDefinition definition, FormData data, 
+        public PreviewViewModel(IEventAggregator events,
+            FormDefinition definition, FormData data,
             INZazuWpfFieldFactory fieldFactory = null)
         {
             if (events == null) throw new ArgumentNullException(nameof(events));
@@ -26,6 +28,7 @@ namespace NZazuFiddle
             _events.Subscribe(this);
             _definition = definition;
             _data = data;
+            _fieldFactory = fieldFactory ?? new XceedFieldFactory(serializer: new NZazuJsonSerializer());
             _fieldFactory = fieldFactory ?? new XceedFieldFactory();
         }
 

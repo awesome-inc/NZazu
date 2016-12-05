@@ -1,10 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using NEdifis.Attributes;
 using NEdifis.Conventions;
 using NUnit.Framework;
 
 namespace NZazu.Contracts
 {
+    [ExcludeFromCodeCoverage]
+    [Because("Coverage on tests?")]
     internal class NZazuConventions : ConventionBase
     {
         private static readonly IEnumerable<Type> TypesToTest = ClassesToTestFor<NZazuConventions>();

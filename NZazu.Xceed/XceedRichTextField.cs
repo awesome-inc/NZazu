@@ -1,5 +1,7 @@
-﻿using System.Windows;
+﻿using System.Collections.Generic;
+using System.Windows;
 using System.Windows.Controls;
+using NZazu.Contracts;
 using NZazu.Fields;
 using Xceed.Wpf.Toolkit;
 using RichTextBox = Xceed.Wpf.Toolkit.RichTextBox;
@@ -10,10 +12,7 @@ namespace NZazu.Xceed
     {
         public const double DefaultHeight = 80.0d;
 
-        public XceedRichTextField(string key)
-            : base(key)
-        {
-        }
+        public XceedRichTextField(FieldDefinition definition) : base(definition) { }
 
         public override DependencyProperty ContentProperty => RichTextBox.TextProperty;
 

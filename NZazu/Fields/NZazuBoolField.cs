@@ -1,13 +1,13 @@
-using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
+using NZazu.Contracts;
 
 namespace NZazu.Fields
 {
     public class NZazuBoolField : NZazuField<bool?>
     {
-        public NZazuBoolField(string key) : base(key) { }
+        public NZazuBoolField(FieldDefinition definition) : base(definition) { }
 
         protected override void SetStringValue(string value)
         {
@@ -20,7 +20,7 @@ namespace NZazu.Fields
 
         protected override string GetStringValue()
         {
-            return Value.HasValue ? Value.Value.ToString() : string.Empty;
+            return Value?.ToString() ?? string.Empty;
         }
 
         public override string Type => "bool";
@@ -30,8 +30,10 @@ namespace NZazu.Fields
         {
             return new CheckBox
             {
-                Content = Hint, ToolTip = Description, 
-                IsChecked = null, IsThreeState = true,
+                Content = Hint,
+                ToolTip = Description,
+                IsChecked = null,
+                IsThreeState = true,
                 VerticalContentAlignment = VerticalAlignment.Center
             };
         }

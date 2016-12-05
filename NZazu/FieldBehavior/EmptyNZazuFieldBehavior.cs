@@ -4,10 +4,9 @@ namespace NZazu.FieldBehavior
 {
     internal class EmptyNZazuFieldBehavior : NZazuFieldBehavior
     {
-        public override void AttachTo(INZazuWpfField field, INZazuWpfView view)
+        public override void AttachTo(INZazuWpfField field)
         {
             if (field == null) throw new ArgumentNullException(nameof(field));
-            if (view == null) throw new ArgumentNullException(nameof(view));
         }
 
         public override void Detach() { }

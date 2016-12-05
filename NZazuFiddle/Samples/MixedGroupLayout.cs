@@ -18,12 +18,12 @@ namespace NZazuFiddle.Samples
                     {
                         new FieldDefinition
                         {
-                            Key="caption", Type="label", Prompt = "Note", 
+                            Key="caption", Type="label", Prompt = "Note",
                             Description = "Mixed Layout Sample with customized tabbing: horizontal between left, right"
                         },
                         new FieldDefinition
                         {
-                            Key="timestamp", Type="date", Prompt = "Date", 
+                            Key="timestamp", Type="date", Prompt = "Date",
                             Settings = new Dictionary<string, string>{{"TabIndex","0"}}
                         },
                         new FieldDefinition
@@ -73,7 +73,7 @@ namespace NZazuFiddle.Samples
                                         }
                                     }
                                 }
-                            }  
+                            }
                         },
                         new FieldDefinition
                         {
@@ -84,8 +84,8 @@ namespace NZazuFiddle.Samples
                 },
                 new Dictionary<string, string>
                 {
-                    { "left.name", "John" }, 
-                    { "right.name", "Jim" }, 
+                    { "left.name", "John" },
+                    { "right.name", "Jim" },
                     { "left.score", "15"},
                     { "right.score", "35"}
                 })

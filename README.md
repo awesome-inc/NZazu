@@ -1,15 +1,22 @@
-[![Build status](https://ci.appveyor.com/api/projects/status/nj8cqgfnqd07csuc?svg=true)](https://ci.appveyor.com/project/awesome-inc-build/nzazu/branch/master) ![NuGet Version](https://img.shields.io/nuget/v/NZazu.svg) ![NuGet Version](https://img.shields.io/nuget/dt/NZazu.svg) [![Issue Stats](http://issuestats.com/github/awesome-inc/NZazu/badge/issue)](http://issuestats.com/github/awesome-inc/NZazu) [![Issue Stats](http://issuestats.com/github/awesome-inc/NZazu/badge/pr)](http://issuestats.com/github/awesome-inc/NZazu) 
-
-# NZazu
+# Introduction
 
 **NZazu** is a WPF form templating engine which renders a form based on an abstract form definition. 
 
-## NZazuFiddle 
+[![Join the chat at https://gitter.im/awesome-inc/NZazu](https://badges.gitter.im/awesome-inc/NZazu.svg)](https://gitter.im/awesome-inc/NZazu?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![Build status](https://ci.appveyor.com/api/projects/status/nj8cqgfnqd07csuc?svg=true)](https://ci.appveyor.com/project/awesome-inc-build/nzazu/branch/master) 
+
+![NuGet Version](https://img.shields.io/nuget/v/NZazu.svg) 
+![NuGet Version](https://img.shields.io/nuget/dt/NZazu.svg) 
+
+[![Issue Stats](http://issuestats.com/github/awesome-inc/NZazu/badge/issue)](http://issuestats.com/github/awesome-inc/NZazu) [![Issue Stats](http://issuestats.com/github/awesome-inc/NZazu/badge/pr)](http://issuestats.com/github/awesome-inc/NZazu) 
+
+# NZazuFiddle 
+
 The sample application **NZazuFiddle** can be used for designing forms in real-time
 
 ![](NZazuFiddle.png)
 
-## NZazuView
+# NZazuView
 
 The main view **NZazuView** connects factories, strategies and serializer to be flexible and extensible.
 
@@ -50,6 +57,12 @@ independent from the kind of data storage (e.g. object, dictionary) or rendering
         }
     }
 
+# INZazuWpfFieldFactory
+
+The field factory created the fields depending on several strategies and its own implementation of `CreateField()` to create and compose fields.
+
+The factory suports `INZazuWpfFieldBehaviorFactory`, `ICheckFactory` and `INZazuDataSerializer` strategy factories to support custom behavior, serialization and checks. Details see below.
+
 ## INZazuFieldFactory
 
 The field factory creates fields (controls) based on a template definition. By default, the following 
@@ -65,3 +78,24 @@ The layout strategy provides the mechanism to render the generated fields into t
 
 - [x] GridLayoutStrategy (main package)
 - [x] StackedLayoutStrategy (main package)
+
+## INZazuDataSerializer
+
+The data serializer is used for e.g. data table to serialize a big amount of data. Currentyl the following strategies are implemented
+
+- [x] NZazuXmlSerializer (main package)
+- [x] NZazuJsonSerializer (json serializer package)
+
+# Default Extender
+
+Basic custom behavior and checks can be implemented using the interface for behaviors `INZazuWpfFieldBehavior` and checks `IValueCheck`.
+
+## Custom Field Behavior
+
+Implement the interface `INZazuWpfFieldBehavior` and register the implementation at the behavior extender.
+
+    BehaviorExtender.Register<OpenUrlOnStringEnterBehavior>("OpenUrlOnStringEnter");
+
+# Custom Checks
+
+Implement the interface `IValueCheck` and implement an `ICheckFactory` (which should overwrite the existing implementation).
