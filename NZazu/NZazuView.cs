@@ -227,7 +227,6 @@ namespace NZazu
 
         private void CreateFields(FormDefinition formDefinition, INZazuWpfFieldFactory fieldFactory)
         {
-            //fieldFactory.Serializer = this.Serializer;
             formDefinition.Fields.ToList().ForEach(f =>
             {
                 // create field

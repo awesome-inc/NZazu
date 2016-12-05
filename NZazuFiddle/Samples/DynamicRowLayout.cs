@@ -133,7 +133,7 @@ namespace NZazuFiddle.Samples
                                 new FieldDefinition
                                 {
                                     Key = "modeparameter_image",
-                                    Type = "imageviewer",
+                                    Type = "imageViewer",
                                     Prompt = "Image",
                                 }
                             }
@@ -155,9 +155,20 @@ namespace NZazuFiddle.Samples
                                         new FieldDefinition
                                         {
                                             Key = "table_locatings_icon",
-                                            Type = "option",
+                                            Type = "imageViewer",
+                                            Values = new []
+                                            {
+                                                @"http://cliparts.co/cliparts/Acb/rpK/AcbrpKzxi.png",
+                                                @"http://cliparts.co/cliparts/di9/rkK/di9rkK7nT.png",
+                                                @"http://cliparts.co/cliparts/rTn/rpK/rTnrpK76c.png"
+                                            },
                                             Prompt = "Icon",
-                                            Settings = new Dictionary<string, string> { {"Width", "24" } }
+                                            Settings = new Dictionary<string, string>
+                                            {
+                                                {"Width", "24" },
+                                                {"AllowCustomValues" , "false" },
+                                                {"AllowNullValues" , "true" },
+                                            }
                                         },
                                         new FieldDefinition
                                         {

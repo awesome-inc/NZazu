@@ -2,7 +2,7 @@
 using FluentAssertions;
 using NEdifis.Attributes;
 using NUnit.Framework;
-using NZazu.Serializer;
+using NZazu.Contracts;
 
 namespace NZazu.JsonSerializer
 {

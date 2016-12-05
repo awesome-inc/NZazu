@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace NZazu
+namespace NZazu.Contracts
 {
     public interface INZazuDataSerializer
     {
