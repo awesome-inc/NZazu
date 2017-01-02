@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -277,7 +279,16 @@ namespace NZazu.Fields
 
         private void UpdateGridValues(string value)
         {
-            var newDict = FieldFactory.Serializer.Deserialize(value);
+            Dictionary<string, string> newDict;
+            try
+            {
+                newDict = FieldFactory.Serializer.Deserialize(value);
+
+            }
+            catch (Exception ex)
+            {
+                throw new SerializationException("NZazu.NZazuDataTable.UpdateGridValues(): data cannot be parsed. therefore the list will be empty", ex);
+            }
 
             var iterations = 0;
             if (newDict.Count > 0)

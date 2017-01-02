@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Xml.Linq;
 using NZazu.Contracts;
 
@@ -21,7 +23,19 @@ namespace NZazu.Serializer
 
         public Dictionary<string, string> Deserialize(string value)
         {
-            var xElem2 = XElement.Parse(value);
+            if (string.IsNullOrEmpty(value)) return new Dictionary<string, string>();
+
+            XElement xElem2;
+            try
+            {
+                xElem2 = XElement.Parse(value);
+
+            }
+            catch (Exception ex)
+            {
+                throw new SerializationException("cannot deserialize xml", ex);
+            }
+
             var newDict = xElem2.Descendants("item")
                 .ToDictionary(x => (string)x.Attribute("id"), x => (string)x.Attribute("value"));
             return newDict;
