@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 using System.Threading;
 using System.Windows.Controls;
 using FluentAssertions;
@@ -55,6 +56,63 @@ namespace NZazu.Fields
 
             sut.Validate().IsValid.Should().BeTrue();
             ((DynamicDataTable)sut.ValueControl).LayoutGrid.RowDefinitions.Count.Should().Be(3);
+        }
+
+        [Test]
+        [TestCase("")]
+        [TestCase("<items/>")]
+        [STAThread]
+        public void Deserialize_Empty_Data(string data)
+        {
+            var factory = new NZazuFieldFactory();
+
+            // ReSharper disable once UseObjectOrCollectionInitializer
+            var sut = new NZazuDataTableField(new FieldDefinition
+            {
+                Key = "table01",
+                Fields = new[]
+                {
+                    new FieldDefinition {Key = "table01_field01", Type = "string"}
+                }
+            });
+            sut.FieldFactory = factory;
+            // ReSharper disable once UnusedVariable
+            var justToMakeTheCall = sut.ValueControl;
+
+            sut.StringValue = data;
+            var actual = factory.Serializer.Deserialize(sut.StringValue);
+
+            actual.Should().NotBeNull();
+
+            ((DynamicDataTable)sut.ValueControl).LayoutGrid.RowDefinitions.Count.Should().Be(2);
+        }
+
+        [Test]
+        [TestCase("this should not be handled")]
+        [STAThread]
+        public void Throw_Exception_On_Deserialize_Invalid_Data(string data)
+        {
+            var factory = new NZazuFieldFactory();
+
+            // ReSharper disable once UseObjectOrCollectionInitializer
+            var sut = new NZazuDataTableField(new FieldDefinition
+            {
+                Key = "table01",
+                Fields = new[]
+                {
+                    new FieldDefinition {Key = "table01_field01", Type = "string"}
+                }
+            });
+            sut.FieldFactory = factory;
+            // ReSharper disable once UnusedVariable
+            var justToMakeTheCall = sut.ValueControl;
+
+            Action act = () => { sut.StringValue = data; };
+
+            act.ShouldThrow<SerializationException>()
+                 .WithMessage("NZazu.NZazuDataTable.UpdateGridValues(): data cannot be parsed. therefore the list will be empty");
+
+            ((DynamicDataTable)sut.ValueControl).LayoutGrid.RowDefinitions.Count.Should().Be(2);
         }
 
         [Test]
