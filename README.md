@@ -99,3 +99,8 @@ Implement the interface `INZazuWpfFieldBehavior` and register the implementation
 # Custom Checks
 
 Implement the interface `IValueCheck` and implement an `ICheckFactory` (which should overwrite the existing implementation).
+
+
+#### Icons	
+
+Some icons are taken from http://www.iconarchive.com/show/oxygen-icons-by-oxygen-icons.org/Actions-go-jump-today-icon.html

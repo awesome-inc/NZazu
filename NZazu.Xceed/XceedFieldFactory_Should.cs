@@ -50,7 +50,7 @@ namespace NZazu.Xceed
             var field = sut.CreateField(fieldDefinition);
             field.Should().BeOfType<XceedDateTimeField>();
 
-            var datePicker = (DateTimePicker) field.ValueControl;
+            var datePicker = (DateTimePickerWithUpdate) field.ValueControl;
             datePicker.Watermark.Should().Be(fieldDefinition.Hint);
             datePicker.FormatString.Should().BeNull();
 
@@ -58,7 +58,7 @@ namespace NZazu.Xceed
             fieldDefinition.Settings = new Dictionary<string, string> { { "Format", dateFormat } };
 
             field = sut.CreateField(fieldDefinition);
-            datePicker = (DateTimePicker)field.ValueControl;
+            datePicker = (DateTimePickerWithUpdate)field.ValueControl;
             datePicker.FormatString.Should().Be(dateFormat);
         }
 
