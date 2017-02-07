@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using System.Threading;
 using FluentAssertions;
 using NEdifis.Attributes;
@@ -28,7 +27,7 @@ namespace NZazu.Xceed
         public void Override_ContentProperty()
         {
             var sut = new XceedDateTimeField(new FieldDefinition { Key = "date" });
-            sut.ContentProperty.Should().Be(DateTimePicker.ValueProperty);
+            sut.ContentProperty.Should().Be(DateTimePickerWithUpdate.ValueProperty);
         }
 
         [Test]
@@ -39,12 +38,12 @@ namespace NZazu.Xceed
             const string dateFormat = "yyyy/MM/dd";
             sut.Settings.Add("Format", dateFormat);
 
-            var control = (DateTimePicker)sut.ValueControl;
+            var control = (DateTimePickerWithUpdate)sut.ValueControl;
             control.Format.Should().Be(DateTimeFormat.Custom);
             control.FormatString.Should().Be(dateFormat);
 
             sut = new XceedDateTimeField(new FieldDefinition { Key = "date" });
-            control = (DateTimePicker)sut.ValueControl;
+            control = (DateTimePickerWithUpdate)sut.ValueControl;
             control.Format.Should().Be(DateTimeFormat.FullDateTime);
             control.FormatString.Should().BeNull();
         }
