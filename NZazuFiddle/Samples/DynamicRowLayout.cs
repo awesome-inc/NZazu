@@ -27,7 +27,7 @@ namespace NZazuFiddle.Samples
                                 {
                                     Key = "group_activity_stack_left",
                                     Type = "group",
-                                    Settings = new Dictionary<string, string>() { {"Width","300" } },
+                                    Settings = new Dictionary<string, string>() { {"Width","400" } },
                                     Fields = new []
                                     {
                                         new FieldDefinition
@@ -38,9 +38,7 @@ namespace NZazuFiddle.Samples
                                             Description = "Date as date time geoup because it is easier to read",
                                             Settings = new Dictionary<string, string>
                                             {
-                                                {"Format", "ddHHmm\\ZMMMyy" },
-                                                {"HorizontalAlignment", "Left" },
-                                                {"Width","230" }
+                                                {"Format", "ddHHmm\\ZMMMyy" }
                                             }
                                         },
                                         new FieldDefinition
