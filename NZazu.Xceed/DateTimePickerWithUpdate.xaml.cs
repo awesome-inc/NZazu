@@ -116,6 +116,7 @@ namespace NZazu.Xceed
         DateTime Now();
     }
 
+    [ExcludeFromConventions("trivial")]
     internal class NowDateTimeProvider : IActualDateTimeProvider
     {
         public DateTime Now()
@@ -124,6 +125,7 @@ namespace NZazu.Xceed
         }
     }
 
+    [ExcludeFromConventions("trivial")]
     internal class UtcDateTimeProvider : IActualDateTimeProvider
     {
         public DateTime Now()
