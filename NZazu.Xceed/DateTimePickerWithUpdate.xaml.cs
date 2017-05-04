@@ -60,6 +60,27 @@ namespace NZazu.Xceed
             set { SetValue(ValueProperty, value); }
         }
 
+        public static readonly DependencyProperty ActualDateTimeProviderProperty = DependencyProperty.Register(
+            "ActualDateTimeProvider", typeof(IActualDateTimeProvider), typeof(DateTimePickerWithUpdate), new PropertyMetadata(new NowDateTimeProvider()));
+
+        public IActualDateTimeProvider ActualDateTimeProvider
+        {
+            get { return (IActualDateTimeProvider)GetValue(ActualDateTimeProviderProperty); }
+            set { SetValue(ActualDateTimeProviderProperty, value); }
+        }
+
+        public bool UseUTCDateTimeFormat
+        {
+            get { return ActualDateTimeProvider is UtcDateTimeProvider; }
+            set
+            {
+                if (value)
+                    ActualDateTimeProvider = new UtcDateTimeProvider();
+                else
+                    ActualDateTimeProvider = new NowDateTimeProvider();
+            }
+        }
+
         #endregion
 
         #region pass-through properties
@@ -86,7 +107,30 @@ namespace NZazu.Xceed
 
         internal void UpdateToToday_OnClick(object sender, RoutedEventArgs e)
         {
-            Value = DateTime.Now;
+            Value = ActualDateTimeProvider.Now();
+        }
+    }
+
+    public interface IActualDateTimeProvider
+    {
+        DateTime Now();
+    }
+
+    [ExcludeFromConventions("trivial")]
+    internal class NowDateTimeProvider : IActualDateTimeProvider
+    {
+        public DateTime Now()
+        {
+            return DateTime.Now;
+        }
+    }
+
+    [ExcludeFromConventions("trivial")]
+    internal class UtcDateTimeProvider : IActualDateTimeProvider
+    {
+        public DateTime Now()
+        {
+            return DateTime.UtcNow;
         }
     }
 
