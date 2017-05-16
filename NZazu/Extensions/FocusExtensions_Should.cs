@@ -19,7 +19,7 @@ namespace NZazu.Extensions
             var control = new TextBox();
             control.IsFocused.Should().BeFalse();
 
-            control.Focus();
+            control.SetFocus();
 
             control.IsFocused.Should().BeTrue();
         }

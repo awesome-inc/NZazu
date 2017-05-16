@@ -9,13 +9,13 @@ namespace NZazu
         FormDefinition FormDefinition { get; set; }
         FormData FormData { get; set; }
         bool IsReadOnly { get; set; }
-            
+
         INZazuWpfFieldFactory FieldFactory { get; set; }
         IResolveLayout ResolveLayout { get; set; }
 
         INZazuWpfField GetField(string key);
         bool TryGetField(string key, out INZazuWpfField field);
-        bool TrySetFocusOn(string key);
+        bool TrySetFocusOn(string key = null);
 
         Dictionary<string, string> GetFieldValues();
         void ApplyChanges();

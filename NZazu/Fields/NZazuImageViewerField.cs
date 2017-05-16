@@ -4,7 +4,6 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using NZazu.Contracts;
@@ -67,7 +66,7 @@ namespace NZazu.Fields
             return _stringValue;
         }
 
-        public override DependencyProperty ContentProperty => ToggleButton.IsCheckedProperty;
+        public override DependencyProperty ContentProperty => Image.SourceProperty;
 
         protected override Control GetValue()
         {

@@ -4,6 +4,5 @@
     {
         public FieldDefinition[] Fields { get; set; }
         public string Layout { get; set; }
-        public string FocusOn { get; set; }
     }
 }

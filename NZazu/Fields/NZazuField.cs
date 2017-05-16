@@ -164,6 +164,11 @@ namespace NZazu.Fields
             Behavior.Detach();
             Behavior = null;
         }
+
+        public virtual IEnumerable<KeyValuePair<string, string>> GetState()
+        {
+            return Enumerable.Empty<KeyValuePair<string, string>>();
+        }
     }
 
     public abstract class NZazuField<T> : NZazuField, INZazuWpfField<T>, INotifyPropertyChanged

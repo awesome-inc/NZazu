@@ -1,6 +1,5 @@
 ﻿using System;
 using Caliburn.Micro;
-using Newtonsoft.Json;
 using NZazu;
 using NZazu.Contracts;
 using NZazu.JsonSerializer;
@@ -80,9 +79,10 @@ namespace NZazuFiddle
         protected override void OnActivate()
         {
             base.OnActivate();
+            if (Data.Values == null || !Data.Values.ContainsKey(NZazuView.FocusOnFieldName)) return;
 
             var view = GetView() as PreviewView;
-            view?.View.TrySetFocusOn(Definition.FocusOn);
+            view?.View.TrySetFocusOn();
         }
 
         public void Handle(FormDefinition definition)

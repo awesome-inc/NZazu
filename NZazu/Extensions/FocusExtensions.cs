@@ -23,8 +23,6 @@ namespace NZazu.Extensions
 
         public static void SetFocus(this UIElement uiElement)
         {
-            RemoveFocus(uiElement);
-
             uiElement.Focusable = true;
             FocusManager.SetFocusedElement(uiElement, uiElement);
             uiElement.Focus();
@@ -33,9 +31,6 @@ namespace NZazu.Extensions
 
         public static void RemoveFocus(this UIElement uiElement)
         {
-            // cf.: http://stackoverflow.com/questions/2914495/wpf-how-to-programmatically-remove-focus-from-a-textbox
-            //Keyboard.ClearFocus();
-
             var frameWorkElement = uiElement as FrameworkElement;
             if (frameWorkElement == null) return;
             

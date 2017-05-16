@@ -43,6 +43,6 @@
         </Grid>
 
         <GridSplitter Grid.Column="1" Width="3" VerticalAlignment="Stretch" />
-        <ContentControl x:Name="Preview" Grid.Column="2" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" />
+        <ContentControl x:Name="Preview" Grid.Column="2" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Focusable="False"/>
     </Grid>
 </UserControl>

@@ -76,6 +76,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Extensions\DebugConverter.cs" />
+    <Compile Include="Extensions\DebugExtension.cs" />
     <Compile Include="Extensions\FieldExtensions.cs" />
     <Compile Include="Extensions\FocusExtensions.cs" />
     <Compile Include="Extensions\FocusExtensions_Should.cs" />

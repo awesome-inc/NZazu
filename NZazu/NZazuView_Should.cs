@@ -60,7 +60,7 @@ namespace NZazu
             view.FieldFactory = factory;
 
             var actual = view.GetFieldValues();
-            actual.Keys.Single().Should().Be(key);
+            actual.Keys.Should().Contain(key);
             actual[key].Should().Be(value);
         }
 
@@ -97,7 +97,8 @@ namespace NZazu
             view.SetFieldValues(expected);
 
             var actual = view.GetFieldValues();
-            actual.ShouldBeEquivalentTo(expected);
+            actual.Should().Contain(expected);
+            actual.Keys.Should().Contain("__focusOn");
         }
 
         [Test]
@@ -234,7 +235,7 @@ namespace NZazu
             view.FormData = new Dictionary<string, string> { { key, value } };
 
             var actual = view.GetFieldValues();
-            actual.Keys.Single().Should().Be(key);
+            actual.Keys.Should().Contain(key);
             actual[key].Should().Be(value);
         }
 
@@ -301,7 +302,7 @@ namespace NZazu
 
             sut.FormData.Should().Be(formData);
             var actual = sut.GetFieldValues();
-            formData.Values.ShouldBeEquivalentTo(actual);
+            actual.Should().Contain(formData.Values);
 
             fieldDefinition.Prompt = "Login";
             var changedFormDefinition = new FormDefinition { Fields = new[] { fieldDefinition } };
@@ -318,7 +319,7 @@ namespace NZazu
             formDefinitionChanged.Should().BeTrue();
 
             actual = sut.GetFieldValues();
-            actual.ShouldBeEquivalentTo(formData.Values);
+            actual.Should().Contain(formData.Values);
         }
 
 
@@ -362,7 +363,7 @@ namespace NZazu
             view.SetFieldValues(expected);
 
             var actual = view.GetFieldValues();
-            actual.ShouldBeEquivalentTo(expected);
+            actual.Should().Contain(expected);
         }
 
         [Test]
@@ -377,32 +378,32 @@ namespace NZazu
                     {
                         new FieldDefinition {Key = "other", Type = "string"},
                         new FieldDefinition {Key = "focus", Type = "string"}
-                    },
-                    FocusOn = "focus"
-                }
+                    }
+                },
+                FormData = new FormData { Values = { { "__focusOn", "focus" } } }
             };
 
             var otherCtrl = view.GetField("other").ValueControl;
             var keyCtrl = view.GetField("focus").ValueControl;
 
+            view.TrySetFocusOn().Should().BeTrue();
             otherCtrl.IsFocused.Should().BeFalse();
             keyCtrl.IsFocused.Should().BeTrue();
 
             view.TrySetFocusOn("other").Should().BeTrue();
-
             keyCtrl.IsFocused.Should().BeFalse();
             otherCtrl.IsFocused.Should().BeTrue();
         }
 
         [Test]
         [STAThread]
-        public void Have_scrollbars()
+        public void Have_scrollbars_and_tabstopable()
         {
             var sut = new NZazuView();
             sut.Should().BeAssignableTo<ScrollViewer>();
 
-            sut.IsTabStop.Should().BeFalse();
-            sut.Focusable.Should().BeFalse();
+            sut.IsTabStop.Should().BeTrue();
+            sut.Focusable.Should().BeTrue();
 
             sut.VerticalContentAlignment.Should().Be(VerticalAlignment.Stretch);
             sut.HorizontalContentAlignment.Should().Be(HorizontalAlignment.Stretch);

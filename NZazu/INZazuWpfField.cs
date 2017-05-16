@@ -24,6 +24,7 @@ namespace NZazu
         DependencyProperty ContentProperty { get; }
 
         void DisposeField();
+        IEnumerable<KeyValuePair<string, string>> GetState();
     }
 
     public interface INZazuWpfField<T> : INZazuWpfField

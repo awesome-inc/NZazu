@@ -1,7 +1,9 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 using NZazu.Contracts;
 using NZazu.Contracts.Checks;
 using NZazu.Extensions;
@@ -13,6 +15,8 @@ namespace NZazu
 {
     public class NZazuView : ScrollViewer, INZazuWpfView
     {
+        public static string FocusOnFieldName => "__focusOn";
+
         #region dependency properties
 
         // ############# FormDefinition
@@ -31,7 +35,6 @@ namespace NZazu
             var view = (NZazuView)d;
             var formDefinition = (FormDefinition)e.NewValue;
             view.UpdateFields(formDefinition, view.FieldFactory, view.ResolveLayout);
-            view.TrySetFocusOn(formDefinition.FocusOn);
         }
 
         // ############# FieldFactory
@@ -97,7 +100,14 @@ namespace NZazu
             var view = (INZazuWpfView)d;
             var fieldValues = (FormData)e.NewValue;
             view.SetFieldValues(fieldValues.Values);
+
+            //if (((Control)view).IsKeyboardFocusWithin == false)
+            //    view.TrySetFocusOn();
+
+            //if (e.OldValue != e.NewValue &&fieldValues.Values.ContainsKey("__focusOn"))
+            //    view.TrySetFocusOn(fieldValues.Values["__focusOn"]);
         }
+
 
         public FormData FormData
         {
@@ -135,9 +145,10 @@ namespace NZazu
 
         private void InitializeComponent()
         {
-            Layout.Focusable = false;
             // cf.: http://compiledexperience.com/blog/posts/using-caliburn-micro-as-a-data-template-selector/
-            Layout.IsTabStop = false;
+            // we make this tab selectable so we can jump directly into the last selected field
+            Layout.Focusable = true;
+            Layout.IsTabStop = true;
             Layout.VerticalContentAlignment = VerticalAlignment.Stretch;
             Layout.HorizontalContentAlignment = HorizontalAlignment.Stretch;
 
@@ -145,6 +156,16 @@ namespace NZazu
             SetVerticalScrollBarVisibility(Layout, ScrollBarVisibility.Visible);
 
             Layout.LostFocus += (s, e) => ApplyChanges();
+            Layout.GotKeyboardFocus += (s, e) =>
+            {
+                // remember ctrl with focus for state
+                var focusIsAt = GetFocussedControl(e.NewFocus as FrameworkElement);
+
+                _lastFoussedElement = focusIsAt;
+                // now if I focus on the control, I focus on the last field
+                if (Equals(e.NewFocus, Layout))
+                    TrySetFocusOn();
+            };
 
             FieldFactory = new NZazuFieldFactory(new NZazuFieldBehaviorFactory(), new CheckFactory(), new NZazuXmlSerializer());
         }
@@ -156,6 +177,9 @@ namespace NZazu
 
         public INZazuWpfField GetField(string key)
         {
+            // in case we have a "settings" field.
+            if (key.StartsWith("_")) return null;
+
             INZazuWpfField field;
             if (TryGetField(key, out field))
                 return field;
@@ -171,9 +195,31 @@ namespace NZazu
         public Dictionary<string, string> GetFieldValues()
         {
             return _fields
+                // lets add the data
                 .Where(f => f.Value.IsEditable)
                 .Where(f => !string.IsNullOrEmpty(f.Value.StringValue))
-                .ToDictionary(f => f.Key, f => f.Value.StringValue);
+                .Select(x => new KeyValuePair<string, string>(x.Key, x.Value.StringValue))
+                // now lets add the state
+                .Concat(_fields
+                    .Where(f => !string.IsNullOrEmpty(f.Value.StringValue))
+                    .SelectMany(x => x.Value.GetState()))
+                .Concat(new[] { new KeyValuePair<string, string>("__focusOn", _lastFoussedElement?.Key), })
+                .ToDictionary(x => x.Key, x => x.Value);
+        }
+
+        private INZazuWpfField GetFocussedControl(UIElement focusedSubControl)
+        {
+            if (focusedSubControl == null) return null;
+
+            var nzfield = _fields.SingleOrDefault(x => Equals(x.Value?.ValueControl, focusedSubControl)).Value;
+
+            if (nzfield != null) return nzfield;
+
+            var parent = VisualTreeHelper.GetParent(focusedSubControl);
+            if (parent != null)
+                return GetFocussedControl(parent as UIElement);
+
+            return null;
         }
 
         public ValueCheckResult Validate()
@@ -182,10 +228,11 @@ namespace NZazu
             return result ?? ValueCheckResult.Success;
         }
 
-        public bool TrySetFocusOn(string focusOn)
+        public bool TrySetFocusOn(string focusOn = null)
         {
             INZazuWpfField field;
-            if (string.IsNullOrWhiteSpace(focusOn) || !TryGetField(focusOn, out field)) return false;
+            var safeFocusOn = focusOn ?? (FormData.Values.ContainsKey(FocusOnFieldName) ? FormData.Values[FocusOnFieldName] : null);
+            if (string.IsNullOrWhiteSpace(safeFocusOn) || !TryGetField(safeFocusOn, out field)) return false;
 
             var control = field.ValueControl;
             if (control == null) return false;
@@ -197,6 +244,7 @@ namespace NZazu
         }
 
         private readonly IDictionary<string, INZazuWpfField> _fields = new Dictionary<string, INZazuWpfField>();
+        private INZazuWpfField _lastFoussedElement;
 
         private void UpdateFields(
             FormDefinition formDefinition,
