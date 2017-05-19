@@ -390,7 +390,7 @@ namespace NZazu
             otherCtrl.IsFocused.Should().BeFalse();
             keyCtrl.IsFocused.Should().BeTrue();
 
-            view.TrySetFocusOn("other").Should().BeTrue();
+            view.TrySetFocusOn("other", true).Should().BeTrue();
             keyCtrl.IsFocused.Should().BeFalse();
             otherCtrl.IsFocused.Should().BeTrue();
         }

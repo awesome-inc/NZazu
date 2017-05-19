@@ -129,7 +129,7 @@ namespace NZazuFiddle
             // options <- Selector <- ItemsControl <- Control
             CompleteSettingsFor<ComboBox>(map);
             // bool <-> check box
-            CompleteSettingsFor<ToggleButton>(map);
+            CompleteSettingsFor<CheckBox>(map);
             // int,double <-> Numeric up down
             CompleteSettingsFor<DoubleUpDown>(map);
             // datetime

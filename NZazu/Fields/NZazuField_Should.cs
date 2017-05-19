@@ -34,7 +34,7 @@ namespace NZazu.Fields
             protected override string GetStringValue() { return _stringValue; }
             public override string Type => null;
             public override DependencyProperty ContentProperty => null;
-            protected override Control GetValue() { return null; }
+            protected override Control CreateValueControl() { return null; }
         }
 
         [ExcludeFromCodeCoverage]
@@ -43,7 +43,7 @@ namespace NZazu.Fields
             public NZazuField_With_Description_As_Content_Property(FieldDefinition definition) : base(definition) { }
 
             public override DependencyProperty ContentProperty => ContentControl.ContentProperty;
-            protected override Control GetValue() { return new ContentControl(); }
+            protected override Control CreateValueControl() { return new ContentControl(); }
         }
 
 
@@ -53,7 +53,7 @@ namespace NZazu.Fields
             public GenericDummyField(FieldDefinition definition) : base(definition) { }
             public override DependencyProperty ContentProperty { get { throw new NotImplementedException(); } }
             public override string Type { get { throw new NotImplementedException(); } }
-            protected override Control GetValue() { throw new NotImplementedException(); }
+            protected override Control CreateValueControl() { throw new NotImplementedException(); }
             protected override void SetStringValue(string value) { throw new NotImplementedException(); }
             protected override string GetStringValue() { throw new NotImplementedException(); }
         }

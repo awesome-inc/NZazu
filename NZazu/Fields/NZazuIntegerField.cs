@@ -12,7 +12,7 @@ namespace NZazu.Fields
         public override string Type => "int";
         public override DependencyProperty ContentProperty => TextBox.TextProperty;
 
-        protected override Control GetValue()
+        protected override Control CreateValueControl()
         {
             return new TextBox { ToolTip = Description };
         }

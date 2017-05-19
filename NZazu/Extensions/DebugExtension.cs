@@ -1,10 +1,16 @@
 ﻿using System;
 using System.Windows.Markup;
+using NEdifis.Attributes;
 
-public class DebugExtension : MarkupExtension
+// cf: https://social.msdn.microsoft.com/Forums/vstudio/en-US/549eeb7c-8df7-4a6c-a264-91f06ca75293/debug-wpf-binding?forum=wpf
+namespace NZazu.Extensions
 {
-    public override object ProvideValue(IServiceProvider serviceProvider)
+    [ExcludeFromConventions("stolen from StackOverflow")]
+    public class DebugExtension : MarkupExtension
     {
-        return DebugConverter.Instance;
+        public override object ProvideValue(IServiceProvider serviceProvider)
+        {
+            return DebugConverter.Instance;
+        }
     }
 }

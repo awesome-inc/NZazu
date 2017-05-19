@@ -1,6 +1,5 @@
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
 using NZazu.Contracts;
 
 namespace NZazu.Fields
@@ -24,9 +23,10 @@ namespace NZazu.Fields
         }
 
         public override string Type => "bool";
-        public override DependencyProperty ContentProperty => ToggleButton.IsCheckedProperty;
+        // ReSharper disable once AccessToStaticMemberViaDerivedType
+        public override DependencyProperty ContentProperty => CheckBox.IsCheckedProperty;
 
-        protected override Control GetValue()
+        protected override Control CreateValueControl()
         {
             return new CheckBox
             {

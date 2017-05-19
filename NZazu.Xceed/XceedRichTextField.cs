@@ -16,7 +16,7 @@ namespace NZazu.Xceed
 
         public override DependencyProperty ContentProperty => RichTextBox.TextProperty;
 
-        protected override Control GetValue()
+        protected override Control CreateValueControl()
         {
             var control = new RichTextBox
             {

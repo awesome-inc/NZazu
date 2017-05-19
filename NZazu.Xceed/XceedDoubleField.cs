@@ -17,7 +17,7 @@ namespace NZazu.Xceed
 
         public override string Type => "double";
 
-        protected override Control GetValue()
+        protected override Control CreateValueControl()
         {
             var control = new DoubleUpDown { ToolTip = Description, Watermark = Hint };
             var formatString = GetSetting("Format");

@@ -15,7 +15,7 @@ namespace NZazu.Fields
 
         public string[] Options { get; protected internal set; }
 
-        protected override Control GetValue()
+        protected override Control CreateValueControl()
         {
             var control = new ComboBox { ToolTip = Description};
             if (Options != null)

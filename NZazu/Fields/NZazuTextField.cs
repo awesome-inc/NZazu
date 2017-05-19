@@ -6,15 +6,33 @@ namespace NZazu.Fields
 {
     public class NZazuTextField : NZazuField<string>
     {
+        private TextBox _control;
+        private readonly object _lockObj = new object();
+
         public NZazuTextField(FieldDefinition definition) : base(definition) { }
 
-        protected override void SetStringValue(string value) { Value = value; }
-        protected override string GetStringValue() { return Value; }
+        protected override void SetStringValue(string value)
+        {
+            Value = value;
+        }
+        protected override string GetStringValue()
+        {
+          var foo = CreateValueControl().GetValue(ContentProperty) ; return Value;
+        }
 
         public override string Type => "string";
 
         public override DependencyProperty ContentProperty => TextBox.TextProperty;
 
-        protected override Control GetValue() { return new TextBox { ToolTip = Description }; }
+        protected override Control CreateValueControl()
+        {
+            lock (_lockObj)
+            {
+                if (_control == null)
+                    _control = new TextBox { ToolTip = Description };
+            }
+
+            return _control;
+        }
     }
 }

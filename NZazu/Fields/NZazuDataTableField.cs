@@ -311,7 +311,7 @@ namespace NZazu.Fields
         public override DependencyProperty ContentProperty => null;
         public override string Type => "datatable";
 
-        protected override Control GetValue()
+        protected override Control CreateValueControl()
         {
             if (_clientControl != null) return _clientControl;
 

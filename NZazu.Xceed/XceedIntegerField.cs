@@ -15,7 +15,7 @@ namespace NZazu.Xceed
 
         public override DependencyProperty ContentProperty => IntegerUpDown.ValueProperty;
 
-        protected override Control GetValue()
+        protected override Control CreateValueControl()
         {
             var control = new IntegerUpDown {ToolTip = Description, Watermark = Hint};
             var formatString = GetSetting("Format");

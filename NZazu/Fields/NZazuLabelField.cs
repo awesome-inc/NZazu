@@ -17,6 +17,6 @@ namespace NZazu.Fields
 
         public override DependencyProperty ContentProperty => null;
 
-        protected override Control GetValue() { return !string.IsNullOrWhiteSpace(Description) ? new Label { Content = Description } : null; }
+        protected override Control CreateValueControl() { return !string.IsNullOrWhiteSpace(Description) ? new Label { Content = Description } : null; }
     }
 }

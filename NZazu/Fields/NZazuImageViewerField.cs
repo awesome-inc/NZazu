@@ -68,7 +68,7 @@ namespace NZazu.Fields
 
         public override DependencyProperty ContentProperty => Image.SourceProperty;
 
-        protected override Control GetValue()
+        protected override Control CreateValueControl()
         {
             if (_clientControl != null) return _clientControl;
 

@@ -62,7 +62,7 @@ namespace NZazu.Fields
         public override string Type => "double";
         public override DependencyProperty ContentProperty => TextBox.TextProperty;
 
-        protected override Control GetValue()
+        protected override Control CreateValueControl()
         {
             var result = new TextBox { ToolTip = Description };
             return result;

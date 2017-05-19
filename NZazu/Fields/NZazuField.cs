@@ -19,6 +19,8 @@ namespace NZazu.Fields
 
         private readonly Lazy<Control> _labelControl;
         private readonly Lazy<Control> _valueControl;
+        private readonly object _lockObj = new object();
+        protected Control Control;
 
         public abstract bool IsEditable { get; }
         public string StringValue
@@ -72,22 +74,29 @@ namespace NZazu.Fields
 
         protected internal IValueCheck Check { get; set; }
 
-        protected virtual Control GetLabel() { return !string.IsNullOrWhiteSpace(Prompt) ? new Label { Content = Prompt } : null; }
-        protected abstract Control GetValue();
+        protected virtual Control CreateLabelControl() { return !string.IsNullOrWhiteSpace(Prompt) ? new Label { Content = Prompt } : null; }
+        protected abstract Control CreateValueControl();
 
         private Control GetLabelControl()
         {
-            return GetLabel();
+            return CreateLabelControl();
         }
 
         private Control GetValueControl()
         {
-            var control = GetValue();
-            ApplySettings(control);
-            return DecorateValidation(control);
+            if (Control != null) return Control;
+
+            lock (_lockObj)
+            {
+                Control = CreateValueControl();
+                ApplySettings(Control);
+                DecorateValidation(Control);
+            }
+
+            return Control;
         }
 
-        private void ApplySettings(Control control)
+        private Control ApplySettings(Control control)
         {
             var height = GetSetting<double>("Height");
             if (height.HasValue)
@@ -97,6 +106,7 @@ namespace NZazu.Fields
                 control.MinWidth = control.MaxWidth = width.Value;
 
             ApplyGenericSettings(control);
+            return control;
         }
 
         private void ApplyGenericSettings(Control control)
@@ -121,7 +131,10 @@ namespace NZazu.Fields
                 NotifyOnTargetUpdated = true,
                 NotifyOnSourceUpdated = true,
                 IsAsync = false,
+                FallbackValue = GetDefaultValue(ContentProperty.PropertyType),
+                //Converter =new DebugConverter(), // awesome stuff to debug 
                 UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged,
+                TargetNullValue = string.Empty
             };
             binding = DecorateBinding(binding);
             control.SetBinding(ContentProperty, binding);
@@ -132,6 +145,14 @@ namespace NZazu.Fields
             binding.ValidationRules.Add(new CheckValidationRule(Check) { ValidatesOnTargetUpdated = true });
 
             return control;
+        }
+
+        private object GetDefaultValue(Type t)
+        {
+            if (t.IsValueType)
+                return Activator.CreateInstance(t);
+
+            return null;
         }
 
         /// <summary>
@@ -179,7 +200,10 @@ namespace NZazu.Fields
 
         public T Value
         {
-            get { return _value; }
+            get
+            {
+                return _value;
+            }
             set
             {
                 _value = value;

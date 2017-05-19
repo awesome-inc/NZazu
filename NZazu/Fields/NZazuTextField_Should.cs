@@ -64,12 +64,10 @@ namespace NZazu.Fields
 
             sut.StringValue = "test";
             sut.StringValue.Should().Be("test");
-
-
             textBox.Text.Should().Be("test");
 
             textBox.Text = string.Empty;
-            sut.StringValue.Should().BeEmpty();
+            sut.StringValue.Should().BeNullOrEmpty();
         }
     }
 }

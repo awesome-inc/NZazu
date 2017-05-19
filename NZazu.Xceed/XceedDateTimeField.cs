@@ -12,7 +12,7 @@ namespace NZazu.Xceed
 
         public override DependencyProperty ContentProperty => DateTimePickerWithUpdate.ValueProperty;
 
-        protected override Control GetValue()
+        protected override Control CreateValueControl()
         {
             var control = new DateTimePickerWithUpdate { ToolTip = Description, Watermark = Hint };
 

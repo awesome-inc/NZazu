@@ -20,7 +20,7 @@ namespace NZazu.Fields
         public string Layout { get; set; }
         public IEnumerable<INZazuWpfField> Fields { get; set; }
 
-        protected override Control GetValue()
+        protected override Control CreateValueControl()
         {
             if (string.IsNullOrEmpty(Description))
                 return new ContentControl { Focusable = false };

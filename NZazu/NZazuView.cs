@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -199,14 +198,16 @@ namespace NZazu
                 .Where(f => f.Value.IsEditable)
                 .Where(f => !string.IsNullOrEmpty(f.Value.StringValue))
                 .Select(x => new KeyValuePair<string, string>(x.Key, x.Value.StringValue))
-                // now lets add the state
+                // now lets add the control state
                 .Concat(_fields
                     .Where(f => !string.IsNullOrEmpty(f.Value.StringValue))
                     .SelectMany(x => x.Value.GetState()))
+                // and dont forget the focus
                 .Concat(new[] { new KeyValuePair<string, string>("__focusOn", _lastFoussedElement?.Key), })
                 .ToDictionary(x => x.Key, x => x.Value);
         }
 
+        // ReSharper disable once SuggestBaseTypeForParameter
         private INZazuWpfField GetFocussedControl(UIElement focusedSubControl)
         {
             if (focusedSubControl == null) return null;
@@ -228,7 +229,7 @@ namespace NZazu
             return result ?? ValueCheckResult.Success;
         }
 
-        public bool TrySetFocusOn(string focusOn = null)
+        public bool TrySetFocusOn(string focusOn = null, bool force = false)
         {
             INZazuWpfField field;
             var safeFocusOn = focusOn ?? (FormData.Values.ContainsKey(FocusOnFieldName) ? FormData.Values[FocusOnFieldName] : null);
@@ -236,6 +237,7 @@ namespace NZazu
 
             var control = field.ValueControl;
             if (control == null) return false;
+            if (force) this.RemoveFocus();
 
             control.SetFocus();
             control.DelayedFocus();

@@ -15,7 +15,7 @@ namespace NZazu
 
         INZazuWpfField GetField(string key);
         bool TryGetField(string key, out INZazuWpfField field);
-        bool TrySetFocusOn(string key = null);
+        bool TrySetFocusOn(string key = null, bool force = false);
 
         Dictionary<string, string> GetFieldValues();
         void ApplyChanges();
