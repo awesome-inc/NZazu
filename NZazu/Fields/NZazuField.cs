@@ -7,6 +7,7 @@ using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using System.Windows.Markup;
 using NZazu.Contracts;
 using NZazu.Contracts.Checks;
 
@@ -126,24 +127,28 @@ namespace NZazu.Fields
                 Source = this,
                 Mode = BindingMode.TwoWay,
                 ValidatesOnDataErrors = true,
-                ValidatesOnExceptions = true,
-                NotifyOnValidationError = true,
+                //ValidatesOnExceptions = true,
+                //NotifyOnValidationError = false,
                 NotifyOnTargetUpdated = true,
                 NotifyOnSourceUpdated = true,
                 IsAsync = false,
                 FallbackValue = GetDefaultValue(ContentProperty.PropertyType),
                 //Converter =new DebugConverter(), // awesome stuff to debug 
-                UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged,
-                TargetNullValue = string.Empty
+                UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged
             };
+            //binding.TargetNullValue = string.Empty;
             binding = DecorateBinding(binding);
-            control.SetBinding(ContentProperty, binding);
 
-            if (Check == null) return control; // no checks, no validation required. saves performance
+            if (Check == null)
+            {
+                control.SetBinding(ContentProperty, binding);
+                return control; // no checks, no validation required. saves performance
+            }
 
             binding.ValidationRules.Clear();
             binding.ValidationRules.Add(new CheckValidationRule(Check) { ValidatesOnTargetUpdated = true });
 
+            control.SetBinding(ContentProperty, binding);
             return control;
         }
 
@@ -227,7 +232,6 @@ namespace NZazu.Fields
         {
             if (Nullable.GetUnderlyingType(typeof(T)) == null) return binding;
 
-            binding.TargetNullValue = string.Empty;
             return binding;
         }
     }
