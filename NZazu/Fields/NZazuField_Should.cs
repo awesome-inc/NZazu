@@ -178,7 +178,8 @@ namespace NZazu.Fields
         {
             // but we need a dummy content enabled field -> no content, no validation
             var check = Substitute.For<IValueCheck>();
-            check.Validate(Arg.Any<string>()).Returns(new ValueCheckResult(false, "test"));
+            check.Validate(Arg.Any<string>(), Arg.Any<CultureInfo>())
+                .Returns(new ValueCheckResult(false, "test"));
 
             var sut = new NZazuField_With_Description_As_Content_Property(new FieldDefinition { Key = "test" })
             { Description = "description", Check = check };

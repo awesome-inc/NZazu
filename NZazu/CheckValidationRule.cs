@@ -18,7 +18,7 @@ namespace NZazu
         public override ValidationResult Validate(object value, CultureInfo cultureInfo)
         {
             var stringValue = Convert.ToString(value);
-            var vr = _check.Validate(stringValue, cultureInfo);
+            var vr = _check.Validate(stringValue, cultureInfo ?? CultureInfo.CurrentCulture);
 
             var error = vr.Error;
             var exception = error as Exception;

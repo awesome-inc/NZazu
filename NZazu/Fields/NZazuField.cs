@@ -10,6 +10,7 @@ using System.Windows.Data;
 using System.Windows.Markup;
 using NZazu.Contracts;
 using NZazu.Contracts.Checks;
+using NZazu.Extensions;
 
 namespace NZazu.Fields
 {
@@ -127,16 +128,15 @@ namespace NZazu.Fields
                 Source = this,
                 Mode = BindingMode.TwoWay,
                 ValidatesOnDataErrors = true,
-                //ValidatesOnExceptions = true,
-                //NotifyOnValidationError = false,
+                ValidatesOnExceptions = true,
+                NotifyOnValidationError = false,
                 NotifyOnTargetUpdated = true,
                 NotifyOnSourceUpdated = true,
                 IsAsync = false,
-                FallbackValue = GetDefaultValue(ContentProperty.PropertyType),
-                //Converter =new DebugConverter(), // awesome stuff to debug 
+                Converter = new DebugConverter(), // awesome stuff to debug 
                 UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged
             };
-            //binding.TargetNullValue = string.Empty;
+            binding.TargetNullValue = string.Empty;
             binding = DecorateBinding(binding);
 
             if (Check == null)
@@ -150,14 +150,6 @@ namespace NZazu.Fields
 
             control.SetBinding(ContentProperty, binding);
             return control;
-        }
-
-        private object GetDefaultValue(Type t)
-        {
-            if (t.IsValueType)
-                return Activator.CreateInstance(t);
-
-            return null;
         }
 
         /// <summary>
