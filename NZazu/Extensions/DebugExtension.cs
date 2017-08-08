@@ -10,7 +10,7 @@ namespace NZazu.Extensions
     {
         public override object ProvideValue(IServiceProvider serviceProvider)
         {
-            return DebugConverter.Instance;
+            return NoExceptionsConverter.Instance;
         }
     }
 }

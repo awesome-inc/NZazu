@@ -72,7 +72,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Extensions\DebugConverter.cs" />
+    <Compile Include="Extensions\NoExceptionsConverter.cs" />
     <Compile Include="Extensions\DebugExtension.cs" />
     <Compile Include="Extensions\FieldExtensions.cs" />
     <Compile Include="Extensions\FocusExtensions.cs" />

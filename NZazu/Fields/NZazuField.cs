@@ -7,7 +7,6 @@ using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Markup;
 using NZazu.Contracts;
 using NZazu.Contracts.Checks;
 using NZazu.Extensions;
@@ -46,7 +45,7 @@ namespace NZazu.Fields
         public Dictionary<string, string> Settings { get; }
         public INZazuWpfFieldBehavior Behavior { get; set; }
 
-        protected NZazuField(FieldDefinition definition)
+        protected NZazuField(FieldDefinition definition, IValueConverter valueConverter = null)
         {
             if (definition == null) throw new ArgumentNullException(nameof(definition));
             if (definition == null) throw new ArgumentNullException(nameof(definition));
@@ -58,6 +57,7 @@ namespace NZazu.Fields
             _labelControl = new Lazy<Control>(GetLabelControl);
             _valueControl = new Lazy<Control>(GetValueControl);
             Settings = new Dictionary<string, string>();
+            ValueConverter = valueConverter ?? NoExceptionsConverter.Instance;
         }
 
         public virtual ValueCheckResult Validate()
@@ -78,6 +78,8 @@ namespace NZazu.Fields
 
         protected virtual Control CreateLabelControl() { return !string.IsNullOrWhiteSpace(Prompt) ? new Label { Content = Prompt } : null; }
         protected abstract Control CreateValueControl();
+
+        public IValueConverter ValueConverter { get; private set; }
 
         private Control GetLabelControl()
         {
@@ -133,23 +135,21 @@ namespace NZazu.Fields
                 NotifyOnTargetUpdated = true,
                 NotifyOnSourceUpdated = true,
                 IsAsync = false,
-                Converter = new DebugConverter(), // awesome stuff to debug 
                 UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged
             };
-            binding.TargetNullValue = string.Empty;
+            if (ValueConverter != null)
+                binding.Converter = ValueConverter;
+
             binding = DecorateBinding(binding);
 
-            if (Check == null)
+            if (Check != null)
             {
-                control.SetBinding(ContentProperty, binding);
-                return control; // no checks, no validation required. saves performance
+                binding.ValidationRules.Clear();
+                binding.ValidationRules.Add(new CheckValidationRule(Check) { ValidatesOnTargetUpdated = true });
             }
 
-            binding.ValidationRules.Clear();
-            binding.ValidationRules.Add(new CheckValidationRule(Check) { ValidatesOnTargetUpdated = true });
-
             control.SetBinding(ContentProperty, binding);
-            return control;
+            return control; // no checks, no validation required. saves performance
         }
 
         /// <summary>
