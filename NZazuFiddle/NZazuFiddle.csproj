@@ -139,6 +139,7 @@
     <Compile Include="IHaveJson.cs" />
     <Compile Include="IPreviewViewModel.cs" />
     <Compile Include="ISample.cs" />
+    <Compile Include="IServerCommand.cs" />
     <Compile Include="IShell.cs" />
     <Compile Include="NZazuAutoCompletion.cs" />
     <Compile Include="NzazuCompletionData.cs" />
@@ -169,6 +170,10 @@
       <DependentUpon>SampleView.xaml</DependentUpon>
     </Compile>
     <Compile Include="SampleViewModel.cs" />
+    <Compile Include="ServerCommandView.xaml.cs">
+      <DependentUpon>ServerCommandView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ServerCommandViewModel.cs" />
     <Compile Include="ShellView.xaml.cs">
       <DependentUpon>ShellView.xaml</DependentUpon>
     </Compile>
@@ -192,6 +197,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="SampleView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ServerCommandView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

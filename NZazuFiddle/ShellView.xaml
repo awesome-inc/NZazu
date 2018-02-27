@@ -5,16 +5,23 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:nZazuFiddle="clr-namespace:NZazuFiddle"
              mc:Ignorable="d" d:DataContext="{d:DesignInstance nZazuFiddle:ShellViewModel}">
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
+    
+    <StackPanel>
 
-        <ListBox x:Name="Samples"
-            ItemsSource="{Binding Samples}" 
-            SelectedItem="{Binding SelectedSample}" />
+        <nZazuFiddle:ServerCommandView/>
 
-        <ContentControl Grid.Column="1" x:Name="SelectedSample"/>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <ListBox x:Name="Samples"
+                ItemsSource="{Binding Samples}" 
+                SelectedItem="{Binding SelectedSample}" />
+
+            <ContentControl Grid.Column="1" x:Name="SelectedSample"/>
     </Grid>
+
+    </StackPanel>
 </UserControl>

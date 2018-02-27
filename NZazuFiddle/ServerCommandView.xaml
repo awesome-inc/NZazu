@@ -1,0 +1,22 @@
+﻿<UserControl x:Class="NZazuFiddle.ServerCommandView"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:NZazuFiddle"
+      mc:Ignorable="d" d:DataContext="{d:DesignInstance local:ShellViewModel}">
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="150"/>
+            <ColumnDefinition Width="300"/>
+            <ColumnDefinition Width="100"/>
+        </Grid.ColumnDefinitions>
+
+        <TextBlock Text="Database request:" Grid.Column="0" FontWeight="Bold" Margin="10"></TextBlock>
+        <TextBox Text="{Binding Endpoint}" Grid.Column="1" Margin="10"></TextBox>
+        <Button Grid.Column="2" Content="Send" Margin="10"></Button>
+    </Grid>
+
+</UserControl>
+
