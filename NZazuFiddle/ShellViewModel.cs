@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -8,6 +9,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NZazu.Contracts;
 using NZazuFiddle.Samples;
+using Xceed.Wpf.Toolkit;
 
 namespace NZazuFiddle
 {
@@ -81,27 +83,35 @@ namespace NZazuFiddle
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
+                Trace.TraceError(e.StackTrace);
                 throw;
             }
             
         }
 
-
         public List<ISample> DeserializeSamplesFromEndpoint(string json)
         {
+          
+            var samples = JObject.Parse(json)["hits"]
+                .SelectToken("hits")
+                .Select(hit => hit.SelectToken("_source"))
+                .Select(source => mapJsonToSample(
+                        source.SelectToken("Id").ToString(), 
+                        source.SelectToken("FormDefinition").ToString(), 
+                        source.SelectToken("Values").ToString()
+                            ) 
+                    )
+                ;
 
-            dynamic data = JsonConvert.DeserializeObject<Object>(json);
-            var hits = data.hits.hits;
+            return samples.ToList();
+        }
 
-
-
-            //var sampleFormDefinition = JsonConvert.DeserializeObject<FormDefinition>(value);
-            //var sampleFormData = JsonConvert.DeserializeObject<FormData>(value);
-
-            //new SampleTemplate(sampleFormDefinition, sampleFormData);
-
-            throw new NotImplementedException();
+        private ISample mapJsonToSample(string sampleId, string sampleFormDefAsJson, string sampleFormDataAsJson)
+        {
+            var sampleFormDefinition = JsonConvert.DeserializeObject<FormDefinition>(sampleFormDefAsJson);
+            var sampleFormData = JsonConvert.DeserializeObject<FormData>(sampleFormDataAsJson);
+            var sampleTemplate = new SampleTemplate(sampleId, sampleFormDefinition, sampleFormData);
+            return sampleTemplate.Sample;
         }
 
 

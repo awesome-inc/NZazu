@@ -20,7 +20,6 @@ namespace NZazuFiddle
             {
                 Name = name,
                 Fiddle = ToFiddle(sampleFormDefinition, sampleFormData)
-
             };
         }
 

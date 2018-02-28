@@ -19,9 +19,9 @@ namespace NZazuFiddle
             builder.RegisterType<SampleTemplate>().As<IHaveSample>().AsImplementedInterfaces();
 
             // register all samples
-            builder.RegisterAssemblyTypes(Assembly.GetExecutingAssembly())
-               .Where(t => typeof(IHaveSample).IsAssignableFrom(t))
-               .AsImplementedInterfaces();
+            //builder.RegisterAssemblyTypes(Assembly.GetExecutingAssembly())
+            //   .Where(t => typeof(IHaveSample).IsAssignableFrom(t))
+            //   .AsImplementedInterfaces();
         }
 
         protected override void ConfigureBootstrapper()
