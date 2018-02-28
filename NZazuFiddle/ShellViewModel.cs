@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Caliburn.Micro;
+using FluentAssertions.Reflection;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NZazu.Contracts;
@@ -13,7 +14,7 @@ using Xceed.Wpf.Toolkit;
 
 namespace NZazuFiddle
 {
-    internal sealed class ShellViewModel : Screen,IShell
+    internal sealed class ShellViewModel : Screen, IShell
     {
         private readonly BindableCollection<ISample> _samples = new BindableCollection<ISample>();
         private ISample _selectedSample;
@@ -22,7 +23,7 @@ namespace NZazuFiddle
         public ShellViewModel(IEnumerable<IHaveSample> samples = null)
         {
             DisplayName = "NZazuFiddle";
-            if (samples != null) 
+            if (samples != null)
                 Samples = samples.OrderBy(s => s.Order).Select(s => s.Sample);
         }
 
@@ -86,20 +87,20 @@ namespace NZazuFiddle
                 Trace.TraceError(e.StackTrace);
                 throw;
             }
-            
+
         }
 
         public List<ISample> DeserializeSamplesFromEndpoint(string json)
         {
-          
+
             var samples = JObject.Parse(json)["hits"]
                 .SelectToken("hits")
                 .Select(hit => hit.SelectToken("_source"))
                 .Select(source => mapJsonToSample(
-                        source.SelectToken("Id").ToString(), 
-                        source.SelectToken("FormDefinition").ToString(), 
+                        source.SelectToken("Id").ToString(),
+                        source.SelectToken("FormDefinition").ToString(),
                         source.SelectToken("Values").ToString()
-                            ) 
+                            )
                     )
                 ;
 
