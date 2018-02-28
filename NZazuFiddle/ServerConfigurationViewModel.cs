@@ -4,12 +4,22 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
+using Caliburn.Micro;
 
 namespace NZazuFiddle
 {
-    class ServerCommandViewModel : IServerCommand
+    class ServerConfigurationViewModel : IServerConfiguration
     {
+        private readonly IEventAggregator _events = null;
         private string _endpointUri = "http://sw-mews-01-app:9200/tacon";
+
+        public ServerConfigurationViewModel(IEventAggregator events, string endpointUri = "http://sw-mews-01-app:9200/tacon")
+        {
+            _events = events ?? throw new ArgumentNullException(nameof(events));
+            _events.Subscribe(this);
+            _endpointUri = endpointUri ?? throw new ArgumentNullException(nameof(endpointUri));
+        }
 
         public string Endpoint
         {
@@ -34,5 +44,13 @@ namespace NZazuFiddle
             }
             return result;
         }
+
+        public async void GetData()
+        {
+            var res = await GetDataFromEndpoint(_endpointUri);
+
+            _events.PublishOnUIThread(res);
+        }
+    
     }
 }

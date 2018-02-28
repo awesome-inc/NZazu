@@ -8,11 +8,21 @@
     
     <StackPanel>
 
-        <nZazuFiddle:ServerCommandView/>
-
         <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="150"/>
+                <ColumnDefinition Width="300"/>
+                <ColumnDefinition Width="100"/>
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Text="Database request:" Grid.Column="0" FontWeight="Bold" Margin="10"></TextBlock>
+            <TextBox Text="{Binding Endpoint}" Grid.Column="1" Margin="10"></TextBox>
+            <Button Grid.Column="2" Content="Send" Margin="10" x:Name="GetData"></Button>
+        </Grid>
+
+        <Grid MinHeight="400">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" MinWidth="150"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 

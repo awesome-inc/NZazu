@@ -18,9 +18,9 @@ namespace NZazuFiddle
     /// <summary>
     /// Interaction logic for ServerCommandView.xaml
     /// </summary>
-    public partial class ServerCommandView : UserControl
+    public partial class ServerConfigurationView : UserControl
     {
-        public ServerCommandView()
+        public ServerConfigurationView()
         {
             InitializeComponent();
         }

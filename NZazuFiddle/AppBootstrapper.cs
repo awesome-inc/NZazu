@@ -16,7 +16,8 @@ namespace NZazuFiddle
         protected override void ConfigureContainer(ContainerBuilder builder)
         {
             builder.RegisterType<ShellViewModel>().As<IShell>().SingleInstance();
-            
+            builder.RegisterType<SampleTemplate>().As<IHaveSample>().AsImplementedInterfaces();
+
             // register all samples
             builder.RegisterAssemblyTypes(Assembly.GetExecutingAssembly())
                .Where(t => typeof(IHaveSample).IsAssignableFrom(t))

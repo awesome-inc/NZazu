@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace NZazuFiddle
 {
-    public interface IServerCommand
+    public interface IServerConfiguration
     {
         string Endpoint { get; set; }
 
