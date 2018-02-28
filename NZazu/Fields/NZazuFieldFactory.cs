@@ -49,7 +49,8 @@ namespace NZazu.Fields
             else
             {
                 Trace.TraceWarning("The specified field type is not supported: " + fieldTypeSafe);
-                field = (NZazuField)Activator.CreateInstance(FieldTypes[DefaultType], fieldDefinition);
+                var res = ProofForAvailableDescription(fieldDefinition);
+                field = (NZazuField)Activator.CreateInstance(FieldTypes[DefaultType], res);
             }
 
             var safeField = field as IRequireFactory;
@@ -66,6 +67,17 @@ namespace NZazu.Fields
                 .AddOptionValues(fieldDefinition)
                 .AddChecks(fieldDefinition.Checks, CheckFactory)
                 .AddBehavior(fieldDefinition.Behavior, BehaviorFactory, View);
+        }
+
+        /// <summary>
+        /// Some unknown types which are mapped to "label" does not carry a "Description" with them.
+        /// The "Description" is taken as content for "label". If "Description" is not set you run into a System.NullReference exception otherwise.
+        /// <see cref="NZazuLabelField.CreateValueControl()"/>
+        /// </summary>
+        private static FieldDefinition ProofForAvailableDescription(FieldDefinition fieldDefinition)
+        {
+            fieldDefinition.Description = fieldDefinition.Description ?? "-";
+            return fieldDefinition;
         }
     }
 }
