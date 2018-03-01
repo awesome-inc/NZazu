@@ -146,22 +146,16 @@ namespace NZazuFiddle
             return samples.ToList();
         }
 
-        private static ISample MapJsonToSample(string dbId, string sampleId, string sampleFormDefAsJson, string sampleFormDataAsJson)
+        private static ISample MapJsonToSample(string dbId, string sampleId, string sampleFormDefAsJson, string sampleFormValues)
         {
             var sampleFormDefinition = JsonConvert.DeserializeObject<FormDefinition>(sampleFormDefAsJson);
-            var sampleFormData = JsonConvert.DeserializeObject<FormData>(sampleFormDataAsJson);
+            var sampleFormData = new FormData(JsonConvert.DeserializeObject<Dictionary<string, string>>(sampleFormValues));
             var sampleTemplate = new SampleTemplate(dbId, sampleId, sampleFormDefinition, sampleFormData);
             return sampleTemplate.Sample;
         }
 
         private static string MapSampleToJson(ISample sample)
         {
-            //var formDefinitionAsJson = sample.Fiddle.Definition.Json;
-            //var formDataAsJson = sample.Fiddle.Data.Json;
-            //var id = sample.Name;
-
-            //var sourceUpdate = "{\r\n" + $"\"Id\": \"{id}\", \r\n {formDefinitionAsJson}, \r\n {formDataAsJson} \r\n" + "}";
-            //return sourceUpdate;
 
             var esDoc = new ElasticSearchDocument
             {
