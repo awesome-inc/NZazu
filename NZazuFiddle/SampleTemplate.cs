@@ -14,10 +14,11 @@ namespace NZazuFiddle
 
         public SampleTemplate(): base(40) { }
 
-        public SampleTemplate(string name, FormDefinition sampleFormDefinition, FormData sampleFormData) : base(40)
+        public SampleTemplate(string id, string name, FormDefinition sampleFormDefinition, FormData sampleFormData) : base(40)
         {
             Sample = new SampleViewModel
             {
+                Id = id,
                 Name = name,
                 Fiddle = ToFiddle(sampleFormDefinition, sampleFormData)
             };

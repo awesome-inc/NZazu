@@ -10,14 +10,16 @@
 
         <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="150"/>
+                <ColumnDefinition Width="200"/>
                 <ColumnDefinition Width="300"/>
+                <ColumnDefinition Width="100"/>
                 <ColumnDefinition Width="100"/>
             </Grid.ColumnDefinitions>
 
-            <TextBlock Text="Database request:" Grid.Column="0" FontWeight="Bold" Margin="10"></TextBlock>
+            <TextBlock Text="Database template source:" Grid.Column="0" FontWeight="Bold" Margin="10"></TextBlock>
             <TextBox Text="{Binding Endpoint}" Grid.Column="1" Margin="10"></TextBox>
-            <Button Grid.Column="2" Content="Send" Margin="10" x:Name="GetData"></Button>
+            <Button Grid.Column="2" Content="Load" Margin="10" x:Name="GetData"></Button>
+            <Button Grid.Column="3" Content="Upload" Margin="10" x:Name="SendData"></Button>
         </Grid>
 
         <Grid MinHeight="400">
