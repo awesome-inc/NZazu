@@ -149,7 +149,7 @@ namespace NZazuFiddle
         private static ISample MapJsonToSample(string dbId, string sampleId, string sampleFormDefAsJson, string sampleFormValues)
         {
             var sampleFormDefinition = JsonConvert.DeserializeObject<FormDefinition>(sampleFormDefAsJson);
-            var sampleFormData = new FormData(JsonConvert.DeserializeObject<Dictionary<string, string>>(sampleFormValues));
+            var sampleFormData = new FormData(JsonConvert.DeserializeObject<Dictionary<string, string>>(sampleFormValues));//JsonConvert.DeserializeObject<FormData>(sampleFormValues);
             var sampleTemplate = new SampleTemplate(dbId, sampleId, sampleFormDefinition, sampleFormData);
             return sampleTemplate.Sample;
         }
@@ -161,7 +161,7 @@ namespace NZazuFiddle
             {
                 Id = sample.Id,
                 FormDefinition = sample.Fiddle.Definition.Model,
-                Values = sample.Fiddle.Data.Model
+                Values = sample.Fiddle.Data.Model.Values
             };
 
             var sampleAsJsonForElasticSearch = JsonConvert.SerializeObject(esDoc, Formatting.Indented
@@ -174,7 +174,7 @@ namespace NZazuFiddle
         {
             public string Id { get; set; }
             public FormDefinition FormDefinition { get; set; }
-            public FormData Values { get; set; }
+            public Dictionary<string,string> Values { get; set; }
         }
 
 

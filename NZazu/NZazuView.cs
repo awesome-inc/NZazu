@@ -171,7 +171,10 @@ namespace NZazu
 
         public void ApplyChanges()
         {
-            FormData = GetFieldValues();
+            var initilValuesAsDict = GetInitialValues();
+            var currentFieldValues = GetFieldValues();
+
+            FormData = initilValuesAsDict.MergedWith(currentFieldValues);
         }
 
         public INZazuWpfField GetField(string key)
@@ -189,6 +192,13 @@ namespace NZazu
         public bool TryGetField(string key, out INZazuWpfField field)
         {
             return _fields.TryGetValue(key, out field);
+        }
+
+        public Dictionary<string, string> GetInitialValues()
+        {
+            // ... which are not stored in fields or predefined from out of NZazu.
+            var res = FormData.Values.Where(f => !_fields.ContainsKey(f.Key));
+            return res.ToDictionary(x => x.Key, x => x.Value);
         }
 
         public Dictionary<string, string> GetFieldValues()
