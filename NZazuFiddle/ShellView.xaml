@@ -8,6 +8,17 @@
     
     <StackPanel>
 
+        <DockPanel>
+            <Menu DockPanel.Dock="Top">
+                <MenuItem Header="_File">
+                    <MenuItem Header="_Import" x:Name="ImportFile"/>
+                    <MenuItem Header="_Import folder" x:Name="ImportFiles"/>
+                    <MenuItem Header="_Export all" x:Name="ExportAll"/>
+                </MenuItem>
+            </Menu>
+            <StackPanel></StackPanel>
+        </DockPanel>
+
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="200"/>

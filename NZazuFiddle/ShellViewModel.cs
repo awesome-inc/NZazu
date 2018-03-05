@@ -1,16 +1,13 @@
-﻿using System;
+﻿using Caliburn.Micro;
+using NZazuFiddle.Samples;
+using NZazuFiddle.TemplateManagement;
+using NZazuFiddle.TemplateManagement.Contracts;
+using NZazuFiddle.TemplateManagement.Data;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
-using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks;
-using Caliburn.Micro;
-using FluentAssertions.Reflection;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using NZazu.Contracts;
-using NZazuFiddle.Samples;
 using Xceed.Wpf.Toolkit;
 
 namespace NZazuFiddle
@@ -19,16 +16,32 @@ namespace NZazuFiddle
     {
         private readonly BindableCollection<ISample> _samples = new BindableCollection<ISample>();
         private ISample _selectedSample;
+        private string _endpoint;
+        private readonly Session _session;
 
-        // REST communication with Elasticsearch
-        private string _endpointUri = "http://127.0.0.1:9200/tacon/form/";
-        private readonly HttpClient _httpClient = new HttpClient();
+        private readonly ITemplateRepoManager _templateManager = new TemplateRepoManager(new ElasticSearchTemplateDbClient(), new JsonTemplateFileIo(), Session.Instance);
 
         public ShellViewModel(IEnumerable<IHaveSample> samples = null)
         {
             DisplayName = "Tacon Template Editor";
             if (samples != null)
                 Samples = samples.OrderBy(s => s.Order).Select(s => s.Sample);
+
+            _session = Session.Instance;
+            _session.PropertyChanged += new PropertyChangedEventHandler(session_PropertyChanged);
+            _session.Endpoint = "http://127.0.0.1:9200/tacon/form/";
+        }
+
+        /// <summary>
+        /// Data binding with current central session via property change events
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void session_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            Trace.TraceInformation("ShellViewModel:: A session property has changed: " + e.PropertyName);
+            if(e.PropertyName == "DbEndpoint") Endpoint = _session.Endpoint;
+            if (e.PropertyName == "Samples") Samples = _session.Samples;
         }
 
         public IEnumerable<ISample> Samples
@@ -56,60 +69,18 @@ namespace NZazuFiddle
 
         public string Endpoint
         {
-            get => _endpointUri;
+            get => _endpoint;
             set
             {
-                if (Equals(value, _endpointUri)) return;
-                _endpointUri = value;
+                if (Equals(value, _endpoint)) return;
+                _endpoint = value;
             }
 
         }
 
-        private async Task<string> GetDataFromEndpoint(string endpoint)
+        public void GetData()
         {
-            string result = null;          
-            var response = await _httpClient.GetAsync(endpoint);
-            if (response.IsSuccessStatusCode)
-            {
-                result = await response.Content.ReadAsStringAsync();
-            }
-            else
-            {
-                Trace.TraceWarning($"Loading data from endpoint failed with status code: {response.StatusCode}");
-            }
-            return result;
-        }
-
-        private async void UploadDataToEndpoint(string requestUri, string id, string dataAsJson)
-        {
-            var content = new StringContent(dataAsJson, Encoding.UTF8, "application/json");
-            var endpoint = requestUri + id;
-            var response = await _httpClient.PutAsync(endpoint, content);
-            if (response.IsSuccessStatusCode)
-            {
-                Trace.TraceInformation("UploadDataToEndpoint");
-            }
-            else
-            {
-                Trace.TraceWarning($"Uploading data from endpoint failed with status code: {response.StatusCode}");
-            }
-
-        }
-
-        public async void GetData()
-        {
-            try
-            {
-                var res = await GetDataFromEndpoint(_endpointUri + "_search");
-                var sampleList = DeserializeSamplesFromEndpoint(res);
-                Samples = sampleList;
-            }
-            catch (Exception e)
-            {
-                Trace.TraceError(e.StackTrace);
-                throw;
-            }
-
+            _templateManager.GetTemplatesFromDb();
         }
 
         public void SendData()
@@ -118,8 +89,7 @@ namespace NZazuFiddle
             {
                 Samples
                     .ToList()
-                    .Select(sample => (id: sample.Id, json: MapSampleToJson(sample)))
-                    .Apply(data => UploadDataToEndpoint(_endpointUri, data.id, data.json));
+                    .Apply(data => _templateManager.UpdateTemplateOnDb(data.Id));
             }
             catch (Exception e)
             {
@@ -128,54 +98,7 @@ namespace NZazuFiddle
             }
         }
 
-        private static List<ISample> DeserializeSamplesFromEndpoint(string json)
-        {
 
-            var samples = JObject.Parse(json)["hits"]
-                .SelectToken("hits")
-                .Select(hit => (dbId: hit.SelectToken("_id"), dbSource: hit.SelectToken("_source")))
-                .Select(source => MapJsonToSample(
-                        source.dbId.ToString(),
-                        source.dbSource.SelectToken("Id").ToString(),
-                        source.dbSource.SelectToken("FormDefinition").ToString(),
-                        source.dbSource.SelectToken("Values").ToString()
-                        )
-                    )
-                ;
-
-            return samples.ToList();
-        }
-
-        private static ISample MapJsonToSample(string dbId, string sampleId, string sampleFormDefAsJson, string sampleFormValues)
-        {
-            var sampleFormDefinition = JsonConvert.DeserializeObject<FormDefinition>(sampleFormDefAsJson);
-            var sampleFormData = new FormData(JsonConvert.DeserializeObject<Dictionary<string, string>>(sampleFormValues));//JsonConvert.DeserializeObject<FormData>(sampleFormValues);
-            var sampleTemplate = new SampleTemplate(dbId, sampleId, sampleFormDefinition, sampleFormData);
-            return sampleTemplate.Sample;
-        }
-
-        private static string MapSampleToJson(ISample sample)
-        {
-
-            var esDoc = new ElasticSearchDocument
-            {
-                Id = sample.Id,
-                FormDefinition = sample.Fiddle.Definition.Model,
-                Values = sample.Fiddle.Data.Model.Values
-            };
-
-            var sampleAsJsonForElasticSearch = JsonConvert.SerializeObject(esDoc, Formatting.Indented
-                , new JsonSerializerSettings {DefaultValueHandling = DefaultValueHandling.Ignore});
-
-            return sampleAsJsonForElasticSearch;
-        }
-
-        private class ElasticSearchDocument
-        {
-            public string Id { get; set; }
-            public FormDefinition FormDefinition { get; set; }
-            public Dictionary<string,string> Values { get; set; }
-        }
 
 
     }
