@@ -1,4 +1,5 @@
 ﻿using Caliburn.Micro;
+using Microsoft.Win32;
 using NZazuFiddle.Samples;
 using NZazuFiddle.TemplateManagement;
 using NZazuFiddle.TemplateManagement.Contracts;
@@ -7,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using Xceed.Wpf.Toolkit;
 
@@ -67,6 +69,25 @@ namespace NZazuFiddle
             }
         }
 
+        // File handling
+        public void ImportFile()
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            if (openFileDialog.ShowDialog() == true) {
+                var isUri = Uri.TryCreate(openFileDialog.FileName, UriKind.Absolute, out Uri uri);
+                if(isUri) _templateManager.LoadTemplateFromFile(openFileDialog.FileName);
+            }
+        }
+
+        public void ImportFiles()
+        {
+            var dialog = new OpenFolderService();
+            var folder = dialog.SelectFolder();
+            if (string.IsNullOrWhiteSpace(folder)) return;
+            _templateManager.LoadTemplatesFromFolder(folder);
+        }
+
+        // Database communication
         public string Endpoint
         {
             get => _endpoint;

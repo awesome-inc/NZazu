@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
-using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace NZazuFiddle.TemplateManagement.Contracts
 {
@@ -26,22 +24,34 @@ namespace NZazuFiddle.TemplateManagement.Contracts
             _dbClient.Endpoint = endpoint;
         }
 
-        public void LoadTemplateFromFile(Uri pathToTemplate)
+        public void LoadTemplateFromFile(string pathToTemplate)
+        {
+            try
+            {
+                var loadedSample = _fileIo.loadTemplate(pathToTemplate);
+                var currentSamples = _session.Samples;
+                currentSamples.Add(loadedSample);
+                _session.Samples = currentSamples;
+            } catch(Exception e)
+            {
+                Trace.TraceError($"{this.GetType().Name}::LoadTemplateFromUri => \r\n Message:{e.Message} \r\n StackTrace:{e.StackTrace}");
+            }
+        }
+
+        public void LoadTemplatesFromFolder(string pathToTemplateFolder)
+        {
+            var files = Directory.GetFiles(pathToTemplateFolder);
+            foreach(string file in files) {
+                LoadTemplateFromFile(file);
+            }
+        }
+
+        public void ExportTemplateToFile(string pathToTemplate)
         {
             throw new NotImplementedException();
         }
 
-        public void LoadTemplatesFromFolder(Uri pathToTemplateFolder)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void ExportTemplateToFile(Uri pathToTemplate)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void ExportTemplatesToFolder(Uri pathToTemplateFolder)
+        public void ExportTemplatesToFolder(string pathToTemplateFolder)
         {
             throw new NotImplementedException();
         }

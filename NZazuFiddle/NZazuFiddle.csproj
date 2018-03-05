@@ -147,6 +147,7 @@
     <Compile Include="IShell.cs" />
     <Compile Include="NZazuAutoCompletion.cs" />
     <Compile Include="NzazuCompletionData.cs" />
+    <Compile Include="OpenFolderService.cs" />
     <Compile Include="PreviewView.xaml.cs">
       <DependentUpon>PreviewView.xaml</DependentUpon>
     </Compile>
@@ -161,6 +162,7 @@
     </Compile>
     <Compile Include="AppBootstrapper.cs" />
     <Compile Include="IFiddle.cs" />
+    <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Samples\BehaviorSample.cs" />
     <Compile Include="Samples\DynamicRowLayout.cs" />
     <Compile Include="Samples\FocusSample.cs" />
@@ -170,7 +172,18 @@
     <Compile Include="Samples\ReadOnlySample.cs" />
     <Compile Include="Samples\SampleBase.cs" />
     <Compile Include="Samples\ValidationSample.cs" />
-    <Compile Include="SampleTemplate.cs" />
+    <Compile Include="TemplateManagement\Contracts\ETemplateStatus.cs" />
+    <Compile Include="TemplateManagement\Contracts\ISession.cs" />
+    <Compile Include="TemplateManagement\Contracts\ITemplateDbClient.cs" />
+    <Compile Include="TemplateManagement\Contracts\ITemplateFileIo.cs" />
+    <Compile Include="TemplateManagement\Contracts\ITemplateRepoManager.cs" />
+    <Compile Include="TemplateManagement\Data\ElasticSearchFormDocument.cs" />
+    <Compile Include="TemplateManagement\Data\Session.cs" />
+    <Compile Include="TemplateManagement\MappingUtil.cs" />
+    <Compile Include="TemplateManagement\TemplateRepoManager.cs" />
+    <Compile Include="TemplateManagement\ElasticSearchTemplateDbClient.cs" />
+    <Compile Include="TemplateManagement\JsonTemplateFileIo.cs" />
+    <Compile Include="TemplateManagement\Data\TemplateSample.cs" />
     <Compile Include="SampleView.xaml.cs">
       <DependentUpon>SampleView.xaml</DependentUpon>
     </Compile>

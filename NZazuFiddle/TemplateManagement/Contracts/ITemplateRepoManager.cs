@@ -10,13 +10,13 @@ namespace NZazuFiddle.TemplateManagement.Contracts
     {
      
         // File IO interactions
-        void LoadTemplateFromFile(Uri pathToTemplate);
+        void LoadTemplateFromFile(string pathToTemplate);
 
-        void LoadTemplatesFromFolder(Uri pathToTemplateFolder);
+        void LoadTemplatesFromFolder(string pathToTemplateFolder);
 
-        void ExportTemplateToFile(Uri pathToTemplate);
+        void ExportTemplateToFile(string pathToTemplate);
 
-        void ExportTemplatesToFolder(Uri pathToTemplateFolder);
+        void ExportTemplatesToFolder(string pathToTemplateFolder);
 
         // Interactions within NZazuFiddle UI
         void CreateNewEmptyTemplate(string id);

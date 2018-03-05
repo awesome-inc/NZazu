@@ -20,7 +20,7 @@ namespace NZazuFiddle.TemplateManagement.Data
             {
                 if (_instance == null)
                 {
-                    _instance = new Session();
+                    _instance = new Session("", new List<ISample>());
                 }
                 return _instance;
             }
@@ -42,7 +42,10 @@ namespace NZazuFiddle.TemplateManagement.Data
             set { _samples = value; OnPropertyChanged("Samples"); }
         }
 
-        private Session() { }
+        private Session(string dbEndpoint, List<ISample> samples) {
+            _dbEndpoint = dbEndpoint;
+            _samples = samples;
+        }
 
         public event PropertyChangedEventHandler PropertyChanged;
 

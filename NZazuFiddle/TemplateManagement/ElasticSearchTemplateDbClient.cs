@@ -49,7 +49,7 @@ namespace NZazuFiddle.TemplateManagement
             try
             {
                 var id = sample.Id;
-                var dataAsJson = MapSampleToJson(sample);
+                var dataAsJson = MappingUtil.MapSampleToJson(sample);
 
                 var content = new StringContent(dataAsJson, Encoding.UTF8, "application/json");
                 var endpoint = EndPoint + id;
@@ -104,7 +104,7 @@ namespace NZazuFiddle.TemplateManagement
             var samples = JObject.Parse(json)["hits"]
                     .SelectToken("hits")
                     .Select(hit => (dbId: hit.SelectToken("_id"), dbSource: hit.SelectToken("_source")))
-                    .Select(source => MapJsonToSample(
+                    .Select(source => MappingUtil.MapJsonToSample(
                             source.dbId.ToString(),
                             source.dbSource.SelectToken("Id").ToString(),
                             source.dbSource.SelectToken("FormDefinition").ToString(),
@@ -116,29 +116,6 @@ namespace NZazuFiddle.TemplateManagement
             return samples.ToList();
         }
 
-        private static string MapSampleToJson(ISample sample)
-        {
-
-            var esDoc = new ElasticSearchFormDocument
-            {
-                Id = sample.Id,
-                FormDefinition = sample.Fiddle.Definition.Model,
-                Values = sample.Fiddle.Data.Model.Values
-            };
-
-            var sampleAsJsonForElasticSearch = JsonConvert.SerializeObject(esDoc, Formatting.Indented
-                , new JsonSerializerSettings { DefaultValueHandling = DefaultValueHandling.Ignore });
-
-            return sampleAsJsonForElasticSearch;
-        }
-
-        private static ISample MapJsonToSample(string dbId, string sampleId, string sampleFormDefAsJson, string sampleFormValues)
-        {
-            var sampleFormDefinition = JsonConvert.DeserializeObject<FormDefinition>(sampleFormDefAsJson);
-            var sampleFormData = new FormData(JsonConvert.DeserializeObject<Dictionary<string, string>>(sampleFormValues));
-            var sampleTemplate = new TemplateSample(dbId, sampleId, sampleFormDefinition, sampleFormData);
-            return sampleTemplate.Sample;
-        }
 
     }
 }

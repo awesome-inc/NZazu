@@ -12,7 +12,7 @@ namespace NZazuFiddle.TemplateManagement.Contracts
 
         void exportTemplate(Uri pathToFile);
 
-        ISample loadTemplate(Uri pathToTemplate);
+        ISample loadTemplate(string pathToTemplate);
 
     }
 }

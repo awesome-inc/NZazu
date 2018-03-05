@@ -3,6 +3,7 @@ using System.Windows;
 using Autofac;
 using Caliburn.Micro.Autofac;
 using NZazuFiddle.Samples;
+using NZazuFiddle.TemplateManagement;
 
 namespace NZazuFiddle
 {
@@ -16,7 +17,7 @@ namespace NZazuFiddle
         protected override void ConfigureContainer(ContainerBuilder builder)
         {
             builder.RegisterType<ShellViewModel>().As<IShell>().SingleInstance();
-            builder.RegisterType<SampleTemplate>().As<IHaveSample>().AsImplementedInterfaces();
+            builder.RegisterType<TemplateSample>().As<IHaveSample>().AsImplementedInterfaces();
 
             //register all samples
             //builder.RegisterAssemblyTypes(Assembly.GetExecutingAssembly())
