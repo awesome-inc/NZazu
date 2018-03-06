@@ -5,10 +5,10 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:NZazuFiddle"
              mc:Ignorable="d" 
-             d:DesignHeight="100" d:DesignWidth="250">
+             d:DesignHeight="70" d:DesignWidth="250">
     <UserControl.Resources>
         <Style TargetType="Button">
-            <Setter Property="Margin" Value="8" />
+            <Setter Property="Margin" Value="0" />
             <Setter Property="Width" Value="55" />
             <Setter Property="Height" Value="24" />
         </Style>
@@ -16,12 +16,12 @@
     <Grid>
 
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" MinHeight="50"/>
-            <RowDefinition Height="Auto" MinHeight="50"/>
+            <RowDefinition Height="Auto" MinHeight="20"/>
+            <RowDefinition Height="Auto" MinHeight="20"/>
         </Grid.RowDefinitions>
 
-        <TextBox Grid.Row="0" Margin="8" x:Name="SampleId" Height="24" MinWidth="250" HorizontalAlignment="Left"/>
-        <Button Grid.Row="1" FontWeight="Bold" FontSize="15" Content="+" x:Name="AddSample" HorizontalAlignment="Left"/>
+        <TextBox Grid.Row="0" Margin="8 8 8 4" x:Name="SampleId" Height="24" MinWidth="250" HorizontalAlignment="Left"/>
+        <Button Grid.Row="1" Margin="8 4 8 8" FontWeight="Bold" FontSize="15" Content="+" x:Name="AddSample" HorizontalAlignment="Left"/>
 
     </Grid>
 </UserControl>

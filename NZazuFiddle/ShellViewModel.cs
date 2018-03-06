@@ -1,16 +1,8 @@
 ﻿using Caliburn.Micro;
-using Microsoft.Win32;
-using NZazuFiddle.Samples;
-using NZazuFiddle.TemplateManagement;
 using NZazuFiddle.TemplateManagement.Contracts;
-using NZazuFiddle.TemplateManagement.Data;
-using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.IO;
+
 using System.Linq;
-using Xceed.Wpf.Toolkit;
 
 namespace NZazuFiddle
 {

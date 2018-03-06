@@ -1,8 +1,9 @@
-﻿using NZazu.Contracts;
+﻿using Caliburn.Micro;
+using NZazu.Contracts;
 
 namespace NZazuFiddle
 {
-    public interface IFormDataViewModel : IHaveFormData, IHaveJsonFor<FormData>
+    public interface IFormDataViewModel : IScreen, IHaveFormData, IHaveJsonFor<FormData>
     {
     }
 }

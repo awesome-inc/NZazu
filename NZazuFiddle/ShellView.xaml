@@ -22,7 +22,13 @@
 
             <ListBox x:Name="Samples"
                 ItemsSource="{Binding Samples}" 
-                SelectedItem="{Binding SelectedSample}" />
+                SelectedItem="{Binding SelectedSample}">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Name}" Foreground="{Binding StatusBrush}"/>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
 
             <ContentControl Grid.Column="1" x:Name="SelectedSample"/>
         </Grid>

@@ -33,6 +33,7 @@ namespace NZazuFiddle.TemplateManagement
             {
                 var res = await GetDataFromEndpoint(Endpoint + "_search");
                 var sampleList = DeserializeSamplesFromEndpoint(res);
+                sampleList.ForEach(s => s.Status = ETemplateStatus.Initial);
                 return sampleList;
             }
             catch (Exception e)

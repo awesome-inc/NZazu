@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:nZazuFiddle="clr-namespace:NZazuFiddle"
         mc:Ignorable="d"
-        Height="1000" Width="1624" d:DataContext="{d:DesignInstance nZazuFiddle:FiddleViewModel}">
+        Height="800" Width="1624" d:DataContext="{d:DesignInstance nZazuFiddle:FiddleViewModel}">
     <UserControl.Resources>
         <Style TargetType="Grid">
             <Setter Property="Margin" Value="4"/>
