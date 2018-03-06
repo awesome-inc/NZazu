@@ -16,20 +16,6 @@ namespace NZazuFiddle
 
         public Brush StatusBrush { get => StateToBrush(Status); }
 
-        public SampleViewModel()
-        {
-        }
-
-        public SampleViewModel(string id, string name, IFiddle fiddle)
-        {
-            Id = id;
-            Name = name;
-            Fiddle = fiddle;
-
-            //Fiddle.Data.PropertyChanged += new PropertyChangedEventHandler(Fiddle_PropertyChanged);
-            //Fiddle.Definition.PropertyChanged += new PropertyChangedEventHandler(Fiddle_PropertyChanged);
-        }
-
         public override string ToString()
         {
             return Name;
@@ -48,9 +34,5 @@ namespace NZazuFiddle
             }
         }
 
-        private void Fiddle_PropertyChanged(Object sender, PropertyChangedEventArgs e)
-        {
-            Status = ETemplateStatus.Modified;
-        }
     }
 }
