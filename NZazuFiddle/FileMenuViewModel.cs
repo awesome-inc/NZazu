@@ -1,13 +1,9 @@
 ﻿using Caliburn.Micro;
 using Microsoft.Win32;
-using NZazuFiddle.TemplateManagement;
 using NZazuFiddle.TemplateManagement.Contracts;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace NZazuFiddle
 {
@@ -19,8 +15,8 @@ namespace NZazuFiddle
 
         public FileMenuViewModel(ITemplateFileIo fileIo, ISession session)
         {
-            _fileIo = fileIo ?? throw new System.ArgumentNullException(nameof(fileIo));
-            _session = session ?? throw new System.ArgumentNullException(nameof(session));
+            _fileIo = fileIo ?? throw new ArgumentNullException(nameof(fileIo));
+            _session = session ?? throw new ArgumentNullException(nameof(session));
         }
 
         public void ExportToFiles()
@@ -42,7 +38,7 @@ namespace NZazuFiddle
                     try
                     {
                         var loadedSample = _fileIo.LoadTemplateFromFile(openFileDialog.FileName);
-                        _session.Samples.Add(loadedSample);
+                        _session.AddSampleAsUniqueItem(loadedSample);
                     }
                     catch (Exception e)
                     {
@@ -58,7 +54,7 @@ namespace NZazuFiddle
             var folder = dialog.SelectFolder();
             if (string.IsNullOrWhiteSpace(folder)) return;
             var loadedSamples = _fileIo.LoadTemplatesFromFolder(folder);
-            _session.Samples.AddRange(loadedSamples);
+            _session.AddSamplesAsUniqueItems(loadedSamples);
         }
     }
 }

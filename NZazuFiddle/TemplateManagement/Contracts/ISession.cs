@@ -1,11 +1,7 @@
 ﻿using Caliburn.Micro;
-using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace NZazuFiddle.TemplateManagement.Contracts
 {
@@ -17,6 +13,11 @@ namespace NZazuFiddle.TemplateManagement.Contracts
         ISample SelectedSample { get; set; }
 
         BindableCollection<ISample> Samples { get; }
+
+        // ToDo: Solve via cental EventAggregator and Events
+        void AddSampleAsUniqueItem(ISample sample);
+
+        void AddSamplesAsUniqueItems(List<ISample> samples);
 
     }
 }

@@ -39,7 +39,7 @@ namespace NZazuFiddle
         public async void LoadSamples()
         {
             var samplesFromDb = await _templateDbRepo.GetData();
-            _session.Samples.AddRange(samplesFromDb);
+            _session.AddSamplesAsUniqueItems(samplesFromDb);
         }
 
         public void SaveSamples()

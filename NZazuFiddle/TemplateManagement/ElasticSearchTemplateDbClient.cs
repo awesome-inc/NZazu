@@ -1,8 +1,5 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using NZazu.Contracts;
+﻿using Newtonsoft.Json.Linq;
 using NZazuFiddle.TemplateManagement.Contracts;
-using NZazuFiddle.TemplateManagement.Data;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
