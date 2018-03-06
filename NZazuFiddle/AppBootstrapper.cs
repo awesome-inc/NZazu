@@ -1,9 +1,11 @@
-﻿using System.Reflection;
+﻿using System.Collections.Generic;
 using System.Windows;
 using Autofac;
 using Caliburn.Micro.Autofac;
 using NZazuFiddle.Samples;
 using NZazuFiddle.TemplateManagement;
+using NZazuFiddle.TemplateManagement.Contracts;
+using NZazuFiddle.TemplateManagement.Data;
 
 namespace NZazuFiddle
 {
@@ -16,8 +18,15 @@ namespace NZazuFiddle
 
         protected override void ConfigureContainer(ContainerBuilder builder)
         {
+
+            var session = new Session("", new List<ISample>());
+
+            builder.RegisterInstance(session).As<ISession>().SingleInstance();
             builder.RegisterType<ShellViewModel>().As<IShell>().SingleInstance();
-            builder.RegisterType<TemplateSample>().As<IHaveSample>().AsImplementedInterfaces();
+            builder.RegisterType<EndpointViewModel>().As<IEndpointViewModel>().SingleInstance();
+            builder.RegisterType<FileMenuViewModel>().As<IFileMenuViewModel>().SingleInstance();
+
+            builder.RegisterModule<TemplateModule>();
 
             //register all samples
             //builder.RegisterAssemblyTypes(Assembly.GetExecutingAssembly())

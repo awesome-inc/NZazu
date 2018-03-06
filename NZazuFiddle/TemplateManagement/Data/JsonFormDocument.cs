@@ -3,7 +3,7 @@ using NZazu.Contracts;
 
 namespace NZazuFiddle.TemplateManagement.Data
 {
-    internal class ElasticSearchFormDocument
+    internal class JsonFormDocument
     {
         public string Id { get; set; }
         public FormDefinition FormDefinition { get; set; }

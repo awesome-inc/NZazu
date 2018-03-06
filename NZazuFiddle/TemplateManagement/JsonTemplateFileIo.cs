@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -12,21 +13,56 @@ namespace NZazuFiddle.TemplateManagement
 {
     internal class JsonTemplateFileIo : ITemplateFileIo
     {
-        public void exportTemplate(Uri pathToFile)
+
+
+        public void ExportTemplate(ISample sample, string pathToFile)
         {
-            throw new NotImplementedException();
+            try
+            {
+                //File.Create(pathToFile);
+                var sampleAsJson = MappingUtil.MapSampleToJson(sample);
+                File.WriteAllText(pathToFile, sampleAsJson);
+            }
+            catch (Exception e)
+            {
+                Trace.TraceError($"{GetType().Name} :: ExportTemplate for sample with target path {pathToFile} failed! \r\n {e.Message} \r\n {e.StackTrace}");
+                throw;
+            }
+
         }
 
-        public ISample loadTemplate(string pathToTemplate)
+        public void ExportTemplates(List<ISample> samples, string pathToFolder)
         {
-            ISample loadedSample = null;
+            foreach (var sample in samples)
+            {
+                var fileName = sample.Id + ".json";
+                var fullPath = pathToFolder + Path.DirectorySeparatorChar + fileName;
+                ExportTemplate(sample,fullPath);
+            }
+        }
+
+        public ISample LoadTemplateFromFile(string pathToTemplate)
+        {
+            ISample loadedSample;
             using (StreamReader r = new StreamReader(pathToTemplate))
             {
-                string json = r.ReadToEnd();
+                var json = r.ReadToEnd();
                 loadedSample = DeserializeSampleFromJSONFile(json);
             }    
 
             return loadedSample;
+        }
+
+        public List<ISample> LoadTemplatesFromFolder(string pathToFolder)
+        {
+            var files = Directory.GetFiles(pathToFolder);
+            var listOfSamples = new List<ISample>();
+            foreach (string file in files)
+            {
+                var loadedSample = LoadTemplateFromFile(file);
+                listOfSamples.Add(loadedSample);
+            }
+            return listOfSamples;
         }
 
         private ISample DeserializeSampleFromJSONFile(string json)
@@ -41,5 +77,6 @@ namespace NZazuFiddle.TemplateManagement
             
             return sample;
         }
+
     }
 }

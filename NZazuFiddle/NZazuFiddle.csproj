@@ -127,6 +127,14 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="AvalonEditBehaviour.cs" />
+    <Compile Include="EndpointView.xaml.cs">
+      <DependentUpon>EndpointView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="EndpointViewModel.cs" />
+    <Compile Include="FileMenuView.xaml.cs">
+      <DependentUpon>FileMenuView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="FileMenuViewModel.cs" />
     <Compile Include="FormDataView.xaml.cs">
       <DependentUpon>FormDataView.xaml</DependentUpon>
     </Compile>
@@ -136,6 +144,8 @@
     </Compile>
     <Compile Include="FormDefinitionViewModel.cs" />
     <Compile Include="HaveJsonFor.cs" />
+    <Compile Include="IEndpointViewModel.cs" />
+    <Compile Include="IFileMenuViewModel.cs" />
     <Compile Include="IFormDataViewModel.cs" />
     <Compile Include="IFormDefinitionViewModel.cs" />
     <Compile Include="IHaveFormData.cs" />
@@ -177,7 +187,7 @@
     <Compile Include="TemplateManagement\Contracts\ITemplateDbClient.cs" />
     <Compile Include="TemplateManagement\Contracts\ITemplateFileIo.cs" />
     <Compile Include="TemplateManagement\Contracts\ITemplateRepoManager.cs" />
-    <Compile Include="TemplateManagement\Data\ElasticSearchFormDocument.cs" />
+    <Compile Include="TemplateManagement\Data\JsonFormDocument.cs" />
     <Compile Include="TemplateManagement\Data\Session.cs" />
     <Compile Include="TemplateManagement\MappingUtil.cs" />
     <Compile Include="TemplateManagement\TemplateRepoManager.cs" />
@@ -193,7 +203,16 @@
     </Compile>
     <Compile Include="ShellViewModel.cs" />
     <Compile Include="SimpleEditor.cs" />
+    <Compile Include="TemplateModule.cs" />
     <Compile Include="TextEditorExtensions.cs" />
+    <Page Include="EndpointView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="FileMenuView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="FormDataView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

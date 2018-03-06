@@ -22,7 +22,7 @@ namespace NZazuFiddle.TemplateManagement
 
         public static string MapSampleToJson(ISample sample)
         {
-            var esDoc = new ElasticSearchFormDocument
+            var esDoc = new JsonFormDocument
             {
                 Id = sample.Id,
                 FormDefinition = sample.Fiddle.Definition.Model,

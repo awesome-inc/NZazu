@@ -6,28 +6,17 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using Caliburn.Micro;
 using NZazuFiddle.Annotations;
 using NZazuFiddle.TemplateManagement.Contracts;
 
 namespace NZazuFiddle.TemplateManagement.Data
 {
-    internal class Session : ISession, INotifyPropertyChanged
+    internal class Session : ISession
     {
-        private static Session _instance;
-        public static Session Instance
-        {
-            get
-            {
-                if (_instance == null)
-                {
-                    _instance = new Session("", new List<ISample>());
-                }
-                return _instance;
-            }
-        }
 
         private string _dbEndpoint;
-        private List<ISample> _samples;
+        private BindableCollection<ISample> _samples;
 
         public string Endpoint
         {
@@ -36,15 +25,14 @@ namespace NZazuFiddle.TemplateManagement.Data
         }
 
         public ISample SelectedSample { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public List<ISample> Samples
-        {
+
+        public BindableCollection<ISample> Samples {
             get => _samples;
-            set { _samples = value; OnPropertyChanged("Samples"); }
         }
 
-        private Session(string dbEndpoint, List<ISample> samples) {
+        public Session(string dbEndpoint, List<ISample> samples) {
             _dbEndpoint = dbEndpoint;
-            _samples = samples;
+            _samples = new BindableCollection<ISample>(samples);
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

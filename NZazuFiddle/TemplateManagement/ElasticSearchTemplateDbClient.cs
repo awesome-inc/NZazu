@@ -19,20 +19,22 @@ namespace NZazuFiddle.TemplateManagement
         private readonly HttpClient _httpClient = new HttpClient();
         private string _endpoint;
 
-        public string EndPoint { get => _endpoint; set => _endpoint = value; }
-
-        public ElasticSearchTemplateDbClient(string endPoint = "http://127.0.0.1:9200/tacon/form/")
+        public ElasticSearchTemplateDbClient(string endpoint = "http://localhost:9200/tacon/form/")
         {
-            _endpoint = endPoint;
+            _endpoint = endpoint;
         }
 
-        public string Endpoint { get; set; }
+        public string Endpoint
+        {
+            get => _endpoint;
+            set { _endpoint = value;}
+        }
 
         public async Task<List<ISample>> GetData()
         {
             try
             {
-                var res = await GetDataFromEndpoint(EndPoint + "_search");
+                var res = await GetDataFromEndpoint(Endpoint + "_search");
                 var sampleList = DeserializeSamplesFromEndpoint(res);
                 return sampleList;
             }
@@ -41,10 +43,9 @@ namespace NZazuFiddle.TemplateManagement
                 Trace.TraceError(e.StackTrace);
                 throw;
             }
-
         }
 
-        public async Task<string> UpdateData(ISample sample)
+        public async void UpdateData(ISample sample)
         {
             try
             {
@@ -52,33 +53,32 @@ namespace NZazuFiddle.TemplateManagement
                 var dataAsJson = MappingUtil.MapSampleToJson(sample);
 
                 var content = new StringContent(dataAsJson, Encoding.UTF8, "application/json");
-                var endpoint = EndPoint + id;
+                var endpoint = Endpoint + id;
                 var response = await _httpClient.PutAsync(endpoint, content);
 
                 if (response.IsSuccessStatusCode)
                 {
-                    Trace.TraceInformation("UploadDataToEndpoint");
+                    Trace.TraceInformation($"Uploading data {id} to endpoint {_endpoint} was successfull!");
                 }
                 else
                 {
-                    Trace.TraceWarning($"Uploading data from endpoint failed with status code: {response.StatusCode}");
+                    Trace.TraceWarning($"Uploading data {id} to endpoint {_endpoint} failed with status code: {response.StatusCode}");
                 }
 
-                return response.ToString();
             }
             catch (Exception e)
             {
-                Trace.TraceError(e.StackTrace);
+                Trace.TraceError($"{GetType().Name}:: {e.Message} \r\n {e.StackTrace}");
                 throw;
             }
         }
 
-        public string DeleteData(string id)
+        public void DeleteData(string id)
         {
             throw new NotImplementedException();
         }
 
-        public string CreateData(ISample sample)
+        public void CreateData(ISample sample)
         {
             throw new NotImplementedException();
         }

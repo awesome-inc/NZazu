@@ -12,11 +12,17 @@ namespace NZazuFiddle.TemplateManagement.Contracts
 
         Task<List<ISample>> GetData();
 
-        Task<string> UpdateData(ISample sample);
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sample"></param>
+        /// <returns></returns>
+        /// <exception cref="SaveSamplesException">Thrown when</exception>
+        void UpdateData(ISample sample);
 
-        string DeleteData(string id);
+        void DeleteData(string id);
 
-        string CreateData(ISample sample);
+        void CreateData(ISample sample);
 
     }
 }

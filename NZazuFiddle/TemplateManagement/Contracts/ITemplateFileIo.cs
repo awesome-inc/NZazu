@@ -10,9 +10,13 @@ namespace NZazuFiddle.TemplateManagement.Contracts
     interface ITemplateFileIo
     {
 
-        void exportTemplate(Uri pathToFile);
+        void ExportTemplate(ISample sample, string pathToFile);
 
-        ISample loadTemplate(string pathToTemplate);
+        void ExportTemplates(List<ISample> samples, string pathToFolder);
+
+        ISample LoadTemplateFromFile(string pathToTemplate);
+
+        List<ISample> LoadTemplatesFromFolder(string pathToFolder);
 
     }
 }
