@@ -19,13 +19,14 @@ namespace NZazuFiddle
         private readonly BindableCollection<ISample> _samples;
         private ISample _selectedSample;
 
-        public ShellViewModel(IEndpointViewModel endpointViewModel, IFileMenuViewModel fileMenuViewModel, ISession session)
+        public ShellViewModel(IEndpointViewModel endpointViewModel, IFileMenuViewModel fileMenuViewModel, IAddTemplateViewModel addTemplateViewModel, ISession session)
         {
             DisplayName = "TACON Template Editor";
 
             _samples = session.Samples;
             EndpointViewModel = endpointViewModel;
             FileMenuViewModel = fileMenuViewModel;
+            AddTemplateViewModel = addTemplateViewModel;
         }
 
         public IEnumerable<ISample> Samples
@@ -54,6 +55,8 @@ namespace NZazuFiddle
         public IEndpointViewModel EndpointViewModel { get; }
 
         public IFileMenuViewModel FileMenuViewModel { get; }
+
+        public IAddTemplateViewModel AddTemplateViewModel { get; }
 
     }
 }
