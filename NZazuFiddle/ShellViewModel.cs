@@ -21,7 +21,7 @@ namespace NZazuFiddle
 
         public ShellViewModel(IEndpointViewModel endpointViewModel, IFileMenuViewModel fileMenuViewModel, ISession session)
         {
-            DisplayName = "Tacon Template Editor";
+            DisplayName = "TACON Template Editor";
 
             _samples = session.Samples;
             EndpointViewModel = endpointViewModel;
