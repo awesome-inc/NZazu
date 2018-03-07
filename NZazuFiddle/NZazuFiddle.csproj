@@ -191,6 +191,7 @@
     <Compile Include="TemplateManagement\Contracts\ISession.cs" />
     <Compile Include="TemplateManagement\Contracts\ITemplateDbClient.cs" />
     <Compile Include="TemplateManagement\Contracts\ITemplateFileIo.cs" />
+    <Compile Include="TemplateManagement\Contracts\ITemplateFileIoPromptService.cs" />
     <Compile Include="TemplateManagement\Data\JsonFormDocument.cs" />
     <Compile Include="TemplateManagement\Data\Session.cs" />
     <Compile Include="TemplateManagement\MappingUtil.cs" />
@@ -206,6 +207,7 @@
     </Compile>
     <Compile Include="ShellViewModel.cs" />
     <Compile Include="SimpleEditor.cs" />
+    <Compile Include="TemplateManagement\TemplateFileIoPromptService.cs" />
     <Compile Include="TemplateModule.cs" />
     <Compile Include="TextEditorExtensions.cs" />
     <Compile Include="Utils\LoggingUtil.cs" />

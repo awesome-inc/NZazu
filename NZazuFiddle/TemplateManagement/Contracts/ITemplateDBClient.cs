@@ -20,7 +20,7 @@ namespace NZazuFiddle.TemplateManagement.Contracts
         /// <exception cref="SaveSamplesException">Thrown when</exception>
         void UpdateData(ISample sample);
 
-        void DeleteData(string id);
+        void DeleteData(ISample sample);
 
         void CreateData(ISample sample);
 

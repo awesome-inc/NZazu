@@ -4,7 +4,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:nZazuFiddle="clr-namespace:NZazuFiddle"
-             mc:Ignorable="d" d:DataContext="{d:DesignInstance nZazuFiddle:ShellViewModel}">
+             mc:Ignorable="d" d:DataContext="{d:DesignInstance nZazuFiddle:ShellViewModel}"
+             xmlns:cal="http://www.caliburnproject.org">
 
     <StackPanel>
 
@@ -28,6 +29,12 @@
                         <TextBlock Text="{Binding Name}" Foreground="{Binding StatusBrush}"/>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
+                <ListBox.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="Remove (just from List)" cal:Message.Attach="RemoveSelectedSample"/>
+                        <MenuItem Header="Delete (on DB)" cal:Message.Attach="DeleteSelectedSample"/>
+                    </ContextMenu>
+                </ListBox.ContextMenu>
             </ListBox>
 
             <ContentControl Grid.Column="1" x:Name="SelectedSample"/>

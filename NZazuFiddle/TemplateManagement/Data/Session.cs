@@ -61,5 +61,6 @@ namespace NZazuFiddle.TemplateManagement.Data
         {
             samples.ForEach(AddSampleAsUniqueItem);
         }
+
     }
 }

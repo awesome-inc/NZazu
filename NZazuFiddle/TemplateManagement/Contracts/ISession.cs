@@ -14,7 +14,8 @@ namespace NZazuFiddle.TemplateManagement.Contracts
 
         BindableCollection<ISample> Samples { get; }
 
-        // ToDo: Solve via cental EventAggregator and Events
+        // ToDo: Solve via cental/global EventAggregator and Events handled directly
+        // ToDo: Move to a specific Sample Repo
         void AddSampleAsUniqueItem(ISample sample);
 
         void AddSamplesAsUniqueItems(List<ISample> samples);

@@ -3,6 +3,7 @@ using NZazuFiddle.TemplateManagement.Contracts;
 using System.Collections.Generic;
 
 using System.Linq;
+using System.Windows;
 
 namespace NZazuFiddle
 {
@@ -10,12 +11,23 @@ namespace NZazuFiddle
     {
         private readonly BindableCollection<ISample> _samples;
         private ISample _selectedSample;
+        private readonly ISession _session;
+        private readonly ITemplateDbClient _templateDbRepo;
+        private readonly ITemplateFileIo _templateFileIo;
 
-        public ShellViewModel(IEndpointViewModel endpointViewModel, IFileMenuViewModel fileMenuViewModel, IAddTemplateViewModel addTemplateViewModel, ISession session)
+        public ShellViewModel(
+            ITemplateFileIo templateFileIo, 
+            ITemplateDbClient templateDbRepo, 
+            IEndpointViewModel endpointViewModel, 
+            IFileMenuViewModel fileMenuViewModel, 
+            IAddTemplateViewModel addTemplateViewModel, 
+            ISession session)
         {
             DisplayName = "TACON Template Editor";
 
             _samples = session.Samples;
+            _session = session;
+            _templateDbRepo = templateDbRepo;
             EndpointViewModel = endpointViewModel;
             FileMenuViewModel = fileMenuViewModel;
             AddTemplateViewModel = addTemplateViewModel;
@@ -42,6 +54,21 @@ namespace NZazuFiddle
                 _selectedSample = value;
                 NotifyOfPropertyChange();
             }
+        }
+
+        public void RemoveSelectedSample()
+        {
+            _samples.Remove(SelectedSample);
+        }
+
+        public void DeleteSelectedSample()
+        {
+            _templateDbRepo.DeleteData(SelectedSample);
+            _samples.Remove(SelectedSample);
+        }
+
+        public void ExportSelectedSample()
+        {
         }
 
         public IEndpointViewModel EndpointViewModel { get; }

@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json.Linq;
 using NZazuFiddle.TemplateManagement.Contracts;
+using NZazuFiddle.Utils;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -71,11 +72,6 @@ namespace NZazuFiddle.TemplateManagement
             }
         }
 
-        public void DeleteData(string id)
-        {
-            throw new NotImplementedException();
-        }
-
         public void CreateData(ISample sample)
         {
             throw new NotImplementedException();
@@ -114,6 +110,31 @@ namespace NZazuFiddle.TemplateManagement
             return samples.ToList();
         }
 
+        public async void DeleteData(ISample sample)
+        {
+            var id = sample.Id;
+            try
+            {   
+                var endpoint = Endpoint + id;
+                var response = await _httpClient.DeleteAsync(endpoint);
 
+                if (response.IsSuccessStatusCode)
+                {
+                    var msg = LoggingUtil.CreateLogMessage(this, $"Deletion of data with {id} on endpoint {_endpoint} was successfull!");
+                    Trace.TraceInformation(msg);
+                }
+                else
+                {
+                    var msg = LoggingUtil.CreateLogMessage(this, $"Deletion of data with {id} on endpoint {_endpoint} was NOT successfull!");
+                    Trace.TraceInformation(msg);
+                }
+
+            }
+            catch (Exception e)
+            {
+                var msg = LoggingUtil.CreateLogMessage(this, $"Deletion of data with {id} on endpoint {_endpoint} was NOT successfull!", e.Message, e.StackTrace);
+                throw;
+            }
+        }
     }
 }
