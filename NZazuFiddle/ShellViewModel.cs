@@ -13,10 +13,10 @@ namespace NZazuFiddle
         private ISample _selectedSample;
         private readonly ISession _session;
         private readonly ITemplateDbClient _templateDbRepo;
-        private readonly ITemplateFileIo _templateFileIo;
+        private readonly ITemplateFileIoDialogService _templateFileIoDialogService;
 
         public ShellViewModel(
-            ITemplateFileIo templateFileIo, 
+            ITemplateFileIoDialogService templateFileIoDialogService, 
             ITemplateDbClient templateDbRepo, 
             IEndpointViewModel endpointViewModel, 
             IFileMenuViewModel fileMenuViewModel, 
@@ -27,6 +27,7 @@ namespace NZazuFiddle
 
             _samples = session.Samples;
             _session = session;
+            _templateFileIoDialogService = templateFileIoDialogService;
             _templateDbRepo = templateDbRepo;
             EndpointViewModel = endpointViewModel;
             FileMenuViewModel = fileMenuViewModel;
@@ -69,6 +70,7 @@ namespace NZazuFiddle
 
         public void ExportSelectedSample()
         {
+            _templateFileIoDialogService.ExportTemplate(SelectedSample);
         }
 
         public IEndpointViewModel EndpointViewModel { get; }

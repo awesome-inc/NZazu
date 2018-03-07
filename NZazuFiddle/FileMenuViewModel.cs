@@ -11,9 +11,9 @@ namespace NZazuFiddle
     {
 
         private readonly ISession _session;
-        private readonly ITemplateFileIo _fileIo;
+        private readonly ITemplateFileIoDialogService _fileIo;
 
-        public FileMenuViewModel(ITemplateFileIo fileIo, ISession session)
+        public FileMenuViewModel(ITemplateFileIoDialogService fileIo, ISession session)
         {
             _fileIo = fileIo ?? throw new ArgumentNullException(nameof(fileIo));
             _session = session ?? throw new ArgumentNullException(nameof(session));
@@ -21,39 +21,18 @@ namespace NZazuFiddle
 
         public void ExportToFiles()
         {
-            var dialog = new OpenFolderService();
-            var folder = dialog.SelectFolder();
-            if (string.IsNullOrWhiteSpace(folder)) return;
-            _fileIo.ExportTemplates(_session.Samples.ToList(), folder);
+            _fileIo.ExportTemplates(_session.Samples.ToList());
         }
 
         public void ImportFile()
         {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            if (openFileDialog.ShowDialog() == true)
-            {
-                var isUri = Uri.TryCreate(openFileDialog.FileName, UriKind.Absolute, out Uri uri);
-                if (isUri)
-                {
-                    try
-                    {
-                        var loadedSample = _fileIo.LoadTemplateFromFile(openFileDialog.FileName);
-                        _session.AddSampleAsUniqueItem(loadedSample);
-                    }
-                    catch (Exception e)
-                    {
-                        Trace.TraceError($"{this.GetType().Name}::LoadTemplateFromUri => \r\n Message:{e.Message} \r\n StackTrace:{e.StackTrace}");
-                    }
-                }
-            }
+            var sampleTemplate = _fileIo.ImportTemplateFromFile();
+            _session.AddSampleAsUniqueItem(sampleTemplate);
         }
 
         public void ImportFiles()
         {
-            var dialog = new OpenFolderService();
-            var folder = dialog.SelectFolder();
-            if (string.IsNullOrWhiteSpace(folder)) return;
-            var loadedSamples = _fileIo.LoadTemplatesFromFolder(folder);
+            var loadedSamples = _fileIo.ImportTemplatesFromFolder();
             _session.AddSamplesAsUniqueItems(loadedSamples);
         }
     }
