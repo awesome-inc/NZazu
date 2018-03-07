@@ -13,11 +13,10 @@ namespace NZazuFiddle.Samples
         public ISample Sample { get; protected set; }
         public int Order { get; }
 
-        protected static IFiddle ToFiddle(FormDefinition formDefinition, FormData formData)
+        protected static IFiddle ToFiddle(FormDefinition formDefinition, FormData formData, IEventAggregator events)
         {
-            var events = new EventAggregator();
             return new FiddleViewModel(
-                new FormDefinitionViewModel(events,formDefinition), 
+                new FormDefinitionViewModel(events, formDefinition), 
                 new FormDataViewModel(events, formData),
                 new PreviewViewModel(events, formDefinition, formData));
         }

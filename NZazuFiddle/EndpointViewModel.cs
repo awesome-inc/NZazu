@@ -18,14 +18,7 @@ namespace NZazuFiddle
             _templateDbRepo = templateDbRepo ?? throw new ArgumentNullException(nameof(templateDbRepo));
             _session = session ?? throw new ArgumentNullException(nameof(session));
             _endpoint = _templateDbRepo.Endpoint;
-
-            UploadIcon = IconChar.Upload;
-            DownloadIcon = IconChar.Download;
         }
-
-        public IconChar UploadIcon { get; set; }
-
-        public IconChar DownloadIcon { get; set; }
 
         public string Endpoint
         {

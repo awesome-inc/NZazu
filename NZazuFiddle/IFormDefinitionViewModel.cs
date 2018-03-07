@@ -6,8 +6,6 @@ namespace NZazuFiddle
     public interface IFormDefinitionViewModel 
         : IHaveFormDefinition
         , IHaveJsonFor<FormDefinition>
-        , IScreen
-        
     {
     }
 }

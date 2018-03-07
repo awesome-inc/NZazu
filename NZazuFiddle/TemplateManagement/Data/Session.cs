@@ -19,6 +19,7 @@ namespace NZazuFiddle.TemplateManagement.Data
 
         private string _dbEndpoint;
         private BindableCollection<ISample> _samples;
+        private readonly IEventAggregator _events;
 
         public string Endpoint
         {
@@ -32,7 +33,7 @@ namespace NZazuFiddle.TemplateManagement.Data
             get => _samples;
         }
 
-        public Session(string dbEndpoint, List<ISample> samples) {
+        public Session(string dbEndpoint, List<ISample> samples, IEventAggregator events) {
             _dbEndpoint = dbEndpoint;
             _samples = new BindableCollection<ISample>(samples);
         }

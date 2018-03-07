@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Windows;
 using Autofac;
+using Caliburn.Micro;
 using Caliburn.Micro.Autofac;
 using NZazuFiddle.Samples;
 using NZazuFiddle.TemplateManagement;
@@ -19,9 +20,11 @@ namespace NZazuFiddle
         protected override void ConfigureContainer(ContainerBuilder builder)
         {
 
-            var session = new Session("", new List<ISample>());
+            var globalEvents = new EventAggregator();
+            var session = new Session("", new List<ISample>(), globalEvents);
 
             builder.RegisterInstance(session).As<ISession>().SingleInstance();
+            builder.RegisterInstance(globalEvents).As<IEventAggregator>().SingleInstance();
             builder.RegisterType<ShellViewModel>().As<IShell>().SingleInstance();
             builder.RegisterType<EndpointViewModel>().As<IEndpointViewModel>().SingleInstance();
             builder.RegisterType<FileMenuViewModel>().As<IFileMenuViewModel>().SingleInstance();

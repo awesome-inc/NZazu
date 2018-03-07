@@ -6,7 +6,7 @@ namespace NZazuFiddle
     public interface ISample
     {
         ETemplateStatus Status { get; set; }
-        Brush StatusBrush { get; }
+        Brush StatusBrush { get; set; }
         string Name { get; }
         string Description { get; }
         string Id { get; }

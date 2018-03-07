@@ -41,5 +41,6 @@ namespace NZazuFiddle
             var loadedSamples = _fileIo.ImportTemplatesFromFolder();
             _session.AddSamplesAsUniqueItems(loadedSamples);
         }
+
     }
 }
