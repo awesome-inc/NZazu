@@ -31,8 +31,8 @@
                 </ListBox.ItemTemplate>
                 <ListBox.ContextMenu>
                     <ContextMenu>
-                        <MenuItem Header="Remove (just from List)" cal:Message.Attach="RemoveSelectedSample"/>
-                        <MenuItem Header="Delete (on DB)" cal:Message.Attach="DeleteSelectedSample"/>
+                        <MenuItem Header="Delete" cal:Message.Attach="DeleteSelectedSample"/>
+                        <MenuItem Header="Export" cal:Message.Attach="ExportSelectedSample"/>
                     </ContextMenu>
                 </ListBox.ContextMenu>
             </ListBox>
