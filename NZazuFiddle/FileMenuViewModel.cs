@@ -1,8 +1,7 @@
 ﻿using Caliburn.Micro;
-using Microsoft.Win32;
+using FontAwesome.Sharp;
 using NZazuFiddle.TemplateManagement.Contracts;
 using System;
-using System.Diagnostics;
 using System.Linq;
 
 namespace NZazuFiddle
@@ -17,7 +16,14 @@ namespace NZazuFiddle
         {
             _fileIo = fileIo ?? throw new ArgumentNullException(nameof(fileIo));
             _session = session ?? throw new ArgumentNullException(nameof(session));
+
+            ImportIcon = IconChar.LevelDown;
+            ExportIcon = IconChar.HddO;
         }
+
+        public IconChar ImportIcon { get; set; }
+
+        public IconChar ExportIcon { get; set; }
 
         public void ExportToFiles()
         {

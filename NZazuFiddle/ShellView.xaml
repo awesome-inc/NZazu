@@ -5,7 +5,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:nZazuFiddle="clr-namespace:NZazuFiddle"
              mc:Ignorable="d" d:DataContext="{d:DesignInstance nZazuFiddle:ShellViewModel}"
-             xmlns:cal="http://www.caliburnproject.org">
+             xmlns:cal="http://www.caliburnproject.org"
+             xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp">
 
     <StackPanel>
 
@@ -24,6 +25,9 @@
             <ListBox x:Name="Samples"
                 ItemsSource="{Binding Samples}" 
                 SelectedItem="{Binding SelectedSample}">
+                <ListBox.Resources>
+                    <fa:IconToImageConverter x:Key="IconToImage"/>
+                </ListBox.Resources>
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <TextBlock Text="{Binding Name}" Foreground="{Binding StatusBrush}"/>
@@ -31,8 +35,8 @@
                 </ListBox.ItemTemplate>
                 <ListBox.ContextMenu>
                     <ContextMenu>
-                        <MenuItem Header="Delete" cal:Message.Attach="DeleteSelectedSample"/>
-                        <MenuItem Header="Export" cal:Message.Attach="ExportSelectedSample"/>
+                        <MenuItem Header="Delete" cal:Message.Attach="DeleteSelectedSample" Icon="{Binding DeleteIcon, Converter={StaticResource IconToImage}}"/>
+                        <MenuItem Header="Export" cal:Message.Attach="ExportSelectedSample" Icon="{Binding ExportIcon, Converter={StaticResource IconToImage}}"/>
                     </ContextMenu>
                 </ListBox.ContextMenu>
             </ListBox>

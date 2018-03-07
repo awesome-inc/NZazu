@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:NZazuFiddle"
+             xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
              mc:Ignorable="d" 
              d:DesignHeight="40" d:DesignWidth="700">
     <UserControl.Resources>
@@ -24,9 +25,24 @@
             <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
 
-        <Label Content="Endpoint:" Grid.Column="0" Margin="8" VerticalAlignment="Center"/>
+        <Label Grid.Column="0" Margin="8" VerticalAlignment="Center">
+            <StackPanel Orientation="Horizontal">
+                <Label Padding="0 0 4 0">Endpoint:</Label>
+                <fa:IconBlock Icon="Database"/>
+            </StackPanel>
+        </Label>
         <TextBox Grid.Column="1" Margin="8" x:Name="Endpoint" Height="24"/>
-        <Button Grid.Column="2" Content="Load" x:Name="LoadSamples"/>
-        <Button Grid.Column="3" Content="Upload" x:Name="SaveSamples"/>
+        <Button Grid.Column="2" x:Name="LoadSamples">
+            <StackPanel Orientation="Horizontal">
+                <fa:IconBlock Icon="Download"/>
+                <Label Padding="4 0 0 0">Load</Label>
+            </StackPanel>
+        </Button>
+        <Button Grid.Column="3" x:Name="SaveSamples">
+            <StackPanel Orientation="Horizontal">
+                <fa:IconBlock Icon="Upload"/>
+                <Label Padding="4 0 0 0">Upload</Label>
+            </StackPanel>        
+        </Button>
     </Grid>
 </UserControl>

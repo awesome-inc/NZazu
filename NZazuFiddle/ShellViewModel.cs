@@ -1,4 +1,5 @@
 ﻿using Caliburn.Micro;
+using FontAwesome.Sharp;
 using NZazuFiddle.TemplateManagement.Contracts;
 using System.Collections.Generic;
 
@@ -32,7 +33,13 @@ namespace NZazuFiddle
             EndpointViewModel = endpointViewModel;
             FileMenuViewModel = fileMenuViewModel;
             AddTemplateViewModel = addTemplateViewModel;
-        }
+
+            DeleteIcon = IconChar.TrashO;
+            ExportIcon = IconChar.HddO;
+    }
+
+        public IconChar DeleteIcon { get; set; }
+        public IconChar ExportIcon { get; set; }
 
         public IEnumerable<ISample> Samples
         {
