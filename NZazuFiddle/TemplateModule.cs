@@ -11,6 +11,7 @@ namespace NZazuFiddle
         {
             builder.RegisterType<ElasticSearchTemplateDbClient>().As<ITemplateDbClient>().SingleInstance();
             builder.RegisterType<JsonTemplateFileIo>().As<ITemplateFileIo>().SingleInstance();
+            builder.RegisterType<TemplateFileIoDialogService>().As<ITemplateFileIoDialogService>().SingleInstance();
             builder.RegisterType<TemplateSample>().As<IHaveSample>();
         }
     }
