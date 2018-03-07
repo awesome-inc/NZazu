@@ -10,7 +10,6 @@ namespace NZazuFiddle
     public class SampleViewModel : Screen, ISample, IHandle<FormData>, IHandle<FormDefinition>
     {
         private readonly IEventAggregator _fiddleRelatedEvents;
-        private readonly IEventAggregator _globalEvents;
 
         private ETemplateStatus _status;
         private Brush _statusBrush;
@@ -43,16 +42,15 @@ namespace NZazuFiddle
                 string name,
                 IFiddle fiddle,
                 IEventAggregator fiddleRelatedEvents,
-                IEventAggregator globalEvents
+                ETemplateStatus status = ETemplateStatus.Initial
         )
         {
             Id = id;
             Name = name;
             Fiddle = fiddle;
             _fiddleRelatedEvents = fiddleRelatedEvents;
-            _globalEvents = globalEvents;
 
-            _status = ETemplateStatus.Initial;
+            _status = status;
             _statusBrush = StateToBrush(_status);
 
             _fiddleRelatedEvents.Subscribe(this);

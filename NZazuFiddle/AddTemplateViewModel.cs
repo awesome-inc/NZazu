@@ -25,7 +25,7 @@ namespace NZazuFiddle
 
         public void AddSample()
         {
-            var newTemplateSample = new TemplateSample(_sampleId, _sampleId, new FormDefinition(), new FormData(), _globalEvents);
+            var newTemplateSample = new TemplateSample(_sampleId, _sampleId, new FormDefinition(), new FormData());
             _session.AddSampleAsUniqueItem(newTemplateSample.Sample);
 
         }

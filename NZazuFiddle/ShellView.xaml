@@ -44,6 +44,5 @@
             <ContentControl Grid.Column="1" x:Name="SelectedSample"/>
         </Grid>
 
-        <ContentControl x:Name="AddTemplateViewModel"/>
     </StackPanel>
 </UserControl>

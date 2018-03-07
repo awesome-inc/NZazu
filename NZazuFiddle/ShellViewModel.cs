@@ -21,7 +21,6 @@ namespace NZazuFiddle
             ITemplateDbClient templateDbRepo, 
             IEndpointViewModel endpointViewModel, 
             IFileMenuViewModel fileMenuViewModel, 
-            IAddTemplateViewModel addTemplateViewModel, 
             ISession session)
         {
             DisplayName = "TACON Template Editor";
@@ -32,7 +31,6 @@ namespace NZazuFiddle
             _templateDbRepo = templateDbRepo;
             EndpointViewModel = endpointViewModel;
             FileMenuViewModel = fileMenuViewModel;
-            AddTemplateViewModel = addTemplateViewModel;
 
             DeleteIcon = IconChar.TrashO;
             ExportIcon = IconChar.HddO;
@@ -83,8 +81,6 @@ namespace NZazuFiddle
         public IEndpointViewModel EndpointViewModel { get; }
 
         public IFileMenuViewModel FileMenuViewModel { get; }
-
-        public IAddTemplateViewModel AddTemplateViewModel { get; }
 
     }
 }

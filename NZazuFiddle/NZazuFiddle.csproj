@@ -165,6 +165,10 @@
     <Compile Include="ISample.cs" />
     <Compile Include="IServerConfiguration.cs" />
     <Compile Include="IShell.cs" />
+    <Compile Include="NewFileView.xaml.cs">
+      <DependentUpon>NewFileView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="NewFileViewModel.cs" />
     <Compile Include="NZazuAutoCompletion.cs" />
     <Compile Include="NzazuCompletionData.cs" />
     <Compile Include="OpenFolderService.cs" />
@@ -226,6 +230,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="FormDefinitionView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="NewFileView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

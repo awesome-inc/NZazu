@@ -13,6 +13,7 @@
             <fa:IconToImageConverter x:Key="IconToImage"/>
         </Menu.Resources>
         <MenuItem Header="_File">
+            <MenuItem Header="_New" x:Name="NewFile" Icon="{Binding NewFileIcon, Converter={StaticResource IconToImage}}"/>
             <MenuItem Header="_Import" x:Name="ImportFile" Icon="{Binding ImportIcon, Converter={StaticResource IconToImage}}"/>
             <MenuItem Header="_Import folder" x:Name="ImportFiles" Icon="{Binding ImportIcon, Converter={StaticResource IconToImage}}"/>
             <MenuItem Header="_Export all" x:Name="ExportToFiles" Icon="{Binding ExportIcon, Converter={StaticResource IconToImage}}"/>
