@@ -183,15 +183,8 @@
     <Compile Include="AppBootstrapper.cs" />
     <Compile Include="IFiddle.cs" />
     <Compile Include="Properties\Annotations.cs" />
-    <Compile Include="Samples\BehaviorSample.cs" />
-    <Compile Include="Samples\DynamicRowLayout.cs" />
-    <Compile Include="Samples\FocusSample.cs" />
     <Compile Include="Samples\IHaveSample.cs" />
-    <Compile Include="Samples\MixedGroupLayout.cs" />
-    <Compile Include="Samples\PrimitivesSample.cs" />
-    <Compile Include="Samples\ReadOnlySample.cs" />
     <Compile Include="Samples\SampleBase.cs" />
-    <Compile Include="Samples\ValidationSample.cs" />
     <Compile Include="TemplateManagement\Contracts\ETemplateStatus.cs" />
     <Compile Include="TemplateManagement\Contracts\ISession.cs" />
     <Compile Include="TemplateManagement\Contracts\ITemplateDbClient.cs" />
@@ -286,7 +279,9 @@
   <ItemGroup>
     <Resource Include="Images\error.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Events\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
