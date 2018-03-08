@@ -1,9 +1,10 @@
 ﻿using Caliburn.Micro;
-using FontAwesome.Sharp;
 using NZazuFiddle.TemplateManagement.Contracts;
+using NZazuFiddle.Utils;
 using System;
 using System.Diagnostics;
 using System.Windows;
+using System.Linq;
 
 namespace NZazuFiddle
 {
@@ -42,9 +43,11 @@ namespace NZazuFiddle
             try
             {
                 var samplesFromDb = await _templateDbRepo.GetData();
+                //ToDo [bornemeier] implement dialog handling as a session decorator
                 _session.AddSamplesAsUniqueItems(samplesFromDb);
             } catch(Exception e)
             {
+                Trace.TraceError(LoggingUtil.CreateLogMessage(this,"Endpoint connection failed!",e.Message,e.StackTrace));
                 MessageBox.Show(
                             $"Endpoint not reachable. Please check if you are connected to the database or if the given URL is correct.",
                             "Error",
@@ -70,5 +73,6 @@ namespace NZazuFiddle
                 MessageBox.Show("Upload failed!");
             }
         }
+
     }
 }

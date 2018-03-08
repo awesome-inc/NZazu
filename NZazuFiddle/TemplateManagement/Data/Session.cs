@@ -7,6 +7,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using Caliburn.Micro;
 using NZazuFiddle.Annotations;
 using NZazuFiddle.TemplateManagement.Contracts;
@@ -48,14 +49,7 @@ namespace NZazuFiddle.TemplateManagement.Data
 
         public void AddSampleAsUniqueItem(ISample sample)
         {
-            var sampleExist = !(_samples.FirstOrDefault(s => s.Id == sample.Id) == null);
-            if(!sampleExist)
-            {
-                _samples.Add(sample);
-            } else
-            {
-                Trace.TraceWarning(LoggingUtil.CreateLogMessage(this,$"Sample with Id {sample.Id} already exists!"));
-            }
+            HandleAlreadyExistingSample(sample);
         }
 
         public void AddSamplesAsUniqueItems(List<ISample> samples)
@@ -63,5 +57,48 @@ namespace NZazuFiddle.TemplateManagement.Data
             samples.ForEach(AddSampleAsUniqueItem);
         }
 
+        public bool DoesSampleAlreadyExist(ISample sample)
+        {
+            var sampleExists = !(_samples.FirstOrDefault(s => s.Id == sample.Id) == null);
+            return sampleExists;
+        }
+
+        public void Replace(ISample sample)
+        {
+            var toBeRemoved = _samples.FirstOrDefault(s => sample.Id == s.Id);
+            if(toBeRemoved != null)
+            {
+                _samples.Remove(toBeRemoved);
+                _samples.Add(sample);
+            }
+
+        }
+
+        private void HandleAlreadyExistingSample(ISample sample)
+        {
+            var sampleExists = DoesSampleAlreadyExist(sample);
+            if (sampleExists)
+            {
+                Trace.TraceWarning(LoggingUtil.CreateLogMessage(this, $"Sample with Id {sample.Id} already exists!"));
+
+                var r = MessageBox.Show(
+                    $"The template {sample.Name} does already exist in current local list. Do you want to replace it?",
+                    "Already exists",
+                    MessageBoxButton.YesNo,
+                    MessageBoxImage.Warning
+                    );
+
+                if (r == MessageBoxResult.Yes)
+                {
+                    Replace(sample);
+                } else
+                {
+                    Trace.TraceInformation(LoggingUtil.CreateLogMessage(this, $"Sample with Id {sample.Id} was not replaced!"));
+                }
+            } else
+            {
+                _samples.Add(sample);
+            }
+        }
     }
 }

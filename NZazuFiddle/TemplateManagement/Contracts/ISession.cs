@@ -20,5 +20,9 @@ namespace NZazuFiddle.TemplateManagement.Contracts
 
         void AddSamplesAsUniqueItems(List<ISample> samples);
 
+        bool DoesSampleAlreadyExist(ISample sample);
+
+        void Replace(ISample sample);
+
     }
 }
