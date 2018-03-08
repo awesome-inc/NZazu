@@ -28,7 +28,6 @@ namespace NZazuFiddle
             builder.RegisterType<ShellViewModel>().As<IShell>().SingleInstance();
             builder.RegisterType<EndpointViewModel>().As<IEndpointViewModel>().SingleInstance();
             builder.RegisterType<FileMenuViewModel>().As<IFileMenuViewModel>().SingleInstance();
-            builder.RegisterType<AddTemplateViewModel>().As<IAddTemplateViewModel>().SingleInstance();
             builder.RegisterType<WindowManager>().As<IWindowManager>().SingleInstance();
 
             builder.RegisterModule<TemplateModule>();

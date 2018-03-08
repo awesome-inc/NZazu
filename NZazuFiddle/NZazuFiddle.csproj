@@ -131,10 +131,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="AddTemplateView.xaml.cs">
-      <DependentUpon>AddTemplateView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="AddTemplateViewModel.cs" />
     <Compile Include="AvalonEditBehaviour.cs" />
     <Compile Include="EndpointView.xaml.cs">
       <DependentUpon>EndpointView.xaml</DependentUpon>
@@ -213,10 +209,6 @@
     <Compile Include="TemplateModule.cs" />
     <Compile Include="TextEditorExtensions.cs" />
     <Compile Include="Utils\LoggingUtil.cs" />
-    <Page Include="AddTemplateView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="EndpointView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
