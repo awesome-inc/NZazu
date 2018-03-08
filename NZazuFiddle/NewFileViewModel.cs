@@ -13,7 +13,7 @@ namespace NZazuFiddle
             get => _sampleId;
             set
             {
-                _sampleId = value.Trim();
+                _sampleId = value.Trim().ToLower();
                 NotifyOfPropertyChange(nameof(SampleId));
                 NotifyOfPropertyChange(nameof(CanAcceptButton));
             }
