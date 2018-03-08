@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace NZazuFiddle
 {
-    class NewFileViewModel : Screen
+    class NewFileViewModel : Screen, INewFileViewModel
     {
 
         private string _sampleId = "";
