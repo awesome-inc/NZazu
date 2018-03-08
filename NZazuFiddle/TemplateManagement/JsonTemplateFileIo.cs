@@ -48,6 +48,7 @@ namespace NZazuFiddle.TemplateManagement
             {
                 var json = r.ReadToEnd();
                 loadedSample = DeserializeSampleFromJSONFile(json);
+                loadedSample.Status = ETemplateStatus.Imported;
             }    
 
             return loadedSample;
@@ -60,6 +61,7 @@ namespace NZazuFiddle.TemplateManagement
             foreach (string file in files)
             {
                 var loadedSample = LoadTemplateFromFile(file);
+                loadedSample.Status = ETemplateStatus.Imported;
                 listOfSamples.Add(loadedSample);
             }
             return listOfSamples;

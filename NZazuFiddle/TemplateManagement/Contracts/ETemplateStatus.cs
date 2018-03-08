@@ -10,6 +10,7 @@ namespace NZazuFiddle.TemplateManagement.Contracts
     {
         Initial,
         New,
-        Modified
+        Modified,
+        Imported
     }
 }
