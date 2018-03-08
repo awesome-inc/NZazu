@@ -3,11 +3,9 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NZazuFiddle.TemplateManagement.Contracts;
+using NZazuFiddle.Utils;
 
 namespace NZazuFiddle.TemplateManagement
 {
@@ -19,7 +17,6 @@ namespace NZazuFiddle.TemplateManagement
         {
             try
             {
-                //File.Create(pathToFile);
                 var sampleAsJson = MappingUtil.MapSampleToJson(sample);
                 File.WriteAllText(pathToFile, sampleAsJson);
             }
@@ -41,22 +38,49 @@ namespace NZazuFiddle.TemplateManagement
             }
         }
 
+        public bool isValidFormat(string pathToFile)
+        {
+            try
+            {
+                LoadTemplateFromFile(pathToFile);
+            } catch(Exception e)
+            {
+                return false;
+            }
+            return true;
+        }
+
         public ISample LoadTemplateFromFile(string pathToTemplate)
         {
-            ISample loadedSample;
-            using (StreamReader r = new StreamReader(pathToTemplate))
-            {
-                var json = r.ReadToEnd();
-                loadedSample = DeserializeSampleFromJSONFile(json);
-                loadedSample.Status = ETemplateStatus.Imported;
-            }    
 
-            return loadedSample;
+            try
+            {
+                ISample loadedSample;
+                using (StreamReader r = new StreamReader(pathToTemplate))
+                {
+                    var json = r.ReadToEnd();
+                    loadedSample = DeserializeSampleFromJSONFile(json);
+                    loadedSample.Status = ETemplateStatus.Imported;
+                }
+
+                return loadedSample;
+            } catch(Exception e)
+            {
+                Trace.TraceError(LoggingUtil.CreateLogMessage(this, $"Loading file {pathToTemplate} failed!", e.Message, e.StackTrace));
+                throw e;
+;            }
         }
 
         public List<ISample> LoadTemplatesFromFolder(string pathToFolder)
         {
-            var files = Directory.GetFiles(pathToFolder);
+            var files = Directory.GetFiles(pathToFolder, "*.*", SearchOption.AllDirectories)
+                // collect only json files
+                .Where(file => new string[] { ".json" }
+                .Contains(Path.GetExtension(file)))
+                .ToList()
+                // filter valid NZazu template formats
+                .FindAll(f => isValidFormat(f));
+
             var listOfSamples = new List<ISample>();
             foreach (string file in files)
             {

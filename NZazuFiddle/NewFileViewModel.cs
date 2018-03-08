@@ -1,22 +1,29 @@
 ﻿using Caliburn.Micro;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace NZazuFiddle
 {
     class NewFileViewModel : Screen
     {
 
-        public string SampleId { get; set; }
+        private string _sampleId = "";
+
+        public string SampleId
+        {
+            get => _sampleId;
+            set
+            {
+                _sampleId = value.Trim();
+                NotifyOfPropertyChange(nameof(SampleId));
+                NotifyOfPropertyChange(nameof(CanAcceptButton));
+            }
+        }
 
         public bool IsCancelled { get; set; }
 
         public bool CanAcceptButton
         {
-            get { return true; /* add logic here */ }
+            get => !string.IsNullOrWhiteSpace(SampleId) || SampleId.ToCharArray().Contains(' ');
         }
 
         public void AcceptButton()
@@ -25,15 +32,11 @@ namespace NZazuFiddle
             TryClose(true);
         }
 
-        public bool CanCancelButton
-        {
-            get { return true; }
-        }
-
         public void CancelButton()
         {
             IsCancelled = true;
             TryClose(false);
         }
+ 
     }
 }

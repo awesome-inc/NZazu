@@ -46,7 +46,7 @@ namespace NZazuFiddle
         public void ImportFile()
         {
             var sampleTemplate = _fileIo.ImportTemplateFromFile();
-            _session.AddSampleAsUniqueItem(sampleTemplate);
+            if(sampleTemplate != null) _session.AddSampleAsUniqueItem(sampleTemplate);
         }
 
         public void ImportFiles()
@@ -59,11 +59,7 @@ namespace NZazuFiddle
         {
             var newFileViewModel = new NewFileViewModel();
             _windowManager.ShowDialog(newFileViewModel);
-            if (newFileViewModel.IsCancelled)
-            {
-                // Handle cancellation
-            }
-            else
+            if (!newFileViewModel.IsCancelled)
             {
                 var newTemplateSample = new TemplateSample(newFileViewModel.SampleId, newFileViewModel.SampleId, new FormDefinition(), new FormData(), ETemplateStatus.New);
                 _session.AddSampleAsUniqueItem(newTemplateSample.Sample);
@@ -75,7 +71,8 @@ namespace NZazuFiddle
             var r = MessageBox.Show(
                 "Do you really want to delete all templates from database?",
                 "Delete all",
-                MessageBoxButton.YesNo
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Question
             );
 
             if (r == MessageBoxResult.Yes)

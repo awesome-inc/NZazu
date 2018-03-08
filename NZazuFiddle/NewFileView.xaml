@@ -26,7 +26,7 @@
             <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
 
-        <Label Grid.Row="0" Grid.ColumnSpan="2" Margin="8" HorizontalAlignment="Center" Height="24">Please enter a valid Id:</Label>
+        <Label Grid.Row="0" Grid.ColumnSpan="2" Margin="8" HorizontalAlignment="Center" Height="24">Please enter a valid template name:</Label>
         <TextBox Grid.Row="1" Grid.ColumnSpan="2" Margin="8" x:Name="SampleId" Height="24" MinWidth="250" HorizontalAlignment="Left"/>
         <Button Grid.Row="2" Grid.Column="0" Margin="8" Content="OK" cal:Message.Attach="[Event Click] = [AcceptButton()]" />
         <Button Grid.Row="2" Grid.Column="1" Margin="8" Content="Cancel" cal:Message.Attach="[Event Click] = [CancelButton()]" />

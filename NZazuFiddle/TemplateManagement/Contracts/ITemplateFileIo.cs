@@ -18,5 +18,7 @@ namespace NZazuFiddle.TemplateManagement.Contracts
 
         List<ISample> LoadTemplatesFromFolder(string pathToFolder);
 
+        bool isValidFormat(string pathToFile);
+
     }
 }

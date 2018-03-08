@@ -157,6 +157,7 @@
     <Compile Include="IHaveFormData.cs" />
     <Compile Include="IHaveFormDefinition.cs" />
     <Compile Include="IHaveJson.cs" />
+    <Compile Include="INewFileViewModel.cs" />
     <Compile Include="IPreviewViewModel.cs" />
     <Compile Include="ISample.cs" />
     <Compile Include="IServerConfiguration.cs" />

@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace NZazuFiddle.TemplateManagement
 {
@@ -40,6 +41,7 @@ namespace NZazuFiddle.TemplateManagement
         public ISample ImportTemplateFromFile()
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "Templates (*.json) | *.json";
             if (openFileDialog.ShowDialog() == true)
             {
                 var isUri = Uri.TryCreate(openFileDialog.FileName, UriKind.Absolute, out Uri uri);
@@ -52,7 +54,12 @@ namespace NZazuFiddle.TemplateManagement
                     }
                     catch (Exception e)
                     {
-                        Trace.TraceError(LoggingUtil.CreateLogMessage(this, "Importing file failed!", e.Message, e.StackTrace));
+                        var r = MessageBox.Show(
+                            $"Importing {openFileDialog.FileName} failed! No valid format.",
+                            "Error",
+                            MessageBoxButton.OK,
+                            MessageBoxImage.Error
+                        );
                     }
                 }
             }
@@ -63,9 +70,10 @@ namespace NZazuFiddle.TemplateManagement
         {
             var dialog = new OpenFolderService();
             var folder = dialog.SelectFolder();
-            if (string.IsNullOrWhiteSpace(folder)) return null;
+            if (string.IsNullOrWhiteSpace(folder)) return new List<ISample>();
             var loadedSamples = _fileIo.LoadTemplatesFromFolder(folder);
             return loadedSamples;
         }
+
     }
 }
