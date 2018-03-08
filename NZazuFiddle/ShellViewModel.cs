@@ -69,8 +69,16 @@ namespace NZazuFiddle
 
         public void DeleteSelectedSample()
         {
-            _templateDbRepo.DeleteData(SelectedSample);
-            _samples.Remove(SelectedSample);
+            var r = MessageBox.Show(
+                "Do you really want to delete this template?",
+                "Delete template",
+                MessageBoxButton.YesNo
+                );
+            
+            if(r == MessageBoxResult.Yes) { 
+                _templateDbRepo.DeleteData(SelectedSample);
+                _samples.Remove(SelectedSample);
+            }
         }
 
         public void ExportSelectedSample()
