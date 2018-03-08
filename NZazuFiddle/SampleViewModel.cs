@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Windows.Media;
 using Caliburn.Micro;
+using FontAwesome.Sharp;
 using NZazu.Contracts;
 using NZazuFiddle.TemplateManagement.Contracts;
 
@@ -11,8 +12,10 @@ namespace NZazuFiddle
     {
         private readonly IEventAggregator _fiddleRelatedEvents;
 
+        // ToDo [bornemeier]: implement statechange as state-pattern
         private ETemplateStatus _status;
         private Brush _statusBrush;
+        private IconChar _statusIcon;
 
         public ETemplateStatus Status
         {
@@ -21,14 +24,12 @@ namespace NZazuFiddle
             {
                 _status = value;
                 StatusBrush = StateToBrush(_status);
+                StatusIcon = StateToIcon(_status);
+                NotifyOfPropertyChange();
             }
         }
-        public string Name { get; set; }
-        public string Description { get; set; }
-        public string Id { get; set; }
-        public IFiddle Fiddle { get; set; }
-
-        public Brush StatusBrush {
+        public Brush StatusBrush
+        {
             get => _statusBrush;
             set
             {
@@ -36,7 +37,18 @@ namespace NZazuFiddle
                 NotifyOfPropertyChange();
             }
         }
-
+        public IconChar StatusIcon
+        {
+            get => _statusIcon;
+            set {
+                _statusIcon = value;
+                NotifyOfPropertyChange();
+            }
+        }
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public string Id { get; set; }
+        public IFiddle Fiddle { get; set; }
         public SampleViewModel(
                 string id,
                 string name,
@@ -52,6 +64,7 @@ namespace NZazuFiddle
 
             _status = status;
             _statusBrush = StateToBrush(_status);
+            _statusIcon = StateToIcon(_status);
 
             _fiddleRelatedEvents.Subscribe(this);
         }
@@ -73,6 +86,21 @@ namespace NZazuFiddle
                     return Brushes.BlueViolet;
                 default:
                     return Brushes.Black;
+            }
+        }
+
+        protected virtual IconChar StateToIcon(ETemplateStatus status)
+        {
+            switch (status)
+            {
+                case ETemplateStatus.Modified:
+                    return IconChar.Asterisk;
+                case ETemplateStatus.New:
+                    return IconChar.Asterisk;
+                case ETemplateStatus.Imported:
+                    return IconChar.Asterisk;
+                default:
+                    return IconChar.Database;
             }
         }
 

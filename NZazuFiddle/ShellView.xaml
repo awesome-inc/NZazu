@@ -30,7 +30,14 @@
                 </ListBox.Resources>
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <TextBlock Text="{Binding Name}" Foreground="{Binding StatusBrush}"/>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <fa:IconImage Icon="{Binding StatusIcon}" Margin="1 0 0 0"/>
+                            <TextBlock Grid.Column="1" Text="{Binding Name}" Foreground="{Binding StatusBrush}" Margin="3 0 0 0"/>
+                        </Grid>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
                 <ListBox.ContextMenu>
