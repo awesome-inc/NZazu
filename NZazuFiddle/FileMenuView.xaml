@@ -17,6 +17,7 @@
             <MenuItem Header="_Import" x:Name="ImportFile" Icon="{Binding ImportIcon, Converter={StaticResource IconToImage}}"/>
             <MenuItem Header="_Import folder" x:Name="ImportFiles" Icon="{Binding ImportIcon, Converter={StaticResource IconToImage}}"/>
             <MenuItem Header="_Export all" x:Name="ExportToFiles" Icon="{Binding ExportIcon, Converter={StaticResource IconToImage}}"/>
+            <MenuItem Header="_Delete all" x:Name="DeleteAll" Icon="{Binding DeleteAllIcon, Converter={StaticResource IconToImage}}"/>
         </MenuItem>
     </Menu>
 
