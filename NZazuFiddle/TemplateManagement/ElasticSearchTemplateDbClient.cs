@@ -32,7 +32,7 @@ namespace NZazuFiddle.TemplateManagement
         {
             try
             {
-                var res = await GetDataFromEndpoint(Endpoint + "_search");
+                var res = await GetDataFromEndpoint(Endpoint + "_search?size=1000");
                 var sampleList = DeserializeSamplesFromEndpoint(res);
                 sampleList.ForEach(s => s.Status = ETemplateStatus.Initial);
                 return sampleList;
@@ -58,6 +58,7 @@ namespace NZazuFiddle.TemplateManagement
                 if (response.IsSuccessStatusCode)
                 {
                     Trace.TraceInformation($"Uploading data {id} to endpoint {_endpoint} was successfull!");
+                    sample.Status = ETemplateStatus.Initial;
                 }
                 else
                 {
