@@ -69,6 +69,8 @@ namespace NZazuFiddle
                     return Brushes.DarkRed;
                 case ETemplateStatus.New:
                     return Brushes.DarkGreen;
+                case ETemplateStatus.Imported:
+                    return Brushes.BlueViolet;
                 default:
                     return Brushes.Black;
             }
