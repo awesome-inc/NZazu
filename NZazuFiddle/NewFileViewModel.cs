@@ -23,7 +23,7 @@ namespace NZazuFiddle
 
         public bool CanAcceptButton
         {
-            get => !string.IsNullOrWhiteSpace(SampleId) || SampleId.ToCharArray().Contains(' ');
+            get => !string.IsNullOrWhiteSpace(SampleId) && !SampleId.ToCharArray().Contains(' ');
         }
 
         public void AcceptButton()

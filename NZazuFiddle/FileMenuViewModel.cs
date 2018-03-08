@@ -24,9 +24,9 @@ namespace NZazuFiddle
             _windowManager = windowManager ?? throw new ArgumentNullException(nameof(windowManager));
             _templateDbRepo = templateDbRepo ?? throw new ArgumentNullException(nameof(templateDbRepo));
 
-            ImportIcon = IconChar.LevelDown;
+            ImportIcon = IconChar.FolderOpenO;
             ExportIcon = IconChar.HddO;
-            NewFileIcon = IconChar.Plus;
+            NewFileIcon = IconChar.FileO;
             DeleteAllIcon = IconChar.TrashO;
         }
 

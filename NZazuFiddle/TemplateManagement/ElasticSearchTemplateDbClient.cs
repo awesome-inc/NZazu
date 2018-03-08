@@ -39,7 +39,7 @@ namespace NZazuFiddle.TemplateManagement
             }
             catch (Exception e)
             {
-                Trace.TraceError(e.StackTrace);
+                Trace.TraceError(LoggingUtil.CreateLogMessage(this,"Failed to load data from Endpoint!", e.Message, e.StackTrace));
                 throw;
             }
         }

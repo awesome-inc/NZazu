@@ -34,13 +34,24 @@ namespace NZazuFiddle
             }
         }
 
-        public bool CanLoadSamples { get => !string.IsNullOrWhiteSpace(Endpoint); }
-        public bool CanSaveSamples { get => !string.IsNullOrWhiteSpace(Endpoint); }
+        public bool CanLoadSamples { get => !string.IsNullOrWhiteSpace(Endpoint) && Uri.TryCreate(Endpoint, UriKind.Absolute, out Uri uri); }
+        public bool CanSaveSamples { get => !string.IsNullOrWhiteSpace(Endpoint) && Uri.TryCreate(Endpoint, UriKind.Absolute, out Uri uri); }
 
         public async void LoadSamples()
         {
-            var samplesFromDb = await _templateDbRepo.GetData();
-            _session.AddSamplesAsUniqueItems(samplesFromDb);
+            try
+            {
+                var samplesFromDb = await _templateDbRepo.GetData();
+                _session.AddSamplesAsUniqueItems(samplesFromDb);
+            } catch(Exception e)
+            {
+                MessageBox.Show(
+                            $"Endpoint not reachable. Please check if you are connected to the database or if the given URL is correct.",
+                            "Error",
+                            MessageBoxButton.OK,
+                            MessageBoxImage.Error
+                        );
+            }
         }
 
         public void SaveSamples()
