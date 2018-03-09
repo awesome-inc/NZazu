@@ -11,7 +11,7 @@ namespace NZazuFiddle
     internal class EndpointViewModel : Screen, IEndpointViewModel
     {
         private readonly ITemplateDbClient _templateDbRepo;
-        private string _endpoint = "http://localhost:9200/tacon/form";
+        private string _endpoint = "http://localhost:9200/tacon/form/";
         private readonly ISession _session;
 
         public EndpointViewModel(ITemplateDbClient templateDbRepo, ISession session)

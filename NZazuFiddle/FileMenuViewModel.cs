@@ -4,7 +4,6 @@ using NZazu.Contracts;
 using NZazuFiddle.TemplateManagement;
 using NZazuFiddle.TemplateManagement.Contracts;
 using System;
-using System.Linq;
 using System.Windows;
 
 namespace NZazuFiddle

@@ -17,7 +17,7 @@ namespace NZazuFiddle.TemplateManagement
         private readonly HttpClient _httpClient = new HttpClient();
         private string _endpoint;
 
-        public ElasticSearchTemplateDbClient(string endpoint = "http://localhost:9200/tacon/")
+        public ElasticSearchTemplateDbClient(string endpoint = "http://localhost:9200/tacon/form/")
         {
             _endpoint = endpoint;
         }
