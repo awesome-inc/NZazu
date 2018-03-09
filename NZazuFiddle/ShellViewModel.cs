@@ -25,7 +25,10 @@ namespace NZazuFiddle
         {
             DisplayName = "TACON Template Editor";
 
-            _samples = session.Samples;
+            _samples = new BindableCollection<ISample>(session.Samples);
+
+            session.PropertyChanged += (o, s) => { Samples = session.Samples; };
+
             _session = session;
             _templateFileIoDialogService = templateFileIoDialogService;
             _templateDbRepo = templateDbRepo;

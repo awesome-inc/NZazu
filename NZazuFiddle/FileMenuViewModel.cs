@@ -28,6 +28,7 @@ namespace NZazuFiddle
             ExportIcon = IconChar.HddO;
             NewFileIcon = IconChar.FileO;
             DeleteAllIcon = IconChar.TrashO;
+            ClearAllIcon = IconChar.Eraser;
         }
 
         public IconChar ImportIcon { get; set; }
@@ -38,9 +39,11 @@ namespace NZazuFiddle
 
         public IconChar DeleteAllIcon { get; set; }
 
+        public IconChar ClearAllIcon { get; set; }
+
         public void ExportToFiles()
         {
-            _fileIo.ExportTemplates(_session.Samples.ToList());
+            _fileIo.ExportTemplates(_session.Samples);
         }
 
         public void ImportFile()
@@ -81,7 +84,23 @@ namespace NZazuFiddle
                 {
                     _templateDbRepo.DeleteData(sample);
                 }
-                _session.Samples.Clear();
+                _session.ClearSamples();
+            }
+        }
+
+        public void ClearAll()
+        {
+            var r = MessageBox.Show(
+                "Do you really want to clear the current local list? " +
+                "All local not synchronized changes will be lost.",
+                "Clear list",
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Question
+            );
+
+            if (r == MessageBoxResult.Yes)
+            {
+                _session.ClearSamples();
             }
         }
 

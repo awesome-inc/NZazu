@@ -21,7 +21,7 @@ namespace NZazuFiddle
         {
 
             var globalEvents = new EventAggregator();
-            var session = new Session("", new List<ISample>(), globalEvents);
+            var session = new Session("", new List<ISample>());
 
             builder.RegisterInstance(session).As<ISession>().SingleInstance();
             builder.RegisterInstance(globalEvents).As<IEventAggregator>().SingleInstance();

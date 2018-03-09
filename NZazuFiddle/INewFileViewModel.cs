@@ -9,7 +9,7 @@ namespace NZazuFiddle
     interface INewFileViewModel
     {
         string SampleId { get; set; }
-        bool CanAcceptButton { get; set; }
+        bool CanAcceptButton { get; }
         void AcceptButton();
         void CancelButton();
     }

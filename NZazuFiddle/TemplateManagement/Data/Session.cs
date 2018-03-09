@@ -16,8 +16,7 @@ namespace NZazuFiddle.TemplateManagement.Data
     {
 
         private string _dbEndpoint;
-        private BindableCollection<ISample> _samples;
-        private readonly IEventAggregator _events;
+        private readonly List<ISample> _samples;
 
         public string Endpoint
         {
@@ -27,26 +26,28 @@ namespace NZazuFiddle.TemplateManagement.Data
 
         public ISample SelectedSample { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
-        public BindableCollection<ISample> Samples {
-            get => _samples;
+        public List<ISample> Samples {
+            // assure immutability of sample list
+            get => new List<ISample>(_samples);
         }
 
-        public Session(string dbEndpoint, List<ISample> samples, IEventAggregator events) {
+        public Session(string dbEndpoint, List<ISample> samples) {
             _dbEndpoint = dbEndpoint;
-            _samples = new BindableCollection<ISample>(samples);
+            _samples = new List<ISample>(samples);
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler PropertyChanged = (sender, e) => { };
 
-        [NotifyPropertyChangedInvocator]
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        // ReSharper disable once MemberCanBePrivate.Global
+        protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
         }
 
         public void AddSampleAsUniqueItem(ISample sample)
         {
             HandleAlreadyExistingSample(sample);
+            OnPropertyChanged(nameof(Samples));
         }
 
         public void AddSamplesAsUniqueItems(List<ISample> samples)
@@ -68,7 +69,13 @@ namespace NZazuFiddle.TemplateManagement.Data
                 _samples.Remove(toBeRemoved);
                 _samples.Add(sample);
             }
+            OnPropertyChanged(nameof(Samples));
+        }
 
+        public void ClearSamples()
+        {
+            _samples.Clear();
+            OnPropertyChanged(nameof(Samples));
         }
 
         private void HandleAlreadyExistingSample(ISample sample)
