@@ -173,19 +173,24 @@ namespace NZazu.Fields
 
         protected virtual string GetSetting(string key)
         {
-            string value;
-            Settings.TryGetValue(key, out value);
+            Settings.TryGetValue(key, out var value);
             return value;
         }
 
         protected internal virtual T? GetSetting<T>(string key) where T : struct
         {
+            var str = GetSetting(key);
+
             try
             {
-                var str = GetSetting(key);
+                if (str == null) return null;
                 return (T)Convert.ChangeType(str, typeof(T), CultureInfo.InvariantCulture);
             }
-            catch (Exception) { return null; }
+            catch (Exception)
+            {
+                Trace.TraceWarning($"Setting {key} with value '{str ?? "<null>"}' has the wrong type. A {typeof(T).Name} is expected.");
+                return null;
+            }
         }
 
         public virtual void DisposeField()
