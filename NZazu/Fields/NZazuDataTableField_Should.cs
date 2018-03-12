@@ -28,12 +28,89 @@ namespace NZazu.Fields
             sut.Type.Should().Be("datatable");
         }
 
+
+        private static dynamic GetField()
+        {
+            var sut = new NZazuDataTableField(new FieldDefinition
+            {
+                Key = "table01",
+                Fields = new[]
+                {
+                    new FieldDefinition {Key = "table01_field01", Type = "string"},
+                    new FieldDefinition {Key = "table01_field02", Type = "bool"}
+                }
+            });
+
+            // create factory later but before "ValueControl" access
+            var _factory = new NZazuFieldFactory();
+            sut.FieldFactory = _factory;
+            // don't create the control by invoking the getter.
+            //var control = sut.ValueControl;
+            //control.Should().NotBeNull();
+
+            // now lets create some testdata and return it for multiple tests
+            var data = new Dictionary<string, string>
+            {
+                { "table01_field01__1", "Hello" },
+                { "table01_field02__1", "True" },
+                { "table01_field01__2", "World" },
+                { "table01_field02__2", "False" },
+                { "table01_field01__3", "42" },
+                { "table01_field02__3", "" }
+            };
+
+            return new
+            {
+                Field = sut,
+                Data = data,
+                Factory = _factory
+            };
+        }
+
         [Test]
         [STAThread]
         public void Serialize_And_Deserialize()
         {
+            var testData = GetField();
+            var sut = (NZazuDataTableField)testData.Field;
+            var factory = (INZazuWpfFieldFactory)testData.Factory;
+            var data = (Dictionary<string, string>)testData.Data;
+
+            // lets assign the data and do some tests
+            sut.StringValue = factory.Serializer.Serialize(data);
+            var actual = factory.Serializer.Deserialize(sut.StringValue);
+            foreach (var dta in data)
+                actual.Should().Contain(dta);
+
+            sut.Validate().IsValid.Should().BeTrue();
+            ((DynamicDataTable)sut.ValueControl).LayoutGrid.RowDefinitions.Count.Should().Be(4);
+        }
+
+        [Test]
+        [STAThread]
+        public void Serialize_And_Deserialize_Multiple()
+        {
+            var testData = GetField();
+            var sut = (NZazuDataTableField)testData.Field;
+            var factory = (INZazuWpfFieldFactory)testData.Factory;
+            var data = (Dictionary<string, string>)testData.Data;
+            var sd = factory.Serializer.Serialize(data);
+
+            // lets assign the data
+            sut.StringValue = sd;
+
+            // lets assign the data again
+            var testData2 = GetField();
+            var sut2 = (NZazuDataTableField)testData2.Field;
+            sut2.StringValue = sd;
+        }
+
+        [Test]
+        [STAThread]
+        public void Serialize_And_Deserialize_Null_Rows_To_Null()
+        {
             var factory = new NZazuFieldFactory();
-            var data = new Dictionary<string, string> { { "table01_field01__1", "hello" }, { "table01_field01__2", "world" } };
+            var data = new Dictionary<string, string> { { "table01_field01__1", null }, { "table01_field01__2", null } };
             var dataSerialized = factory.Serializer.Serialize(data);
 
             // ReSharper disable once UseObjectOrCollectionInitializer
@@ -46,19 +123,18 @@ namespace NZazu.Fields
                 }
             });
             sut.FieldFactory = factory;
-            // ReSharper disable once UnusedVariable
-            var justToMakeTheCall = sut.ValueControl;
-
             sut.StringValue = dataSerialized;
+
+            // test the returned data
             var actual = factory.Serializer.Deserialize(sut.StringValue);
-            foreach (var dta in data)
-                actual.Should().Contain(dta);
+            actual.Count.Should().Be(0);
 
             sut.Validate().IsValid.Should().BeTrue();
-            ((DynamicDataTable)sut.ValueControl).LayoutGrid.RowDefinitions.Count.Should().Be(3);
+            ((DynamicDataTable)sut.ValueControl).LayoutGrid.RowDefinitions.Count.Should().Be(2);
         }
 
         [Test]
+        [TestCase(null)]
         [TestCase("")]
         [TestCase("<items/>")]
         [STAThread]

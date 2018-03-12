@@ -44,6 +44,7 @@
       <HintPath>..\packages\FontAwesome.Sharp.4.7.0\lib\net40\FontAwesome.Sharp.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="NEdifis, Version=0.7.0.0, Culture=neutral, PublicKeyToken=68bd55412466663d, processorArchitecture=MSIL">
       <HintPath>..\packages\NEdifis.0.7.0\lib\net45\NEdifis.dll</HintPath>
       <Private>True</Private>
