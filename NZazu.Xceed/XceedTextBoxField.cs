@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Windows.Controls;
+﻿using System.Windows.Controls;
 using NZazu.Contracts;
 using NZazu.Fields;
 using Xceed.Wpf.Toolkit;

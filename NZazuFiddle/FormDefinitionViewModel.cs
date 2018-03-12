@@ -15,11 +15,9 @@ namespace NZazuFiddle
         public FormDefinitionViewModel(IEventAggregator events, 
             FormDefinition definition)
         {
-            if (events == null) throw new ArgumentNullException(nameof(events));
-            if (definition == null) throw new ArgumentNullException(nameof(definition));
-            _events = events;
+            _events = events ?? throw new ArgumentNullException(nameof(events));
             _events.Subscribe(this);
-            _definition = definition;
+            _definition = definition ?? throw new ArgumentNullException(nameof(definition));
         }
 
         public FormDefinition Definition

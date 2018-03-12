@@ -12,11 +12,9 @@ namespace NZazuFiddle
 
         public FormDataViewModel(IEventAggregator events, FormData data)
         {
-            if (events == null) throw new ArgumentNullException(nameof(events));
-            if (data == null) throw new ArgumentNullException(nameof(data));
-            _events = events;
+            _events = events ?? throw new ArgumentNullException(nameof(events));
             _events.Subscribe(this);
-            _data = data;
+            _data = data ?? throw new ArgumentNullException(nameof(data));
         }
 
         public FormData Data

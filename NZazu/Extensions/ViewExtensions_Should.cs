@@ -24,7 +24,12 @@ namespace NZazu.Extensions
             view.FormDefinition = formDefinition;
 
             var field = Substitute.For<INZazuWpfField>();
-            view.GetField(key).Returns(field);
+            view.TryGetField(key, out var tmpField)
+                .Returns(x =>
+                {
+                    x[1] = field;
+                    return true;
+                });
 
             var input = new Dictionary<string, string> { { key, value } };
 
@@ -45,7 +50,12 @@ namespace NZazu.Extensions
             view.FormDefinition = formDefinition;
 
             var field = Substitute.For<INZazuWpfField>();
-            view.GetField(key).Returns(field);
+            view.TryGetField(key, out var tmpField)
+                .Returns(x =>
+                {
+                    x[1] = field;
+                    return true;
+                });
 
             var input = new Dictionary<string, string>
             {

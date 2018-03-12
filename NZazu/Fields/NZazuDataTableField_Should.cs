@@ -164,9 +164,9 @@ namespace NZazu.Fields
         }
 
         [Test]
-        [TestCase("this should not be handled")]
+        [TestCase("this should be ignored")]
         [STAThread]
-        public void Throw_Exception_On_Deserialize_Invalid_Data(string data)
+        public void Ignore_Exception_On_Deserialize_Invalid_Data(string data)
         {
             var factory = new NZazuFieldFactory();
 
@@ -180,13 +180,10 @@ namespace NZazu.Fields
                 }
             });
             sut.FieldFactory = factory;
-            // ReSharper disable once UnusedVariable
-            var justToMakeTheCall = sut.ValueControl;
 
             Action act = () => { sut.StringValue = data; };
 
-            act.ShouldThrow<SerializationException>()
-                 .WithMessage("NZazu.NZazuDataTable.UpdateGridValues(): data cannot be parsed. therefore the list will be empty");
+            act.ShouldNotThrow<Exception>();
 
             ((DynamicDataTable)sut.ValueControl).LayoutGrid.RowDefinitions.Count.Should().Be(2);
         }

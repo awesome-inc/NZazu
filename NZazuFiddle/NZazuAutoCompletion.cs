@@ -4,7 +4,6 @@ using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
 using ICSharpCode.AvalonEdit.CodeCompletion;
 using NZazu.FieldBehavior;
 using Xceed.Wpf.Toolkit;

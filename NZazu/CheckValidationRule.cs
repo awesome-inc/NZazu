@@ -11,8 +11,7 @@ namespace NZazu
 
         public CheckValidationRule(IValueCheck check)
         {
-            if (check == null) throw new ArgumentNullException(nameof(check));
-            _check = check;
+            _check = check ?? throw new ArgumentNullException(nameof(check));
         }
 
         public override ValidationResult Validate(object value, CultureInfo cultureInfo)

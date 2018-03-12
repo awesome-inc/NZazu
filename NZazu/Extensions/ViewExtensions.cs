@@ -11,13 +11,9 @@ namespace NZazu.Extensions
             if (fieldValues == null) throw new ArgumentNullException(nameof(fieldValues));
             foreach (var kvp in fieldValues)
             {
-                try
-                {
-                    var field = view.GetField(kvp.Key);
-                    if (field == null) continue;
-                    field.StringValue = kvp.Value;
-                }
-                catch (KeyNotFoundException) { }
+                if (!view.TryGetField(kvp.Key, out var field))
+                    continue;
+                field.StringValue = kvp.Value;
             }
         }
 

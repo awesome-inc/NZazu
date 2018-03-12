@@ -279,15 +279,14 @@ namespace NZazu.Fields
 
         private void UpdateGridValues(string value)
         {
-            Dictionary<string, string> newDict;
+            var newDict = new Dictionary<string, string>();
             try
             {
-                newDict = FieldFactory.Serializer.Deserialize(value);
-
+                newDict.MergeWith(FieldFactory.Serializer.Deserialize(value));
             }
             catch (Exception ex)
             {
-                throw new SerializationException("NZazu.NZazuDataTable.UpdateGridValues(): data cannot be parsed. therefore the list will be empty", ex);
+                Trace.TraceWarning("[NZazu.NZazuDataTable.UpdateGridValues] data cannot be parsed. therefore the list will be empty", ex);
             }
 
             var iterations = 0;

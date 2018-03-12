@@ -20,15 +20,12 @@ namespace NZazuFiddle
             FormDefinition definition, FormData data,
             INZazuWpfFieldFactory fieldFactory = null)
         {
-            if (events == null) throw new ArgumentNullException(nameof(events));
-            if (definition == null) throw new ArgumentNullException(nameof(definition));
-            if (data == null) throw new ArgumentNullException(nameof(data));
-            _events = events;
+            _events = events ?? throw new ArgumentNullException(nameof(events));
             _events.Subscribe(this);
-            _definition = definition;
-            _data = data;
+            _definition = definition ?? throw new ArgumentNullException(nameof(definition));
+            _data = data ?? throw new ArgumentNullException(nameof(data));
             _fieldFactory = fieldFactory ?? new XceedFieldFactory(serializer: new NZazuJsonSerializer());
-            _fieldFactory = fieldFactory ?? new XceedFieldFactory();
+            //_fieldFactory = fieldFactory ?? new XceedFieldFactory();
         }
 
         public FormDefinition Definition

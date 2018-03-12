@@ -179,8 +179,7 @@ namespace NZazu
             // in case we have a "settings" field.
             if (key.StartsWith("_")) return null;
 
-            INZazuWpfField field;
-            if (TryGetField(key, out field))
+            if (TryGetField(key, out var field))
                 return field;
 
             throw new KeyNotFoundException();
