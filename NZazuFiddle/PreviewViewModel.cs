@@ -30,7 +30,7 @@ namespace NZazuFiddle
 
         public FormDefinition Definition
         {
-            get { return _definition; }
+            get => _definition;
             set
             {
                 if (Equals(value, _definition)) return;
@@ -41,7 +41,7 @@ namespace NZazuFiddle
 
         public FormData Data
         {
-            get { return _data; }
+            get => _data;
             set
             {
                 if (Equals(value, _data)) return;
@@ -53,7 +53,7 @@ namespace NZazuFiddle
 
         public INZazuWpfFieldFactory FieldFactory
         {
-            get { return _fieldFactory; }
+            get => _fieldFactory;
             private set
             {
                 if (Equals(value, _fieldFactory)) return;
@@ -64,7 +64,7 @@ namespace NZazuFiddle
 
         public bool IsReadOnly
         {
-            get { return _isReadOnly; }
+            get => _isReadOnly;
             set
             {
                 if (value.Equals(_isReadOnly)) return;

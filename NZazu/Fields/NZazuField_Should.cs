@@ -28,7 +28,7 @@ namespace NZazu.Fields
         {
             public NZazuDummyField(FieldDefinition definition) : base(definition) { }
 
-            public override bool IsEditable { get { throw new NotImplementedException(); } }
+            public override bool IsEditable => throw new NotImplementedException();
             private string _stringValue;
             protected override void SetStringValue(string value) { _stringValue = value; }
             protected override string GetStringValue() { return _stringValue; }
@@ -51,8 +51,8 @@ namespace NZazu.Fields
         private class GenericDummyField : NZazuField<int>
         {
             public GenericDummyField(FieldDefinition definition) : base(definition) { }
-            public override DependencyProperty ContentProperty { get { throw new NotImplementedException(); } }
-            public override string Type { get { throw new NotImplementedException(); } }
+            public override DependencyProperty ContentProperty => throw new NotImplementedException();
+            public override string Type => throw new NotImplementedException();
             protected override Control CreateValueControl() { throw new NotImplementedException(); }
             protected override void SetStringValue(string value) { throw new NotImplementedException(); }
             protected override string GetStringValue() { throw new NotImplementedException(); }

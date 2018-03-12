@@ -25,7 +25,7 @@ namespace NZazu
 
         public FormDefinition FormDefinition
         {
-            get { return (FormDefinition)GetValue(FormDefinitionProperty); }
+            get => (FormDefinition)GetValue(FormDefinitionProperty);
             set { SetValue(FormDefinitionProperty, value); }
         }
 
@@ -43,7 +43,7 @@ namespace NZazu
 
         public INZazuWpfFieldFactory FieldFactory
         {
-            get { return (INZazuWpfFieldFactory)GetValue(FieldFactoryProperty); }
+            get => (INZazuWpfFieldFactory)GetValue(FieldFactoryProperty);
             set { SetValue(FieldFactoryProperty, value); }
         }
 
@@ -70,7 +70,7 @@ namespace NZazu
 
         public IResolveLayout ResolveLayout
         {
-            get { return (IResolveLayout)GetValue(ResolveLayoutProperty); }
+            get => (IResolveLayout)GetValue(ResolveLayoutProperty);
             set { SetValue(ResolveLayoutProperty, value); }
         }
 
@@ -110,7 +110,7 @@ namespace NZazu
 
         public FormData FormData
         {
-            get { return (FormData)GetValue(FormDataProperty); }
+            get => (FormData)GetValue(FormDataProperty);
             set { SetValue(FormDataProperty, value); }
         }
 
@@ -129,7 +129,7 @@ namespace NZazu
 
         public bool IsReadOnly
         {
-            get { return (bool)GetValue(IsReadOnlyProperty); }
+            get => (bool)GetValue(IsReadOnlyProperty);
             set { SetValue(IsReadOnlyProperty, value); }
         }
 

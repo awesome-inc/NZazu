@@ -56,7 +56,7 @@ namespace NZazu.Xceed
 
         public DateTime? Value
         {
-            get { return (DateTime?)GetValue(ValueProperty); }
+            get => (DateTime?)GetValue(ValueProperty);
             set { SetValue(ValueProperty, value); }
         }
 
@@ -65,13 +65,13 @@ namespace NZazu.Xceed
 
         public IActualDateTimeProvider ActualDateTimeProvider
         {
-            get { return (IActualDateTimeProvider)GetValue(ActualDateTimeProviderProperty); }
+            get => (IActualDateTimeProvider)GetValue(ActualDateTimeProviderProperty);
             set { SetValue(ActualDateTimeProviderProperty, value); }
         }
 
         public bool UseUTCDateTimeFormat
         {
-            get { return ActualDateTimeProvider is UtcDateTimeProvider; }
+            get => ActualDateTimeProvider is UtcDateTimeProvider;
             set
             {
                 if (value)
@@ -87,19 +87,19 @@ namespace NZazu.Xceed
 
         public DateTimeFormat Format
         {
-            get { return _valuePicker.Format; }
+            get => _valuePicker.Format;
             set { _valuePicker.Format = value; }
         }
 
         public string FormatString
         {
-            get { return _valuePicker.FormatString; }
+            get => _valuePicker.FormatString;
             set { _valuePicker.FormatString = value; }
         }
 
         public object Watermark
         {
-            get { return _valuePicker.Watermark; }
+            get => _valuePicker.Watermark;
             set { _valuePicker.Watermark = value; }
         }
 

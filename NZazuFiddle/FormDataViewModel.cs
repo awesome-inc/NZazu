@@ -19,7 +19,7 @@ namespace NZazuFiddle
 
         public FormData Data
         {
-            get { return _data; }
+            get => _data;
             set
             {
                 if (Equals(value, _data)) return;
@@ -38,6 +38,7 @@ namespace NZazuFiddle
             finally { _inHandle = false; } 
         }
 
-        public override FormData Model { get { return Data; } set { Data = value; } }
+        public override FormData Model { get => Data;
+            set { Data = value; } }
     }
 }

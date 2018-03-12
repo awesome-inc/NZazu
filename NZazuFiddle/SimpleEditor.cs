@@ -12,7 +12,7 @@ namespace NZazuFiddle
 
         public string GiveMeTheText
         {
-            get { return (string)GetValue(GiveMeTheTextProperty); }
+            get => (string)GetValue(GiveMeTheTextProperty);
             set { SetValue(GiveMeTheTextProperty, value); }
         }
 

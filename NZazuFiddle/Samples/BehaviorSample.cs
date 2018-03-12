@@ -84,7 +84,7 @@ namespace NZazuFiddle.Samples
             // ReSharper disable once UnusedMember.Local
             public string UrlPattern
             {
-                get { return _regex.ToString(); }
+                get => _regex.ToString();
                 set { _regex = new Regex(value); }
             }
 

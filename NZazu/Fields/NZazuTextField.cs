@@ -17,7 +17,8 @@ namespace NZazu.Fields
         }
         protected override string GetStringValue()
         {
-          var foo = CreateValueControl().GetValue(ContentProperty) ; return Value;
+            var foo = CreateValueControl().GetValue(ContentProperty);
+            return Value;
         }
 
         public override string Type => "string";

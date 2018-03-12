@@ -24,6 +24,7 @@ namespace NZazu.Extensions
             view.FormDefinition = formDefinition;
 
             var field = Substitute.For<INZazuWpfField>();
+            // ReSharper disable once UnusedVariable
             view.TryGetField(key, out var tmpField)
                 .Returns(x =>
                 {
@@ -50,6 +51,7 @@ namespace NZazu.Extensions
             view.FormDefinition = formDefinition;
 
             var field = Substitute.For<INZazuWpfField>();
+            // ReSharper disable once UnusedVariable
             view.TryGetField(key, out var tmpField)
                 .Returns(x =>
                 {

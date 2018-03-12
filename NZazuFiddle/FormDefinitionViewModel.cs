@@ -22,7 +22,7 @@ namespace NZazuFiddle
 
         public FormDefinition Definition
         {
-            get { return _definition; }
+            get => _definition;
             set
             {
                 if (Equals(value, _definition)) return;
@@ -48,6 +48,7 @@ namespace NZazuFiddle
             catch (Exception ex) { Trace.TraceWarning("{0}: {1}", couldNot, ex.Message); }
         }
 
-        public override FormDefinition Model { get { return Definition; } set { Definition = value; } }
+        public override FormDefinition Model { get => Definition;
+            set { Definition = value; } }
     }
 }

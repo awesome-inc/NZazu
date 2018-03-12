@@ -13,12 +13,14 @@ namespace NZazu.Contracts.Checks
         [Test]
         public void Ctor_MaxLEQMin_ShouldThrow()
         {
+            // ReSharper disable once ObjectCreationAsStatement
             new Action(() => new StringLengthCheck(1, 0)).Invoking(a => a()).ShouldThrow<ArgumentOutOfRangeException>();
         }
 
         [Test]
         public void Ctor_NegativeLength_ShouldThrow()
         {
+            // ReSharper disable once ObjectCreationAsStatement
             new Action(() => new StringLengthCheck(-1, -1)).Invoking(a => a()).ShouldThrow<ArgumentOutOfRangeException>();
         }
 

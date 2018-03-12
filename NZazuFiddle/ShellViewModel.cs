@@ -19,7 +19,7 @@ namespace NZazuFiddle
 
         public IEnumerable<ISample> Samples
         {
-            get { return _samples; }
+            get => _samples;
             set
             {
                 if (Equals(value, _samples)) return;
@@ -31,7 +31,7 @@ namespace NZazuFiddle
 
         public ISample SelectedSample
         {
-            get { return _selectedSample; }
+            get => _selectedSample;
             set
             {
                 if (Equals(value, _selectedSample)) return;

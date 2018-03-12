@@ -11,9 +11,9 @@ namespace NZazuFiddle
 
         public string Json
         {
-            get { return JsonConvert.SerializeObject(Model, Formatting.Indented
+            get => JsonConvert.SerializeObject(Model, Formatting.Indented
                 , new JsonSerializerSettings { DefaultValueHandling = DefaultValueHandling.Ignore }
-                ); }
+            );
             set
             {
                 try
@@ -29,7 +29,7 @@ namespace NZazuFiddle
 
         public string JsonError
         {
-            get { return _jsonError; }
+            get => _jsonError;
             private set
             {
                 if (Equals(value, _jsonError)) return;

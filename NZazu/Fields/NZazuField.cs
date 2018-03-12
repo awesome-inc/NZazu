@@ -215,10 +215,7 @@ namespace NZazu.Fields
 
         public T Value
         {
-            get
-            {
-                return _value;
-            }
+            get => _value;
             set
             {
                 _value = value;
