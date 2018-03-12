@@ -26,8 +26,20 @@ namespace NZazu.Fields
         public abstract bool IsEditable { get; }
         public string StringValue
         {
-            get { return GetStringValue(); }
-            set { SetStringValue(value); }
+            get
+            {
+                // make sure the control is created
+                if (Control == null)
+                    GetValueControl();
+                return GetStringValue();
+            }
+            set
+            {
+                // make sure the control is created
+                if (Control == null)
+                    GetValueControl();
+                SetStringValue(value);
+            }
         }
 
         protected abstract void SetStringValue(string value);
