@@ -43,3 +43,4 @@ packages/*
 publish*/
 *.psess
 *.vsp
+.vs/
