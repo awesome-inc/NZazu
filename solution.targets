@@ -13,7 +13,12 @@
 		<NUnitResultFormat>nunit3</NUnitResultFormat>
 	</PropertyGroup>
 
-	<!-- ## Automatically import project-specific overrides (place this last) -->
+    <!--## Specifying your repository token for coveralls.io -->
+    <PropertyGroup>
+        <CoverAllsToken>i2KNIIpoODfP7pMb23lyUJnlfB6m2ELtC</CoverAllsToken>
+    </PropertyGroup>
+
+    <!-- ## Automatically import project-specific overrides (place this last) -->
 	<Import Project="$(ProjectDir)\$(ProjectName).targets" 
      Condition="Exists('$(ProjectDir)\$(ProjectName).targets') And '$(NCrunch)' != '1'"/>
 
