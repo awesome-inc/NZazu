@@ -113,6 +113,7 @@ namespace NZazu.Fields
             return Control;
         }
 
+        // ReSharper disable once UnusedMethodReturnValue.Local
         private Control ApplySettings(Control control)
         {
             var height = GetSetting<double>("Height");

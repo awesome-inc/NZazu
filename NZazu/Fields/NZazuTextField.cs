@@ -17,7 +17,7 @@ namespace NZazu.Fields
         }
         protected override string GetStringValue()
         {
-            var foo = CreateValueControl().GetValue(ContentProperty);
+            CreateValueControl().GetValue(ContentProperty);
             return Value;
         }
 

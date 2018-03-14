@@ -22,6 +22,7 @@ namespace NZazu.Contracts.Checks
         [Test]
         public void Ctor_MaxLEQMin_Should_Throw()
         {
+            // ReSharper disable once ObjectCreationAsStatement
             new Action(() => new RangeCheck(1, 0)).Invoking(a => a()).Should().Throw<ArgumentOutOfRangeException>();
         }
 

@@ -33,11 +33,11 @@ namespace NZazu.Fields
             if (containerDefinition == null) throw new ArgumentNullException(nameof(containerDefinition));
 
             if (!string.IsNullOrWhiteSpace(containerDefinition.Layout))
-                this.Layout = containerDefinition.Layout;
+                Layout = containerDefinition.Layout;
 
             if (containerDefinition.Fields == null || !containerDefinition.Fields.Any()) return;
 
-            this.Fields = containerDefinition.Fields.Select(factory.CreateField).ToArray();
+            Fields = containerDefinition.Fields.Select(factory.CreateField).ToArray();
         }
     }
 }

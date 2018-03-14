@@ -13,7 +13,7 @@ namespace NZazuFiddle
         public string GiveMeTheText
         {
             get => (string)GetValue(GiveMeTheTextProperty);
-            set { SetValue(GiveMeTheTextProperty, value); }
+            set => SetValue(GiveMeTheTextProperty, value);
         }
 
         public SimpleEditor()

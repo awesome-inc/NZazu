@@ -130,7 +130,8 @@ namespace NZazu.Fields
             field.Settings.Should().NotBeNull();
 
             var propInfo = typeof(NZazuField).GetProperty(nameof(NZazuField.Settings));
-            propInfo.GetSetMethod(true).Should().BeNull();
+            propInfo.Should().NotBeNull();
+            propInfo?.GetSetMethod(true).Should().BeNull();
         }
 
         [Test]

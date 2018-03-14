@@ -160,6 +160,7 @@ namespace NZazu.Fields
             sut.Value.Should().BeApproximately(1.0, double.Epsilon);
             control.Text.Should().Be("1.");
 
+            // ReSharper disable once AssignNullToNotNullAttribute
             control.Text = null;
             sut.IsValid().Should().BeTrue();
             sut.Value.Should().NotHaveValue();
@@ -198,6 +199,7 @@ namespace NZazu.Fields
             sut.IsValid().Should().BeTrue();
             sut.StringValue.Should().Be("");
 
+            // ReSharper disable once AssignNullToNotNullAttribute
             control.Text = null;
             sut.IsValid().Should().BeTrue();
             sut.StringValue.Should().Be(string.Empty);

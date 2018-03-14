@@ -49,6 +49,7 @@ namespace NZazuFiddle
         }
 
         public override FormDefinition Model { get => Definition;
-            set { Definition = value; } }
+            set => Definition = value;
+        }
     }
 }

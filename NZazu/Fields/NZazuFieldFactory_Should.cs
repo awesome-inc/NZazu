@@ -133,7 +133,7 @@ namespace NZazu.Fields
 
             var aggregateCheck = (AggregateCheck)field.Check;
             aggregateCheck.Should().NotBeNull();
-            aggregateCheck.Checks.Should().BeEquivalentTo(new IValueCheck[] { check1, check2 });
+            aggregateCheck.Checks.Should().BeEquivalentTo(check1, check2);
         }
 
         [Test]

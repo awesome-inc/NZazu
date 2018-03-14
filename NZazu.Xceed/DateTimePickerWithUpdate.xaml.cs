@@ -57,18 +57,21 @@ namespace NZazu.Xceed
         public DateTime? Value
         {
             get => (DateTime?)GetValue(ValueProperty);
-            set { SetValue(ValueProperty, value); }
+            set => SetValue(ValueProperty, value);
         }
 
         public static readonly DependencyProperty ActualDateTimeProviderProperty = DependencyProperty.Register(
             "ActualDateTimeProvider", typeof(IActualDateTimeProvider), typeof(DateTimePickerWithUpdate), new PropertyMetadata(new NowDateTimeProvider()));
 
+        // ReSharper disable once MemberCanBePrivate.Global
         public IActualDateTimeProvider ActualDateTimeProvider
         {
             get => (IActualDateTimeProvider)GetValue(ActualDateTimeProviderProperty);
-            set { SetValue(ActualDateTimeProviderProperty, value); }
+            set => SetValue(ActualDateTimeProviderProperty, value);
         }
 
+        // ReSharper disable once UnusedMember.Global
+        // ReSharper disable once InconsistentNaming
         public bool UseUTCDateTimeFormat
         {
             get => ActualDateTimeProvider is UtcDateTimeProvider;
@@ -88,19 +91,19 @@ namespace NZazu.Xceed
         public DateTimeFormat Format
         {
             get => _valuePicker.Format;
-            set { _valuePicker.Format = value; }
+            set => _valuePicker.Format = value;
         }
 
         public string FormatString
         {
             get => _valuePicker.FormatString;
-            set { _valuePicker.FormatString = value; }
+            set => _valuePicker.FormatString = value;
         }
 
         public object Watermark
         {
             get => _valuePicker.Watermark;
-            set { _valuePicker.Watermark = value; }
+            set => _valuePicker.Watermark = value;
         }
 
         #endregion

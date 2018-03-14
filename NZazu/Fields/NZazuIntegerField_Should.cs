@@ -126,6 +126,7 @@ namespace NZazu.Fields
             sut.IsValid().Should().BeTrue();
             sut.StringValue.Should().Be("");
 
+            // ReSharper disable once AssignNullToNotNullAttribute
             textBox.Text = null;
             sut.IsValid().Should().BeTrue();
             sut.StringValue.Should().Be(string.Empty);

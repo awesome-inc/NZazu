@@ -39,6 +39,7 @@ namespace NZazuFiddle
         }
 
         public override FormData Model { get => Data;
-            set { Data = value; } }
+            set => Data = value;
+        }
     }
 }

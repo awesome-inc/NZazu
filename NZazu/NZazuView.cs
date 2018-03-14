@@ -26,7 +26,7 @@ namespace NZazu
         public FormDefinition FormDefinition
         {
             get => (FormDefinition)GetValue(FormDefinitionProperty);
-            set { SetValue(FormDefinitionProperty, value); }
+            set => SetValue(FormDefinitionProperty, value);
         }
 
         private static void FormDefinitionChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -44,7 +44,7 @@ namespace NZazu
         public INZazuWpfFieldFactory FieldFactory
         {
             get => (INZazuWpfFieldFactory)GetValue(FieldFactoryProperty);
-            set { SetValue(FieldFactoryProperty, value); }
+            set => SetValue(FieldFactoryProperty, value);
         }
 
         private static void FieldFactoryChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -71,7 +71,7 @@ namespace NZazu
         public IResolveLayout ResolveLayout
         {
             get => (IResolveLayout)GetValue(ResolveLayoutProperty);
-            set { SetValue(ResolveLayoutProperty, value); }
+            set => SetValue(ResolveLayoutProperty, value);
         }
 
         private static void ResolveLayoutChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -111,7 +111,7 @@ namespace NZazu
         public FormData FormData
         {
             get => (FormData)GetValue(FormDataProperty);
-            set { SetValue(FormDataProperty, value); }
+            set => SetValue(FormDataProperty, value);
         }
 
 
@@ -130,7 +130,7 @@ namespace NZazu
         public bool IsReadOnly
         {
             get => (bool)GetValue(IsReadOnlyProperty);
-            set { SetValue(IsReadOnlyProperty, value); }
+            set => SetValue(IsReadOnlyProperty, value);
         }
 
         #endregion

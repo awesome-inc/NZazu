@@ -54,7 +54,7 @@ namespace NZazuFiddle
         public INZazuWpfFieldFactory FieldFactory
         {
             get => _fieldFactory;
-            private set
+            set
             {
                 if (Equals(value, _fieldFactory)) return;
                 _fieldFactory = value;

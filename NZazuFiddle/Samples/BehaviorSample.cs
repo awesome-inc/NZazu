@@ -85,7 +85,7 @@ namespace NZazuFiddle.Samples
             public string UrlPattern
             {
                 get => _regex.ToString();
-                set { _regex = new Regex(value); }
+                set => _regex = new Regex(value);
             }
 
             public void AttachTo(INZazuWpfField field, INZazuWpfView view)

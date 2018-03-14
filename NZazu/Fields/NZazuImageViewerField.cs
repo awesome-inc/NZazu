@@ -32,8 +32,8 @@ namespace NZazu.Fields
             _stringValue = value;
 
             // lets see if the value is a URI if not set the stringValue to null
-            Uri uriOut;
-            if (!Uri.TryCreate(value, UriKind.Absolute, out uriOut))
+            // ReSharper disable once UnusedVariable
+            if (!Uri.TryCreate(value, UriKind.Absolute, out var uriOut))
                 _stringValue = null;
 
             // ok, lets see if the value is not part of the options list
@@ -135,7 +135,8 @@ namespace NZazu.Fields
                 }
 
             // just in case no options are given (and no custom value!)
-            if (options.Length == 0) {
+            if (options.Length == 0)
+            {
                 StringValue = null;
                 return;
             }

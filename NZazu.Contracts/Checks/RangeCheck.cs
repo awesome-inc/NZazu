@@ -6,7 +6,7 @@ namespace NZazu.Contracts.Checks
     public class RangeCheck : IValueCheck
     {
         private readonly ValueCheckResult _outOfRange;
-        private ValueCheckResult _notAValidNumber = new ValueCheckResult(false, new ArgumentException("The specified value is not a number"));
+        private readonly ValueCheckResult _notAValidNumber = new ValueCheckResult(false, new ArgumentException("The specified value is not a number"));
 
         public double Minimum { get; }
         public double Maximum { get; }
@@ -17,8 +17,7 @@ namespace NZazu.Contracts.Checks
                 $"min={min} must be less than or equal to max={max}.");
             Minimum = min;
             Maximum = max;
-
-            _outOfRange = new ValueCheckResult(false, new ArgumentOutOfRangeException("value",
+            _outOfRange = new ValueCheckResult(false, new ArgumentOutOfRangeException(
                 $"The specified value must be between {Minimum} and {Maximum}"));
         }
 

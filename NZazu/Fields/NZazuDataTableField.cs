@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using System.Runtime.Serialization;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -286,7 +285,7 @@ namespace NZazu.Fields
             }
             catch (Exception ex)
             {
-                Trace.TraceWarning("[NZazu.NZazuDataTable.UpdateGridValues] data cannot be parsed. therefore the list will be empty", ex);
+                Trace.TraceWarning("[NZazu.NZazuDataTable.UpdateGridValues] data cannot be parsed. therefore the list will be empty. {0}", ex.Message);
             }
 
             var iterations = 0;
