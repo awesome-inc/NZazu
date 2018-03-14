@@ -7,8 +7,9 @@ using NZazu.Contracts;
 
 namespace NZazu.Serializer
 {
-    public class NZazuXmlSerializer
-        : INZazuDataSerializer
+    public class NZazuTableDataXmlSerializer
+        : NZazuTableDataSerializerBase
+        , INZazuTableDataSerializer
     {
         public string Serialize(Dictionary<string, string> data)
         {

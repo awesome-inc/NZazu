@@ -63,9 +63,9 @@ namespace NZazu.Fields
         public void Validate_ctor_parameters()
         {
             // ReSharper disable ObjectCreationAsStatement
-            0.Invoking(x => new NZazuDummyField(new FieldDefinition { Key = "" })).ShouldThrow<ArgumentException>();
-            1.Invoking(x => new NZazuDummyField(new FieldDefinition())).ShouldThrow<ArgumentException>();
-            2.Invoking(x => new NZazuDummyField(new FieldDefinition { Key = "\t\r\n " })).ShouldThrow<ArgumentException>();
+            0.Invoking(x => new NZazuDummyField(new FieldDefinition { Key = "" })).Should().Throw<ArgumentException>();
+            1.Invoking(x => new NZazuDummyField(new FieldDefinition())).Should().Throw<ArgumentException>();
+            2.Invoking(x => new NZazuDummyField(new FieldDefinition { Key = "\t\r\n " })).Should().Throw<ArgumentException>();
             // ReSharper restore ObjectCreationAsStatement
         }
 
@@ -202,7 +202,7 @@ namespace NZazu.Fields
             binding.UpdateSourceTrigger
                 .Should().Be(UpdateSourceTrigger.PropertyChanged, because: "we want validation during edit");
 
-            binding.ValidationRules.Single().ShouldBeEquivalentTo(expectedRule);
+            binding.ValidationRules.Single().Should().BeEquivalentTo(expectedRule);
         }
 
         #endregion

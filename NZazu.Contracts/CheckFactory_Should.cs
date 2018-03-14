@@ -30,9 +30,9 @@ namespace NZazu.Contracts
         public void Throw_on_unsupported_types()
         {
             var sut = new CheckFactory();
-            sut.Invoking(x => x.CreateCheck(null)).ShouldThrow<ArgumentNullException>();
-            sut.Invoking(x => x.CreateCheck(new CheckDefinition())).ShouldThrow<ArgumentException>().WithMessage("check type not specified");
-            sut.Invoking(x => x.CreateCheck(new CheckDefinition { Type = "foobar" })).ShouldThrow<NotSupportedException>().WithMessage("The specified check is not supported");
+            sut.Invoking(x => x.CreateCheck(null)).Should().Throw<ArgumentNullException>();
+            sut.Invoking(x => x.CreateCheck(new CheckDefinition())).Should().Throw<ArgumentException>().WithMessage("check type not specified");
+            sut.Invoking(x => x.CreateCheck(new CheckDefinition { Type = "foobar" })).Should().Throw<NotSupportedException>().WithMessage("The specified check is not supported");
         }
         
         [Test]
@@ -55,25 +55,25 @@ namespace NZazu.Contracts
 
             checkDefinition.Values = null;
             sut.Invoking(x => x.CreateCheck(checkDefinition))
-                .ShouldThrow<ArgumentException>()
+                .Should().Throw<ArgumentException>()
                 .WithMessage("At least a minimum string length must be specified");
 
             checkDefinition.Values = new []{"6", "4"};
             sut.Invoking(x => x.CreateCheck(checkDefinition))
-                .ShouldThrow<ArgumentException>();
+                .Should().Throw<ArgumentException>();
 
             checkDefinition.Values = new[] { "1", "2", "3" };
             sut.Invoking(x => x.CreateCheck(checkDefinition))
-                .ShouldThrow<ArgumentException>()
+                .Should().Throw<ArgumentException>()
                 .WithMessage("At most minimum and maximum string length can be specified");
 
             checkDefinition.Values = new[] { "a", "4" };
             sut.Invoking(x => x.CreateCheck(checkDefinition))
-                .ShouldThrow<FormatException>();
+                .Should().Throw<FormatException>();
 
             checkDefinition.Values = new[] { "4", "b" };
             sut.Invoking(x => x.CreateCheck(checkDefinition))
-                .ShouldThrow<FormatException>();
+                .Should().Throw<FormatException>();
         }
 
         [Test]
@@ -93,17 +93,17 @@ namespace NZazu.Contracts
 
             checkDefinition.Values = null;
             sut.Invoking(x => x.CreateCheck(checkDefinition))
-                .ShouldThrow<ArgumentException>()
+                .Should().Throw<ArgumentException>()
                 .WithMessage("At least a hint and one regex pattern must be specified");
 
             checkDefinition.Values = new string[]{};
             sut.Invoking(x => x.CreateCheck(checkDefinition))
-                .ShouldThrow<ArgumentException>()
+                .Should().Throw<ArgumentException>()
                 .WithMessage("At least a hint and one regex pattern must be specified");
 
             checkDefinition.Values = new[] {hint};
             sut.Invoking(x => x.CreateCheck(checkDefinition))
-                .ShouldThrow<ArgumentException>()
+                .Should().Throw<ArgumentException>()
                 .WithMessage("At least a hint and one regex pattern must be specified");
         }
 
@@ -121,34 +121,34 @@ namespace NZazu.Contracts
 
             checkDefinition.Values = new[] {"5.1", "5.0"};
             sut.Invoking(x => x.CreateCheck(checkDefinition))
-                .ShouldThrow<ArgumentOutOfRangeException>();
+                .Should().Throw<ArgumentOutOfRangeException>();
 
             checkDefinition.Values = new[] { "a", "5" };
             sut.Invoking(x => x.CreateCheck(checkDefinition))
-                .ShouldThrow<FormatException>();
+                .Should().Throw<FormatException>();
 
             checkDefinition.Values = new[] { "5", "a" };
             sut.Invoking(x => x.CreateCheck(checkDefinition))
-                .ShouldThrow<FormatException>();
+                .Should().Throw<FormatException>();
 
             checkDefinition.Values = new[] { "5" };
             sut.Invoking(x => x.CreateCheck(checkDefinition))
-                .ShouldThrow<ArgumentException>()
+                .Should().Throw<ArgumentException>()
                 .WithMessage("Must sepcify minimum and maximum");
 
             checkDefinition.Values = new string[] { };
             sut.Invoking(x => x.CreateCheck(checkDefinition))
-                .ShouldThrow<ArgumentException>()
+                .Should().Throw<ArgumentException>()
                 .WithMessage("Must sepcify minimum and maximum");
 
             checkDefinition.Values = null;
             sut.Invoking(x => x.CreateCheck(checkDefinition))
-                .ShouldThrow<ArgumentException>()
+                .Should().Throw<ArgumentException>()
                 .WithMessage("Must sepcify minimum and maximum");
 
             checkDefinition.Values = new[] { "1", "2", "3" };
             sut.Invoking(x => x.CreateCheck(checkDefinition))
-                .ShouldThrow<ArgumentException>()
+                .Should().Throw<ArgumentException>()
                 .WithMessage("Must sepcify minimum and maximum");
         }
     }

@@ -14,11 +14,11 @@ namespace NZazu.Contracts
         {
             var input = new Dictionary<string, string> { { "user", "John" } };
             FormData formData = input;
-            formData.Values.ShouldBeEquivalentTo(input);
+            formData.Values.Should().BeEquivalentTo(input);
 
             Dictionary<string, string> output = formData;
 
-            output.ShouldBeEquivalentTo(input);
+            output.Should().BeEquivalentTo(input);
         }
 
         [Test]
@@ -28,10 +28,10 @@ namespace NZazu.Contracts
             var input = new Dictionary<string, string> { { "user", "john" }, { "password", null } };
 
             FormData formData = input;
-            formData.Values.ShouldBeEquivalentTo(expected);
+            formData.Values.Should().BeEquivalentTo(expected);
 
             Dictionary<string, string> output = formData;
-            output.ShouldBeEquivalentTo(expected);
+            output.Should().BeEquivalentTo(expected);
         }
 
         [Test]

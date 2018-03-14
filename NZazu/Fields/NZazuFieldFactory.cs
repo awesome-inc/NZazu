@@ -11,7 +11,7 @@ namespace NZazu.Fields
     {
         public INZazuWpfFieldBehaviorFactory BehaviorFactory { get; }
         public ICheckFactory CheckFactory { get; }
-        public INZazuDataSerializer Serializer { get; }
+        public INZazuTableDataSerializer Serializer { get; }
         public INZazuWpfView View { get; set; }
 
         protected readonly Dictionary<string, Type> FieldTypes = new Dictionary<string, Type>();
@@ -20,11 +20,11 @@ namespace NZazu.Fields
         public NZazuFieldFactory(
             INZazuWpfFieldBehaviorFactory behaviorFactory = null,
             ICheckFactory checkFactory = null,
-            INZazuDataSerializer serializer = null)
+            INZazuTableDataSerializer serializer = null)
         {
             BehaviorFactory = behaviorFactory ?? new NZazuFieldBehaviorFactory();
             CheckFactory = checkFactory ?? new CheckFactory();
-            Serializer = serializer ?? new NZazuXmlSerializer();
+            Serializer = serializer ?? new NZazuTableDataXmlSerializer();
 
             FieldTypes.Add("label", typeof(NZazuLabelField));
             FieldTypes.Add("string", typeof(NZazuTextField));

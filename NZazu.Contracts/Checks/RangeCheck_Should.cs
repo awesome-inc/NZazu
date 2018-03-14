@@ -20,9 +20,9 @@ namespace NZazu.Contracts.Checks
         }
 
         [Test]
-        public void Ctor_MaxLEQMin_ShouldThrow()
+        public void Ctor_MaxLEQMin_Should_Throw()
         {
-            new Action(() => new RangeCheck(1, 0)).Invoking(a => a()).ShouldThrow<ArgumentOutOfRangeException>();
+            new Action(() => new RangeCheck(1, 0)).Invoking(a => a()).Should().Throw<ArgumentOutOfRangeException>();
         }
 
         [Test]

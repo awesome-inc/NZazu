@@ -1,11 +1,13 @@
 ﻿using System.Collections.Generic;
 using Newtonsoft.Json;
 using NZazu.Contracts;
+using NZazu.Serializer;
 
 namespace NZazu.JsonSerializer
 {
-    public class NZazuJsonSerializer
-        : INZazuDataSerializer
+    public class NZazuTableDataJsonSerializer
+        : NZazuTableDataSerializerBase
+        , INZazuTableDataSerializer
     {
         public string Serialize(Dictionary<string, string> data)
         {

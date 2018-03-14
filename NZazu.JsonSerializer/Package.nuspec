@@ -14,6 +14,7 @@
     <projectUrl>https://github.com/awesome-inc/NZazu</projectUrl>
     <dependencies>
       <dependency id="Newtonsoft.Json" version="7.0.1" />
+      <dependency id="NZazu" version="$Version$" />
       <dependency id="NZazu.Contracts" version="$Version$" />
     </dependencies>
   </metadata>

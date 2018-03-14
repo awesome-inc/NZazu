@@ -6,17 +6,17 @@ using NZazu.Contracts;
 
 namespace NZazu.Serializer
 {
-    [TestFixtureFor(typeof(NZazuXmlSerializer))]
+    [TestFixtureFor(typeof(NZazuTableDataXmlSerializer))]
     // ReSharper disable once InconsistentNaming
-    internal class NZazuXmlSerializer_Should
+    internal class NZazuTableDataXmlSerializer_Should
     {
         [Test]
         public void Be_Creatable()
         {
-            var sut = new NZazuXmlSerializer();
+            var sut = new NZazuTableDataXmlSerializer();
 
             sut.Should().NotBeNull();
-            sut.Should().BeAssignableTo<INZazuDataSerializer>();
+            sut.Should().BeAssignableTo<INZazuTableDataSerializer>();
         }
 
         [Test]
@@ -28,7 +28,7 @@ namespace NZazu.Serializer
                 {"John", "Smith"},
             };
 
-            var sut = new NZazuXmlSerializer();
+            var sut = new NZazuTableDataXmlSerializer();
 
             var actual = sut.Serialize(data);
             var expected = sut.Deserialize(actual);

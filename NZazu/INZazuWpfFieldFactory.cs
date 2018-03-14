@@ -8,7 +8,7 @@ namespace NZazu
 
         INZazuWpfFieldBehaviorFactory BehaviorFactory { get; }
         ICheckFactory CheckFactory { get; }
-        INZazuDataSerializer Serializer { get; }
+        INZazuTableDataSerializer Serializer { get; }
 
         INZazuWpfView View { get; set; }
     }

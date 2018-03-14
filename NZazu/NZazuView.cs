@@ -166,7 +166,7 @@ namespace NZazu
                     TrySetFocusOn();
             };
 
-            FieldFactory = new NZazuFieldFactory(new NZazuFieldBehaviorFactory(), new CheckFactory(), new NZazuXmlSerializer());
+            FieldFactory = new NZazuFieldFactory(new NZazuFieldBehaviorFactory(), new CheckFactory(), new NZazuTableDataXmlSerializer());
         }
 
         public void ApplyChanges()

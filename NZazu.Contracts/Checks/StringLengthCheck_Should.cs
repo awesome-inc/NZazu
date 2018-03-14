@@ -11,17 +11,17 @@ namespace NZazu.Contracts.Checks
     internal class StringLengthCheck_Should
     {
         [Test]
-        public void Ctor_MaxLEQMin_ShouldThrow()
+        public void Ctor_MaxLEQMin_ShouldT_hrow()
         {
             // ReSharper disable once ObjectCreationAsStatement
-            new Action(() => new StringLengthCheck(1, 0)).Invoking(a => a()).ShouldThrow<ArgumentOutOfRangeException>();
+            new Action(() => new StringLengthCheck(1, 0)).Invoking(a => a()).Should().Throw<ArgumentOutOfRangeException>();
         }
 
         [Test]
-        public void Ctor_NegativeLength_ShouldThrow()
+        public void Ctor_NegativeLength_Should_Throw()
         {
             // ReSharper disable once ObjectCreationAsStatement
-            new Action(() => new StringLengthCheck(-1, -1)).Invoking(a => a()).ShouldThrow<ArgumentOutOfRangeException>();
+            new Action(() => new StringLengthCheck(-1, -1)).Invoking(a => a()).Should().Throw<ArgumentOutOfRangeException>();
         }
 
         [Test]

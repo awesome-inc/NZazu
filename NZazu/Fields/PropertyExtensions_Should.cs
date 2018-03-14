@@ -22,15 +22,15 @@ namespace NZazu.Fields
             parent.Child.Name.Should().Be(expected);
 
             parent.Invoking(x => x.CanSetProperty("foo.bar"))
-                .ShouldThrow<ArgumentException>()
+                .Should().Throw<ArgumentException>()
                 .WithMessage("Property 'foo.bar' does not exist.");
 
             parent.Invoking(x => x.SetProperty("foo.bar", "value"))
-                .ShouldThrow<ArgumentException>()
+                .Should().Throw<ArgumentException>()
                 .WithMessage("Property 'foo.bar' does not exist.");
 
             parent.Invoking(x => x.SetProperty("foo", "value"))
-                .ShouldThrow<ArgumentException>()
+                .Should().Throw<ArgumentException>()
                 .WithMessage("Property 'foo' does not exist.");
         }
 

@@ -8,7 +8,7 @@ namespace NZazu.Xceed
         public XceedFieldFactory(
             INZazuWpfFieldBehaviorFactory behaviorFactory = null,
             ICheckFactory checkFactory = null,
-            INZazuDataSerializer serializer = null)
+            INZazuTableDataSerializer serializer = null)
             : base(behaviorFactory, checkFactory, serializer)
         {
             FieldTypes["string"] = typeof(XceedTextBoxField);

@@ -33,7 +33,7 @@ namespace NZazu
             sut.Should().BeAssignableTo<INZazuWpfView>();
 
             // and have default values
-            sut.FieldFactory.Serializer.Should().BeAssignableTo<NZazuXmlSerializer>();
+            sut.FieldFactory.Serializer.Should().BeAssignableTo<NZazuTableDataXmlSerializer>();
             sut.FieldFactory.Should().BeAssignableTo<NZazuFieldFactory>();
             sut.FieldFactory.BehaviorFactory.Should().BeAssignableTo<NZazuFieldBehaviorFactory>();
         }
@@ -252,7 +252,7 @@ namespace NZazu
             view.FormDefinition = formDefinition;
             var values = new Dictionary<string, string> { { key, value } };
             view.FormData = values;
-            view.FormData.Values.ShouldBeEquivalentTo(values);
+            view.FormData.Values.Should().BeEquivalentTo(values);
 
             // simulate user editing
             const string changedValue = "other";
@@ -338,7 +338,7 @@ namespace NZazu
             factory.BehaviorFactory.Returns(behavior);
 
             var sut = new NZazuView { FormDefinition = formDefinition, FormData = formData, FieldFactory = factory };
-            new Action(() => sut.GetField("I do not exist")).Invoking(a => a()).ShouldThrow<KeyNotFoundException>();
+            new Action(() => sut.GetField("I do not exist")).Invoking(a => a()).Should().Throw<KeyNotFoundException>();
 
         }
 

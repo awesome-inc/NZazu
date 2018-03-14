@@ -1,4 +1,5 @@
 using System;
+using System.Threading;
 using System.Windows.Controls;
 using FluentAssertions;
 using NEdifis.Attributes;
@@ -14,7 +15,7 @@ namespace NZazu.Fields
     {
         [Test]
         [STAThread]
-        [RequiresSTA]
+        [Apartment(ApartmentState.STA)]
         public void Be_Creatable()
         {
             var sut = new NZazuImageViewerField(new FieldDefinition { Key = "test", Type = "imageViewer" });
@@ -33,7 +34,7 @@ namespace NZazu.Fields
 
         [Test]
         [STAThread]
-        [RequiresSTA]
+        [Apartment(ApartmentState.STA)]
         [TestCase(null, null)]
         [TestCase("foo bar", null)]
         [TestCase(@"http://img/4.jpg", null)] // because custom values not allowed
@@ -63,7 +64,7 @@ namespace NZazu.Fields
 
         [Test]
         [STAThread]
-        [RequiresSTA]
+        [Apartment(ApartmentState.STA)]
         [TestCase(null, null)]
         [TestCase("foo bar", null)]
         [TestCase(@"http://img/4.jpg", null)] // because custom values not allowed
@@ -93,7 +94,7 @@ namespace NZazu.Fields
 
         [Test]
         [STAThread]
-        [RequiresSTA]
+        [Apartment(ApartmentState.STA)]
         [TestCase(null, null)]
         [TestCase("foo bar", null)]
         [TestCase(@"http://img/4.jpg", null)] // because custom values not allowed
@@ -126,7 +127,7 @@ namespace NZazu.Fields
 
         [Test]
         [STAThread]
-        [RequiresSTA]
+        [Apartment(ApartmentState.STA)]
         [TestCase(null, null)]
         [TestCase("foo bar", null)]
         [TestCase(@"http://img/4.jpg", null)] // because custom values not allowed
@@ -159,7 +160,7 @@ namespace NZazu.Fields
 
         [Test]
         [STAThread]
-        [RequiresSTA]
+        [Apartment(ApartmentState.STA)]
         [TestCase(@"http://img/4.jpg", @"http://img/4.jpg")]
         public void Toggle_Values_With_Custom_Values(string initValue, string toggleStartValue)
         {
@@ -188,7 +189,7 @@ namespace NZazu.Fields
 
         [Test]
         [STAThread]
-        [RequiresSTA]
+        [Apartment(ApartmentState.STA)]
         public void Toggle_EmptyValues_With_CustomValues()
         {
             string initValue = "http://img/4.jpg";
@@ -220,7 +221,7 @@ namespace NZazu.Fields
 
         [Test]
         [STAThread]
-        [RequiresSTA]
+        [Apartment(ApartmentState.STA)]
         public void Toggle_EmptyValues_Without_CustomValues()
         {
             var sut = new NZazuImageViewerField(new FieldDefinition

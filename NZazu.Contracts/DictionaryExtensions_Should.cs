@@ -16,17 +16,17 @@ namespace NZazu.Contracts
 
             var expected1 = new Dictionary<string, string> { { "name", "thomas" }, { "street", "123 Ave" } };
             var actual1 = source.Remove(kvp => kvp.Value == null);
-            actual1.ShouldBeEquivalentTo(expected1);
+            actual1.Should().BeEquivalentTo(expected1);
 
             var expected2 = new Dictionary<string, string> { { "street", "123 Ave" }, { "nullthing", null } };
             var actual2 = source.Remove(kvp => kvp.Key == "name");
-            actual2.ShouldAllBeEquivalentTo(expected2);
+            actual2.Should().BeEquivalentTo(expected2);
 
             var actual3 = source.Remove(kvp => true);
             actual3.Should().BeEmpty();
 
             var actual4 = source.Remove(kvp => false);
-            actual4.ShouldAllBeEquivalentTo(source);
+            actual4.Should().BeEquivalentTo(source);
         }
 
         [Test]
@@ -75,11 +75,11 @@ namespace NZazu.Contracts
         {
             var src = new Dictionary<string, string> { { "key", "value" } };
             var dst = ((Dictionary<string, string>)null).MergedWith(src);
-            dst.ShouldBeEquivalentTo(src, "null is not only allowed but also expected");
+            dst.Should().BeEquivalentTo(src, "null is not only allowed but also expected");
 
             dst["key"] = "value2";
             dst = dst.MergedWith(src);
-            dst.ShouldBeEquivalentTo(src, "src field should be updated");
+            dst.Should().BeEquivalentTo(src, "src field should be updated");
 
             dst["key2"] = "value2";
             dst = dst.MergedWith(src);

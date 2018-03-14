@@ -28,11 +28,11 @@ namespace NZazu.FieldBehavior
 
             new Action(() => sut.CreateFieldBehavior(null))
                 .Invoking(a => a())
-                .ShouldThrow<ArgumentNullException>();
+                .Should().Throw<ArgumentNullException>();
 
             new Action(() => sut.CreateFieldBehavior(new BehaviorDefinition()))
                 .Invoking(a => a())
-                .ShouldThrow<ArgumentException>();
+                .Should().Throw<ArgumentException>();
         }
 
         #region simple interface implementation

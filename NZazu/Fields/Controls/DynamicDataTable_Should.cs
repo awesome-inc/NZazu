@@ -11,7 +11,6 @@ namespace NZazu.Fields.Controls
     internal class DynamicDataTable_Should
     {
         [Test]
-        [RequiresSTA]
         [Apartment(ApartmentState.STA)]
         public void Be_Creatable()
         {

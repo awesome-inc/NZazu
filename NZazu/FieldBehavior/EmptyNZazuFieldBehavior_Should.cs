@@ -24,7 +24,7 @@ namespace NZazu.FieldBehavior
         {
             var sut = new EmptyNZazuFieldBehavior();
 
-            sut.Invoking(x => x.AttachTo(null, null)).ShouldThrow<ArgumentNullException>();
+            sut.Invoking(x => x.AttachTo(null, null)).Should().Throw<ArgumentNullException>();
         }
 
         [Test]

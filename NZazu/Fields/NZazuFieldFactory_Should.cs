@@ -91,7 +91,7 @@ namespace NZazu.Fields
         public void Use_CheckFactory_for_creating_checks()
         {
             var behaviorFactory = Substitute.For<INZazuWpfFieldBehaviorFactory>();
-            var serializer = Substitute.For<INZazuDataSerializer>();
+            var serializer = Substitute.For<INZazuTableDataSerializer>();
             var checkFactory = Substitute.For<ICheckFactory>();
 
             var checkDefinition = new CheckDefinition { Type = "required" };
@@ -110,7 +110,7 @@ namespace NZazu.Fields
         public void Use_AggregateCheck_for_multiple_checks()
         {
             var behaviorFactory = Substitute.For<INZazuWpfFieldBehaviorFactory>();
-            var serializer = Substitute.For<INZazuDataSerializer>();
+            var serializer = Substitute.For<INZazuTableDataSerializer>();
             var checkFactory = Substitute.For<ICheckFactory>();
 
             var checkDefinition1 = new CheckDefinition { Type = "required" };
@@ -133,7 +133,7 @@ namespace NZazu.Fields
 
             var aggregateCheck = (AggregateCheck)field.Check;
             aggregateCheck.Should().NotBeNull();
-            aggregateCheck.Checks.ShouldBeEquivalentTo(new IValueCheck[] { check1, check2 });
+            aggregateCheck.Checks.Should().BeEquivalentTo(new IValueCheck[] { check1, check2 });
         }
 
         [Test]
@@ -149,7 +149,7 @@ namespace NZazu.Fields
             fieldDefinition.Settings = settings;
 
             field = (NZazuField)sut.CreateField(fieldDefinition);
-            field.Settings.ShouldBeEquivalentTo(settings);
+            field.Settings.Should().BeEquivalentTo(settings);
         }
 
         [Test]
@@ -255,7 +255,7 @@ namespace NZazu.Fields
             var behavior = Substitute.For<INZazuWpfFieldBehavior>();
             var behaviorFactory = Substitute.For<INZazuWpfFieldBehaviorFactory>();
             var checkFactory = Substitute.For<ICheckFactory>();
-            var serializer = Substitute.For<INZazuDataSerializer>();
+            var serializer = Substitute.For<INZazuTableDataSerializer>();
 
             var fieldDefintion = new FieldDefinition { Key = "a", Type = "string", Behavior = new BehaviorDefinition { Name = "Empty" } };
             behaviorFactory.CreateFieldBehavior(fieldDefintion.Behavior).Returns(behavior);

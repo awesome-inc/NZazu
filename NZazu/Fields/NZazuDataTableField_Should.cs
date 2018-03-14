@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Runtime.Serialization;
 using System.Threading;
 using System.Windows.Controls;
 using FluentAssertions;
@@ -44,9 +43,6 @@ namespace NZazu.Fields
             // create factory later but before "ValueControl" access
             var _factory = new NZazuFieldFactory();
             sut.FieldFactory = _factory;
-            // don't create the control by invoking the getter.
-            //var control = sut.ValueControl;
-            //control.Should().NotBeNull();
 
             // now lets create some testdata and return it for multiple tests
             var data = new Dictionary<string, string>
@@ -183,7 +179,7 @@ namespace NZazu.Fields
 
             Action act = () => { sut.StringValue = data; };
 
-            act.ShouldNotThrow<Exception>();
+            act.Should().NotThrow<Exception>();
 
             ((DynamicDataTable)sut.ValueControl).LayoutGrid.RowDefinitions.Count.Should().Be(2);
         }
@@ -291,12 +287,12 @@ namespace NZazu.Fields
             var sut = new NZazuDataTableField(new FieldDefinition
             {
                 Key = "key",
-                Type = "datatable",
+                Type = "table01",
                 Fields = new[]
                 {
                     new FieldDefinition
                     {
-                        Key = "cell01",
+                        Key = "table01_field01",
                         Type = "string"
                     }
                 }
@@ -304,12 +300,12 @@ namespace NZazu.Fields
             {
                 FieldFactory = new NZazuFieldFactory()
             };
-            var ctrl = (DynamicDataTable)sut.ValueControl;
 
             var data = new Dictionary<string, string> { { "table01_field01__1", "hello" }, { "table01_field01__2", "world" } };
             var dataSerialized = sut.FieldFactory.Serializer.Serialize(data);
             sut.StringValue = dataSerialized;
 
+            var ctrl = (DynamicDataTable)sut.ValueControl;
             var lastadded = ctrl.LayoutGrid.Children[2];
             lastadded.Should().NotBeNull();
 
