@@ -36,5 +36,33 @@ namespace NZazu.Serializer
             foreach (var item in data)
                 expected.Should().Contain(item);
         }
+
+        [Test]
+        public void Handle_Empty_Symetric()
+        {
+            var data = new Dictionary<string, string>();
+            var sut = new NZazuTableDataXmlSerializer();
+
+            var actual = sut.Serialize(data);
+            var expected = sut.Deserialize(actual);
+
+            expected.Should().NotBeNull();
+            expected.Count.Should().Be(0);
+        }
+
+        [Test]
+        [TestCase(null)]
+        [TestCase("")]
+        [TestCase("         ")]
+        public void Handle_Empty_Stuff(string data)
+        {
+            var sut = new NZazuTableDataXmlSerializer();
+
+            var expected = sut.Deserialize(data);
+
+            expected.Should().NotBeNull();
+            expected.Count.Should().Be(0);
+        }
+
     }
 }

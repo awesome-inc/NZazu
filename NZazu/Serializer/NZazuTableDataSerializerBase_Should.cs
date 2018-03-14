@@ -9,7 +9,7 @@ namespace NZazu.Serializer
     // ReSharper disable once InconsistentNaming
     internal class NZazuTableDataSerializerBase_Should
     {
-        private Dictionary<string, string> GetTableData()
+        private static Dictionary<string, string> GetTableData()
         {
             return new Dictionary<string, string>
             {

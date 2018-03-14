@@ -24,7 +24,7 @@ namespace NZazu.Serializer
 
         public Dictionary<string, string> Deserialize(string value)
         {
-            if (string.IsNullOrEmpty(value)) return new Dictionary<string, string>();
+            if (string.IsNullOrWhiteSpace(value)) return new Dictionary<string, string>();
 
             XElement xElem2;
             try

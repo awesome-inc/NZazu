@@ -16,6 +16,8 @@ namespace NZazu.JsonSerializer
 
         public Dictionary<string, string> Deserialize(string value)
         {
+            if (string.IsNullOrWhiteSpace(value)) return new Dictionary<string, string>();
+
             return JsonConvert.DeserializeObject<Dictionary<string, string>>(value);
         }
     }
