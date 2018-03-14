@@ -35,5 +35,37 @@ namespace NZazu.Serializer
             data.Should().Contain("table01_field01__3", "jane");
             data.Should().Contain("table01_field02__3", "doe");
         }
+
+        [Test]
+        public void Add_Row_To_Empty_Dictionary()
+        {
+            var newRow = new Dictionary<string, string>() {
+                { "table01_field01", "jane" }, { "table01_field02", "doe" },
+            };
+
+            var data = new Dictionary<string, string>();
+            data.Count.Should().Be(0);
+
+            var sut = new NZazuTableDataSerializerBase();
+            sut.AddTableRow(data, newRow);
+
+            data.Count.Should().Be(2);
+            data.Should().Contain("table01_field01__1", "jane");
+            data.Should().Contain("table01_field02__1", "doe");
+        }
+
+        [Test]
+        public void Add_Empty_Row_To_Dictionary()
+        {
+            var newRow = new Dictionary<string, string>();
+
+            var data = GetTableData();
+            data.Count.Should().Be(4);
+
+            var sut = new NZazuTableDataSerializerBase();
+            sut.AddTableRow(data, newRow);
+
+            data.Count.Should().Be(4);
+        }
     }
 }
