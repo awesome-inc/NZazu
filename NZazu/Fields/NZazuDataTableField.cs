@@ -293,8 +293,11 @@ namespace NZazu.Fields
                 iterations = newDict
                     .Max(x => int.Parse(x.Key.Split(new[] { "__" }, StringSplitOptions.RemoveEmptyEntries)[1]));
 
+            var lastField = _clientControl.LayoutGrid.Children.Cast<UIElement>()
+                .First(x => Grid.GetRow(x) == _clientControl.LayoutGrid.RowDefinitions.Count - 1 &&
+                            Grid.GetColumn(x) == _clientControl.LayoutGrid.ColumnDefinitions.Count - 1);
             while (_clientControl.LayoutGrid.RowDefinitions.Count > iterations + 1)
-                DeleteRow(_lastAddedField);
+                DeleteRow(lastField);
 
             while (_clientControl.LayoutGrid.RowDefinitions.Count <= iterations)
                 AddNewRow();
@@ -307,6 +310,8 @@ namespace NZazu.Fields
                 field.Value.StringValue = kv.Value;
             }
 
+            if (_clientControl.LayoutGrid.RowDefinitions.Count == 1)
+                AddNewRow(1);
         }
 
         public override DependencyProperty ContentProperty => null;
