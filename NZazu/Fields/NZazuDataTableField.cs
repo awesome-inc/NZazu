@@ -293,6 +293,9 @@ namespace NZazu.Fields
                 iterations = newDict
                     .Max(x => int.Parse(x.Key.Split(new[] { "__" }, StringSplitOptions.RemoveEmptyEntries)[1]));
 
+            while (_clientControl.LayoutGrid.RowDefinitions.Count > iterations + 1)
+                DeleteRow(_lastAddedField);
+
             while (_clientControl.LayoutGrid.RowDefinitions.Count <= iterations)
                 AddNewRow();
 

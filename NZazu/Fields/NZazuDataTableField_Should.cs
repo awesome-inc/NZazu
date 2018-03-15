@@ -103,6 +103,32 @@ namespace NZazu.Fields
 
         [Test]
         [STAThread]
+        public void Assign_Data_Multiple_Times()
+        {
+            var testData = GetField();
+            var sut = (NZazuDataTableField)testData.Field;
+            var factory = (INZazuWpfFieldFactory)testData.Factory;
+            var data = (Dictionary<string, string>)testData.Data;
+            var sd = factory.Serializer.Serialize(data);
+
+            // lets assign the data
+            sut.StringValue = sd;
+            ((DynamicDataTable) sut.ValueControl).LayoutGrid.RowDefinitions.Count.Should().Be(4);
+
+            // lets assign other data
+            data = new Dictionary<string, string>
+            {
+                { "table01_field01__1", "Hello" },
+                { "table01_field02__1", "True" },
+            };
+            sd = factory.Serializer.Serialize(data);
+
+            sut.StringValue = sd;
+            ((DynamicDataTable)sut.ValueControl).LayoutGrid.RowDefinitions.Count.Should().Be(2);
+        }
+
+        [Test]
+        [STAThread]
         public void Serialize_And_Deserialize_Null_Rows_To_Null()
         {
             var factory = new NZazuFieldFactory();
