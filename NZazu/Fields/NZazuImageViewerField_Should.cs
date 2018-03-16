@@ -9,7 +9,6 @@ using NZazu.Contracts;
 namespace NZazu.Fields
 {
     [TestFixtureFor(typeof(NZazuImageViewerField))]
-    [Ignore("skip for now because this takes long to tes for some reasons")]
     [Apartment(ApartmentState.STA)]
     // ReSharper disable once InconsistentNaming
     internal class NZazuImageViewerField_Should
@@ -17,7 +16,7 @@ namespace NZazu.Fields
         [Test]
         [STAThread]
         [Apartment(ApartmentState.STA)]
-        [Ignore("skip for now")]
+        //[Ignore("skip for now")]
         public void Be_Creatable()
         {
             var sut = new NZazuImageViewerField(new FieldDefinition { Key = "test", Type = "imageViewer" });

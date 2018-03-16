@@ -13,7 +13,6 @@ using NZazu.Fields.Controls;
 namespace NZazu.Fields
 {
     [TestFixtureFor(typeof(NZazuDataTableField))]
-    [Ignore("skip for now because this takes long to tes for some reasons")]
     // ReSharper disable InconsistentNaming
     internal class NZazuDataTableField_Should
     {
