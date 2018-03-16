@@ -244,7 +244,7 @@ namespace NZazu
             return true;
         }
 
-        private readonly IDictionary<string, INZazuWpfField> _fields = new Dictionary<string, INZazuWpfField>();
+        private readonly Dictionary<string, INZazuWpfField> _fields = new Dictionary<string, INZazuWpfField>();
         private INZazuWpfField _lastFoussedElement;
 
         private void UpdateFields(

@@ -151,7 +151,7 @@ namespace NZazuFiddle
             return settings;
         }
 
-        private static void CompleteSettingsFor<TControl>(IDictionary<string, ICompletionData> map) where TControl : Control
+        private static void CompleteSettingsFor<TControl>(Dictionary<string, ICompletionData> map) where TControl : Control
         {
             var control = (TControl)Activator.CreateInstance(typeof(TControl));
             var items = typeof(TControl).GetProperties()

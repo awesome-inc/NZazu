@@ -6,8 +6,8 @@ namespace NZazu.Contracts
 {
     public static class DictionaryExtensions
     {
-        public static IDictionary<TKey, TValue> AddOrReplace<TKey, TValue>(
-            this IDictionary<TKey, TValue> source,
+        public static Dictionary<TKey, TValue> AddOrReplace<TKey, TValue>(
+            this Dictionary<TKey, TValue> source,
             TKey key, TValue value)
             where TValue : class
         {
@@ -22,8 +22,8 @@ namespace NZazu.Contracts
             return source;
         }
 
-        public static IDictionary<TKey, TValue> Remove<TKey, TValue>(
-            this IDictionary<TKey, TValue> source,
+        public static Dictionary<TKey, TValue> Remove<TKey, TValue>(
+            this Dictionary<TKey, TValue> source,
             Func<KeyValuePair<TKey, TValue>, bool> predicate)
             where TValue : class
         {
@@ -34,7 +34,7 @@ namespace NZazu.Contracts
             return validItems.ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
         }
 
-        public static bool Equivalent(this IDictionary<string, string> dict, IDictionary<string, string> dict2)
+        public static bool Equivalent(this Dictionary<string, string> dict, Dictionary<string, string> dict2)
         {
             // cf.: http://www.dotnetperls.com/dictionary-equals
             // Test for equality.
@@ -65,7 +65,7 @@ namespace NZazu.Contracts
             return equal;
         }
 
-        public static IDictionary<string, string> MergedWith(this IDictionary<string, string> source, IDictionary<string, string> toMerge)
+        public static Dictionary<string, string> MergedWith(this Dictionary<string, string> source, Dictionary<string, string> toMerge)
         {
             var toBeMerged = source ?? new Dictionary<string, string>();
             var result = toBeMerged.ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
@@ -77,7 +77,7 @@ namespace NZazu.Contracts
             return result;
         }
 
-        public static bool MergeWith(this IDictionary<string, string> mergeTo, IDictionary<string, string> toMerge)
+        public static bool MergeWith(this Dictionary<string, string> mergeTo, Dictionary<string, string> toMerge)
         {
             var anyChanges = false;
             foreach (var field in toMerge)

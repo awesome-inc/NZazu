@@ -96,7 +96,7 @@ namespace NZazu.Fields
             {
                 RemoveShortcutsFrom(control);
                 _clientControl.LayoutGrid.Children.Remove(control);
-                _fields.Remove(_fields.First(x => Equals(x.Value.ValueControl, control)));
+                _fields.Remove(_fields.First(x => Equals(x.Value.ValueControl, control)).Key);
             });
 
             RecalculateFieldKeys();
@@ -169,9 +169,9 @@ namespace NZazu.Fields
 
             // ok, lets fill the  fields
             _fields.Clear();
-            fieldsAboveInsert.ToList().ForEach(_fields.Add);
+            fieldsAboveInsert.ToList().ForEach(x => _fields.Add(x.Key, x.Value));
             AddNewRow(row); // this adds the new controls to the field list
-            fieldsBelowWithNewName.ToList().ForEach(_fields.Add);
+            fieldsBelowWithNewName.ToList().ForEach(x => _fields.Add(x.Key, x.Value));
         }
 
         #endregion
@@ -179,7 +179,7 @@ namespace NZazu.Fields
         public INZazuWpfFieldFactory FieldFactory { get; set; }
 
         private DynamicDataTable _clientControl;
-        private readonly IDictionary<string, INZazuWpfField> _fields = new Dictionary<string, INZazuWpfField>();
+        private readonly Dictionary<string, INZazuWpfField> _fields = new Dictionary<string, INZazuWpfField>();
         private int _tabOrder;
 
         private Button _addBtn;
