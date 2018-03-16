@@ -35,7 +35,7 @@ namespace NZazu.Fields
         }
 
         [ExcludeFromCodeCoverage]
-        internal void LastAddedFieldOnPreviewKeyDown(object sender, KeyEventArgs e)
+        private void LastAddedFieldOnPreviewKeyDown(object sender, KeyEventArgs e)
         {
             // double check sender
             if (!ReferenceEquals(sender, _lastAddedField)) return;
@@ -82,8 +82,7 @@ namespace NZazu.Fields
 
         internal void DeleteRow(object sender)
         {
-            var ctrl = sender as Control;
-            if (ctrl == null) return;
+            if (!(sender is Control ctrl)) return;
 
             var row = Grid.GetRow(ctrl);
             if (row == 0) return; // cannot delete header
@@ -131,18 +130,17 @@ namespace NZazu.Fields
 
                 // set new field and move the control to the current row (index)
                 field.Value.ValueControl.Name = newKey;
-                newFields.Add(newKey, field.Value);
+                newFields.AddOrReplace(newKey, field.Value);
                 Grid.SetRow(field.Value.ValueControl, index);
             }
 
             _fields.Clear();
-            newFields.ToList().ForEach(x => _fields.Add(x));
+            newFields.ToList().ForEach(x => _fields.AddOrReplace(x.Key, x.Value));
         }
 
         internal void AddRowAbove(object sender)
         {
-            var ctrl = sender as Control;
-            if (ctrl == null) return;
+            if (!(sender is Control ctrl)) return;
 
             var row = Grid.GetRow(ctrl);
             if (row == 0) return; // cannot insert above header
@@ -166,7 +164,7 @@ namespace NZazu.Fields
                 var splits = field.Key.Split(new[] { "__" }, StringSplitOptions.None);
                 var newKey = splits[0] + "__" + (currentRow + 1);
                 field.Value.ValueControl.Name = newKey;
-                fieldsBelowWithNewName.Add(newKey, field.Value);
+                fieldsBelowWithNewName.AddOrReplace(newKey, field.Value);
             }
 
             // ok, lets fill the  fields
@@ -233,7 +231,7 @@ namespace NZazu.Fields
                 Grid.SetRow(ctrl.ValueControl, rowNo);
                 Grid.SetColumn(ctrl.ValueControl, columnCounter);
 
-                _fields.Add(ctrl.ValueControl.Name, ctrl);
+                _fields.AddOrReplace(ctrl.ValueControl.Name, ctrl);
                 if (row == -1) // only if added new row
                     ChangeLastAddedFieldTo(ctrl.ValueControl);
 
@@ -293,11 +291,14 @@ namespace NZazu.Fields
                 iterations = newDict
                     .Max(x => int.Parse(x.Key.Split(new[] { "__" }, StringSplitOptions.RemoveEmptyEntries)[1]));
 
-            var lastField = _clientControl.LayoutGrid.Children.Cast<UIElement>()
-                .First(x => Grid.GetRow(x) == _clientControl.LayoutGrid.RowDefinitions.Count - 1 &&
-                            Grid.GetColumn(x) == _clientControl.LayoutGrid.ColumnDefinitions.Count - 1);
-            while (_clientControl.LayoutGrid.RowDefinitions.Count > iterations + 1)
-                DeleteRow(lastField);
+            if (iterations > 0)
+                while (_clientControl.LayoutGrid.RowDefinitions.Count > iterations + 1)
+                {
+                    var lastField = _clientControl.LayoutGrid.Children.Cast<UIElement>()
+                       .First(x => Grid.GetRow(x) == _clientControl.LayoutGrid.RowDefinitions.Count - 1 &&
+                                   Grid.GetColumn(x) == _clientControl.LayoutGrid.ColumnDefinitions.Count - 1);
+                    DeleteRow(lastField);
+                }
 
             while (_clientControl.LayoutGrid.RowDefinitions.Count <= iterations)
                 AddNewRow();

@@ -10,6 +10,18 @@ namespace NZazu.Contracts
     internal class DictionaryExtensions_Should
     {
         [Test]
+        public void Add_Or_Replace()
+        {
+              var source = new Dictionary<string, string> { { "name", "thomas" }, { "street", "123 Ave" }, { "nullthing", null } };
+
+            source.AddOrReplace("name", "horst").Should().Contain("name", "horst");
+            source.AddOrReplace("street", "456 Ave").Should().Contain("street", "456 Ave");
+
+            // handle null to return new dict with the parameter
+            ((Dictionary<string, string>) null).AddOrReplace("name", "horst").Should().Contain("name", "horst");
+        }
+
+        [Test]
         public void Remove_Items()
         {
             var source = new Dictionary<string, string> { { "name", "thomas" }, { "street", "123 Ave" }, { "nullthing", null } };
