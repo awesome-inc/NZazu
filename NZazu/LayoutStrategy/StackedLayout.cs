@@ -23,7 +23,8 @@ namespace NZazu.LayoutStrategy
             {
                 Margin = new Thickness(5),
                 Orientation = Orientation.Horizontal,
-                VerticalAlignment = VerticalAlignment.Top
+                VerticalAlignment = VerticalAlignment.Top,
+                HorizontalAlignment = HorizontalAlignment.Left
             };
 
             foreach (var field in fields)
