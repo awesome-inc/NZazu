@@ -55,7 +55,7 @@ namespace NZazu.Serializer
         }
 
         [Test]
-        public void Add_Empty_Row_To_Dictionary()
+        public void Not_Add_Empty_Row_To_Dictionary()
         {
             var newRow = new Dictionary<string, string>();
 
@@ -66,6 +66,26 @@ namespace NZazu.Serializer
             sut.AddTableRow(data, newRow);
 
             data.Count.Should().Be(4);
+        }
+
+        [Test]
+        public void Override_Empty_Row()
+        {
+            var newRow = new Dictionary<string, string>()
+            {
+                {"table01_field01", "jane"},
+                {"table01_field02", "doe"},
+            };
+
+            var data = new Dictionary<string, string>() {{"table01_field01__1", ""},  {"table01_field02__1", null}};
+            data.Count.Should().Be(2);
+
+            var sut = new NZazuTableDataSerializerBase();
+            sut.AddTableRow(data, newRow);
+
+            data.Count.Should().Be(2);
+            data.Should().Contain("table01_field01__1", "jane");
+            data.Should().Contain("table01_field02__1", "doe");
         }
     }
 }
