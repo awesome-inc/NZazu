@@ -1,0 +1,6 @@
+title: NZazu - A WPF forms engine
+logo: /assets/img/logo.png
+description: NZazu is a json based forms engine for WPF.
+show_downloads: true
+google_analytics:
+theme: jekyll-theme-minimal
