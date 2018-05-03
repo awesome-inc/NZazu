@@ -75,6 +75,8 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Extensions\KeyValuesStore.cs" />
+    <Compile Include="Extensions\KeyValuesStore_Should.cs" />
     <Compile Include="Extensions\NoExceptionsConverter.cs" />
     <Compile Include="Extensions\DebugExtension.cs" />
     <Compile Include="Extensions\FieldExtensions.cs" />
@@ -105,10 +107,13 @@
     <Compile Include="Fields\NZazuGroupField_Should.cs" />
     <Compile Include="Fields\NZazuImageViewerField.cs" />
     <Compile Include="Fields\NZazuImageViewerField_Should.cs" />
+    <Compile Include="Fields\NZazuKeyedOptionsField.cs" />
+    <Compile Include="Fields\NZazuKeyedOptionsField_Should.cs" />
     <Compile Include="Fields\NZazuOptionsField.cs" />
     <Compile Include="Fields\NZazuOptionsField_Should.cs" />
     <Compile Include="Fields\PropertyExtensions.cs" />
     <Compile Include="Fields\PropertyExtensions_Should.cs" />
+    <Compile Include="Fields\ValueChangedEventArgs.cs" />
     <Compile Include="IResolveLayout.cs" />
     <Compile Include="INZazuWpfFieldBehavior.cs" />
     <Compile Include="Extensions\ViewExtensions_Should.cs" />

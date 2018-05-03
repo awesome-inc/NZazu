@@ -17,7 +17,7 @@ namespace NZazu.Fields
 
         protected override Control CreateValueControl()
         {
-            var control = new ComboBox { ToolTip = Description};
+            var control = new ComboBox { ToolTip = Description };
             if (Options != null)
             {
                 foreach (var option in Options)
@@ -28,5 +28,6 @@ namespace NZazu.Fields
         }
 
         protected override void SetStringValue(string value) { Value = value; }
-        protected override string GetStringValue() { return Value; }}
+        protected override string GetStringValue() { return Value; }
+    }
 }

@@ -61,7 +61,6 @@ namespace NZazu.Fields
         protected NZazuField(FieldDefinition definition, IValueConverter valueConverter = null)
         {
             if (definition == null) throw new ArgumentNullException(nameof(definition));
-            if (definition == null) throw new ArgumentNullException(nameof(definition));
             if (string.IsNullOrWhiteSpace(definition.Key)) throw new ArgumentException("key");
             Definition = definition;
             Key = definition.Key;
@@ -69,8 +68,12 @@ namespace NZazu.Fields
 
             _labelControl = new Lazy<Control>(GetLabelControl);
             _valueControl = new Lazy<Control>(GetValueControl);
-            Settings = new Dictionary<string, string>();
+
             ValueConverter = valueConverter ?? NoExceptionsConverter.Instance;
+
+            Settings = new Dictionary<string, string>();
+            foreach (var setting in (definition.Settings ?? new Dictionary<string, string>()))
+                Settings.Add(setting.Key, setting.Value);
         }
 
         public virtual ValueCheckResult Validate()
