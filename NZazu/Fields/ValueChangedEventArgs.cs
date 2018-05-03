@@ -1,4 +1,5 @@
-﻿using NEdifis.Attributes;
+﻿using System;
+using NEdifis.Attributes;
 
 namespace NZazu.Fields
 {
@@ -6,12 +7,14 @@ namespace NZazu.Fields
     internal class ValueChangedEventArgs<T>
     {
         public string StoreKey { get; }
+        public Guid CtrlGuid { get; }
         public T OldValue { get; }
         public T NewValue { get; }
 
-        public ValueChangedEventArgs(string storeKey, T oldValue, T newValue)
+        public ValueChangedEventArgs(string storeKey, Guid ctrlGuid, T oldValue, T newValue)
         {
             StoreKey = storeKey;
+            CtrlGuid = ctrlGuid;
             OldValue = oldValue;
             NewValue = newValue;
         }
