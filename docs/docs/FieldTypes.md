@@ -1,4 +1,20 @@
-## Keyed Option Field
+
+# Label `label`
+
+# Checkbox `bool`
+
+# Integer field `int`
+
+# Single Line Text `string`
+
+# Date and Time field `date`
+
+# Floating Number `double`
+
+# Option field `option`
+
+# Keyed Option Field `keyedoption`
+
 
 The keyed option field is a field which syncs the entered values to the available option of each other field.
 
