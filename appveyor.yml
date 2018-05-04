@@ -22,8 +22,8 @@ for:
 -
   branches:
 # IMPORTANT: Building a TAG is on a branch with the TAG name. So this does not work
-#    only:
-#      - master
+    only:
+      - /master|^v\d+\.\d+\.\d+$/
   build_script:
     - build.bat /t:CoverageUpload;Deploy /v:m
   skip_non_tags: true
