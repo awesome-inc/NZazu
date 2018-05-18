@@ -48,9 +48,31 @@ namespace NZazuFiddle.Samples
                         {
                             Key = "storekey020",
                             Type = "keyedoption",
-                            Prompt = "Store 2 - ",
+                            Prompt = "Store 2 - 2",
                             Settings = new Dictionary<string, string> {{"storekey", "store2"}}
-                        }
+                        },
+                        new FieldDefinition
+                        {
+                            Type = "datatable",
+                            Key = "keyedtable",
+                            Fields = new []
+                            {
+                                new FieldDefinition
+                                {
+                                    Key = "storekey0104",
+                                    Type = "keyedoption",
+                                    Prompt = "Store 1 - 4",
+                                    Settings = new Dictionary<string, string> {{"storekey", "store1"}}
+                                },
+                                new FieldDefinition
+                                {
+                                    Key = "storekey0203",
+                                    Type = "keyedoption",
+                                    Prompt = "Store 2 - 3",
+                                    Settings = new Dictionary<string, string> {{"storekey", "store2"}}
+                                },
+                            }
+                        }, 
                     }
                 },
                 new FormData(new Dictionary<string, string>() { { "storekey0103", "Horst" } }))

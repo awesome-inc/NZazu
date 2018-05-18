@@ -11,6 +11,7 @@ namespace NZazu.Fields
         : NZazuField<string>
     {
         private static event EventHandler<ValueChangedEventArgs<string>> ValueAdded = (sender, e) => { };
+        private static readonly List<NZazuKeyedOptionsField> AvailableFields = new List<NZazuKeyedOptionsField>();
 
         private readonly string _storeKey;
         private string _currentValue = string.Empty;
@@ -19,15 +20,23 @@ namespace NZazu.Fields
 
         public NZazuKeyedOptionsField(FieldDefinition definition) : base(definition)
         {
+            Id = Guid.NewGuid();
             _valueControl = CreateValueControlInternal();
             _storeKey = GetSetting("storekey") ?? string.Empty;
+
+            AvailableFields.Add(this);
             ValueAdded += OnValueAdded;
-            Id = Guid.NewGuid();
+
+            AvailableFields.ForEach(x =>
+            {
+                OnValueAdded(this, new ValueChangedEventArgs<string>(x._storeKey, x.Id, null, x._currentValue));
+            });
         }
 
         public override void DisposeField()
         {
             ValueAdded.Invoke(this, new ValueChangedEventArgs<string>(_storeKey, Id, _currentValue, null));
+            AvailableFields.Remove(this);
 
             base.DisposeField();
         }
