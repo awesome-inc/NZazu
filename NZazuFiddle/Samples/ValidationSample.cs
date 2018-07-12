@@ -65,6 +65,48 @@ namespace NZazuFiddle.Samples
                             {
                                 new CheckDefinition { Type = "required" }
                             }
+                        },
+                        new FieldDefinition
+                        {
+                            Key = "startTime",
+                            Type = "string",
+                            Prompt = "Star time",
+                            Hint = "Set start time"
+                        },
+                        new FieldDefinition
+                        {
+                            Key = "endTime",
+                            Type = "string",
+                            Prompt = "End time",
+                            Hint = "Set end time",
+                            Checks = new []
+                            {
+                                new CheckDefinition
+                                {
+                                    Type = "dateTime", Values = new []{ "End time must lie in future compared to start time", ">", "startTime" }
+                                }
+                            }
+                        },
+                        new FieldDefinition
+                        {
+                            Key = "startTimeWithFormats",
+                            Type = "string",
+                            Prompt = "Another start time",
+                            Hint = "Set start time"
+                        },
+                        new FieldDefinition
+                        {
+                            Key = "endTimeWithFormats",
+                            Type = "string",
+                            Prompt = "Another end time",
+                            Hint = "Set end time with specific format to compare with anothe start time format",
+                            Checks = new []
+                            {
+                                new CheckDefinition
+                                {
+                                    Type = "dateTime", Values = new []{ "End time must lie in future compared to start time", ">", "startTimeWithFormats", "HHmm", "HHmmss", "HH:mm", "HH:mm:ss" }
+                                }
+                            }
                         }
                     }
                 },

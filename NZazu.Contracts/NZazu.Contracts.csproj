@@ -70,6 +70,8 @@
     <Compile Include="CheckDefinition.cs" />
     <Compile Include="CheckFactory_Should.cs" />
     <Compile Include="Checks\AggregateCheck_Should.cs" />
+    <Compile Include="Checks\DateTimeComparisonCheck.cs" />
+    <Compile Include="Checks\DateTimeComparisonCheck_Should.cs" />
     <Compile Include="Checks\RangeCheck_Should.cs" />
     <Compile Include="Checks\RequiredCheck.cs" />
     <Compile Include="Checks\RequiredCheck_Should.cs" />
@@ -83,6 +85,9 @@
     <Compile Include="DictionaryExtensions_Should.cs" />
     <Compile Include="FieldDefinition.cs" />
     <Compile Include="FieldDefinition_Should.cs" />
+    <Compile Include="FormChecks\GreaterThanFormCheck.cs" />
+    <Compile Include="FormChecks\GreaterThanFormCheck_Should.cs" />
+    <Compile Include="FormChecks\IFormCheck.cs" />
     <Compile Include="FormData.cs" />
     <Compile Include="FormData_Should.cs" />
     <Compile Include="FormDefinition.cs" />
@@ -90,6 +95,7 @@
     <Compile Include="Checks\IValueCheck.cs" />
     <Compile Include="ICheckFactory.cs" />
     <Compile Include="INZazuTableDataSerializer.cs" />
+    <Compile Include="INZazuView.cs" />
     <Compile Include="NZazuConventions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Checks\RangeCheck.cs" />

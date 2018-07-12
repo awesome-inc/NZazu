@@ -5,6 +5,7 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using NZazu.Contracts;
 using NZazu.Contracts.Checks;
+using NZazu.Contracts.FormChecks;
 using NZazu.Extensions;
 using NZazu.FieldBehavior;
 using NZazu.Fields;
@@ -111,7 +112,7 @@ namespace NZazu
         public FormData FormData
         {
             get => (FormData)GetValue(FormDataProperty);
-            set => SetValue(FormDataProperty, value);
+            set => SetValue(FormDataProperty, value);           
         }
 
 
@@ -224,8 +225,12 @@ namespace NZazu
 
         public ValueCheckResult Validate()
         {
-            var result = _fields.Values.Select(f => f.Validate()).FirstOrDefault(vr => !vr.IsValid);
-            return result ?? ValueCheckResult.Success;
+            var fieldCheckResults = _fields.Values.Select(f => f.Validate()).FirstOrDefault(vr => !vr.IsValid);
+            var formCheckResults = _checks.Select(f => f.Validate(FormData)).FirstOrDefault(vr => !vr.IsValid);
+
+            return(fieldCheckResults == null && formCheckResults == null)
+                ? ValueCheckResult.Success
+                : null;
         }
 
         public bool TrySetFocusOn(string focusOn = null, bool force = false)
@@ -246,6 +251,7 @@ namespace NZazu
 
         private readonly Dictionary<string, INZazuWpfField> _fields = new Dictionary<string, INZazuWpfField>();
         private INZazuWpfField _lastFoussedElement;
+        private readonly List<IFormCheck> _checks = new List<IFormCheck>();
 
         private void UpdateFields(
             FormDefinition formDefinition,
@@ -253,11 +259,15 @@ namespace NZazu
             IResolveLayout resolveLayout)
         {
             DisposeFields();
+            DisposeChecks();
 
             // make sure at least the minimum is set for render the layout
             if (formDefinition?.Fields == null) return;
 
-            CreateFields(formDefinition, fieldFactory);
+            CreateFields(formDefinition.Fields, fieldFactory);
+
+            if(formDefinition?.Checks != null)
+                CreateFormChecks(formDefinition.Checks, fieldFactory.CheckFactory);
 
             var layout = resolveLayout.Resolve(formDefinition.Layout);
 
@@ -275,14 +285,24 @@ namespace NZazu
                 field.SetReadOnly(isReadOnly);
         }
 
-        private void CreateFields(FormDefinition formDefinition, INZazuWpfFieldFactory fieldFactory)
+        private void CreateFields(IEnumerable<FieldDefinition> formDefinition, INZazuWpfFieldFactory fieldFactory)
         {
-            formDefinition.Fields.ToList().ForEach(f =>
+            formDefinition.ToList().ForEach(f =>
             {
                 // create field
                 var field = fieldFactory.CreateField(f);
                 _fields.Add(f.Key, field);
                 AddGroupFieldKeys(field as INZazuWpfFieldContainer);
+            });
+        }
+
+        private void CreateFormChecks(IEnumerable<CheckDefinition> checkDefinition, ICheckFactory checkFactory)
+        {         
+            checkDefinition.ToList().ForEach(f =>
+            {
+                // create check
+                var check = checkFactory.CreateFormCheck(f);
+                _checks.Add(check) ;
             });
         }
 
@@ -302,6 +322,11 @@ namespace NZazu
                 field.DisposeField();
 
             _fields.Clear();
+        }
+
+        private void DisposeChecks()
+        {
+            _checks.Clear();
         }
     }
 }

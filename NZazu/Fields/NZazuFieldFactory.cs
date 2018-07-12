@@ -66,7 +66,7 @@ namespace NZazu.Fields
                 .DecorateLabels(fieldDefinition)
                 .ApplySettings(fieldDefinition)
                 .AddOptionValues(fieldDefinition)
-                .AddChecks(fieldDefinition.Checks, CheckFactory)
+                .AddChecks(fieldDefinition.Checks, CheckFactory, () => View.FormData) //ToDo think about passing View
                 .AddBehavior(fieldDefinition.Behavior, BehaviorFactory, View);
         }
 
