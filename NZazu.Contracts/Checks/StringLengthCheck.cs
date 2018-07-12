@@ -23,7 +23,7 @@ namespace NZazu.Contracts.Checks
             _valueTooShort = new ValueCheckResult(false, new ArgumentException(
                 $"The specified string is too short (at least {MinimumLength} characters)"));
             _valueTooLong = new ValueCheckResult(false, new ArgumentException(
-                $"The specified string is too loong (at most {MaximumLength} characters)"));
+                $"The specified string is too long (at most {MaximumLength} characters)"));
         }
 
         public ValueCheckResult Validate(string value, IFormatProvider formatProvider = null)
