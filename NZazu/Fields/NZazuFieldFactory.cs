@@ -62,12 +62,15 @@ namespace NZazu.Fields
             var fieldContainer = field as INZazuWpfFieldContainer;
             fieldContainer?.CreateChildControls(this, fieldDefinition);
 
-            return field
+            var wpfField = field
                 .DecorateLabels(fieldDefinition)
                 .ApplySettings(fieldDefinition)
                 .AddOptionValues(fieldDefinition)
-                .AddChecks(fieldDefinition.Checks, CheckFactory, () => View.FormData) //ToDo think about passing View
                 .AddBehavior(fieldDefinition.Behavior, BehaviorFactory, View);
+
+            return View == null 
+                ? wpfField.AddChecks(fieldDefinition.Checks, CheckFactory) 
+                : wpfField.AddChecks(fieldDefinition.Checks, CheckFactory, () => View.FormData);
         }
 
         /// <summary>

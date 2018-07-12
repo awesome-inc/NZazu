@@ -7,7 +7,7 @@ namespace NZazu.Contracts.FormChecks
 {
     [TestFixtureFor(typeof(GreaterThanFormCheck))]
     // ReSharper disable InconsistentNaming
-    public class GreaterThanFormCheck_Should
+    internal class GreaterThanFormCheck_Should
     {
         [Test]
         public void Deal_With_Not_Exiting_Fields()

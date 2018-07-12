@@ -39,7 +39,7 @@ namespace NZazu.Fields
             return field;
         }
 
-        public static NZazuField AddChecks(this NZazuField field, IEnumerable<CheckDefinition> checkDefinitions, ICheckFactory checkFactory, Func<FormData> formData)
+        public static NZazuField AddChecks(this NZazuField field, IEnumerable<CheckDefinition> checkDefinitions, ICheckFactory checkFactory, Func<FormData> formData = null)
         {
             if (checkDefinitions == null) return field;
 

@@ -10,7 +10,7 @@ namespace NZazu.Contracts.Checks
 
     [TestFixtureFor(typeof(DateTimeComparisonCheck))]
     // ReSharper disable InconsistentNaming
-    public class DateTimeComparisonCheck_Should
+    internal class DateTimeComparisonCheck_Should
     {
         [Test]
         public void Return_False_For_Endtime_Before_Starttime_Using_Greater_Than()
