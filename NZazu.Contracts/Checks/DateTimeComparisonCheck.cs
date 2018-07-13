@@ -14,13 +14,19 @@ namespace NZazu.Contracts.Checks
         private readonly string _fieldToCompareWith;
         private readonly string _hint;
         private readonly Func<FormData> _formData;
+        private readonly INZazuTableDataSerializer _tableSerializer;
+        private readonly string _tableKey;
         private readonly IEnumerable<string> _specificDateTimeFormats;
 
-        public DateTimeComparisonCheck(string hint, string compareOperator, string fieldToCompareWith, Func<FormData> formData, IEnumerable<string> specificDateTimeFormats = null)
+        public DateTimeComparisonCheck(
+            string hint, string compareOperator, string fieldToCompareWith, Func<FormData> formData, INZazuTableDataSerializer tableSerializer, string tableKey = null,
+            IEnumerable<string> specificDateTimeFormats = null)
         {
             _compareOperator = compareOperator ?? throw new ArgumentNullException(nameof(compareOperator));
             _fieldToCompareWith = fieldToCompareWith ?? throw new ArgumentNullException(nameof(fieldToCompareWith));
             _formData = formData ?? throw new ArgumentNullException(nameof(formData));
+            _tableSerializer = tableSerializer ?? throw new ArgumentNullException(nameof(tableSerializer));
+            _tableKey = tableKey;
             _specificDateTimeFormats = specificDateTimeFormats;
             _hint = hint ?? string.Empty;
         }
@@ -42,6 +48,14 @@ namespace NZazu.Contracts.Checks
 
             return result;
         }
+
+        //private string GetValueToCompareWithFromTable()
+        //{
+        //    _formData().Values.TryGetValue(_tableKey, out var tableData);
+        //    var tableDict = _tableSerializer.Deserialize(tableData);
+        //    var idx = _
+        //}
+
 
         protected class DataToCompare
         {

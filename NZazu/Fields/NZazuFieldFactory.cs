@@ -70,7 +70,7 @@ namespace NZazu.Fields
 
             return View == null 
                 ? wpfField.AddChecks(fieldDefinition.Checks, CheckFactory) 
-                : wpfField.AddChecks(fieldDefinition.Checks, CheckFactory, () => View.FormData);
+                : wpfField.AddChecks(fieldDefinition.Checks, CheckFactory, () => View.FormData, Serializer); //ToDo check if lambda is really needed
         }
 
         /// <summary>

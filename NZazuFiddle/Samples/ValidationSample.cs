@@ -104,7 +104,7 @@ namespace NZazuFiddle.Samples
                             {
                                 new CheckDefinition
                                 {
-                                    Type = "dateTime", Values = new []{ "End time must lie in future compared to start time", ">", "startTimeWithFormats", "HHmm", "HHmmss", "HH:mm", "HH:mm:ss" }
+                                    Type = "dateTime", Values = new []{ "End time must lie in future compared to start time", ">", "startTimeWithFormats", "HHmm|HHmmss|HH:mm|HH:mm:ss" }
                                 }
                             }
                         }

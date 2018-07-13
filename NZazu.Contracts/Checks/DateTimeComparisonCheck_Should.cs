@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using FluentAssertions;
 using NEdifis;
 using NEdifis.Attributes;
+using NSubstitute;
 using NUnit.Framework;
 
 namespace NZazu.Contracts.Checks
@@ -22,8 +23,9 @@ namespace NZazu.Contracts.Checks
             };
 
             var formData = new FormData(testDict);
+            var tableDataSerializer = Substitute.For<INZazuTableDataSerializer>();
 
-            var dateTimeCheck = new DateTimeComparisonCheck("lorem ipsum", ">", "startTime", () => formData);
+            var dateTimeCheck = new DateTimeComparisonCheck("lorem ipsum", ">", "startTime", () => formData, tableDataSerializer);
             formData.Values.TryGetValue("stopTime", out var result);
             var res = dateTimeCheck.Validate(result);
 
@@ -40,8 +42,9 @@ namespace NZazu.Contracts.Checks
             };
 
             var formData = new FormData(testDict);
+            var tableDataSerializer = Substitute.For<INZazuTableDataSerializer>();
 
-            var dateTimeCheck = new DateTimeComparisonCheck("lorem ipsum", ">", "startTime", () => formData);
+            var dateTimeCheck = new DateTimeComparisonCheck("lorem ipsum", ">", "startTime", () => formData, tableDataSerializer);
             formData.Values.TryGetValue("stopTime", out var result);
             var res = dateTimeCheck.Validate(result);
 
@@ -58,9 +61,10 @@ namespace NZazu.Contracts.Checks
             };
 
             var formData = new FormData(testDict);
+            var tableDataSerializer = Substitute.For<INZazuTableDataSerializer>();
             var testFormats = new[] { "HHmm", "HHmmss", "HH:mm", "HH:mm:ss" };
 
-            var dateTimeCheck = new DateTimeComparisonCheck("lorem ipsum", ">", "startTime", () => formData, testFormats);
+            var dateTimeCheck = new DateTimeComparisonCheck("lorem ipsum", ">", "startTime", () => formData, tableDataSerializer, specificDateTimeFormats:testFormats);
             formData.Values.TryGetValue("stopTime", out var result);
             var res = dateTimeCheck.Validate(result);
 
@@ -77,9 +81,10 @@ namespace NZazu.Contracts.Checks
             };
 
             var formData = new FormData(testDict);
+            var tableDataSerializer = Substitute.For<INZazuTableDataSerializer>();
             var testFormats = new[] { "HHmm", "HHmmss", "HH:mm", "HH:mm:ss" };
 
-            var dateTimeCheck = new DateTimeComparisonCheck("lorem ipsum", ">", "startTime", () => formData, testFormats);
+            var dateTimeCheck = new DateTimeComparisonCheck("lorem ipsum", ">", "startTime", () => formData, tableDataSerializer, specificDateTimeFormats: testFormats);
             formData.Values.TryGetValue("stopTime", out var result);
             var res = dateTimeCheck.Validate(result);
 
@@ -96,8 +101,9 @@ namespace NZazu.Contracts.Checks
             };
 
             var formData = new FormData(testDict);
+            var tableDataSerializer = Substitute.For<INZazuTableDataSerializer>();
 
-            var dateTimeCheck = new DateTimeComparisonCheck("lorem ipsum", "<", "stopTime", () => formData);
+            var dateTimeCheck = new DateTimeComparisonCheck("lorem ipsum", "<", "stopTime", () => formData, tableDataSerializer);
             formData.Values.TryGetValue("startTime", out var result);
             var res = dateTimeCheck.Validate(result);
 
@@ -114,8 +120,9 @@ namespace NZazu.Contracts.Checks
             };
 
             var formData = new FormData(testDict);
+            var tableDataSerializer = Substitute.For<INZazuTableDataSerializer>();
 
-            var dateTimeCheck = new DateTimeComparisonCheck("lorem ipsum", "<", "stopTime", () => formData);
+            var dateTimeCheck = new DateTimeComparisonCheck("lorem ipsum", "<", "stopTime", () => formData, tableDataSerializer);
             formData.Values.TryGetValue("startTime", out var result);
             var res = dateTimeCheck.Validate(result);
 
@@ -132,9 +139,10 @@ namespace NZazu.Contracts.Checks
             };
 
             var formData = new FormData(testDict);
+            var tableDataSerializer = Substitute.For<INZazuTableDataSerializer>();
             var testFormats = new[] { "HHmm", "HHmmss", "HH:mm", "HH:mm:ss" };
 
-            var dateTimeCheck = new DateTimeComparisonCheck("lorem ipsum", "<", "stopTime", () => formData, testFormats);
+            var dateTimeCheck = new DateTimeComparisonCheck("lorem ipsum", "<", "stopTime", () => formData, tableDataSerializer, specificDateTimeFormats: testFormats);
             formData.Values.TryGetValue("startTime", out var result);
             var res = dateTimeCheck.Validate(result);
 
@@ -151,9 +159,10 @@ namespace NZazu.Contracts.Checks
             };
 
             var formData = new FormData(testDict);
+            var tableDataSerializer = Substitute.For<INZazuTableDataSerializer>();
             var testFormats = new[] { "HHmm", "HHmmss", "HH:mm", "HH:mm:ss" };
 
-            var dateTimeCheck = new DateTimeComparisonCheck("lorem ipsum", "<", "stopTime", () => formData, testFormats);
+            var dateTimeCheck = new DateTimeComparisonCheck("lorem ipsum", "<", "stopTime", () => formData, tableDataSerializer, specificDateTimeFormats: testFormats);
             formData.Values.TryGetValue("startTime", out var result);
             var res = dateTimeCheck.Validate(result);
 
