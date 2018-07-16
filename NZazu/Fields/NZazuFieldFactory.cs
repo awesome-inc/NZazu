@@ -39,7 +39,7 @@ namespace NZazu.Fields
             FieldTypes.Add("imageViewer", typeof(NZazuImageViewerField));
         }
 
-        public INZazuWpfField CreateField(FieldDefinition fieldDefinition)
+        public INZazuWpfField CreateField(FieldDefinition fieldDefinition, int rowIdx = -1)
         {
             if (fieldDefinition == null) throw new ArgumentNullException(nameof(fieldDefinition));
             var fieldTypeSafe = fieldDefinition.Type ?? DefaultType;
@@ -70,7 +70,7 @@ namespace NZazu.Fields
 
             return View == null 
                 ? wpfField.AddChecks(fieldDefinition.Checks, CheckFactory) 
-                : wpfField.AddChecks(fieldDefinition.Checks, CheckFactory, () => View.FormData, Serializer); //ToDo check if lambda is really needed
+                : wpfField.AddChecks(fieldDefinition.Checks, CheckFactory, () => View.FormData, Serializer, rowIdx); //ToDo check if lambda is really needed
         }
 
         /// <summary>

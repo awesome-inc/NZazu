@@ -10,6 +10,7 @@ namespace NZazu.Contracts.Checks
     {
         private delegate bool Compare(DateTime value, DateTime valueToCompare);
 
+        private readonly int _rowIdx;
         private readonly string _compareOperator;
         private readonly string _fieldToCompareWith;
         private readonly string _hint;
@@ -20,8 +21,9 @@ namespace NZazu.Contracts.Checks
 
         public DateTimeComparisonCheck(
             string hint, string compareOperator, string fieldToCompareWith, Func<FormData> formData, INZazuTableDataSerializer tableSerializer, string tableKey = null,
-            IEnumerable<string> specificDateTimeFormats = null)
+            IEnumerable<string> specificDateTimeFormats = null, int rowIdx = -1)
         {
+            _rowIdx = rowIdx;
             _compareOperator = compareOperator ?? throw new ArgumentNullException(nameof(compareOperator));
             _fieldToCompareWith = fieldToCompareWith ?? throw new ArgumentNullException(nameof(fieldToCompareWith));
             _formData = formData ?? throw new ArgumentNullException(nameof(formData));
@@ -33,8 +35,16 @@ namespace NZazu.Contracts.Checks
 
         public ValueCheckResult Validate(string value, IFormatProvider formatProvider = null)
         {
-            _formData().Values.TryGetValue(_fieldToCompareWith, out var valueToCompareWith);
-
+            string valueToCompareWith;
+            if (_tableKey != null && _rowIdx != -1)
+            {
+                valueToCompareWith = GetValueToCompareWithFromTable();
+            }
+            else
+            {
+                _formData().Values.TryGetValue(_fieldToCompareWith, out valueToCompareWith);
+            }
+           
             if (value.IsNullOrEmpty() || valueToCompareWith.IsNullOrEmpty()) return ValueCheckResult.Success; // do not mark not yet set values
             
             var compareOperation = GetCompareOperation();
@@ -49,12 +59,18 @@ namespace NZazu.Contracts.Checks
             return result;
         }
 
-        //private string GetValueToCompareWithFromTable()
-        //{
-        //    _formData().Values.TryGetValue(_tableKey, out var tableData);
-        //    var tableDict = _tableSerializer.Deserialize(tableData);
-        //    var idx = _
-        //}
+        private string GetValueToCompareWithFromTable()
+        {
+            // get value to compare by idx
+            _formData().Values.TryGetValue(_tableKey, out var tableData);
+            var tableDict = _tableSerializer.Deserialize(tableData);
+
+            var tableFieldToCompareWith = $"{_fieldToCompareWith}__{_rowIdx}";
+            var tableFieldValueToCompareWithDoesExist =
+                tableDict.TryGetValue(tableFieldToCompareWith, out var valueToCompareWith);
+      
+            return valueToCompareWith;
+        }
 
 
         protected class DataToCompare

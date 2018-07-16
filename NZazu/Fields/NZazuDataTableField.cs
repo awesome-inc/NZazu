@@ -222,7 +222,7 @@ namespace NZazu.Fields
             foreach (var field in (Definition.Fields ?? Enumerable.Empty<FieldDefinition>()).ToArray())
             {
                 // we create a first empty row :)
-                var ctrl = FieldFactory.CreateField(field);
+                var ctrl = FieldFactory.CreateField(field, rowNo);
                 ctrl.ValueControl.Name = field.Key + "__" + rowNo;
                 ctrl.ValueControl.TabIndex = _tabOrder++;
                 AttachShortcutsTo(ctrl.ValueControl);

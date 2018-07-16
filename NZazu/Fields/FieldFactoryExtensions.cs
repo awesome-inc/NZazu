@@ -39,11 +39,15 @@ namespace NZazu.Fields
             return field;
         }
 
-        public static NZazuField AddChecks(this NZazuField field, IEnumerable<CheckDefinition> checkDefinitions, ICheckFactory checkFactory, Func<FormData> formData = null, INZazuTableDataSerializer tableSerializer = null)
+        public static NZazuField AddChecks(
+            this NZazuField field, IEnumerable<CheckDefinition> checkDefinitions, 
+            ICheckFactory checkFactory, Func<FormData> formData = null, 
+            INZazuTableDataSerializer tableSerializer = null,
+            int rowIdx = -1)
         {
             if (checkDefinitions == null) return field;
 
-            var checks = checkDefinitions.Select(checkdef => checkFactory.CreateCheck(checkdef, formData)).ToArray();
+            var checks = checkDefinitions.Select(checkdef => checkFactory.CreateCheck(checkdef, formData, tableSerializer, rowIdx)).ToArray();
             field.Check = checks.Length == 1
                 ? checks.First()
                 : new AggregateCheck(checks.ToArray());

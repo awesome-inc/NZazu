@@ -7,7 +7,7 @@ namespace NZazu.Contracts
     public interface ICheckFactory
     {
         IValueCheck CreateCheck(CheckDefinition checkDefinition, Func<FormData> formData = null,
-            INZazuTableDataSerializer tableSerializer = null);
+            INZazuTableDataSerializer tableSerializer = null, int rowIdx = -1);
 
         IFormCheck CreateFormCheck(CheckDefinition checkDefinition);
     }

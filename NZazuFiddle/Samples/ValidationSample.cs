@@ -25,7 +25,7 @@ namespace NZazuFiddle.Samples
                             Description = "Your account name. At least 6 characters (Required)...",
                             Checks = new []
                             {
-                                new CheckDefinition { Type = "required" }, 
+                                new CheckDefinition { Type = "required" },
                                 new CheckDefinition { Type="length", Values=new []{"6"} }
                             }
                         },
@@ -38,7 +38,7 @@ namespace NZazuFiddle.Samples
                             Description = "Your e-mail address",
                             Checks = new []
                             {
-                                new CheckDefinition { Type = "required" }, 
+                                new CheckDefinition { Type = "required" },
                                 new CheckDefinition { Type = "regex", Values= new []{"Must be a valid e-mail address", @"^.+@.+\..+$"}}
                             }
                         },
@@ -51,7 +51,7 @@ namespace NZazuFiddle.Samples
                             Description = "Check to grant administrator permissions",
                             Checks = new []
                             {
-                                new CheckDefinition { Type = "required" }, 
+                                new CheckDefinition { Type = "required" },
                                 new CheckDefinition { Type = "regex", Values= new []{"Must be Checked or Unchecked", "True", "False"}}
                             }
                         },
@@ -106,6 +106,41 @@ namespace NZazuFiddle.Samples
                                 {
                                     Type = "dateTime", Values = new []{ "End time must lie in future compared to start time", ">", "startTimeWithFormats", "HHmm|HHmmss|HH:mm|HH:mm:ss" }
                                 }
+                            }
+                        },
+                        new FieldDefinition
+                        {
+                            Type = "datatable",
+                            Key = "intraTableComparison",
+                            Fields = new []
+                            {
+                                new FieldDefinition
+                                {
+                                    Key = "startTimeTable",
+                                    Type = "string",
+                                    Prompt = "Start time (table)"
+                                },
+                                new FieldDefinition
+                                {
+                                    Key = "stopTimeTable",
+                                    Type = "string",
+                                    Prompt = "Stop time (table)",
+                                    Checks = new []
+                                    {
+                                        new CheckDefinition
+                                        {
+                                            Type = "dateTime",
+                                            Values = new []
+                                            {
+                                                "End time must lie in future compared to start time",
+                                                ">",
+                                                "startTimeTable",
+                                                "HHmm|HHmmss|HH:mm|HH:mm:ss",
+                                                "intraTableComparison"
+                                            }
+                                        }
+                                    }
+                                },
                             }
                         }
                     }

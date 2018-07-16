@@ -11,7 +11,7 @@ namespace NZazu.Contracts
     public class CheckFactory : ICheckFactory
     {
         public IValueCheck CreateCheck(CheckDefinition checkDefinition, Func<FormData> formData = null,
-            INZazuTableDataSerializer tableSerializer = null)
+            INZazuTableDataSerializer tableSerializer = null, int rowIdx = -1)
         {
             if (checkDefinition == null) throw new ArgumentNullException(nameof(checkDefinition));
             if (string.IsNullOrWhiteSpace(checkDefinition.Type)) throw new ArgumentException("check type not specified");
@@ -21,7 +21,7 @@ namespace NZazu.Contracts
                 case "length": return CreateLengthCheck(checkDefinition.Values);
                 case "range": return CreateRangeCheck(checkDefinition.Values);
                 case "regex": return CreateRegexCheck(checkDefinition.Values);
-                case "dateTime": return CreateDateTimeComparisonCheck(checkDefinition.Values, formData, tableSerializer); 
+                case "dateTime": return CreateDateTimeComparisonCheck(checkDefinition.Values, formData, tableSerializer, rowIdx); 
                 default: throw new NotSupportedException("The specified check is not supported");
             }
         }
@@ -49,14 +49,15 @@ namespace NZazu.Contracts
             return new StringRegExCheck(values[0], rx);
         }
 
-        private static IValueCheck CreateDateTimeComparisonCheck(IList<string> values, Func<FormData> formData, INZazuTableDataSerializer tableSerializer)
+        private static IValueCheck CreateDateTimeComparisonCheck(
+            IList<string> values, Func<FormData> formData, INZazuTableDataSerializer tableSerializer, int rowIdx)
         {
             if (values == null || values.Count < 3) throw new ArgumentException("Hint, comparison operator and field id to compare values needs to be specified");
             if (values[1] != "<=" && values[1] != ">=" && values[1] != "=" && values[1] != "<" && values[1] != ">") throw new ArgumentException("Only <=, >=, =, < and > are supported operators!");
             var optionalDateFormat = values.Count >= 4 ? values[3].Split('|') : null;
             var tableId = values.Count >= 5 && values[4] != string.Empty? values[4] : null;
             
-            return new DateTimeComparisonCheck(values[0], values[1], values[2], formData, tableSerializer, tableId, optionalDateFormat);
+            return new DateTimeComparisonCheck(values[0], values[1], values[2], formData, tableSerializer, tableId, optionalDateFormat, rowIdx);
         }
 
         public IFormCheck CreateFormCheck(CheckDefinition checkDefinition)
