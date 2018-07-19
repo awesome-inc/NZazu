@@ -56,7 +56,9 @@ namespace NZazu.Fields
         public Control LabelControl => _labelControl.Value;
         public Control ValueControl => _valueControl.Value;
         public Dictionary<string, string> Settings { get; }
+        [Obsolete("Please choose '" + nameof(Behaviors) + "' instead")]
         public INZazuWpfFieldBehavior Behavior { get; set; }
+        public List<INZazuWpfFieldBehavior> Behaviors { get; } = new List<INZazuWpfFieldBehavior>();
 
         protected NZazuField(FieldDefinition definition, IValueConverter valueConverter = null)
         {
@@ -200,9 +202,18 @@ namespace NZazu.Fields
 
         public virtual void DisposeField()
         {
-            if (Behavior == null) return;
-            Behavior.Detach();
-            Behavior = null;
+#pragma warning disable 618
+            if (Behavior != null)
+            {
+                Behavior.Detach();
+                Behavior = null;
+            }
+#pragma warning restore 618
+
+            Behaviors?.ForEach(b => 
+            { 
+                b.Detach();
+            });
         }
 
         public virtual IEnumerable<KeyValuePair<string, string>> GetState()

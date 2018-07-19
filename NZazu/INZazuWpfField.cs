@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using NZazu.Contracts.Checks;
@@ -20,7 +21,9 @@ namespace NZazu
         Control LabelControl { get; }
         Control ValueControl { get; }
         Dictionary<string, string> Settings { get; }
+        [Obsolete("Please choose '" + nameof(Behaviors) + "' instead")]
         INZazuWpfFieldBehavior Behavior { get; set; }
+        List<INZazuWpfFieldBehavior> Behaviors { get; }
         DependencyProperty ContentProperty { get; }
 
         void DisposeField();

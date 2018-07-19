@@ -62,11 +62,14 @@ namespace NZazu.Fields
             var fieldContainer = field as INZazuWpfFieldContainer;
             fieldContainer?.CreateChildControls(this, fieldDefinition);
 
+#pragma warning disable 618
             var wpfField = field
                 .DecorateLabels(fieldDefinition)
                 .ApplySettings(fieldDefinition)
                 .AddOptionValues(fieldDefinition)
-                .AddBehavior(fieldDefinition.Behavior, BehaviorFactory, View);
+                .AddBehavior(fieldDefinition.Behavior, BehaviorFactory, View)
+#pragma warning restore 618
+                .AddBehaviors(fieldDefinition.Behaviors, BehaviorFactory, View);
 
             return View == null 
                 ? wpfField.AddChecks(fieldDefinition.Checks, CheckFactory) 

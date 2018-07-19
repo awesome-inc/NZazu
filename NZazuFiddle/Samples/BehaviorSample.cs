@@ -2,9 +2,12 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
+using System.Threading;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using FluentAssertions;
+using NSubstitute;
 using NUnit.Framework;
 using NZazu;
 using NZazu.Contracts;
@@ -20,6 +23,7 @@ namespace NZazuFiddle.Samples
         {
             // register behavior
             BehaviorExtender.Register<OpenUrlOnStringEnterBehavior>("OpenUrlOnStringEnter");
+            BehaviorExtender.Register<SetBorderBehavior>("SetBorder");
 
             Sample = new SampleViewModel
             {
@@ -47,7 +51,9 @@ namespace NZazuFiddle.Samples
                             {
                                 new CheckDefinition { Type = "required" }
                             },
+#pragma warning disable 618
                             Behavior = new BehaviorDefinition { Name = "OpenUrlOnStringEnter" },
+#pragma warning restore 618
                         },
                         new FieldDefinition
                         {
@@ -58,9 +64,36 @@ namespace NZazuFiddle.Samples
                                 new FieldDefinition
                                 {
                                     Key = "nested.comment", Type ="string",
+#pragma warning disable 618
                                     Behavior = new BehaviorDefinition { Name = "OpenUrlOnStringEnter" }
+#pragma warning restore 618
                                 }
                             }
+                        },
+                        // Check multiple behaviours
+                        new FieldDefinition
+                        {
+                            Key = "input1",
+                            Type = "string",
+                            Prompt = "Input 1",
+                            Hint = "Input something ...\r\nIn this textbox you can test 2 behaviours ('OpenUrlOnStringEnter', 'SetBorder')\r\n--> set on 'Behaviors' collection prop",
+                            Settings = new Dictionary<string, string>{{"Height", "100"}},
+                            Description = "non sense",
+                            Behaviors = new List<BehaviorDefinition>() {new BehaviorDefinition { Name = "OpenUrlOnStringEnter" }, new BehaviorDefinition { Name = "SetBorder" }},
+                        },
+                        // Check single behaviour and multiple behaviours coexistence
+                        new FieldDefinition
+                        {
+                            Key = "input2",
+                            Type = "string",
+                            Prompt = "Input 2",
+                            Hint = "Input something ...\r\nIn this textbox you can test 2 behaviours ('OpenUrlOnStringEnter', 'SetBorder')\r\n--> set one on 'Behavior' prop and the other one on the 'Behaviors' collection prop",
+                            Settings = new Dictionary<string, string>{{"Height", "100"}},
+                            Description = "non sense",
+#pragma warning disable 618
+                            Behavior = new BehaviorDefinition { Name = "OpenUrlOnStringEnter" },
+#pragma warning restore 618
+                            Behaviors = new List<BehaviorDefinition>() {new BehaviorDefinition { Name = "SetBorder" }},
                         }
                     }
                 },
@@ -118,7 +151,7 @@ namespace NZazuFiddle.Samples
                 Process.Start(link);
             }
 
-            internal string GetLinkAtPosition(string text, int position)
+            private string GetLinkAtPosition(string text, int position)
             {
                 var spaceBefore = text.Substring(0, position).LastIndexOf(" ", StringComparison.Ordinal);
                 if (spaceBefore < 0) spaceBefore = 0;
@@ -133,29 +166,70 @@ namespace NZazuFiddle.Samples
                 var textUnderCursor = text.Substring(spaceBefore, length);
                 return _regex.IsMatch(textUnderCursor) ? textUnderCursor : null;
             }
+
+            [TestFixture]
+            // ReSharper disable once InconsistentNaming
+            private class OpenUrlOnStringEnterBehavior_Should
+            {
+                [Test]
+                [TestCase("asdfklj asöfkdljsa fdöakfjl saöljad fösadfa", 6, null)]
+                [TestCase("asdfklj asöfkdljsa http://google.de fdöakfjl saöljad fösadfa", 3, null)]
+                [TestCase("asdfklj asöfkdljsa ftp://google.de fdöakfjl saöljad fösadfa", 25, null)]
+                [TestCase("asdfklj asöfkdljsa http://google.de fdöakfjl saöljad fösadfa", 25, "http://google.de")]
+                [TestCase("http://google.de asdfklj asöfkdljsa fdöakfjl saöljad fösadfa", 4, "http://google.de")]
+                [TestCase("http://google.de", 0, "http://google.de")]
+                [TestCase("asdfklj asöfkdljsa fdöakfjl saöljad fösadfa http://google.de", 56, "http://google.de")]
+                public void Extract_Url(string text, int position, string expected)
+                {
+                    var sut = new OpenUrlOnStringEnterBehavior();
+                    var url = sut.GetLinkAtPosition(text, position);
+                    url.Should().Be(expected);
+                }
+            }
+
         }
 
-        [TestFixture]
-        // ReSharper disable once InconsistentNaming
-        private class OpenUrlOnStringEnterBehavior_Should
+        private class SetBorderBehavior : INZazuWpfFieldBehavior
         {
-            [Test]
-            [TestCase("asdfklj asöfkdljsa fdöakfjl saöljad fösadfa", 6, null)]
-            [TestCase("asdfklj asöfkdljsa http://google.de fdöakfjl saöljad fösadfa", 3, null)]
-            [TestCase("asdfklj asöfkdljsa ftp://google.de fdöakfjl saöljad fösadfa", 25, null)]
-            [TestCase("asdfklj asöfkdljsa http://google.de fdöakfjl saöljad fösadfa", 25, "http://google.de")]
-            [TestCase("http://google.de asdfklj asöfkdljsa fdöakfjl saöljad fösadfa", 4, "http://google.de")]
-            [TestCase("http://google.de", 0, "http://google.de")]
-            [TestCase("asdfklj asöfkdljsa fdöakfjl saöljad fösadfa http://google.de", 56, "http://google.de")]
-            public void Extract_Url(string text, int position, string expected)
+            private Control _control;
+
+            public void AttachTo(INZazuWpfField field, INZazuWpfView view)
             {
-                var sut = new OpenUrlOnStringEnterBehavior();
-                var url = sut.GetLinkAtPosition(text, position);
-                url.Should().Be(expected);
+                if (field == null) throw new ArgumentNullException(nameof(field));
+                var valueControl = field.ValueControl;
+
+                _control = valueControl;
+                _control.BorderThickness = new Thickness(3);
+                _control.BorderBrush = SystemColors.HotTrackBrush;
+            }
+
+            public void Detach()
+            {
+                if (_control == null) return;
+                _control = null;
+            }
+
+            [TestFixture]
+            // ReSharper disable once InconsistentNaming
+            private class SetBorderBehavior_Should
+            {
+                [Test]
+                [STAThread]
+                [Apartment(ApartmentState.STA)]
+                public void Set_Border()
+                {
+                    var sut = new SetBorderBehavior();
+                    var field = Substitute.For<INZazuWpfField>();
+                    field.ValueControl.Returns(Substitute.For<Control>());
+                    sut.AttachTo(field, Arg.Any<INZazuWpfView>());
+
+                    var control = sut._control;
+                    control.BorderBrush.Should().Be(SystemColors.HotTrackBrush);
+                    control.BorderThickness.Should().Be(new Thickness(3));
+                }
             }
         }
 
         #endregion
-
     }
 }

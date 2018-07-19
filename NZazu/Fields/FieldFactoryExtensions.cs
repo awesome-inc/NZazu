@@ -40,8 +40,8 @@ namespace NZazu.Fields
         }
 
         public static NZazuField AddChecks(
-            this NZazuField field, IEnumerable<CheckDefinition> checkDefinitions, 
-            ICheckFactory checkFactory, Func<FormData> formData = null, 
+            this NZazuField field, IEnumerable<CheckDefinition> checkDefinitions,
+            ICheckFactory checkFactory, Func<FormData> formData = null,
             INZazuTableDataSerializer tableSerializer = null,
             int rowIdx = -1)
         {
@@ -55,6 +55,7 @@ namespace NZazu.Fields
             return field;
         }
 
+        [Obsolete("Please choose '" + nameof(AddBehaviors) + "' instead")]
         public static NZazuField AddBehavior(
             this NZazuField field, BehaviorDefinition behaviorDefinition,
             INZazuWpfFieldBehaviorFactory behaviorFactory, INZazuWpfView view)
@@ -70,5 +71,24 @@ namespace NZazu.Fields
 
             return field;
         }
+
+        public static NZazuField AddBehaviors(
+            this NZazuField field, IEnumerable<BehaviorDefinition> behaviorDefinitions,
+            INZazuWpfFieldBehaviorFactory behaviorFactory, INZazuWpfView view)
+        {
+            if (behaviorDefinitions == null) return field;
+
+            // add behaviors
+            foreach (var behaviorDefinition in behaviorDefinitions)
+            {
+                var behavior = behaviorFactory.CreateFieldBehavior(behaviorDefinition);
+
+                behavior?.AttachTo(field, view);
+                field.Behaviors.Add(behavior);
+            }
+
+            return field;
+        }
     }
+
 }

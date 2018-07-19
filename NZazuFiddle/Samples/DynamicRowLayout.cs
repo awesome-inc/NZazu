@@ -328,7 +328,9 @@ namespace NZazuFiddle.Samples
                                             Key = "table_transcript_gist",
                                             Type = "string",
                                             Prompt = "Gist",
+#pragma warning disable 618
                                             Behavior = new BehaviorDefinition
+#pragma warning restore 618
                                             {
                                                 Name = "OpenUrlOnStringEnter"
                                             }

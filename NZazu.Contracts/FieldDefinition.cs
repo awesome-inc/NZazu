@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace NZazu.Contracts
 {
@@ -15,7 +16,9 @@ namespace NZazu.Contracts
         public string[] Values { get; set; }
 
         public CheckDefinition[] Checks { get; set; }
+        [Obsolete("Please choose '" + nameof(Behaviors) + "' instead")]
         public BehaviorDefinition Behavior { get; set; }
+        public List<BehaviorDefinition> Behaviors { get; set; }
 
         public Dictionary<string,string> Settings { get; set; }
 

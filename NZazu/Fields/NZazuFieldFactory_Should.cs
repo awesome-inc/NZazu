@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Windows.Controls;
 using FluentAssertions;
@@ -170,6 +171,7 @@ namespace NZazu.Fields
         {
             // because view has the resolver and attaches the behavior
             var sut = new NZazuFieldFactory();
+#pragma warning disable 618
             var field = sut.CreateField(
                 new FieldDefinition
                 {
@@ -179,6 +181,64 @@ namespace NZazu.Fields
                 });
             field.Should().NotBeNull();
             field.Behavior.Should().NotBeNull();
+#pragma warning restore 618
+            field.Behaviors.Count.Should().Be(0);
+        }
+
+        [Test]
+        public void Does_Attach_Behaviors_To_Field()
+        {
+            // because view has the resolver and attaches the behavior
+            var sut = new NZazuFieldFactory();
+            var fieldDef = new FieldDefinition
+            {
+                Key = "test",
+                Type = "string",
+                Behaviors = new List<BehaviorDefinition>()
+                {
+                    new BehaviorDefinition { Name = "behaviorDefinition1" },
+                    new BehaviorDefinition { Name = "behaviorDefinition2" },
+                    new BehaviorDefinition { Name = "behaviorDefinition3" }
+                }
+            };
+
+            var field = sut.CreateField(fieldDef);
+            field.Should().NotBeNull();
+#pragma warning disable 618
+            field.Behavior.Should().BeNull();
+#pragma warning restore 618
+            field.Behaviors.Should().NotBeNull();
+            field.Behaviors.Count.Should().Be(3);
+        }
+
+        [Test]
+        public void Does_Attach_Behavior_And_Behaviors_To_Field()
+        {
+            // because view has the resolver and attaches the behavior
+            var sut = new NZazuFieldFactory();
+
+            var fieldDef = new FieldDefinition
+            {
+                Key = "test",
+                Type = "string",
+#pragma warning disable 618
+                Behavior = new BehaviorDefinition { Name = "Empty" },
+#pragma warning restore 618
+                Behaviors = new List<BehaviorDefinition>()
+                {
+                    new BehaviorDefinition { Name = "behaviorDefinition1" },
+                    new BehaviorDefinition { Name = "behaviorDefinition2" },
+                    new BehaviorDefinition { Name = "behaviorDefinition3" }
+                }
+            };
+
+            var field = sut.CreateField(fieldDef);
+            field.Should().NotBeNull();
+#pragma warning disable 618
+            field.Behavior.Should().NotBeNull();
+#pragma warning restore 618
+            field.Behaviors.Should().NotBeNull();
+            field.Behaviors.Count.Should().Be(3);
         }
 
         [Test]
@@ -257,15 +317,17 @@ namespace NZazu.Fields
             var checkFactory = Substitute.For<ICheckFactory>();
             var serializer = Substitute.For<INZazuTableDataSerializer>();
 
+#pragma warning disable 618
             var fieldDefintion = new FieldDefinition { Key = "a", Type = "string", Behavior = new BehaviorDefinition { Name = "Empty" } };
             behaviorFactory.CreateFieldBehavior(fieldDefintion.Behavior).Returns(behavior);
+#pragma warning restore 618
 
 
             // make sure an attach happens
             var sut = new NZazuFieldFactory(behaviorFactory, checkFactory, serializer);
             var fld1 = sut.CreateField(fieldDefintion);
 
-            behavior.Received(1).AttachTo(Arg.Any<INZazuWpfField>(),Arg.Any<INZazuWpfView>());
+            behavior.Received(1).AttachTo(Arg.Any<INZazuWpfField>(), Arg.Any<INZazuWpfView>());
             behavior.ClearReceivedCalls();
 
             fld1.DisposeField();
@@ -274,6 +336,66 @@ namespace NZazu.Fields
             behavior.ReceivedWithAnyArgs(1).Detach();
         }
 
+        [Test]
+        [STAThread]
+        public void Attach_Multiple_Behaviors_To_Field()
+        {
+            // lets mock the behaviors and all the other stuff
+            var behavior1 = Substitute.For<INZazuWpfFieldBehavior>();
+            var behavior2 = Substitute.For<INZazuWpfFieldBehavior>();
+            var behavior3 = Substitute.For<INZazuWpfFieldBehavior>();
+
+            var behaviorFactory = Substitute.For<INZazuWpfFieldBehaviorFactory>();
+            var checkFactory = Substitute.For<ICheckFactory>();
+            var serializer = Substitute.For<INZazuTableDataSerializer>();
+
+            // Append value to "StringValue" prop on each behaviour to simulate execution of behaviours
+            behavior1.When(x => x.AttachTo(Arg.Any<INZazuWpfField>(), Arg.Any<INZazuWpfView>())).Do(x => ((INZazuWpfField)x.Args()[0]).StringValue += "behavior 1 executed!");
+            behavior2.When(x => x.AttachTo(Arg.Any<INZazuWpfField>(), Arg.Any<INZazuWpfView>())).Do(x => ((INZazuWpfField)x.Args()[0]).StringValue += "|behavior 2 executed!");
+            behavior3.When(x => x.AttachTo(Arg.Any<INZazuWpfField>(), Arg.Any<INZazuWpfView>())).Do(x => ((INZazuWpfField)x.Args()[0]).StringValue += "|behavior 3 executed!");
+
+            var fieldDefintion = new FieldDefinition
+            {
+                Key = "a",
+                Type = "string",
+                Behaviors = new List<BehaviorDefinition>()
+                {
+                    new BehaviorDefinition { Name = "behaviorDefinition1" },
+                    new BehaviorDefinition { Name = "behaviorDefinition2" },
+                    new BehaviorDefinition { Name = "behaviorDefinition3" }
+                }
+            };
+
+            behaviorFactory.CreateFieldBehavior(fieldDefintion.Behaviors.FirstOrDefault(b => b.Name == "behaviorDefinition1")).Returns(behavior1);
+            behaviorFactory.CreateFieldBehavior(fieldDefintion.Behaviors.FirstOrDefault(b => b.Name == "behaviorDefinition2")).Returns(behavior2);
+            behaviorFactory.CreateFieldBehavior(fieldDefintion.Behaviors.FirstOrDefault(b => b.Name == "behaviorDefinition3")).Returns(behavior3);
+
+            // make sure an attach happens
+            var sut = new NZazuFieldFactory(behaviorFactory, checkFactory, serializer);
+            var fld1 = sut.CreateField(fieldDefintion);
+
+            // Check if behaviours were executed
+            fld1.StringValue.Should().Be("behavior 1 executed!|behavior 2 executed!|behavior 3 executed!");
+
+            //behavior1.When(x => x.AttachTo(fld1, Arg.Any<INZazuWpfView>())).Do(x => fld1.StringValue = "behaviorDefinition1");
+            behavior1.Received(1).AttachTo(Arg.Any<INZazuWpfField>(), Arg.Any<INZazuWpfView>());
+            behavior1.ClearReceivedCalls();
+
+            //behavior2.When(x => x.AttachTo(fld1, Arg.Any<INZazuWpfView>())).Do(x => fld1.StringValue = "behaviorDefinition2");
+            behavior2.Received(1).AttachTo(Arg.Any<INZazuWpfField>(), Arg.Any<INZazuWpfView>());
+            behavior2.ClearReceivedCalls();
+
+            //behavior3.When(x => x.AttachTo(fld1, Arg.Any<INZazuWpfView>())).Do(x => fld1.StringValue = "behaviorDefinition3");
+            behavior3.Received(1).AttachTo(Arg.Any<INZazuWpfField>(), Arg.Any<INZazuWpfView>());
+            behavior3.ClearReceivedCalls();
+
+            fld1.DisposeField();
+
+            // now lets create a ner form and detach the existing behavior
+            behavior1.ReceivedWithAnyArgs(1).Detach();
+            behavior2.ReceivedWithAnyArgs(1).Detach();
+            behavior3.ReceivedWithAnyArgs(1).Detach();
+        }
 
     }
 }

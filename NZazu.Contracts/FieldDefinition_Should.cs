@@ -1,5 +1,7 @@
-﻿using FluentAssertions;
+﻿using System.Collections.Generic;
+using FluentAssertions;
 using NEdifis.Attributes;
+using NSubstitute;
 using NUnit.Framework;
 
 namespace NZazu.Contracts
@@ -17,7 +19,7 @@ namespace NZazu.Contracts
         }
         
         [Test]
-        public void Have_Settings_For_Additional_Confi()
+        public void Not_Have_Settings_For_Additional_Config()
         {
             var sut = new FieldDefinition();
 
@@ -26,10 +28,61 @@ namespace NZazu.Contracts
         }
 
         [Test]
-        public void Have_Behavior()
+        public void Not_Have_Behavior()
         {
             var sut = new FieldDefinition();
+#pragma warning disable 618
             sut.Behavior.Should().BeNull();
+#pragma warning restore 618
         }
+
+        [Test]
+        public void Define_Behavior()
+        {
+            var sut = new FieldDefinition();
+            var behavior1 = Substitute.For<BehaviorDefinition>();
+
+#pragma warning disable 618
+            sut.Behavior = behavior1;
+            sut.Behavior.Should().NotBeNull();
+#pragma warning restore 618
+        }
+
+        [Test]
+        public void Define_Multiple_Behaviors()
+        {
+            var sut = new FieldDefinition();
+            var behavior1 = Substitute.For<BehaviorDefinition>();
+            var behavior2 = Substitute.For<BehaviorDefinition>();
+            var behavior3 = Substitute.For<BehaviorDefinition>();
+
+            sut.Behaviors = new List<BehaviorDefinition>() { behavior1, behavior2, behavior3 };
+            
+#pragma warning disable 618
+            sut.Behavior.Should().BeNull();
+#pragma warning restore 618
+
+            sut.Behaviors.Count.Should().Be(3);
+        }
+
+        [Test]
+        public void Define_Single_Behavior_And_Multiple_Behaviors()
+        {
+            var sut = new FieldDefinition();
+            var behavior1 = Substitute.For<BehaviorDefinition>();
+            var behavior2 = Substitute.For<BehaviorDefinition>();
+            var behavior3 = Substitute.For<BehaviorDefinition>();
+            var behavior4 = Substitute.For<BehaviorDefinition>();
+
+#pragma warning disable 618
+            sut.Behavior = behavior1;
+            sut.Behavior.Should().NotBeNull();
+#pragma warning restore 618
+
+            sut.Behaviors = new List<BehaviorDefinition>() { behavior2, behavior3, behavior4 };
+            
+            sut.Behaviors.Count.Should().Be(3);
+        }
+
     }
 }
