@@ -212,8 +212,9 @@ namespace NZazu.Fields
 
             Behaviors?.ForEach(b => 
             { 
-                b.Detach();
+                b?.Detach();
             });
+            Behaviors = null;
         }
 
         public virtual IEnumerable<KeyValuePair<string, string>> GetState()
