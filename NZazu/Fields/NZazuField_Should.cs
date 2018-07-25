@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
@@ -256,6 +257,20 @@ namespace NZazu.Fields
 
             control.HorizontalAlignment.Should().Be(HorizontalAlignment.Left);
             control.VerticalAlignment.Should().Be(VerticalAlignment.Bottom);
+        }
+
+        [Test]
+        public void Define_Multiple_NullReference_Behaviours()
+        {
+            var fieldDefinition = new FieldDefinition {Key = "test"};
+            BehaviorDefinition behavior1 = null;
+            BehaviorDefinition behavior2 = null;
+            BehaviorDefinition behavior3 = null;
+
+            fieldDefinition.Behaviors = new List<BehaviorDefinition>() { behavior1, behavior2, behavior3 };
+            var sut = new GenericDummyField(fieldDefinition);
+
+            Assert.DoesNotThrow(() =>  sut.DisposeField());
         }
     }
 }

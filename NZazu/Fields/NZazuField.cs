@@ -58,7 +58,7 @@ namespace NZazu.Fields
         public Dictionary<string, string> Settings { get; }
         [Obsolete("Please choose '" + nameof(Behaviors) + "' instead")]
         public INZazuWpfFieldBehavior Behavior { get; set; }
-        public List<INZazuWpfFieldBehavior> Behaviors { get; } = new List<INZazuWpfFieldBehavior>();
+        public List<INZazuWpfFieldBehavior> Behaviors { get; set; } = new List<INZazuWpfFieldBehavior>();
 
         protected NZazuField(FieldDefinition definition, IValueConverter valueConverter = null)
         {
