@@ -32,12 +32,22 @@ namespace NZazu.Fields
             if (fieldDefinition == null) throw new ArgumentNullException(nameof(fieldDefinition));
             if (fieldDefinition.Values == null || !fieldDefinition.Values.Any()) return field;
 
-            var optionsField = field as NZazuOptionsField;
-            if (optionsField == null) return field;
-            optionsField.Options = fieldDefinition.Values;
+            switch (field)
+            {
+                case NZazuOptionsField optionsField:
+                    optionsField.Options = fieldDefinition.Values;
+                    break;
+                case NZazuKeyedOptionsField keyedOptionField:
+                    keyedOptionField.Options = fieldDefinition.Values;
+                    break;
+                default:
+                    return field;
+            }
 
             return field;
         }
+
+
 
         public static NZazuField AddChecks(
             this NZazuField field, IEnumerable<CheckDefinition> checkDefinitions,

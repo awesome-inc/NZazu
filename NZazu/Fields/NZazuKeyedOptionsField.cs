@@ -7,22 +7,48 @@ using NZazu.Contracts;
 
 namespace NZazu.Fields
 {
-    public sealed class NZazuKeyedOptionsField
+    public class NZazuKeyedOptionsField
         : NZazuField<string>
     {
         private static event EventHandler<ValueChangedEventArgs<string>> ValueAdded = (sender, e) => { };
         private static readonly List<NZazuKeyedOptionsField> AvailableFields = new List<NZazuKeyedOptionsField>();
 
         private readonly string _storeKey;
+        private readonly bool _isPublisherOnly;
         private string _currentValue = string.Empty;
         private readonly ComboBox _valueControl;
         private readonly Dictionary<Guid, string> _optionsCache = new Dictionary<Guid, string>();
+        private string[] _options;
+
+        public string[] Options
+        {
+            get => _options;
+            internal set
+            {
+                if (value == null) throw new ArgumentNullException(nameof(value));
+                if (value.Length == 0)
+                    throw new ArgumentException("Value cannot be an empty collection.", nameof(value));
+                SetOptionValues(value);
+            }
+        }
+
+        protected internal void SetOptionValues(string[] optionValues)
+        {
+            if (optionValues == null || _valueControl == null) return;
+            _options = optionValues;
+            foreach (var option in _options)
+                _valueControl.Items.Add(option);
+            _valueControl.SelectedItem = _options.FirstOrDefault();
+        }
 
         public NZazuKeyedOptionsField(FieldDefinition definition) : base(definition)
         {
             Id = Guid.NewGuid();
             _valueControl = CreateValueControlInternal();
             _storeKey = GetSetting("storekey") ?? string.Empty;
+
+            var wasParsable = bool.TryParse(GetSetting("publisherOnly"), out var isOnlyASource);
+            _isPublisherOnly = wasParsable && isOnlyASource;
 
             AvailableFields.Add(this);
             ValueAdded += OnValueAdded;
@@ -46,7 +72,7 @@ namespace NZazu.Fields
 
         private void OnValueAdded(object sender, ValueChangedEventArgs<string> e)
         {
-            if (e.StoreKey != _storeKey)
+            if (e.StoreKey != _storeKey || _isPublisherOnly)
                 return;
 
             if (_optionsCache.ContainsKey(e.CtrlGuid))

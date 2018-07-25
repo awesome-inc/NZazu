@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using NZazu.Contracts;
 
 namespace NZazuFiddle.Samples
@@ -16,6 +17,14 @@ namespace NZazuFiddle.Samples
                 {
                     Fields = new[]
                     {
+                        new FieldDefinition
+                        {
+                            Key = "storekey0100",
+                            Type = "keyedoption",
+                            Values = new[] {"Tom", "Markus"},
+                            Prompt = "Store 1 - 0 Publisher only",
+                            Settings = new Dictionary<string, string> {{"storekey", "store1"}, { "publisherOnly", "True"}}
+                        },
                         new FieldDefinition
                         {
                             Key = "storekey0101",
