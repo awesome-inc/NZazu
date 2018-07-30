@@ -96,7 +96,9 @@ namespace NZazu.Fields
             {
                 RemoveShortcutsFrom(control);
                 _clientControl.LayoutGrid.Children.Remove(control);
-                _fields.Remove(_fields.First(x => Equals(x.Value.ValueControl, control)).Key);
+                var elemToDel = _fields.First(x => Equals(x.Value.ValueControl, control));
+                elemToDel.Value.DisposeField();
+                _fields.Remove(elemToDel.Key);
             });
 
             RecalculateFieldKeys();
@@ -400,6 +402,15 @@ namespace NZazu.Fields
                     result = new ValueCheckResult(false, iterRes.Error);
             }
             return result;
+        }
+
+        public override void DisposeField()
+        {
+            foreach (var field in _fields.Values)
+            {
+                field.DisposeField();
+            }
+            base.DisposeField();
         }
     }
 }
