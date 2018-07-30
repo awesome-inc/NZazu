@@ -62,6 +62,8 @@ namespace NZazu.Fields
         public override void DisposeField()
         {
             ValueAdded.Invoke(this, new ValueChangedEventArgs<string>(_storeKey, Id, _currentValue, null));
+            _valueControl.Items.Clear();
+            ValueAdded -= OnValueAdded;
             AvailableFields.Remove(this);
 
             base.DisposeField();
