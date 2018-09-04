@@ -225,12 +225,9 @@ namespace NZazu
 
         public ValueCheckResult Validate()
         {
-            var fieldCheckResults = _fields.Values.Select(f => f.Validate()).FirstOrDefault(vr => !vr.IsValid);
-            var formCheckResults = _checks.Select(f => f.Validate(FormData)).FirstOrDefault(vr => !vr.IsValid);
-
-            return(fieldCheckResults == null && formCheckResults == null)
-                ? ValueCheckResult.Success
-                : null;
+            return _fields.Values.Select(f => f.Validate()).FirstOrDefault(vr => !vr.IsValid) ?? 
+                   _checks.Select(f => f.Validate(FormData)).FirstOrDefault(vr => !vr.IsValid) ??
+                   ValueCheckResult.Success;
         }
 
         public bool TrySetFocusOn(string focusOn = null, bool force = false)
