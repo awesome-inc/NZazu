@@ -21,8 +21,6 @@ namespace NZazu
         Control LabelControl { get; }
         Control ValueControl { get; }
         Dictionary<string, string> Settings { get; }
-        [Obsolete("Please choose '" + nameof(Behaviors) + "' instead")]
-        INZazuWpfFieldBehavior Behavior { get; set; }
         List<INZazuWpfFieldBehavior> Behaviors { get; }
         DependencyProperty ContentProperty { get; }
 
