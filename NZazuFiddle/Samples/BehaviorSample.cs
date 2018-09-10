@@ -52,7 +52,7 @@ namespace NZazuFiddle.Samples
                                 new CheckDefinition { Type = "required" }
                             },
 #pragma warning disable 618
-                            Behavior = new BehaviorDefinition { Name = "OpenUrlOnStringEnter" },
+                            Behaviors = new[] { new BehaviorDefinition { Name = "OpenUrlOnStringEnter" }},
 #pragma warning restore 618
                         },
                         new FieldDefinition
@@ -65,7 +65,7 @@ namespace NZazuFiddle.Samples
                                 {
                                     Key = "nested.comment", Type ="string",
 #pragma warning disable 618
-                                    Behavior = new BehaviorDefinition { Name = "OpenUrlOnStringEnter" }
+                                    Behaviors = new[]{new BehaviorDefinition { Name = "OpenUrlOnStringEnter" }}
 #pragma warning restore 618
                                 }
                             }
@@ -90,10 +90,11 @@ namespace NZazuFiddle.Samples
                             Hint = "Input something ...\r\nIn this textbox you can test 2 behaviours ('OpenUrlOnStringEnter', 'SetBorder')\r\n--> set one on 'Behavior' prop and the other one on the 'Behaviors' collection prop",
                             Settings = new Dictionary<string, string>{{"Height", "100"}},
                             Description = "non sense",
-#pragma warning disable 618
-                            Behavior = new BehaviorDefinition { Name = "OpenUrlOnStringEnter" },
-#pragma warning restore 618
-                            Behaviors = new List<BehaviorDefinition>() {new BehaviorDefinition { Name = "SetBorder" }},
+                            Behaviors = new List<BehaviorDefinition>()
+                            {
+                                new BehaviorDefinition { Name = "SetBorder" },
+                                new BehaviorDefinition { Name = "OpenUrlOnStringEnter" }
+                            },
                         }
                     }
                 },

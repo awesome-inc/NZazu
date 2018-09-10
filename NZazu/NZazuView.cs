@@ -112,7 +112,7 @@ namespace NZazu
         public FormData FormData
         {
             get => (FormData)GetValue(FormDataProperty);
-            set => SetValue(FormDataProperty, value);           
+            set => SetValue(FormDataProperty, value);
         }
 
 
@@ -225,7 +225,7 @@ namespace NZazu
 
         public ValueCheckResult Validate()
         {
-            return _fields.Values.Select(f => f.Validate()).FirstOrDefault(vr => !vr.IsValid) ?? 
+            return _fields.Values.Select(f => f.Validate()).FirstOrDefault(vr => !vr.IsValid) ??
                    _checks.Select(f => f.Validate(FormData)).FirstOrDefault(vr => !vr.IsValid) ??
                    ValueCheckResult.Success;
         }
@@ -260,11 +260,10 @@ namespace NZazu
 
             // make sure at least the minimum is set for render the layout
             if (formDefinition?.Fields == null) return;
-
             CreateFields(formDefinition.Fields, fieldFactory);
 
-            if(formDefinition?.Checks != null)
-                CreateFormChecks(formDefinition.Checks, fieldFactory.CheckFactory);
+            if (formDefinition?.Checks != null)
+                CreateFormChecks(formDefinition.Checks, fieldFactory.Resolve<ICheckFactory>());
 
             var layout = resolveLayout.Resolve(formDefinition.Layout);
 
@@ -294,12 +293,12 @@ namespace NZazu
         }
 
         private void CreateFormChecks(IEnumerable<CheckDefinition> checkDefinition, ICheckFactory checkFactory)
-        {         
+        {
             checkDefinition.ToList().ForEach(f =>
             {
                 // create check
                 var check = checkFactory.CreateFormCheck(f);
-                _checks.Add(check) ;
+                _checks.Add(check);
             });
         }
 

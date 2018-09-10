@@ -12,9 +12,7 @@ using NUnit.Framework;
 using NZazu.Contracts;
 using NZazu.Contracts.Checks;
 using NZazu.Extensions;
-using NZazu.FieldBehavior;
 using NZazu.Fields;
-using NZazu.Serializer;
 
 namespace NZazu
 {
@@ -33,9 +31,10 @@ namespace NZazu
             sut.Should().BeAssignableTo<INZazuWpfView>();
 
             // and have default values
-            sut.FieldFactory.Serializer.Should().BeAssignableTo<NZazuTableDataXmlSerializer>();
             sut.FieldFactory.Should().BeAssignableTo<NZazuFieldFactory>();
-            sut.FieldFactory.BehaviorFactory.Should().BeAssignableTo<NZazuFieldBehaviorFactory>();
+
+            // sut.FieldFactory.BehaviorFactory.Should().BeAssignableTo<NZazuFieldBehaviorFactory>();
+            // sut.FieldFactory.Serializer.Should().BeAssignableTo<NZazuTableDataXmlSerializer>();
         }
 
         [Test]
@@ -334,8 +333,6 @@ namespace NZazu
             var formDefinition = new FormDefinition { Fields = new[] { fieldDefinition } };
             var formData = new FormData(new Dictionary<string, string> { { key, value } });
             var factory = Substitute.For<INZazuWpfFieldFactory>();
-            var behavior = Substitute.For<INZazuWpfFieldBehaviorFactory>();
-            factory.BehaviorFactory.Returns(behavior);
 
             var sut = new NZazuView { FormDefinition = formDefinition, FormData = formData, FieldFactory = factory };
             new Action(() => sut.GetField("I do not exist")).Invoking(a => a()).Should().Throw<KeyNotFoundException>();

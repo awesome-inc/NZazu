@@ -1,3 +1,4 @@
+using System;
 using NZazu.Contracts;
 
 namespace NZazu
@@ -6,10 +7,7 @@ namespace NZazu
     {
         INZazuWpfField CreateField(FieldDefinition fieldDefinition, int rowIdx = -1);
 
-        INZazuWpfFieldBehaviorFactory BehaviorFactory { get; }
-        ICheckFactory CheckFactory { get; }
-        INZazuTableDataSerializer Serializer { get; }
-
-        INZazuWpfView View { get; set; }
+        INZazuWpfView View { set; }
+        T Resolve<T>(Type x = null);
     }
 }

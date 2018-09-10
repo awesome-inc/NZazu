@@ -19,28 +19,21 @@ namespace NZazu.Fields
         protected readonly FieldDefinition Definition;
         protected IFormatProvider FormatProvider => CultureInfo.InvariantCulture;
 
+        /// <summary>
+        /// override this in case you need some information from the factory like serializer or the factory itself
+        /// </summary>
+        /// <param name="propertyLookup"></param>
+        public virtual NZazuField Initialize(Func<Type, object> propertyLookup) => this;
+
         private readonly Lazy<Control> _labelControl;
         private readonly Lazy<Control> _valueControl;
         private readonly object _lockObj = new object();
-        protected Control Control;
 
         public abstract bool IsEditable { get; }
         public string StringValue
         {
-            get
-            {
-                // make sure the control is created
-                if (Control == null)
-                    GetValueControl();
-                return GetStringValue();
-            }
-            set
-            {
-                // make sure the control is created
-                if (Control == null)
-                    GetValueControl();
-                SetStringValue(value);
-            }
+            get => GetStringValue();
+            set => SetStringValue(value);
         }
 
         protected abstract void SetStringValue(string value);
@@ -68,8 +61,14 @@ namespace NZazu.Fields
             Key = definition.Key;
             Description = definition.Description;
 
-            _labelControl = new Lazy<Control>(GetLabelControl);
-            _valueControl = new Lazy<Control>(GetValueControl);
+            _labelControl = new Lazy<Control>(CreateLabelControl);
+            _valueControl = new Lazy<Control>(() =>
+            {
+                var ctrl = CreateValueControl();
+                ApplySettings(ctrl);
+                DecorateValidation(ctrl);
+                return ctrl;
+            });
 
             ValueConverter = valueConverter ?? NoExceptionsConverter.Instance;
 
@@ -98,25 +97,6 @@ namespace NZazu.Fields
         protected abstract Control CreateValueControl();
 
         public IValueConverter ValueConverter { get; private set; }
-
-        private Control GetLabelControl()
-        {
-            return CreateLabelControl();
-        }
-
-        private Control GetValueControl()
-        {
-            if (Control != null) return Control;
-
-            lock (_lockObj)
-            {
-                Control = CreateValueControl();
-                ApplySettings(Control);
-                DecorateValidation(Control);
-            }
-
-            return Control;
-        }
 
         // ReSharper disable once UnusedMethodReturnValue.Local
         private Control ApplySettings(Control control)
@@ -210,8 +190,8 @@ namespace NZazu.Fields
             }
 #pragma warning restore 618
 
-            Behaviors?.ForEach(b => 
-            { 
+            Behaviors?.ForEach(b =>
+            {
                 b?.Detach();
             });
             Behaviors = null;

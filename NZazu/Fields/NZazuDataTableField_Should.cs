@@ -7,6 +7,7 @@ using NEdifis.Attributes;
 using NUnit.Framework;
 using NZazu.Contracts;
 using NZazu.Fields.Controls;
+using NZazu.Serializer;
 
 #pragma warning disable 618
 
@@ -41,7 +42,12 @@ namespace NZazu.Fields
 
             // create factory later but before "ValueControl" access
             var _factory = new NZazuFieldFactory();
-            sut.FieldFactory = _factory;
+            sut.Initialize(type =>
+            {
+                if (type == typeof(INZazuWpfFieldFactory)) return _factory;
+                if (type == typeof(INZazuTableDataSerializer)) return new NZazuTableDataXmlSerializer();
+                return null;
+            });
 
             // now lets create some testdata and return it for multiple tests
             var data = new Dictionary<string, string>
@@ -67,14 +73,15 @@ namespace NZazu.Fields
         [Apartment(ApartmentState.STA)]
         public void Serialize_And_Deserialize()
         {
+            var serializer = new NZazuTableDataXmlSerializer();
             var testData = GetField();
             var sut = (NZazuDataTableField)testData.Field;
             var factory = (INZazuWpfFieldFactory)testData.Factory;
             var data = (Dictionary<string, string>)testData.Data;
 
             // lets assign the data and do some tests
-            sut.StringValue = factory.Serializer.Serialize(data);
-            var actual = factory.Serializer.Deserialize(sut.StringValue);
+            sut.StringValue = serializer.Serialize(data);
+            var actual = serializer.Deserialize(sut.StringValue);
             foreach (var dta in data)
                 actual.Should().Contain(dta);
 
@@ -87,11 +94,12 @@ namespace NZazu.Fields
         [Apartment(ApartmentState.STA)]
         public void Serialize_And_Deserialize_Multiple()
         {
+            var serializer = new NZazuTableDataXmlSerializer();
             var testData = GetField();
             var sut = (NZazuDataTableField)testData.Field;
             var factory = (INZazuWpfFieldFactory)testData.Factory;
             var data = (Dictionary<string, string>)testData.Data;
-            var sd = factory.Serializer.Serialize(data);
+            var sd = serializer.Serialize(data);
 
             // lets assign the data
             sut.StringValue = sd;
@@ -107,11 +115,11 @@ namespace NZazu.Fields
         [Apartment(ApartmentState.STA)]
         public void Assign_Data_Multiple_Times()
         {
+            var serializer = new NZazuTableDataXmlSerializer();
             var testData = GetField();
             var sut = (NZazuDataTableField)testData.Field;
-            var factory = (INZazuWpfFieldFactory)testData.Factory;
             var data = (Dictionary<string, string>)testData.Data;
-            var sd = factory.Serializer.Serialize(data);
+            var sd = serializer.Serialize(data);
 
             // lets assign the data
             sut.StringValue = sd;
@@ -123,7 +131,7 @@ namespace NZazu.Fields
                 { "table01_field01__1", "Hello" },
                 { "table01_field02__1", "True" },
             };
-            sd = factory.Serializer.Serialize(data);
+            sd = serializer.Serialize(data);
 
             sut.StringValue = sd;
             ((DynamicDataTable)sut.ValueControl).LayoutGrid.RowDefinitions.Count.Should().Be(2);
@@ -134,9 +142,16 @@ namespace NZazu.Fields
         [Apartment(ApartmentState.STA)]
         public void Serialize_And_Deserialize_Null_Rows_To_Null()
         {
-            var factory = new NZazuFieldFactory();
+            object Fct(Type t)
+            {
+                if (t == typeof(INZazuTableDataSerializer)) return new NZazuTableDataXmlSerializer();
+                if (t == typeof(INZazuWpfFieldFactory)) return new NZazuFieldFactory();
+                return null;
+            }
+
+            var serializer = (INZazuTableDataSerializer)Fct(typeof(INZazuTableDataSerializer));
             var data = new Dictionary<string, string> { { "table01_field01__1", null }, { "table01_field01__2", null } };
-            var dataSerialized = factory.Serializer.Serialize(data);
+            var dataSerialized = serializer.Serialize(data);
 
             // ReSharper disable once UseObjectOrCollectionInitializer
             var sut = new NZazuDataTableField(new FieldDefinition
@@ -147,11 +162,12 @@ namespace NZazu.Fields
                     new FieldDefinition {Key = "table01_field01", Type = "string"}
                 }
             });
-            sut.FieldFactory = factory;
+            sut.Initialize(Fct);
+
             sut.StringValue = dataSerialized;
 
             // test the returned data
-            var actual = factory.Serializer.Deserialize(sut.StringValue);
+            var actual = serializer.Deserialize(sut.StringValue);
             actual.Count.Should().Be(0);
 
             sut.Validate().IsValid.Should().BeTrue();
@@ -166,7 +182,12 @@ namespace NZazu.Fields
         [Apartment(ApartmentState.STA)]
         public void Deserialize_Empty_Data(string data)
         {
-            var factory = new NZazuFieldFactory();
+            object Fct(Type t)
+            {
+                if (t == typeof(INZazuTableDataSerializer)) return new NZazuTableDataXmlSerializer();
+                if (t == typeof(INZazuWpfFieldFactory)) return new NZazuFieldFactory();
+                return null;
+            }
 
             // ReSharper disable once UseObjectOrCollectionInitializer
             var sut = new NZazuDataTableField(new FieldDefinition
@@ -177,10 +198,10 @@ namespace NZazu.Fields
                     new FieldDefinition {Key = "table01_field01", Type = "string"}
                 }
             });
-            sut.FieldFactory = factory;
+            sut.Initialize(Fct);
 
             sut.StringValue = data;
-            var actual = factory.Serializer.Deserialize(sut.StringValue);
+            var actual = ((INZazuTableDataSerializer)Fct(typeof(INZazuTableDataSerializer))).Deserialize(sut.StringValue);
 
             actual.Should().NotBeNull();
 
@@ -193,8 +214,12 @@ namespace NZazu.Fields
         [Apartment(ApartmentState.STA)]
         public void Ignore_Exception_On_Deserialize_Invalid_Data(string data)
         {
-            var factory = new NZazuFieldFactory();
-
+            object Fct(Type t)
+            {
+                if (t == typeof(INZazuTableDataSerializer)) return new NZazuTableDataXmlSerializer();
+                if (t == typeof(INZazuWpfFieldFactory)) return new NZazuFieldFactory();
+                return null;
+            }
             // ReSharper disable once UseObjectOrCollectionInitializer
             var sut = new NZazuDataTableField(new FieldDefinition
             {
@@ -204,7 +229,7 @@ namespace NZazu.Fields
                     new FieldDefinition {Key = "table01_field01", Type = "string"}
                 }
             });
-            sut.FieldFactory = factory;
+            sut.Initialize(Fct);
 
             Action act = () => { sut.StringValue = data; };
 
@@ -218,9 +243,16 @@ namespace NZazu.Fields
         [Apartment(ApartmentState.STA)]
         public void Validate()
         {
-            var factory = new NZazuFieldFactory();
+            object Fct(Type t)
+            {
+                if (t == typeof(INZazuTableDataSerializer)) return new NZazuTableDataXmlSerializer();
+                if (t == typeof(INZazuWpfFieldFactory)) return new NZazuFieldFactory();
+                return null;
+            }
+
+            var s = (INZazuTableDataSerializer)Fct(typeof(INZazuTableDataSerializer));
             var data = new Dictionary<string, string> { { "table01_field01__1", "" }, { "table01_field01__2", "world" } };
-            var dataSerialized = factory.Serializer.Serialize(data);
+            var dataSerialized = s.Serialize(data);
 
             // ReSharper disable once UseObjectOrCollectionInitializer
             var sut = new NZazuDataTableField(new FieldDefinition
@@ -235,7 +267,8 @@ namespace NZazu.Fields
                     }
                 }
             });
-            sut.FieldFactory = factory;
+            sut.Initialize(Fct);
+
             // ReSharper disable once UnusedVariable
             var justToMakeTheCall = sut.ValueControl;
 
@@ -244,7 +277,7 @@ namespace NZazu.Fields
 
             // now change the data
             data = new Dictionary<string, string> { { "table01_field01__1", "hello" }, { "table01_field01__2", "world" } };
-            dataSerialized = factory.Serializer.Serialize(data);
+            dataSerialized = s.Serialize(data);
             sut.StringValue = dataSerialized;
             sut.Validate().IsValid.Should().BeTrue();
         }
@@ -285,6 +318,14 @@ namespace NZazu.Fields
         [Apartment(ApartmentState.STA)]
         public void Handle_Delete_Button()
         {
+            object Fct(Type t)
+            {
+                if (t == typeof(INZazuTableDataSerializer)) return new NZazuTableDataXmlSerializer();
+                if (t == typeof(INZazuWpfFieldFactory)) return new NZazuFieldFactory();
+                return null;
+            }
+
+            var serializer = new NZazuTableDataXmlSerializer();
             var sut = new NZazuDataTableField(new FieldDefinition
             {
                 Key = "key",
@@ -297,14 +338,13 @@ namespace NZazu.Fields
                         Type = "string"
                     }
                 }
-            })
-            {
-                FieldFactory = new NZazuFieldFactory()
-            };
+            });
+            sut.Initialize(Fct);
+
             var ctrl = (DynamicDataTable)sut.ValueControl;
 
             var data = new Dictionary<string, string> { { "table01_field01__1", "hello" }, { "table01_field01__2", "world" } };
-            var dataSerialized = sut.FieldFactory.Serializer.Serialize(data);
+            var dataSerialized = serializer.Serialize(data);
             sut.StringValue = dataSerialized;
 
             var lastadded = ctrl.LayoutGrid.Children[1];
@@ -321,6 +361,14 @@ namespace NZazu.Fields
         [Apartment(ApartmentState.STA)]
         public void Handle_Add_Button()
         {
+            object Fct(Type t)
+            {
+                if (t == typeof(INZazuTableDataSerializer)) return new NZazuTableDataXmlSerializer();
+                if (t == typeof(INZazuWpfFieldFactory)) return new NZazuFieldFactory();
+                return null;
+            }
+
+            var serializer = (INZazuTableDataSerializer)Fct(typeof(INZazuTableDataSerializer));
             var sut = new NZazuDataTableField(new FieldDefinition
             {
                 Key = "key",
@@ -333,13 +381,11 @@ namespace NZazu.Fields
                         Type = "string"
                     }
                 }
-            })
-            {
-                FieldFactory = new NZazuFieldFactory()
-            };
+            });
+            sut.Initialize(Fct);
 
             var data = new Dictionary<string, string> { { "table01_field01__1", "hello" }, { "table01_field01__2", "world" } };
-            var dataSerialized = sut.FieldFactory.Serializer.Serialize(data);
+            var dataSerialized = serializer.Serialize(data);
             sut.StringValue = dataSerialized;
 
             var ctrl = (DynamicDataTable)sut.ValueControl;

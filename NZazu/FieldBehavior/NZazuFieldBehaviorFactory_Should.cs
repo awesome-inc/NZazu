@@ -26,7 +26,7 @@ namespace NZazu.FieldBehavior
         {
             var sut = new NZazuFieldBehaviorFactory();
 
-            new Action(() => sut.CreateFieldBehavior(null))
+            new Action(() => sut.CreateFieldBehavior((BehaviorDefinition)null))
                 .Invoking(a => a())
                 .Should().Throw<ArgumentNullException>();
 

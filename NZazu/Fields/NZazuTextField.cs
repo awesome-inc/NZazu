@@ -6,9 +6,6 @@ namespace NZazu.Fields
 {
     public class NZazuTextField : NZazuField<string>
     {
-        private TextBox _control;
-        private readonly object _lockObj = new object();
-
         public NZazuTextField(FieldDefinition definition) : base(definition) { }
 
         protected override void SetStringValue(string value)
@@ -27,13 +24,8 @@ namespace NZazu.Fields
 
         protected override Control CreateValueControl()
         {
-            lock (_lockObj)
-            {
-                if (_control == null)
-                    _control = new TextBox { ToolTip = Description };
-            }
-
-            return _control;
+            var control = new TextBox { ToolTip = Description };
+            return control;
         }
     }
 }

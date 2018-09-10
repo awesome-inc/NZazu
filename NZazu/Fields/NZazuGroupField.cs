@@ -7,37 +7,51 @@ using NZazu.Contracts;
 
 namespace NZazu.Fields
 {
-    public class NZazuGroupField : NZazuField, INZazuWpfFieldContainer
+    public class NZazuGroupField
+        : NZazuField
+        , INZazuWpfFieldContainer
     {
         public NZazuGroupField(FieldDefinition definition) : base(definition) { }
 
         public override bool IsEditable => false;
         private string _stringValue;
-        protected override void SetStringValue(string value) { _stringValue = value; }
-        protected override string GetStringValue() { return _stringValue; }
+        private INZazuWpfFieldFactory _factory;
         public override DependencyProperty ContentProperty => null;
         public override string Type => "group";
         public string Layout { get; set; }
+
+        protected override void SetStringValue(string value) { _stringValue = value; }
+        protected override string GetStringValue() { return _stringValue; }
         public IEnumerable<INZazuWpfField> Fields { get; set; }
 
         protected override Control CreateValueControl()
         {
-            if (string.IsNullOrEmpty(Description))
-                return new ContentControl { Focusable = false };
-            else
-                return new GroupBox { Focusable = false, Header = Description };
+            if (Definition == null) throw new ArgumentNullException(nameof(Definition));
+
+            Control control = string.IsNullOrEmpty(Description) 
+                ? new ContentControl { Focusable = false } 
+                : new GroupBox { Focusable = false, Header = Description };
+
+            return control;
         }
 
-        public void CreateChildControls(INZazuWpfFieldFactory factory, FieldDefinition containerDefinition)
+        public override NZazuField Initialize(Func<Type, object> propertyLookup)
         {
-            if (containerDefinition == null) throw new ArgumentNullException(nameof(containerDefinition));
+            _factory = (INZazuWpfFieldFactory)propertyLookup(typeof(INZazuWpfFieldFactory));
 
-            if (!string.IsNullOrWhiteSpace(containerDefinition.Layout))
-                Layout = containerDefinition.Layout;
+            CreateChildControls();
 
-            if (containerDefinition.Fields == null || !containerDefinition.Fields.Any()) return;
+            return base.Initialize(propertyLookup);
+        }
 
-            Fields = containerDefinition.Fields.Select(factory.CreateField).ToArray();
+        private void CreateChildControls()
+        {
+            if (!string.IsNullOrWhiteSpace(Definition.Layout))
+                Layout = Definition.Layout;
+
+            if (Definition.Fields == null || !Definition.Fields.Any()) return;
+
+            Fields = Definition.Fields.Select(_factory.CreateField).ToArray();
         }
     }
 }

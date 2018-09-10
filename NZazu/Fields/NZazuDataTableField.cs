@@ -17,7 +17,6 @@ namespace NZazu.Fields
 {
     public class NZazuDataTableField
         : NZazuField
-        , IRequireFactory
     {
         #region crappy code to create a new row after tabbing the last field
 
@@ -45,7 +44,7 @@ namespace NZazu.Fields
             if (!binding.Gesture.Matches(sender, e)) return;
 
             // add rows and handle key
-            AddNewRow();
+            AddNewRow(((DynamicDataTable)ValueControl).LayoutGrid);
         }
 #pragma warning restore 612
 
@@ -86,16 +85,16 @@ namespace NZazu.Fields
 
             var row = Grid.GetRow(ctrl);
             if (row == 0) return; // cannot delete header
-            if (_clientControl.LayoutGrid.RowDefinitions.Count <= 2) return; // cannot delete last input row
+            if (((DynamicDataTable)ValueControl).LayoutGrid.RowDefinitions.Count <= 2) return; // cannot delete last input row
 
-            var controlsToDelete = _clientControl
+            var controlsToDelete = ((DynamicDataTable)ValueControl)
                 .LayoutGrid.Children.Cast<UIElement>()
                 .Where(e => Grid.GetRow(e) == row)
                 .ToList();
             controlsToDelete.ForEach(delegate (UIElement control)
             {
                 RemoveShortcutsFrom(control);
-                _clientControl.LayoutGrid.Children.Remove(control);
+                ((DynamicDataTable)ValueControl).LayoutGrid.Children.Remove(control);
                 var elemToDel = _fields.First(x => Equals(x.Value.ValueControl, control));
                 elemToDel.Value.DisposeField();
                 _fields.Remove(elemToDel.Key);
@@ -103,13 +102,13 @@ namespace NZazu.Fields
 
             RecalculateFieldKeys();
 
-            var row2Delete = _clientControl.LayoutGrid.RowDefinitions.Count - 1;
-            _clientControl.LayoutGrid.RowDefinitions.RemoveAt(row2Delete);
+            var row2Delete = ((DynamicDataTable)ValueControl).LayoutGrid.RowDefinitions.Count - 1;
+            ((DynamicDataTable)ValueControl).LayoutGrid.RowDefinitions.RemoveAt(row2Delete);
 
             // lets assume the last control in _fields is the lastAddedField
-            ChangeLastAddedFieldTo(_clientControl.LayoutGrid.Children.Cast<UIElement>()
-                .First(x => Grid.GetRow(x) == _clientControl.LayoutGrid.RowDefinitions.Count - 1 &&
-                            Grid.GetColumn(x) == _clientControl.LayoutGrid.ColumnDefinitions.Count - 1));
+            ChangeLastAddedFieldTo(((DynamicDataTable)ValueControl).LayoutGrid.Children.Cast<UIElement>()
+                .First(x => Grid.GetRow(x) == ((DynamicDataTable)ValueControl).LayoutGrid.RowDefinitions.Count - 1 &&
+                            Grid.GetColumn(x) == ((DynamicDataTable)ValueControl).LayoutGrid.ColumnDefinitions.Count - 1));
         }
 
         // renumber all the fields so they are back in order again
@@ -155,7 +154,8 @@ namespace NZazu.Fields
             var fieldsBelowWithNewName = new Dictionary<string, INZazuWpfField>();
 
             // now we need to move the below fields to the next row (a little like Hilberts Hotel)
-            _clientControl.LayoutGrid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(24) });
+            var layout = ((DynamicDataTable)ValueControl).LayoutGrid;
+            layout.RowDefinitions.Add(new RowDefinition { Height = new GridLength(24) });
             foreach (var field in fieldsBelowInsert.OrderBy(x => int.Parse(x.Key.Split(new[] { "__" }, StringSplitOptions.None)[1])))
             {
                 // move to next row
@@ -172,45 +172,51 @@ namespace NZazu.Fields
             // ok, lets fill the  fields
             _fields.Clear();
             fieldsAboveInsert.ToList().ForEach(x => _fields.Add(x.Key, x.Value));
-            AddNewRow(row); // this adds the new controls to the field list
+            AddNewRow(layout, row); // this adds the new controls to the field list
             fieldsBelowWithNewName.ToList().ForEach(x => _fields.Add(x.Key, x.Value));
         }
 
         #endregion
 
-        public INZazuWpfFieldFactory FieldFactory { get; set; }
-
-        private DynamicDataTable _clientControl;
         private readonly Dictionary<string, INZazuWpfField> _fields = new Dictionary<string, INZazuWpfField>();
         private int _tabOrder;
 
         private Button _addBtn;
         private Button _delBtn;
+        private INZazuTableDataSerializer _serializer;
+        private INZazuWpfFieldFactory _factory;
 
         public NZazuDataTableField(FieldDefinition definition) : base(definition) { }
+
+        public override NZazuField Initialize(Func<Type, object> propertyLookup)
+        {
+            _serializer = (INZazuTableDataSerializer)propertyLookup(typeof(INZazuTableDataSerializer));
+            _factory = (INZazuWpfFieldFactory)propertyLookup(typeof(INZazuWpfFieldFactory));
+
+            return base.Initialize(propertyLookup);
+        }
 
         #region buttons
 
         [ExcludeFromCodeCoverage]
         private void AddBtnOnClick(object sender, RoutedEventArgs routedEventArgs)
         {
-            AddNewRow();
+            var layout = ((DynamicDataTable)ValueControl).LayoutGrid;
+            AddNewRow(layout);
         }
 
         [ExcludeFromCodeCoverage]
         private void DelBtnOnClick(object sender, RoutedEventArgs routedEventArgs)
         {
-            var lastField = _clientControl.LayoutGrid.Children.Cast<UIElement>()
-                .First(x => Grid.GetRow(x) == _clientControl.LayoutGrid.RowDefinitions.Count - 1 &&
-                            Grid.GetColumn(x) == _clientControl.LayoutGrid.ColumnDefinitions.Count - 1);
+            var lastField = ((DynamicDataTable)ValueControl).LayoutGrid.Children.Cast<UIElement>()
+                .First(x => Grid.GetRow(x) == ((DynamicDataTable)ValueControl).LayoutGrid.RowDefinitions.Count - 1 &&
+                            Grid.GetColumn(x) == ((DynamicDataTable)ValueControl).LayoutGrid.ColumnDefinitions.Count - 1);
 
             DeleteRow(lastField);
         }
 
-        private void AddNewRow(int row = -1)
+        private void AddNewRow(Grid grid, int row = -1)
         {
-            var grid = _clientControl.LayoutGrid;
-
             int rowNo;
             if (row == -1) // we add a row at the end
             {
@@ -224,7 +230,7 @@ namespace NZazu.Fields
             foreach (var field in (Definition.Fields ?? Enumerable.Empty<FieldDefinition>()).ToArray())
             {
                 // we create a first empty row :)
-                var ctrl = FieldFactory.CreateField(field, rowNo);
+                var ctrl = _factory.CreateField(field, rowNo);
                 ctrl.ValueControl.Name = field.Key + "__" + rowNo;
                 ctrl.ValueControl.TabIndex = _tabOrder++;
                 AttachShortcutsTo(ctrl.ValueControl);
@@ -262,7 +268,7 @@ namespace NZazu.Fields
 
         private string GetGridValues()
         {
-            var data = _clientControl.LayoutGrid.Children
+            var data = ((DynamicDataTable)ValueControl).LayoutGrid.Children
                 .Cast<Control>()
                 .Where(x =>
                     !string.IsNullOrEmpty(x.Name) &&
@@ -273,7 +279,7 @@ namespace NZazu.Fields
                     child => _fields.Single(x => Equals(x.Value.ValueControl, child)).Value.StringValue
                  );
 
-            return FieldFactory.Serializer.Serialize(data);
+            return _serializer.Serialize(data);
         }
 
         private void UpdateGridValues(string value)
@@ -281,7 +287,7 @@ namespace NZazu.Fields
             var newDict = new Dictionary<string, string>();
             try
             {
-                newDict.MergeWith(FieldFactory.Serializer.Deserialize(value));
+                newDict.MergeWith(_serializer.Deserialize(value));
             }
             catch (Exception ex)
             {
@@ -293,17 +299,18 @@ namespace NZazu.Fields
                 iterations = newDict
                     .Max(x => int.Parse(x.Key.Split(new[] { "__" }, StringSplitOptions.RemoveEmptyEntries)[1]));
 
+            var layout = ((DynamicDataTable)ValueControl).LayoutGrid;
             if (iterations > 0)
-                while (_clientControl.LayoutGrid.RowDefinitions.Count > iterations + 1)
+                while (layout.RowDefinitions.Count > iterations + 1)
                 {
-                    var lastField = _clientControl.LayoutGrid.Children.Cast<UIElement>()
-                       .First(x => Grid.GetRow(x) == _clientControl.LayoutGrid.RowDefinitions.Count - 1 &&
-                                   Grid.GetColumn(x) == _clientControl.LayoutGrid.ColumnDefinitions.Count - 1);
+                    var lastField = ((DynamicDataTable)ValueControl).LayoutGrid.Children.Cast<UIElement>()
+                       .First(x => Grid.GetRow(x) == layout.RowDefinitions.Count - 1 &&
+                                   Grid.GetColumn(x) == layout.ColumnDefinitions.Count - 1);
                     DeleteRow(lastField);
                 }
 
-            while (_clientControl.LayoutGrid.RowDefinitions.Count <= iterations)
-                AddNewRow();
+            while (layout.RowDefinitions.Count <= iterations)
+                AddNewRow(layout);
 
             foreach (var field in _fields)
             {
@@ -313,8 +320,8 @@ namespace NZazu.Fields
                 field.Value.StringValue = kv.Value;
             }
 
-            if (_clientControl.LayoutGrid.RowDefinitions.Count == 1)
-                AddNewRow(1);
+            if (layout.RowDefinitions.Count == 1)
+                AddNewRow(layout, 1);
         }
 
         public override DependencyProperty ContentProperty => null;
@@ -322,13 +329,11 @@ namespace NZazu.Fields
 
         protected override Control CreateValueControl()
         {
-            if (_clientControl != null) return _clientControl;
-
-            _clientControl = new DynamicDataTable();
-            CreateClientControlsOn(_clientControl.LayoutGrid);
+            var result = new DynamicDataTable();
+            CreateClientControlsOn(result.LayoutGrid);
             // somewhere here i need to attach the behaviour
-            CreateButtonsOn(_clientControl.ButtonPanel);
-            return _clientControl;
+            CreateButtonsOn(result.ButtonPanel);
+            return result;
         }
 
         private void CreateClientControlsOn(Grid grid)
@@ -357,7 +362,7 @@ namespace NZazu.Fields
                 Grid.SetColumn(lbl, column); // the last one ;)
             }
 
-            AddNewRow();
+            AddNewRow(grid);
         }
 
         #region create _clientControl

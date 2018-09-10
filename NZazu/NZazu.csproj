@@ -93,9 +93,14 @@
       <DependentUpon>DynamicDataTable.xaml</DependentUpon>
     </Compile>
     <Compile Include="Fields\Controls\DynamicDataTable_Should.cs" />
+    <Compile Include="Fields\Controls\GeoLocationBox.xaml.cs">
+      <DependentUpon>GeoLocationBox.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Fields\Controls\GeoLocationBox_Should.cs" />
+    <Compile Include="Fields\NZazuLocationField.cs" />
+    <Compile Include="Fields\NZazuLocationField_Should.cs" />
     <Compile Include="Fields\FieldFactoryExtensions.cs" />
     <Compile Include="Fields\FieldFactoryExtensions_Should.cs" />
-    <Compile Include="Fields\IRequireFactory.cs" />
     <Compile Include="Fields\NZazuDataTableField.cs" />
     <Compile Include="Fields\NZazuDateField.cs" />
     <Compile Include="Fields\NZazuDataTableField_Should.cs" />
@@ -160,6 +165,10 @@
     <Page Include="Fields\Controls\DynamicDataTable.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Fields\Controls\GeoLocationBox.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Themes\Generic.xaml">
       <SubType>Designer</SubType>

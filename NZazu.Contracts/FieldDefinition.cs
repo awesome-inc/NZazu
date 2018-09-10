@@ -16,9 +16,7 @@ namespace NZazu.Contracts
         public string[] Values { get; set; }
 
         public CheckDefinition[] Checks { get; set; }
-        [Obsolete("Please choose '" + nameof(Behaviors) + "' instead")]
-        public BehaviorDefinition Behavior { get; set; }
-        public List<BehaviorDefinition> Behaviors { get; set; }
+        public IEnumerable<BehaviorDefinition> Behaviors { get; set; }
 
         public Dictionary<string,string> Settings { get; set; }
 

@@ -9,23 +9,26 @@ namespace NZazu.Fields
 {
     public class NZazuFieldFactory : INZazuWpfFieldFactory
     {
-        public INZazuWpfFieldBehaviorFactory BehaviorFactory { get; }
-        public ICheckFactory CheckFactory { get; }
-        public INZazuTableDataSerializer Serializer { get; }
         public INZazuWpfView View { get; set; }
 
-        protected readonly Dictionary<string, Type> FieldTypes = new Dictionary<string, Type>();
-        private const string DefaultType = "label";
+        protected readonly IDictionary<string, Type> FieldTypes = new Dictionary<string, Type>();
+        private readonly IDictionary<Type, object> Factorys = new Dictionary<Type, object>();
+        private const string DefaultType = "default";
 
         public NZazuFieldFactory(
             INZazuWpfFieldBehaviorFactory behaviorFactory = null,
             ICheckFactory checkFactory = null,
             INZazuTableDataSerializer serializer = null)
         {
-            BehaviorFactory = behaviorFactory ?? new NZazuFieldBehaviorFactory();
-            CheckFactory = checkFactory ?? new CheckFactory();
-            Serializer = serializer ?? new NZazuTableDataXmlSerializer();
+            Factorys.Add(typeof(INZazuWpfFieldFactory), this);
+            Factorys.Add(typeof(INZazuWpfFieldBehaviorFactory), behaviorFactory ?? new NZazuFieldBehaviorFactory());
+            Factorys.Add(typeof(ICheckFactory), checkFactory ?? new CheckFactory());
+            Factorys.Add(typeof(INZazuTableDataSerializer), serializer ?? new NZazuTableDataXmlSerializer());
 
+            // we add label twice to have it as default type
+            FieldTypes.Add(DefaultType, typeof(NZazuLabelField));
+
+            // lets add all nzazu core fields and types
             FieldTypes.Add("label", typeof(NZazuLabelField));
             FieldTypes.Add("string", typeof(NZazuTextField));
             FieldTypes.Add("bool", typeof(NZazuBoolField));
@@ -42,7 +45,37 @@ namespace NZazu.Fields
 
         public INZazuWpfField CreateField(FieldDefinition fieldDefinition, int rowIdx = -1)
         {
+            var behaviourFactory = (INZazuWpfFieldBehaviorFactory)Factorys[typeof(INZazuWpfFieldBehaviorFactory)];
+            var checkFactory = (ICheckFactory)Factorys[typeof(ICheckFactory)];
+            var serializer = (INZazuTableDataSerializer)Factorys[typeof(INZazuTableDataSerializer)];
+
             if (fieldDefinition == null) throw new ArgumentNullException(nameof(fieldDefinition));
+
+            // we throw an exception but this should not happen by default and only if the user adds null
+            if (behaviourFactory == null) throw new ArgumentNullException(nameof(behaviourFactory));
+            if (serializer == null) throw new ArgumentNullException(nameof(serializer));
+            if (checkFactory == null) throw new ArgumentNullException(nameof(checkFactory));
+
+#pragma warning disable 618
+            return CreateFieldInstance(fieldDefinition)
+                .Initialize(Resolve<object>)
+                .DecorateLabels(fieldDefinition)
+                .ApplySettings(fieldDefinition)
+                .AddOptionValues(fieldDefinition)
+                .AddBehaviors(fieldDefinition.Behaviors, behaviourFactory, View)
+                .AddChecks(fieldDefinition.Checks, checkFactory, View != null ? () => View.FormData : (Func<FormData>)null, serializer, rowIdx);
+#pragma warning restore 618
+        }
+
+        public T Resolve<T>(Type x = null)
+        {
+            if (x == null) x = typeof(T);
+
+            return (T)(Factorys.ContainsKey(x) ? Factorys[x] : null);
+        }
+
+        private NZazuField CreateFieldInstance(FieldDefinition fieldDefinition)
+        {
             var fieldTypeSafe = fieldDefinition.Type ?? DefaultType;
 
             NZazuField field;
@@ -55,26 +88,7 @@ namespace NZazu.Fields
                 field = (NZazuField)Activator.CreateInstance(FieldTypes[DefaultType], res);
             }
 
-            var safeField = field as IRequireFactory;
-            if (safeField != null)
-                safeField.FieldFactory = this;
-
-            // TODO refactoring stuff ....
-            var fieldContainer = field as INZazuWpfFieldContainer;
-            fieldContainer?.CreateChildControls(this, fieldDefinition);
-
-#pragma warning disable 618
-            var wpfField = field
-                .DecorateLabels(fieldDefinition)
-                .ApplySettings(fieldDefinition)
-                .AddOptionValues(fieldDefinition)
-                .AddBehavior(fieldDefinition.Behavior, BehaviorFactory, View)
-#pragma warning restore 618
-                .AddBehaviors(fieldDefinition.Behaviors, BehaviorFactory, View);
-
-            return View == null 
-                ? wpfField.AddChecks(fieldDefinition.Checks, CheckFactory) 
-                : wpfField.AddChecks(fieldDefinition.Checks, CheckFactory, () => View.FormData, Serializer, rowIdx); //ToDo check if lambda is really needed
+            return field;
         }
 
         /// <summary>
@@ -88,4 +102,5 @@ namespace NZazu.Fields
             return fieldDefinition;
         }
     }
+
 }
