@@ -4,13 +4,13 @@ using NZazu.Contracts;
 namespace NZazuFiddle.Samples
 {
     // ReSharper disable once UnusedMember.Global
-    internal class PrimitivesSample : SampleBase
+    internal class AllFieldTypes : SampleBase
     {
-        public PrimitivesSample() : base(10)
+        public AllFieldTypes() : base(10)
         {
             Sample = new SampleViewModel
             {
-                Name = "Primitives",
+                Name = "All Available Fields",
                 Description = "",
                 Fiddle = ToFiddle(new FormDefinition
                 {
@@ -21,6 +21,12 @@ namespace NZazuFiddle.Samples
                             Key = "caption",
                             Type = "label",
                             Description = "A fancy caption!"
+                        },
+                        new FieldDefinition
+                        {
+                            Key = "where are you",
+                            Type = "location",
+                            Description = "Select where you are"
                         },
                         new FieldDefinition
                         {

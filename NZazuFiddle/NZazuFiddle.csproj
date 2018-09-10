@@ -175,7 +175,7 @@
     <Compile Include="Samples\IHaveSample.cs" />
     <Compile Include="Samples\MixedGroupLayout.cs" />
     <Compile Include="Samples\KeyedOptionsSample.cs" />
-    <Compile Include="Samples\PrimitivesSample.cs" />
+    <Compile Include="Samples\AllFieldTypes.cs" />
     <Compile Include="Samples\ReadOnlySample.cs" />
     <Compile Include="Samples\SampleBase.cs" />
     <Compile Include="Samples\ValidationSample.cs" />

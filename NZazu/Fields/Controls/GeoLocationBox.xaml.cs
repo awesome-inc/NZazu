@@ -78,12 +78,15 @@ namespace NZazu.Fields.Controls
 
             glb.OpenInGeoApp.IsEnabled = val != null && support != null && support.CanOpenGeoApp;
 
-            glb.LocationBox.Text = glb.GeoLocationSupport.ToString(val);
+            glb.LocationBox.IsReadOnly = glb.LocationBox.IsReadOnly || support == null;
+            glb.LocationBox.Text = support?.ToString(val) ?? "no valid coordinate converter added";
         }
 
         public GeoLocationBox()
         {
             InitializeComponent();
+
+            UpdateControl(this, Value, GeoLocationSupport);
         }
 
         private void OpenInGeoAppClick(object sender, RoutedEventArgs e)
@@ -101,7 +104,7 @@ namespace NZazu.Fields.Controls
         private void LocationBoxLostFocus(object sender, RoutedEventArgs e)
         {
             // lat lon decimal firmatter is always supported -even if null
-            if (GeoLocationSupport == null )
+            if (GeoLocationSupport == null)
                 Value = NZazuCoordinate.Parse(LocationBox.Text.Trim());
             else
                 Value = GeoLocationSupport.Parse(LocationBox.Text.Trim());
