@@ -37,6 +37,7 @@ namespace NZazu.Fields
             FieldTypes.Add("option", typeof(NZazuOptionsField));
             FieldTypes.Add("keyedoption", typeof(NZazuKeyedOptionsField));
             FieldTypes.Add("imageViewer", typeof(NZazuImageViewerField));
+            FieldTypes.Add("location", typeof(NZazuLocationField));
         }
 
         public INZazuWpfField CreateField(FieldDefinition fieldDefinition, int rowIdx = -1)
