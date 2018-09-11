@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Controls;
 using NZazu.Contracts;
 using NZazu.Contracts.Checks;
 
@@ -10,9 +11,9 @@ namespace NZazu.Fields
     {
         public static NZazuField DecorateLabels(this NZazuField field, FieldDefinition fieldDefinition)
         {
-            field.Prompt = fieldDefinition.Prompt;
-            field.Hint = fieldDefinition.Hint;
-            field.Description = fieldDefinition.Description;
+            field.Definition.Prompt = fieldDefinition.Prompt;
+            field.Definition.Hint = fieldDefinition.Hint;
+            field.Definition.Description = fieldDefinition.Description;
 
             return field;
         }
@@ -21,8 +22,19 @@ namespace NZazu.Fields
         {
             if (fieldDefinition.Settings == null) return field;
 
-            foreach (var kvp in fieldDefinition.Settings)
-                field.Settings[kvp.Key] = kvp.Value;
+            var control = field.ValueControl;
+            var height = fieldDefinition.Settings.Get<double>("Height");
+            if (height.HasValue)
+                control.MinHeight = control.MaxHeight = height.Value;
+
+            var width = fieldDefinition.Settings.Get<double>("Width");
+            if (width.HasValue)
+                control.MinWidth = control.MaxWidth = width.Value;
+
+            // apply generic settings
+            var controlSettings = fieldDefinition.Settings.Where(s => control.CanSetProperty(s.Key));
+            foreach (var setting in controlSettings)
+                control.SetProperty(setting.Key, setting.Value);
 
             return field;
         }
@@ -35,10 +47,10 @@ namespace NZazu.Fields
             switch (field)
             {
                 case NZazuOptionsField optionsField:
-                    optionsField.Options = fieldDefinition.Values;
+                    optionsField.Options = fieldDefinition.Values.ToArray();
                     break;
                 case NZazuKeyedOptionsField keyedOptionField:
-                    keyedOptionField.Options = fieldDefinition.Values;
+                    keyedOptionField.Options = fieldDefinition.Values.ToArray();
                     break;
                 default:
                     return field;
@@ -74,13 +86,15 @@ namespace NZazu.Fields
             if (behaviorDefinitions == null) return field;
 
             // add behaviors
+            var behaviors = new List<INZazuWpfFieldBehavior>();
             foreach (var behaviorDefinition in behaviorDefinitions)
             {
                 var behavior = behaviorFactory.CreateFieldBehavior(behaviorDefinition);
 
                 behavior?.AttachTo(field, view);
-                field.Behaviors.Add(behavior);
+                behaviors.Add(behavior);
             }
+            field.Behaviors = behaviors.ToArray();
 
             return field;
         }

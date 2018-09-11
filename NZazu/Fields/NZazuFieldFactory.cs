@@ -1,7 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
+using System.Windows.Data;
 using NZazu.Contracts;
+using NZazu.Contracts.Adapter;
+using NZazu.Extensions;
 using NZazu.FieldBehavior;
 using NZazu.Serializer;
 
@@ -9,26 +13,24 @@ namespace NZazu.Fields
 {
     public class NZazuFieldFactory : INZazuWpfFieldFactory
     {
-        public INZazuWpfView View { get; set; }
-
-        protected readonly IDictionary<string, Type> FieldTypes = new Dictionary<string, Type>();
-        private readonly IDictionary<Type, object> Factorys = new Dictionary<Type, object>();
         private const string DefaultType = "default";
 
-        public NZazuFieldFactory(
-            INZazuWpfFieldBehaviorFactory behaviorFactory = null,
-            ICheckFactory checkFactory = null,
-            INZazuTableDataSerializer serializer = null)
-        {
-            Factorys.Add(typeof(INZazuWpfFieldFactory), this);
-            Factorys.Add(typeof(INZazuWpfFieldBehaviorFactory), behaviorFactory ?? new NZazuFieldBehaviorFactory());
-            Factorys.Add(typeof(ICheckFactory), checkFactory ?? new CheckFactory());
-            Factorys.Add(typeof(INZazuTableDataSerializer), serializer ?? new NZazuTableDataXmlSerializer());
+        protected readonly IDictionary<string, Type> FieldTypes = new Dictionary<string, Type>();
+        private readonly IDictionary<Type, object> _serviceLocator = new Dictionary<Type, object>();
 
-            // we add label twice to have it as default type
-            FieldTypes.Add(DefaultType, typeof(NZazuLabelField));
+        public NZazuFieldFactory()
+        {
+            // lets add the default implementations to the factory
+            _serviceLocator.Add(typeof(INZazuWpfFieldFactory), this);
+            _serviceLocator.Add(typeof(INZazuWpfFieldBehaviorFactory), new NZazuFieldBehaviorFactory());
+            _serviceLocator.Add(typeof(ICheckFactory), new CheckFactory());
+            _serviceLocator.Add(typeof(INZazuTableDataSerializer), new NZazuTableDataXmlSerializer());
+            _serviceLocator.Add(typeof(IFormatProvider), CultureInfo.InvariantCulture);
+            _serviceLocator.Add(typeof(IValueConverter), NoExceptionsConverter.Instance);
+            _serviceLocator.Add(typeof(ISupportGeoLocationBox), new SupportGeoLocationBox());
 
             // lets add all nzazu core fields and types
+            FieldTypes.Add(DefaultType, typeof(NZazuLabelField)); // we add label twice to have it as default type
             FieldTypes.Add("label", typeof(NZazuLabelField));
             FieldTypes.Add("string", typeof(NZazuTextField));
             FieldTypes.Add("bool", typeof(NZazuBoolField));
@@ -45,9 +47,10 @@ namespace NZazu.Fields
 
         public INZazuWpfField CreateField(FieldDefinition fieldDefinition, int rowIdx = -1)
         {
-            var behaviourFactory = (INZazuWpfFieldBehaviorFactory)Factorys[typeof(INZazuWpfFieldBehaviorFactory)];
-            var checkFactory = (ICheckFactory)Factorys[typeof(ICheckFactory)];
-            var serializer = (INZazuTableDataSerializer)Factorys[typeof(INZazuTableDataSerializer)];
+            var behaviourFactory = (INZazuWpfFieldBehaviorFactory)_serviceLocator[typeof(INZazuWpfFieldBehaviorFactory)];
+            var checkFactory = (ICheckFactory)_serviceLocator[typeof(ICheckFactory)];
+            var serializer = (INZazuTableDataSerializer)_serviceLocator[typeof(INZazuTableDataSerializer)];
+            _serviceLocator.TryGetValue(typeof(INZazuWpfView), out var view);
 
             if (fieldDefinition == null) throw new ArgumentNullException(nameof(fieldDefinition));
 
@@ -58,20 +61,12 @@ namespace NZazu.Fields
 
 #pragma warning disable 618
             return CreateFieldInstance(fieldDefinition)
-                .Initialize(Resolve<object>)
                 .DecorateLabels(fieldDefinition)
                 .ApplySettings(fieldDefinition)
                 .AddOptionValues(fieldDefinition)
-                .AddBehaviors(fieldDefinition.Behaviors, behaviourFactory, View)
-                .AddChecks(fieldDefinition.Checks, checkFactory, View != null ? () => View.FormData : (Func<FormData>)null, serializer, rowIdx);
+                .AddBehaviors(fieldDefinition.Behaviors, behaviourFactory, view as INZazuWpfView)
+                .AddChecks(fieldDefinition.Checks, checkFactory, (view as INZazuView) != null ? () => ((INZazuView)view).FormData : (Func<FormData>)null, serializer, rowIdx);
 #pragma warning restore 618
-        }
-
-        public T Resolve<T>(Type x = null)
-        {
-            if (x == null) x = typeof(T);
-
-            return (T)(Factorys.ContainsKey(x) ? Factorys[x] : null);
         }
 
         private NZazuField CreateFieldInstance(FieldDefinition fieldDefinition)
@@ -80,12 +75,12 @@ namespace NZazu.Fields
 
             NZazuField field;
             if (FieldTypes.ContainsKey(fieldTypeSafe))
-                field = (NZazuField)Activator.CreateInstance(FieldTypes[fieldTypeSafe], fieldDefinition);
+                field = (NZazuField)Activator.CreateInstance(FieldTypes[fieldTypeSafe], fieldDefinition, (Func<Type, object>)Resolve<object>);
             else
             {
                 Trace.TraceWarning("The specified field type is not supported: " + fieldTypeSafe);
                 var res = ProofForAvailableDescription(fieldDefinition);
-                field = (NZazuField)Activator.CreateInstance(FieldTypes[DefaultType], res);
+                field = (NZazuField)Activator.CreateInstance(FieldTypes[DefaultType], res, (Func<Type, object>)Resolve<object>);
             }
 
             return field;
@@ -100,6 +95,21 @@ namespace NZazu.Fields
         {
             fieldDefinition.Description = fieldDefinition.Description ?? "-";
             return fieldDefinition;
+        }
+
+        public T Resolve<T>(Type x = null)
+        {
+            if (x == null) x = typeof(T);
+
+            return (T)(_serviceLocator.ContainsKey(x) ? _serviceLocator[x] : null);
+        }
+
+        public void Use<T>(T service)
+        {
+            if (_serviceLocator.ContainsKey(typeof(T)))
+                _serviceLocator[typeof(T)] = service;
+            else
+                _serviceLocator.Add(typeof(T), service);
         }
     }
 

@@ -16,14 +16,20 @@ namespace NZazu.Fields
     // ReSharper disable InconsistentNaming
     internal class NZazuDoubleField_Should
     {
+        private object ServiceLocator(Type type)
+        {
+            if (type == typeof(IValueConverter)) return NoExceptionsConverter.Instance;
+            if (type == typeof(IFormatProvider)) return CultureInfo.InvariantCulture;
+            throw new NotSupportedException($"Cannot lookup {type.Name}");
+        }
+
         [Test]
         public void Be_Creatable()
         {
-            var sut = new NZazuDoubleField(new FieldDefinition {Key="test"});
+            var sut = new NZazuDoubleField(new FieldDefinition { Key = "key" }, ServiceLocator);
 
             sut.Should().NotBeNull();
             sut.Should().BeAssignableTo<INZazuWpfField>();
-            sut.Type.Should().Be("double");
         }
 
         #region converter tests
@@ -87,16 +93,17 @@ namespace NZazu.Fields
         [STAThread]
         public void Create_Control_With_ToolTip_Matching_Description()
         {
-            var sut = new NZazuDoubleField(new FieldDefinition {Key="test"})
+            var sut = new NZazuDoubleField(new FieldDefinition
             {
+                Key = "key",
                 Hint = "superhero",
                 Description = "check this if you are a registered superhero"
-            };
+            }, ServiceLocator);
 
             var textBox = (TextBox)sut.ValueControl;
             textBox.Should().NotBeNull();
             textBox.Text.Should().BeEmpty();
-            textBox.ToolTip.Should().Be(sut.Description);
+            textBox.ToolTip.Should().Be(sut.Definition.Description);
         }
 
         [Test]
@@ -104,8 +111,8 @@ namespace NZazu.Fields
         [STAThread]
         public void Support_Format()
         {
-            var sut = new NZazuDoubleField(new FieldDefinition {Key="test"});
-            sut.Settings["Format"] = "0.##";
+            var sut = new NZazuDoubleField(new FieldDefinition { Key = "key" }, ServiceLocator);
+            sut.Definition.Settings["Format"] = "0.##";
             var control = (TextBox)sut.ValueControl;
 
             sut.Value.Should().NotHaveValue();
@@ -126,7 +133,7 @@ namespace NZazu.Fields
         [STAThread]
         public void Format_TextBox_From_Value()
         {
-            var sut = new NZazuDoubleField(new FieldDefinition {Key="test"});
+            var sut = new NZazuDoubleField(new FieldDefinition { Key = "key" }, ServiceLocator);
             var control = (TextBox)sut.ValueControl;
 
             sut.Value.Should().NotHaveValue();
@@ -150,7 +157,7 @@ namespace NZazu.Fields
         [STAThread]
         public void Format_Value_From_TextBox()
         {
-            var sut = new NZazuDoubleField(new FieldDefinition {Key="test"});
+            var sut = new NZazuDoubleField(new FieldDefinition { Key = "key" }, ServiceLocator);
             var control = (TextBox)sut.ValueControl;
 
             sut.Value.Should().NotHaveValue();
@@ -171,16 +178,16 @@ namespace NZazu.Fields
         [STAThread]
         public void Format_TextBox_From_StringValue()
         {
-            var sut = new NZazuDoubleField(new FieldDefinition {Key="test"});
+            var sut = new NZazuDoubleField(new FieldDefinition { Key = "key" }, ServiceLocator);
             var control = (TextBox)sut.ValueControl;
 
-            sut.StringValue.Should().BeNullOrEmpty();
+            sut.GetStringValue().Should().BeNullOrEmpty();
             control.Text.Should().BeEmpty();
 
-            sut.StringValue = "1.4";
+            sut.SetStringValue("1.4");
             control.Text.Should().Be("1.4");
 
-            sut.StringValue = "";
+            sut.SetStringValue("");
             control.Text.Should().BeEmpty();
         }
 
@@ -189,20 +196,20 @@ namespace NZazu.Fields
         [STAThread]
         public void Format_StringValue_From_TextBox()
         {
-            var sut = new NZazuDoubleField(new FieldDefinition {Key="test"});
+            var sut = new NZazuDoubleField(new FieldDefinition { Key = "key" }, ServiceLocator);
             var control = (TextBox)sut.ValueControl;
 
             control.Text = "1.4";
-            sut.StringValue.Should().Be("1.4");
+            sut.GetStringValue().Should().Be("1.4");
 
             control.Text = string.Empty;
             sut.IsValid().Should().BeTrue();
-            sut.StringValue.Should().Be("");
+            sut.GetStringValue().Should().Be("");
 
             // ReSharper disable once AssignNullToNotNullAttribute
             control.Text = null;
             sut.IsValid().Should().BeTrue();
-            sut.StringValue.Should().Be(string.Empty);
+            sut.GetStringValue().Should().Be(string.Empty);
         }
     }
 }

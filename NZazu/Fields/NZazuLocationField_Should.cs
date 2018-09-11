@@ -15,12 +15,10 @@ namespace NZazu.Fields
         [Apartment(ApartmentState.STA)]
         public void Be_Creatable()
         {
-            var sut = new NZazuLocationField(new FieldDefinition { Key = "test" });
-            sut.Initialize(type => null); // we should create a func which return the isupportgeo implementation
+            var sut = new NZazuLocationField(new FieldDefinition { Key = "test" }, type => null);
 
             sut.Should().NotBeNull();
             sut.ValueControl.Should().BeOfType<GeoLocationBox>();
-            sut.Type.Should().Be("location");
             sut.Value.Should().BeNull();
         }
     }

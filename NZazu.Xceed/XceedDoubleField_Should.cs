@@ -1,5 +1,7 @@
 using System;
+using System.Globalization;
 using System.Threading;
+using System.Windows.Data;
 using FluentAssertions;
 using NEdifis.Attributes;
 using NUnit.Framework;
@@ -14,21 +16,27 @@ namespace NZazu.Xceed
     // ReSharper disable InconsistentNaming
     internal class XceedDoubleField_Should
     {
+        private object ServiceLocator(Type type)
+        {
+            if (type == typeof(IValueConverter)) return NoExceptionsConverter.Instance;
+            if (type == typeof(IFormatProvider)) return CultureInfo.InvariantCulture;
+            throw new NotSupportedException($"Cannot lookup {type.Name}");
+        }
+
         [Test]
         public void Be_Creatable()
         {
-            var sut = new XceedDoubleField(new FieldDefinition {Key="test"});
+            var sut = new XceedDoubleField(new FieldDefinition { Key = "key" }, ServiceLocator);
 
             sut.Should().NotBeNull();
             sut.Should().BeAssignableTo<INZazuWpfField>();
-            sut.Type.Should().Be("double");
         }
 
         [Test]
         [STAThread]
         public void Use_DoubleUpdown()
         {
-            var sut = new XceedDoubleField(new FieldDefinition {Key="test"});
+            var sut = new XceedDoubleField(new FieldDefinition { Key = "key" }, ServiceLocator);
             sut.ContentProperty.Should().Be(DoubleUpDown.ValueProperty);
 
             var control = (DoubleUpDown) sut.ValueControl;
@@ -39,16 +47,16 @@ namespace NZazu.Xceed
         [STAThread]
         public void Format_ControlValue_From_StringValue()
         {
-            var sut = new XceedDoubleField(new FieldDefinition {Key="test"});
+            var sut = new XceedDoubleField(new FieldDefinition { Key = "key" }, ServiceLocator);
             var control = (DoubleUpDown)sut.ValueControl;
 
-            sut.StringValue.Should().BeNullOrEmpty();
+            sut.GetStringValue().Should().BeNullOrEmpty();
             control.Value.Should().NotHaveValue();
 
-            sut.StringValue = "1.4";
+            sut.SetStringValue("1.4");
             control.Value.Should().Be(1.4);
 
-            sut.StringValue = string.Empty;
+            sut.SetStringValue(string.Empty);
             control.Value.Should().NotHaveValue();
         }
 
@@ -56,34 +64,34 @@ namespace NZazu.Xceed
         [STAThread]
         public void Format_StringValue_From_ControlValue()
         {
-            var sut = new XceedDoubleField(new FieldDefinition {Key="test"});
+            var sut = new XceedDoubleField(new FieldDefinition { Key = "key" }, ServiceLocator);
             var control = (DoubleUpDown)sut.ValueControl;
 
             control.Value = 1.4;
-            sut.StringValue.Should().Be("1.4");
+            sut.GetStringValue().Should().Be("1.4");
 
             control.Value = null;
             sut.IsValid().Should().BeTrue();
-            sut.StringValue.Should().Be("");
+            sut.GetStringValue().Should().Be("");
 
             control.Text = null;
             sut.IsValid().Should().BeTrue();
-            sut.StringValue.Should().Be(string.Empty);
+            sut.GetStringValue().Should().Be(string.Empty);
         }
 
         [Test]
         [STAThread]
         public void Not_Set_null_format_string()
         {
-            var sut = new XceedDoubleField(new FieldDefinition {Key="test"});
-            sut.Settings.Add("Format", null);
+            var sut = new XceedDoubleField(new FieldDefinition { Key = "key" }, ServiceLocator);
+            sut.Definition.Settings.Add("Format", null);
 
             var control = (DoubleUpDown)sut.ValueControl;
             control.FormatString.Should().NotBeNull();
 
             const string format = "#.00";
-            sut = new XceedDoubleField(new FieldDefinition {Key="test"});
-            sut.Settings.Add("Format", format);
+            sut = new XceedDoubleField(new FieldDefinition { Key = "key" }, ServiceLocator);
+            sut.Definition.Settings.Add("Format", format);
 
             control = (DoubleUpDown)sut.ValueControl;
             control.FormatString.Should().Be(format);

@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Threading;
+using System.Windows.Data;
 using FluentAssertions;
 using NEdifis.Attributes;
 using NUnit.Framework;
 using NZazu.Contracts;
+using NZazu.Extensions;
 using Xceed.Wpf.Toolkit;
 
 namespace NZazu.Xceed
@@ -113,7 +116,7 @@ namespace NZazu.Xceed
 
             var textBox = (RichTextBox)field.ValueControl;
             textBox.Should().NotBeNull();
-            textBox.ToolTip.Should().Be(field.Description);
+            textBox.ToolTip.Should().Be(field.Definition.Description);
         }
     }
 }

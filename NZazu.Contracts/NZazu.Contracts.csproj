@@ -66,6 +66,8 @@
     <Compile Include="Adapter\NZazuCoordinate.cs" />
     <Compile Include="Adapter\ISupportGeoLocationBox.cs" />
     <Compile Include="Adapter\NZazuCoordinate_Should.cs" />
+    <Compile Include="Adapter\SupportGeoLocationBox.cs" />
+    <Compile Include="Adapter\SupportGeoLocationBox_Should.cs" />
     <Compile Include="BehaviorDefinition.cs" />
     <Compile Include="BehaviorDefinition_Should.cs" />
     <Compile Include="CheckDefinition_Should.cs" />

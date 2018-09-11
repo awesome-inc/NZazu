@@ -52,7 +52,7 @@ namespace NZazu
         {
             var view = (NZazuView)d;
             var fieldFactory = (INZazuWpfFieldFactory)e.NewValue;
-            fieldFactory.View = view;
+            fieldFactory.Use(view);
             view.UpdateFields(view.FormDefinition, fieldFactory, view.ResolveLayout);
         }
 
@@ -167,7 +167,7 @@ namespace NZazu
                     TrySetFocusOn();
             };
 
-            FieldFactory = new NZazuFieldFactory(new NZazuFieldBehaviorFactory(), new CheckFactory(), new NZazuTableDataXmlSerializer());
+            FieldFactory = new NZazuFieldFactory();
         }
 
         public void ApplyChanges()
@@ -196,11 +196,12 @@ namespace NZazu
             return _fields
                 // lets add the data
                 .Where(f => f.Value.IsEditable)
-                .Where(f => !string.IsNullOrEmpty(f.Value.StringValue))
-                .Select(x => new KeyValuePair<string, string>(x.Key, x.Value.StringValue))
+                .Where(f => !string.IsNullOrEmpty(f.Value.GetStringValue()))
+                .Select(x => new KeyValuePair<string, string>(x.Key, x.Value.GetStringValue()))
+                .Select(x => new KeyValuePair<string, string>(x.Key, x.Value))
                 // now lets add the control state
                 .Concat(_fields
-                    .Where(f => !string.IsNullOrEmpty(f.Value.StringValue))
+                    .Where(f => !string.IsNullOrEmpty(f.Value.GetStringValue()))
                     .SelectMany(x => x.Value.GetState()))
                 // and dont forget the focus
                 .Concat(new[] { new KeyValuePair<string, string>("__focusOn", _lastFoussedElement?.Key), })
@@ -255,7 +256,7 @@ namespace NZazu
             INZazuWpfFieldFactory fieldFactory,
             IResolveLayout resolveLayout)
         {
-            DisposeFields();
+            Dispose();
             DisposeChecks();
 
             // make sure at least the minimum is set for render the layout
@@ -312,10 +313,10 @@ namespace NZazu
             }
         }
 
-        private void DisposeFields()
+        private void Dispose()
         {
             foreach (var field in _fields.Values)
-                field.DisposeField();
+                field.Dispose();
 
             _fields.Clear();
         }

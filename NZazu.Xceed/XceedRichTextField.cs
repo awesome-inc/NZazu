@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Controls;
 using NZazu.Contracts;
 using NZazu.Fields;
@@ -11,7 +12,8 @@ namespace NZazu.Xceed
     {
         public const double DefaultHeight = 80.0d;
 
-        public XceedRichTextField(FieldDefinition definition) : base(definition) { }
+        public XceedRichTextField(FieldDefinition definition, Func<Type, object> serviceLocatorFunc)
+            : base(definition, serviceLocatorFunc) { }
 
         public override DependencyProperty ContentProperty => RichTextBox.TextProperty;
 
@@ -19,14 +21,14 @@ namespace NZazu.Xceed
         {
             var control = new RichTextBox
             {
-                ToolTip = Description,
+                ToolTip = Definition.Description,
                 VerticalScrollBarVisibility = ScrollBarVisibility.Auto,
                 MinHeight = DefaultHeight,
                 MaxHeight = DefaultHeight,
-                TextFormatter = GetFormatter(GetSetting("Format"))
+                TextFormatter = GetFormatter(Definition.Settings.Get("Format"))
             };
 
-            var showFormatBar = GetSetting<bool>("ShowFormatBar");
+            var showFormatBar = Definition.Settings.Get<bool>("ShowFormatBar");
             if (showFormatBar == true)
                 RichTextBoxFormatBarManager.SetFormatBar(control, new RichTextBoxFormatBar());
 

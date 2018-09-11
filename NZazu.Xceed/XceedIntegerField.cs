@@ -1,3 +1,4 @@
+using System;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
@@ -9,14 +10,15 @@ namespace NZazu.Xceed
 {
     public class XceedIntegerField : NZazuIntegerField
     {
-        public XceedIntegerField(FieldDefinition definition) : base(definition) { }
+        public XceedIntegerField(FieldDefinition definition, Func<Type, object> serviceLocatorFunc)
+            : base(definition, serviceLocatorFunc) { }
 
         public override DependencyProperty ContentProperty => IntegerUpDown.ValueProperty;
 
         protected override Control CreateValueControl()
         {
-            var control = new IntegerUpDown {ToolTip = Description, Watermark = Hint};
-            var formatString = GetSetting("Format");
+            var control = new IntegerUpDown {ToolTip = Definition.Description, Watermark = Definition.Hint};
+            var formatString = Definition.Settings.Get("Format");
             if (IsSupported(formatString))
             {
                 control.FormatString = formatString;

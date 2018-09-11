@@ -1,11 +1,14 @@
 ﻿using System;
+using System.Globalization;
 using System.Linq;
 using System.Threading;
 using System.Windows.Controls;
+using System.Windows.Data;
 using FluentAssertions;
 using NEdifis.Attributes;
 using NUnit.Framework;
 using NZazu.Contracts;
+using NZazu.Extensions;
 
 namespace NZazu.Fields
 {
@@ -14,34 +17,40 @@ namespace NZazu.Fields
     // ReSharper disable InconsistentNaming
     internal class NZazuOptionsField_Should
     {
+        private object ServiceLocator(Type type)
+        {
+            if (type == typeof(IValueConverter)) return NoExceptionsConverter.Instance;
+            if (type == typeof(IFormatProvider)) return CultureInfo.InvariantCulture;
+            throw new NotSupportedException($"Cannot lookup {type.Name}");
+        }
+
         [Test]
         public void Be_Creatable()
         {
-            var sut = new NZazuOptionsField(new FieldDefinition {Key="test"});
+            var sut = new NZazuOptionsField(new FieldDefinition { Key = "key" },ServiceLocator);
 
             sut.Should().NotBeNull();
             sut.Should().BeAssignableTo<INZazuWpfField>();
-            sut.Type.Should().Be("option");
         }
 
         [Test(Description = "https://github.com/awesome-inc/NZazu/issues/68")]
         [STAThread]
         public void Create_ComboBox()
         {
-            var sut = new NZazuOptionsField(new FieldDefinition {Key="test"}) { Description = "description"};
+            var sut = new NZazuOptionsField(new FieldDefinition { Key = "key" ,Description = "description"},ServiceLocator);
 
             sut.ContentProperty.Should().Be(ComboBox.TextProperty);
             var control = (ComboBox)sut.ValueControl;
             control.Should().NotBeNull();
 
-            control.ToolTip.Should().Be(sut.Description);
+            control.ToolTip.Should().Be(sut.Definition.Description);
         }
 
         [Test(Description = "https://github.com/awesome-inc/NZazu/issues/68")]
         [STAThread]
         public void Reflect_changing_Value_in_TextProperty()
         {
-            var sut = new NZazuOptionsField(new FieldDefinition {Key="test"})
+            var sut = new NZazuOptionsField(new FieldDefinition { Key = "key" },ServiceLocator)
             {
                 Options = new[] { "1", "2", "3", "4", "5"}
             };
@@ -76,16 +85,16 @@ namespace NZazu.Fields
         [Test]
         public void Identify_Value_with_StringValue()
         {
-            var sut = new NZazuOptionsField(new FieldDefinition {Key="test"});
+            var sut = new NZazuOptionsField(new FieldDefinition { Key = "key" },ServiceLocator);
 
             sut.Value.Should().BeNull();
-            sut.StringValue.Should().Be(sut.Value);
+            sut.GetStringValue().Should().Be(sut.Value);
 
-            sut.StringValue = "1";
-            sut.Value.Should().Be(sut.StringValue);
+            sut.SetStringValue("1");
+            sut.Value.Should().Be(sut.GetStringValue());
 
             sut.Value = "2";
-            sut.StringValue.Should().Be(sut.Value);
+            sut.GetStringValue().Should().Be(sut.Value);
         }
     }
 }

@@ -41,13 +41,14 @@ namespace NZazu.Fields
             _valueControl.SelectedItem = _options.FirstOrDefault();
         }
 
-        public NZazuKeyedOptionsField(FieldDefinition definition) : base(definition)
+        public NZazuKeyedOptionsField(FieldDefinition definition, Func<Type, object> serviceLocatorFunc)
+            : base(definition, serviceLocatorFunc)
         {
             Id = Guid.NewGuid();
             _valueControl = CreateValueControlInternal();
-            _storeKey = GetSetting("storekey") ?? string.Empty;
+            _storeKey = Definition.Settings.Get("storekey") ?? string.Empty;
 
-            var wasParsable = bool.TryParse(GetSetting("publisherOnly"), out var isOnlyASource);
+            var wasParsable = bool.TryParse(Definition.Settings.Get("publisherOnly"), out var isOnlyASource);
             _isPublisherOnly = wasParsable && isOnlyASource;
 
             AvailableFields.Add(this);
@@ -59,14 +60,14 @@ namespace NZazu.Fields
             });
         }
 
-        public override void DisposeField()
+        public override void Dispose()
         {
             ValueAdded.Invoke(this, new ValueChangedEventArgs<string>(_storeKey, Id, _currentValue, null));
             _valueControl.Items.Clear();
             ValueAdded -= OnValueAdded;
             AvailableFields.Remove(this);
 
-            base.DisposeField();
+            base.Dispose();
         }
 
         // unique id for each control so we dont need to store a reference for it
@@ -101,13 +102,11 @@ namespace NZazu.Fields
 
         public override DependencyProperty ContentProperty => ComboBox.TextProperty;
 
-        public override string Type => "keyedoption";
-
         private ComboBox CreateValueControlInternal()
         {
             var control = new ComboBox
             {
-                ToolTip = Description,
+                ToolTip = Definition.Description,
                 IsEditable = true
             };
             control.LostFocus += StoreAndPublishValue;
@@ -129,11 +128,12 @@ namespace NZazu.Fields
             _currentValue = _valueControl.Text ?? string.Empty;
         }
 
-        protected override void SetStringValue(string value)
+        public override void SetStringValue(string value)
         {
             Value = value;
             StoreAndPublishValue(this, new RoutedEventArgs());
         }
-        protected override string GetStringValue() { return Value; }
+
+        public override string GetStringValue() { return Value; }
     }
 }

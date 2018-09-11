@@ -41,22 +41,22 @@ namespace NZazu
         [STAThread]
         public void Return_field_values_on_GetFieldValues()
         {
-            var view = new NZazuView();
-
             const string key = "key";
             const string value = "value";
 
             var fieldDefinition = new FieldDefinition { Key = key };
             var formDefinition = new FormDefinition { Fields = new[] { fieldDefinition } };
-            view.FormDefinition = formDefinition;
-
             var factory = Substitute.For<INZazuWpfFieldFactory>();
             var field = Substitute.For<INZazuWpfField>();
-            field.StringValue = value;
+            field.GetStringValue().Returns(value);
             field.IsEditable.Returns(true);
             factory.CreateField(fieldDefinition).Returns(field);
 
-            view.FieldFactory = factory;
+            var view = new NZazuView
+            {
+                FieldFactory = factory,
+                FormDefinition = formDefinition
+            };
 
             var actual = view.GetFieldValues();
             actual.Keys.Should().Contain(key);
@@ -255,7 +255,7 @@ namespace NZazu
 
             // simulate user editing
             const string changedValue = "other";
-            view.GetField(key).StringValue = changedValue;
+            view.GetField(key).SetStringValue(changedValue);
 
             // simulate user leaves the field -> LostFoucs
             view.RaiseEvent(new RoutedEventArgs(UIElement.LostFocusEvent));

@@ -1,3 +1,4 @@
+using System;
 using System.Windows;
 using System.Windows.Controls;
 using NZazu.Contracts;
@@ -8,16 +9,17 @@ namespace NZazu.Xceed
 {
     public class XceedDateTimeField : NZazuDateField
     {
-        public XceedDateTimeField(FieldDefinition definition) : base(definition) { }
+        public XceedDateTimeField(FieldDefinition definition, Func<Type, object> serviceLocatorFunc)
+            : base(definition, serviceLocatorFunc) { }
 
         public override DependencyProperty ContentProperty => DateTimePickerWithUpdate.ValueProperty;
 
         protected override Control CreateValueControl()
         {
-            var control = new DateTimePickerWithUpdate { ToolTip = Description, Watermark = Hint };
+            var control = new DateTimePickerWithUpdate { ToolTip = Definition.Description, Watermark = Definition.Hint };
 
             // set date time format
-            DateFormat = GetSetting("Format");
+            DateFormat = Definition.Settings.Get("Format");
             // ReSharper disable once InvertIf
             if (!string.IsNullOrWhiteSpace(DateFormat))
             {

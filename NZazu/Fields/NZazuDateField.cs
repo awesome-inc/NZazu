@@ -10,18 +10,18 @@ namespace NZazu.Fields
     {
         public string DateFormat { get; protected internal set; }
 
-        public NZazuDateField(FieldDefinition definition) : base(definition) { }
+        public NZazuDateField(FieldDefinition definition, Func<Type, object> serviceLocatorFunc)
+            : base(definition, serviceLocatorFunc) { }
 
-        public override string Type => "date";
         public override DependencyProperty ContentProperty => DatePicker.SelectedDateProperty;
 
         protected override Control CreateValueControl()
         {
-            DateFormat = GetSetting("Format");
-            return new DatePicker {ToolTip = Description};
+            DateFormat = Definition.Settings.Get("Format");
+            return new DatePicker { ToolTip = Definition.Description };
         }
 
-        protected override void SetStringValue(string value)
+        public override void SetStringValue(string value)
         {
             var parsed = false;
             var result = new DateTime();
@@ -29,8 +29,8 @@ namespace NZazu.Fields
             if (!string.IsNullOrWhiteSpace(value))
             {
                 const DateTimeStyles dateTimeStyles = DateTimeStyles.AssumeLocal;
-                parsed = string.IsNullOrWhiteSpace(DateFormat) 
-                    ? DateTime.TryParse(value, FormatProvider, dateTimeStyles, out result) 
+                parsed = string.IsNullOrWhiteSpace(DateFormat)
+                    ? DateTime.TryParse(value, FormatProvider, dateTimeStyles, out result)
                     : DateTime.TryParseExact(value, DateFormat, FormatProvider, dateTimeStyles, out result);
             }
             if (parsed)
@@ -39,7 +39,7 @@ namespace NZazu.Fields
                 Value = null;
         }
 
-        protected override string GetStringValue()
+        public override string GetStringValue()
         {
             if (!Value.HasValue) return string.Empty;
 

@@ -24,7 +24,8 @@ namespace NZazuFiddle
             _events.Subscribe(this);
             _definition = definition ?? throw new ArgumentNullException(nameof(definition));
             _data = data ?? throw new ArgumentNullException(nameof(data));
-            _fieldFactory = fieldFactory ?? new XceedFieldFactory(serializer: new NZazuTableDataJsonSerializer());
+            _fieldFactory = fieldFactory ?? new XceedFieldFactory();
+            _fieldFactory.Use(new NZazuTableDataJsonSerializer());
             //_fieldFactory = fieldFactory ?? new XceedFieldFactory();
         }
 

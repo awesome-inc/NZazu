@@ -1,3 +1,4 @@
+using System;
 using System.Windows;
 using System.Windows.Controls;
 using NZazu.Contracts;
@@ -6,9 +7,10 @@ namespace NZazu.Fields
 {
     public class NZazuBoolField : NZazuField<bool?>
     {
-        public NZazuBoolField(FieldDefinition definition) : base(definition) { }
+        public NZazuBoolField(FieldDefinition definition, Func<Type, object> serviceLocatorFunc)
+            : base(definition, serviceLocatorFunc) { }
 
-        protected override void SetStringValue(string value)
+        public override void SetStringValue(string value)
         {
             bool b;
             if (!string.IsNullOrWhiteSpace(value) && bool.TryParse(value, out b))
@@ -17,12 +19,11 @@ namespace NZazu.Fields
                 Value = null;
         }
 
-        protected override string GetStringValue()
+        public override string GetStringValue()
         {
             return Value?.ToString() ?? string.Empty;
         }
 
-        public override string Type => "bool";
         // ReSharper disable once AccessToStaticMemberViaDerivedType
         public override DependencyProperty ContentProperty => CheckBox.IsCheckedProperty;
 
@@ -30,8 +31,8 @@ namespace NZazu.Fields
         {
             return new CheckBox
             {
-                Content = Hint,
-                ToolTip = Description,
+                Content = Definition.Hint,
+                ToolTip = Definition.Description,
                 IsChecked = null,
                 IsThreeState = true,
                 VerticalContentAlignment = VerticalAlignment.Center

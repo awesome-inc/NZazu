@@ -44,7 +44,6 @@ namespace NZazu.Fields
             var field = sut.CreateField(new FieldDefinition { Key = "test", Type = fieldType, Description = "test" });
 
             field.Should().NotBeNull();
-            field.Type.Should().Be(fieldType ?? "label"); // because of the fallback in case of null
 
             var control = field.ValueControl;
             control.Should().BeOfType(controlType);
@@ -58,6 +57,8 @@ namespace NZazu.Fields
 
             var fld = sut.CreateField(new FieldDefinition { Key = "test", Type = "location" });
             fld.ValueControl.Should().BeOfType<GeoLocationBox>();
+
+            ((GeoLocationBox)fld.ValueControl).GeoLocationSupport.Should().NotBeNull();
         }
 
         [Test]
@@ -71,7 +72,6 @@ namespace NZazu.Fields
             var field = sut.CreateField(new FieldDefinition { Key = "test", Type = fieldType, Description = description });
 
             field.Should().NotBeNull();
-            field.Type.Should().Be(fieldType ?? "label"); // because of the fallback in case of null
 
             var control = field.ValueControl;
             control.Should().BeOfType(controlType);
@@ -92,7 +92,6 @@ namespace NZazu.Fields
                 });
 
             field.Should().NotBeNull();
-            field.Type.Should().Be("label", because: "the fallback is label");
             // because of the fallback in case of null
 
             var control = field.ValueControl;
@@ -110,7 +109,11 @@ namespace NZazu.Fields
             var check = new RequiredCheck();
             checkFactory.CreateCheck(checkDefinition, Arg.Any<Func<FormData>>(), Arg.Any<INZazuTableDataSerializer>(), Arg.Any<int>()).Returns(check);
 
-            var sut = new NZazuFieldFactory(behaviorFactory, checkFactory, serializer);
+            var sut = new NZazuFieldFactory();
+            sut.Use(behaviorFactory);
+            sut.Use(checkFactory);
+            sut.Use(serializer);
+
             var fieldDefinition = new FieldDefinition { Key = "test", Type = "string", Checks = new[] { checkDefinition } };
             var field = (NZazuField)sut.CreateField(fieldDefinition);
 
@@ -134,7 +137,10 @@ namespace NZazu.Fields
             checkFactory.CreateCheck(checkDefinition1, Arg.Any<Func<FormData>>(), Arg.Any<INZazuTableDataSerializer>(), Arg.Any<int>()).Returns(check1);
             checkFactory.CreateCheck(checkDefinition2, Arg.Any<Func<FormData>>(), Arg.Any<INZazuTableDataSerializer>(), Arg.Any<int>()).Returns(check2);
 
-            var sut = new NZazuFieldFactory(behaviorFactory, checkFactory, serializer);
+            var sut = new NZazuFieldFactory();
+            sut.Use(behaviorFactory);
+            sut.Use(checkFactory);
+            sut.Use(serializer);
 
             var fieldDefinition = new FieldDefinition
             {
@@ -159,14 +165,14 @@ namespace NZazu.Fields
             var sut = new NZazuFieldFactory();
             var fieldDefinition = new FieldDefinition { Key = "test", Type = "string" };
             var field = (NZazuField)sut.CreateField(fieldDefinition);
-            field.Settings.Should().NotBeNull();
-            field.Settings.Should().BeEmpty();
+            field.Definition.Settings.Should().NotBeNull();
+            field.Definition.Settings.Should().BeEmpty();
 
             var settings = new Dictionary<string, string> { { "key", "value" } };
             fieldDefinition.Settings = settings;
 
             field = (NZazuField)sut.CreateField(fieldDefinition);
-            field.Settings.Should().BeEquivalentTo(settings);
+            field.Definition.Settings.Should().BeEquivalentTo(settings);
         }
 
         [Test]
@@ -175,7 +181,7 @@ namespace NZazu.Fields
             // because view has the resolver and attaches the behavior
             var sut = new NZazuFieldFactory();
 #pragma warning disable 618
-            var field = sut.CreateField(
+            var field = (NZazuField)sut.CreateField(
                 new FieldDefinition
                 {
                     Key = "test",
@@ -184,7 +190,7 @@ namespace NZazu.Fields
                 });
             field.Should().NotBeNull();
 #pragma warning restore 618
-            field.Behaviors.Count.Should().Be(1);
+            field.Behaviors.Count().Should().Be(1);
         }
 
         [Test]
@@ -204,10 +210,10 @@ namespace NZazu.Fields
                 }
             };
 
-            var field = sut.CreateField(fieldDef);
+            var field = (NZazuField)sut.CreateField(fieldDef);
             field.Should().NotBeNull();
             field.Behaviors.Should().NotBeNull();
-            field.Behaviors.Count.Should().Be(3);
+            field.Behaviors.Count().Should().Be(3);
         }
 
         [Test]
@@ -228,10 +234,10 @@ namespace NZazu.Fields
                 }
             };
 
-            var field = sut.CreateField(fieldDef);
+            var field = (NZazuField)sut.CreateField(fieldDef);
             field.Should().NotBeNull();
             field.Behaviors.Should().NotBeNull();
-            field.Behaviors.Count.Should().Be(3);
+            field.Behaviors.Count().Should().Be(3);
         }
 
         [Test]
@@ -263,7 +269,7 @@ namespace NZazu.Fields
 
             field.Should().NotBeNull();
 
-            field.Fields.Should().HaveCount(fieldDefinition.Fields.Length);
+            field.Fields.Should().HaveCount(fieldDefinition.Fields.Count());
         }
 
         [Test]
@@ -310,22 +316,24 @@ namespace NZazu.Fields
             var checkFactory = Substitute.For<ICheckFactory>();
             var serializer = Substitute.For<INZazuTableDataSerializer>();
 
-#pragma warning disable 618
             var behaviorDefinition = new BehaviorDefinition { Name = "Empty" };
             var fieldDefintion = new FieldDefinition { Key = "a", Type = "string", Behaviors = new[] { behaviorDefinition } };
             behaviorFactory.CreateFieldBehavior(behaviorDefinition).Returns(behavior);
-#pragma warning restore 618
 
 
             // make sure an attach happens
-            var sut = new NZazuFieldFactory(behaviorFactory, checkFactory, serializer);
+            var sut = new NZazuFieldFactory();
+            sut.Use(behaviorFactory);
+            sut.Use(checkFactory);
+            sut.Use(serializer);
+
             var fld1 = sut.CreateField(fieldDefintion);
 
             behaviorFactory.Received(1).CreateFieldBehavior(behaviorDefinition);
             behavior.Received(1).AttachTo(Arg.Any<INZazuWpfField>(), Arg.Any<INZazuWpfView>());
             behavior.ClearReceivedCalls();
 
-            fld1.DisposeField();
+            fld1.Dispose();
 
             // now lets create a ner form and detach the existing behavior
             behavior.ReceivedWithAnyArgs(1).Detach();
@@ -345,9 +353,12 @@ namespace NZazu.Fields
             var serializer = Substitute.For<INZazuTableDataSerializer>();
 
             // Append value to "StringValue" prop on each behaviour to simulate execution of behaviours
-            behavior1.When(x => x.AttachTo(Arg.Any<INZazuWpfField>(), Arg.Any<INZazuWpfView>())).Do(x => ((INZazuWpfField)x.Args()[0]).StringValue += "behavior 1 executed!");
-            behavior2.When(x => x.AttachTo(Arg.Any<INZazuWpfField>(), Arg.Any<INZazuWpfView>())).Do(x => ((INZazuWpfField)x.Args()[0]).StringValue += "|behavior 2 executed!");
-            behavior3.When(x => x.AttachTo(Arg.Any<INZazuWpfField>(), Arg.Any<INZazuWpfView>())).Do(x => ((INZazuWpfField)x.Args()[0]).StringValue += "|behavior 3 executed!");
+            behavior1.When(x => x.AttachTo(Arg.Any<INZazuWpfField>(), Arg.Any<INZazuWpfView>()))
+                .Do(x => ((INZazuWpfField)x.Args()[0]).SetStringValue(((INZazuWpfField)x.Args()[0]).GetStringValue() + "behavior 1 executed!"));
+            behavior2.When(x => x.AttachTo(Arg.Any<INZazuWpfField>(), Arg.Any<INZazuWpfView>()))
+                .Do(x => ((INZazuWpfField)x.Args()[0]).SetStringValue(((INZazuWpfField)x.Args()[0]).GetStringValue() + "|behavior 2 executed!"));
+            behavior3.When(x => x.AttachTo(Arg.Any<INZazuWpfField>(), Arg.Any<INZazuWpfView>()))
+                .Do(x => ((INZazuWpfField)x.Args()[0]).SetStringValue(((INZazuWpfField)x.Args()[0]).GetStringValue() + "|behavior 3 executed!"));
 
             var fieldDefintion = new FieldDefinition
             {
@@ -366,11 +377,14 @@ namespace NZazu.Fields
             behaviorFactory.CreateFieldBehavior(fieldDefintion.Behaviors.FirstOrDefault(b => b.Name == "behaviorDefinition3")).Returns(behavior3);
 
             // make sure an attach happens
-            var sut = new NZazuFieldFactory(behaviorFactory, checkFactory, serializer);
+            var sut = new NZazuFieldFactory();
+            sut.Use(behaviorFactory);
+            sut.Use(checkFactory);
+            sut.Use(serializer);
             var fld1 = sut.CreateField(fieldDefintion);
 
             // Check if behaviours were executed
-            fld1.StringValue.Should().Be("behavior 1 executed!|behavior 2 executed!|behavior 3 executed!");
+            fld1.GetStringValue().Should().Be("behavior 1 executed!|behavior 2 executed!|behavior 3 executed!");
 
             //behavior1.When(x => x.AttachTo(fld1, Arg.Any<INZazuWpfView>())).Do(x => fld1.StringValue = "behaviorDefinition1");
             behavior1.Received(1).AttachTo(Arg.Any<INZazuWpfField>(), Arg.Any<INZazuWpfView>());
@@ -384,7 +398,7 @@ namespace NZazu.Fields
             behavior3.Received(1).AttachTo(Arg.Any<INZazuWpfField>(), Arg.Any<INZazuWpfView>());
             behavior3.ClearReceivedCalls();
 
-            fld1.DisposeField();
+            fld1.Dispose();
 
             // now lets create a ner form and detach the existing behavior
             behavior1.ReceivedWithAnyArgs(1).Detach();

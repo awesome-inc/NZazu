@@ -1,11 +1,14 @@
 using System;
+using System.Globalization;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using FluentAssertions;
 using NEdifis.Attributes;
 using NUnit.Framework;
 using NZazu.Contracts;
+using NZazu.Extensions;
 
 namespace NZazu.Fields
 {
@@ -14,23 +17,28 @@ namespace NZazu.Fields
     // ReSharper disable InconsistentNaming
     internal class NZazuBoolField_Should
     {
+        private object ServiceLocator(Type type)
+        {
+            if (type == typeof(IValueConverter)) return NoExceptionsConverter.Instance;
+            if (type == typeof(IFormatProvider)) return CultureInfo.InvariantCulture;
+            throw new NotSupportedException($"Cannot lookup {type.Name}");
+        }
+
         [Test]
         [STAThread]
         public void Be_Creatable()
         {
-            var sut = new NZazuBoolField(new FieldDefinition { Key = "bool01" });
+            var sut = new NZazuBoolField(new FieldDefinition { Key = "bool01" },ServiceLocator);
 
             sut.Should().NotBeNull();
             sut.Should().BeAssignableTo<INZazuWpfField>();
-
-            sut.Type.Should().Be("bool");
         }
 
         [Test]
         [STAThread]
         public void Not_Create_Empty_Label()
         {
-            var sut = new NZazuBoolField(new FieldDefinition { Key = "bool01" });
+            var sut = new NZazuBoolField(new FieldDefinition { Key = "bool01" },ServiceLocator);
             sut.LabelControl.Should().BeNull();
         }
 
@@ -38,79 +46,77 @@ namespace NZazu.Fields
         [STAThread]
         public void Create_Label_Matching_Prompt()
         {
-            var sut = new NZazuBoolField(new FieldDefinition { Key = "bool01" })
-            {
-                Prompt = "superhero"
-            };
+            var sut = new NZazuBoolField(new FieldDefinition {Key = "bool01", Prompt = "superhero"},ServiceLocator);
 
             var label = (Label)sut.LabelControl;
             label.Should().NotBeNull();
-            label.Content.Should().Be(sut.Prompt);
+            label.Content.Should().Be(sut.Definition.Prompt);
         }
 
         [Test]
         [STAThread]
         public void Create_ValueControl_Matching_Description()
         {
-            var sut = new NZazuBoolField(new FieldDefinition { Key = "bool01" })
+            var sut = new NZazuBoolField(new FieldDefinition
             {
+                Key = "bool01",
                 Hint = "superhero",
                 Description = "check this if you are a registered superhero"
-            };
+            },ServiceLocator);
 
             var label = (CheckBox)sut.ValueControl;
             label.Should().NotBeNull();
-            label.Content.Should().Be(sut.Hint);
-            label.ToolTip.Should().Be(sut.Description);
+            label.Content.Should().Be(sut.Definition.Hint);
+            label.ToolTip.Should().Be(sut.Definition.Description);
         }
 
         [Test]
         [STAThread]
         public void Create_ValueControl_Even_If_Empty_Hint()
         {
-            var sut = new NZazuBoolField(new FieldDefinition { Key = "bool01" });
+            var sut = new NZazuBoolField(new FieldDefinition { Key = "bool01" },ServiceLocator);
 
             var label = (CheckBox)sut.ValueControl;
             label.Should().NotBeNull();
-            label.Content.Should().Be(sut.Hint);
+            label.Content.Should().Be(sut.Definition.Hint);
         }
 
         [Test]
         [STAThread]
         public void Get_Set_Value_should_propagate_to_ValueControl()
         {
-            var sut = new NZazuBoolField(new FieldDefinition { Key = "bool01" });
-            sut.StringValue.Should().BeEmpty();
+            var sut = new NZazuBoolField(new FieldDefinition { Key = "bool01" },ServiceLocator);
+            sut.GetStringValue().Should().BeEmpty();
             var checkBox = (CheckBox)sut.ValueControl;
 
             // set
             sut.Value = true;
             checkBox.IsChecked.Should().Be(true);
-            sut.StringValue.Should().Be("True");
+            sut.GetStringValue().Should().Be("True");
 
-            sut.StringValue = "false";
+            sut.SetStringValue("false");
             checkBox.IsChecked.Should().Be(false);
-            sut.StringValue.Should().Be("False");
+            sut.GetStringValue().Should().Be("False");
 
-            sut.StringValue = "foobar";
+            sut.SetStringValue("foobar");
             checkBox.IsChecked.Should().NotHaveValue();
 
             // get
             checkBox.IsChecked = true;
-            sut.StringValue.Should().Be("True");
+            sut.GetStringValue().Should().Be("True");
 
             checkBox.IsChecked = false;
-            sut.StringValue.Should().Be("False");
+            sut.GetStringValue().Should().Be("False");
 
             checkBox.IsChecked = null;
-            sut.StringValue.Should().BeEmpty();
+            sut.GetStringValue().Should().BeEmpty();
         }
 
         [Test]
         [STAThread]
         public void Support_ThreeState_by_default()
         {
-            var sut = new NZazuBoolField(new FieldDefinition { Key = "bool01" });
+            var sut = new NZazuBoolField(new FieldDefinition { Key = "bool01" },ServiceLocator);
 
             ((CheckBox)sut.ValueControl).IsThreeState.Should().BeTrue();
         }
@@ -119,7 +125,7 @@ namespace NZazu.Fields
         [STAThread]
         public void Center_checkboxes_vertically()
         {
-            var sut = new NZazuBoolField(new FieldDefinition { Key = "bool01" });
+            var sut = new NZazuBoolField(new FieldDefinition { Key = "bool01" },ServiceLocator);
             var checkBox = (CheckBox)sut.ValueControl;
             checkBox.VerticalContentAlignment.Should().Be(VerticalAlignment.Center);
         }

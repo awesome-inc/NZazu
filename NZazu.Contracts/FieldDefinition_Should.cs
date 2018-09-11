@@ -25,16 +25,14 @@ namespace NZazu.Contracts
             var sut = new FieldDefinition();
 
             sut.Should().NotBeNull();
-            sut.Settings.Should().BeNull();
+            sut.Settings.Should().BeEmpty();
         }
 
         [Test]
         public void Not_Have_Behavior()
         {
             var sut = new FieldDefinition();
-#pragma warning disable 618
-            sut.Behaviors.Should().BeNull();
-#pragma warning restore 618
+            sut.Behaviors.Should().BeEmpty();
         }
 
         [Test]
@@ -43,10 +41,8 @@ namespace NZazu.Contracts
             var sut = new FieldDefinition();
             var behavior1 = Substitute.For<BehaviorDefinition>();
 
-#pragma warning disable 618
             sut.Behaviors = new[] { behavior1 };
             sut.Behaviors.Should().NotBeNull();
-#pragma warning restore 618
         }
 
         [Test]

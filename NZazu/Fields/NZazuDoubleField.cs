@@ -57,18 +57,18 @@ namespace NZazu.Fields
 
         #endregion
 
-        public NZazuDoubleField(FieldDefinition definition) : base(definition) { }
+        public NZazuDoubleField(FieldDefinition definition, Func<Type, object> serviceLocatorFunc)
+            : base(definition, serviceLocatorFunc) { }
 
-        public override string Type => "double";
         public override DependencyProperty ContentProperty => TextBox.TextProperty;
 
         protected override Control CreateValueControl()
         {
-            var result = new TextBox { ToolTip = Description };
+            var result = new TextBox { ToolTip = Definition.Description };
             return result;
         }
 
-        protected override void SetStringValue(string value)
+        public override void SetStringValue(string value)
         {
             double result;
             if (!string.IsNullOrWhiteSpace(value) &&
@@ -78,14 +78,14 @@ namespace NZazu.Fields
                 Value = null;
         }
 
-        protected override string GetStringValue()
+        public override string GetStringValue()
         {
             return Value.HasValue ? Value.Value.ToString(FormatProvider) : string.Empty;
         }
 
         protected override Binding DecorateBinding(Binding binding)
         {
-            var format = Settings.ContainsKey("Format") ? Settings["Format"] : "G";
+            var format = Definition.Settings.ContainsKey("Format") ? Definition.Settings["Format"] : "G";
             var decorated = base.DecorateBinding(binding);
             decorated.Converter = new DoubleToStringConverter(format);
             return decorated;

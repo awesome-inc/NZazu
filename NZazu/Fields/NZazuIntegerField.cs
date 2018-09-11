@@ -1,3 +1,4 @@
+using System;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
@@ -8,9 +9,9 @@ namespace NZazu.Fields
 {
     public class NZazuIntegerField : NZazuField<int?>
     {
-        public NZazuIntegerField(FieldDefinition definition) : base(definition) { }
+        public NZazuIntegerField(FieldDefinition definition, Func<Type, object> serviceLocatorFunc)
+            : base(definition, serviceLocatorFunc) { }
 
-        public override string Type => "int";
         public override DependencyProperty ContentProperty => TextBox.TextProperty;
 
         protected override Binding DecorateBinding(Binding binding)
@@ -21,19 +22,18 @@ namespace NZazu.Fields
 
         protected override Control CreateValueControl()
         {
-            return new TextBox { ToolTip = Description };
+            return new TextBox { ToolTip = Definition.Description };
         }
 
-        protected override void SetStringValue(string value)
+        public override void SetStringValue(string value)
         {
-            int result;
-            if (!string.IsNullOrWhiteSpace(value) && int.TryParse(value, out result)) 
+            if (!string.IsNullOrWhiteSpace(value) && int.TryParse(value, out var result))
                 Value = result;
-            else 
+            else
                 Value = null;
         }
 
-        protected override string GetStringValue()
+        public override string GetStringValue()
         {
             return Value?.ToString(CultureInfo.InvariantCulture) ?? string.Empty;
         }

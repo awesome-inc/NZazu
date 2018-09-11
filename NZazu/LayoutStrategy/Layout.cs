@@ -15,7 +15,9 @@ namespace NZazu.LayoutStrategy
             _errorTemplate = errorTemplate ?? GetDefaultErrorTemplate();
         }
 
-        public abstract void DoLayout(ContentControl contentControl, IEnumerable<INZazuWpfField> fields, 
+        public abstract void DoLayout(
+            ContentControl contentControl, 
+            IEnumerable<INZazuWpfField> fields, 
             IResolveLayout resolveLayout = null);
 
         protected void SetErrorTemplate(Control valueElement)
@@ -23,8 +25,10 @@ namespace NZazu.LayoutStrategy
             Validation.SetErrorTemplate(valueElement, _errorTemplate);
         }
 
-        protected void ProcessGroupField(IResolveLayout resolveLayout,
-            Control control, INZazuWpfField field)
+        protected void ProcessGroupField(
+            IResolveLayout resolveLayout,
+            Control control, 
+            INZazuWpfField field)
         {
             var contentControl = control as ContentControl;
             var groupField = field as INZazuWpfFieldContainer;

@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 
 namespace NZazu.Contracts
@@ -12,7 +14,7 @@ namespace NZazu.Contracts
             where TValue : class
         {
             if (source == null)
-                source = new Dictionary<TKey,TValue>();
+                source = new Dictionary<TKey, TValue>();
 
             if (source.ContainsKey(key))
                 source[key] = value;
@@ -90,6 +92,30 @@ namespace NZazu.Contracts
             }
             return anyChanges;
         }
+
+        public static string Get(this Dictionary<string, string> settings, string key, string defaultValue = null)
+        {
+            settings.TryGetValue(key, out var value);
+            return value ?? defaultValue;
+        }
+
+        public static T? Get<T>(this Dictionary<string, string> settings, string key) 
+            where T : struct
+        {
+            var str = settings.Get(key);
+
+            try
+            {
+                if (str == null) return null;
+                return (T)Convert.ChangeType(str, typeof(T), CultureInfo.InvariantCulture);
+            }
+            catch (Exception)
+            {
+                Trace.TraceWarning($"Setting {key} with value '{str ?? "<null>"}' has the wrong type. A {typeof(T).Name} is expected.");
+                return null;
+            }
+        }
+
 
     }
 }

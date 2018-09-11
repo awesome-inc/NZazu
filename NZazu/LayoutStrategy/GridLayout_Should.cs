@@ -1,14 +1,17 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.Linq;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using FluentAssertions;
 using NEdifis.Attributes;
 using NSubstitute;
 using NUnit.Framework;
 using NZazu.Contracts;
+using NZazu.Extensions;
 using NZazu.Fields;
 
 namespace NZazu.LayoutStrategy
@@ -18,6 +21,14 @@ namespace NZazu.LayoutStrategy
     // ReSharper disable InconsistentNaming
     internal class GridLayout_Should
     {
+        private object ServiceLocator(Type type)
+        {
+            if (type == typeof(IValueConverter)) return NoExceptionsConverter.Instance;
+            if (type == typeof(IFormatProvider)) return CultureInfo.InvariantCulture;
+            if (type == typeof(INZazuWpfFieldFactory)) return new NZazuFieldFactory();
+            throw new NotSupportedException($"Cannot lookup {type.Name}");
+        }
+
         private Application application;
 
         [SetUp]
@@ -48,9 +59,9 @@ namespace NZazu.LayoutStrategy
             var container = new ContentControl();
             var fields = new NZazuField[]
             {
-                new NZazuLabelField(new FieldDefinition {Key = "label01"}) { Prompt="label prompt", Description = "label text"},
-                new NZazuTextField(new FieldDefinition {Key = "text01"}) { Prompt="text prompt", Description = "text tooltip"},
-                new NZazuBoolField(new FieldDefinition {Key = "bool01"}) { Prompt="bool prompt", Description = "checkbox tooltip"}
+                new NZazuLabelField(new FieldDefinition {Key = "label01",Prompt="label prompt", Description = "label text"}, ServiceLocator),
+                new NZazuTextField(new FieldDefinition {Key = "text01", Prompt="text prompt", Description = "text tooltip"}, ServiceLocator),
+                new NZazuBoolField(new FieldDefinition {Key = "bool01",Prompt="bool prompt", Description = "checkbox tooltip"}, ServiceLocator)
             };
             sut.DoLayout(container, fields);
 
@@ -83,9 +94,9 @@ namespace NZazu.LayoutStrategy
             var container = new ContentControl();
             var fields = new NZazuField[]
             {
-                new NZazuLabelField(new FieldDefinition {Key = "label01"}),
-                new NZazuTextField(new FieldDefinition {Key = "text01"}),
-                new NZazuBoolField(new FieldDefinition {Key = "bool01"})
+                new NZazuLabelField(new FieldDefinition {Key = "label01"}, ServiceLocator),
+                new NZazuTextField(new FieldDefinition {Key = "text01"}, ServiceLocator),
+                new NZazuBoolField(new FieldDefinition {Key = "bool01"}, ServiceLocator)
             };
 
             sut.DoLayout(container, fields);
@@ -108,9 +119,9 @@ namespace NZazu.LayoutStrategy
             var container = new ContentControl();
             var fields = new NZazuField[]
             {
-                new NZazuLabelField(new FieldDefinition {Key = "label01"}),
-                new NZazuTextField(new FieldDefinition {Key = "text01"}),
-                new NZazuBoolField(new FieldDefinition {Key = "bool01"})
+                new NZazuLabelField(new FieldDefinition {Key = "label01"}, ServiceLocator),
+                new NZazuTextField(new FieldDefinition {Key = "text01"}, ServiceLocator),
+                new NZazuBoolField(new FieldDefinition {Key = "bool01"}, ServiceLocator)
             };
 
             fields
@@ -131,25 +142,25 @@ namespace NZazu.LayoutStrategy
         [STAThread]
         public void Recurse_on_group_fields()
         {
-            var sut = new GridLayout();//null, resolveLayout);
+            var sut = new GridLayout();
 
             var container = new ContentControl();
             var fields1 = new NZazuField[]
             {
-                new NZazuLabelField(new FieldDefinition {Key = "label01",Prompt = "Hello",Description = "Hello"}),
-                new NZazuTextField(new FieldDefinition {Key = "text01",Prompt = "Hello",Description = "Hello"}),
-                new NZazuBoolField(new FieldDefinition {Key = "bool01",Prompt = "Hello",Description = "Hello"})
+                new NZazuLabelField(new FieldDefinition {Key = "label01",Prompt = "Hello",Description = "Hello"}, ServiceLocator),
+                new NZazuTextField(new FieldDefinition {Key = "text01",Prompt = "Hello",Description = "Hello"}, ServiceLocator),
+                new NZazuBoolField(new FieldDefinition {Key = "bool01",Prompt = "Hello",Description = "Hello"}, ServiceLocator)
             };
             var fields2 = new NZazuField[]
             {
-                new NZazuLabelField(new FieldDefinition {Key = "label02",Prompt = "Hello",Description = "Hello"}),
-                new NZazuTextField(new FieldDefinition {Key = "text02",Prompt = "Hello",Description = "Hello"}),
-                new NZazuBoolField(new FieldDefinition {Key = "bool02",Prompt = "Hello",Description = "Hello"})
+                new NZazuLabelField(new FieldDefinition {Key = "label02",Prompt = "Hello",Description = "Hello"}, ServiceLocator),
+                new NZazuTextField(new FieldDefinition {Key = "text02",Prompt = "Hello",Description = "Hello"}, ServiceLocator),
+                new NZazuBoolField(new FieldDefinition {Key = "bool02",Prompt = "Hello",Description = "Hello"}, ServiceLocator)
             };
             var groups = new[]
             {
-                new NZazuGroupField(new FieldDefinition {Key = "stack01"}) {  Fields = fields1 },
-                new NZazuGroupField(new FieldDefinition {Key = "group01"}) { Fields = fields2 }
+                new NZazuGroupField(new FieldDefinition {Key = "stack01"}, ServiceLocator) {  Fields = fields1 },
+                new NZazuGroupField(new FieldDefinition {Key = "group01"}, ServiceLocator) { Fields = fields2 }
             };
 
             sut.DoLayout(container, groups);
@@ -189,20 +200,20 @@ namespace NZazu.LayoutStrategy
             var container = new ContentControl();
             var fields1 = new NZazuField[]
             {
-                new NZazuLabelField(new FieldDefinition {Key = "label01"}),
-                new NZazuTextField(new FieldDefinition {Key = "text01"}),
-                new NZazuBoolField(new FieldDefinition {Key="bool01"})
+                new NZazuLabelField(new FieldDefinition {Key = "label01"}, ServiceLocator),
+                new NZazuTextField(new FieldDefinition {Key = "text01"}, ServiceLocator),
+                new NZazuBoolField(new FieldDefinition {Key="bool01"}, ServiceLocator)
             };
             var fields2 = new NZazuField[]
             {
-                new NZazuLabelField(new FieldDefinition {Key="label01"})  { Description = "label2"},
-                new NZazuTextField(new FieldDefinition {Key="text01"}),
-                new NZazuBoolField(new FieldDefinition {Key="bool01"})
+                new NZazuLabelField(new FieldDefinition {Key="label01", Description = "label2"}, ServiceLocator),
+                new NZazuTextField(new FieldDefinition {Key="text01"}, ServiceLocator),
+                new NZazuBoolField(new FieldDefinition {Key="bool01"}, ServiceLocator)
             };
             var groups = new[]
             {
-                new NZazuGroupField(new FieldDefinition {Key="stack01"}) { Fields = fields1, Layout = "stack"},
-                new NZazuGroupField(new FieldDefinition {Key="grid01"}) { Fields = fields2, Layout = "grid"}
+                new NZazuGroupField(new FieldDefinition {Key="stack01"}, ServiceLocator) { Fields = fields1, Layout = "stack"},
+                new NZazuGroupField(new FieldDefinition {Key="grid01"}, ServiceLocator) { Fields = fields2, Layout = "grid"}
             };
 
             sut.DoLayout(container, groups, resolveLayout);

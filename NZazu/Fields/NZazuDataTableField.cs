@@ -96,7 +96,7 @@ namespace NZazu.Fields
                 RemoveShortcutsFrom(control);
                 ((DynamicDataTable)ValueControl).LayoutGrid.Children.Remove(control);
                 var elemToDel = _fields.First(x => Equals(x.Value.ValueControl, control));
-                elemToDel.Value.DisposeField();
+                elemToDel.Value.Dispose();
                 _fields.Remove(elemToDel.Key);
             });
 
@@ -186,14 +186,11 @@ namespace NZazu.Fields
         private INZazuTableDataSerializer _serializer;
         private INZazuWpfFieldFactory _factory;
 
-        public NZazuDataTableField(FieldDefinition definition) : base(definition) { }
-
-        public override NZazuField Initialize(Func<Type, object> propertyLookup)
+        public NZazuDataTableField(FieldDefinition definition, Func<Type, object> serviceLocatorFunc)
+            : base(definition, serviceLocatorFunc)
         {
-            _serializer = (INZazuTableDataSerializer)propertyLookup(typeof(INZazuTableDataSerializer));
-            _factory = (INZazuWpfFieldFactory)propertyLookup(typeof(INZazuWpfFieldFactory));
-
-            return base.Initialize(propertyLookup);
+            _serializer = (INZazuTableDataSerializer)serviceLocatorFunc(typeof(INZazuTableDataSerializer));
+            _factory = (INZazuWpfFieldFactory)serviceLocatorFunc(typeof(INZazuWpfFieldFactory));
         }
 
         #region buttons
@@ -254,14 +251,12 @@ namespace NZazu.Fields
 
         #endregion
 
-        public override bool IsEditable => true;
-
-        protected override void SetStringValue(string value)
+        public override void SetStringValue(string value)
         {
             UpdateGridValues(value);
         }
 
-        protected override string GetStringValue()
+        public override string GetStringValue()
         {
             return GetGridValues();
         }
@@ -276,7 +271,7 @@ namespace NZazu.Fields
                         y => y.Key == x.Name.Split(new[] { "__" }, StringSplitOptions.RemoveEmptyEntries)[0]) != null)
                 .ToDictionary(
                     child => child.Name,
-                    child => _fields.Single(x => Equals(x.Value.ValueControl, child)).Value.StringValue
+                    child => _fields.Single(x => Equals(x.Value.ValueControl, child)).Value.GetStringValue()
                  );
 
             return _serializer.Serialize(data);
@@ -317,7 +312,7 @@ namespace NZazu.Fields
                 var kv = newDict.FirstOrDefault(x => x.Key == field.Key);
                 if (string.IsNullOrEmpty(kv.Key)) continue;
 
-                field.Value.StringValue = kv.Value;
+                field.Value.SetStringValue(kv.Value);
             }
 
             if (layout.RowDefinitions.Count == 1)
@@ -325,7 +320,6 @@ namespace NZazu.Fields
         }
 
         public override DependencyProperty ContentProperty => null;
-        public override string Type => "datatable";
 
         protected override Control CreateValueControl()
         {
@@ -356,7 +350,7 @@ namespace NZazu.Fields
                     Background = Brushes.Silver,
                     FontWeight = FontWeights.Bold
                 };
-                if (string.IsNullOrEmpty(Description)) lbl.ToolTip = field.Prompt;
+                if (string.IsNullOrEmpty(Definition.Description)) lbl.ToolTip = field.Prompt;
                 grid.Children.Add(lbl);
                 Grid.SetRow(lbl, 0);
                 Grid.SetColumn(lbl, column); // the last one ;)
@@ -409,13 +403,13 @@ namespace NZazu.Fields
             return result;
         }
 
-        public override void DisposeField()
+        public override void Dispose()
         {
             foreach (var field in _fields.Values)
             {
-                field.DisposeField();
+                field.Dispose();
             }
-            base.DisposeField();
+            base.Dispose();
         }
     }
 }

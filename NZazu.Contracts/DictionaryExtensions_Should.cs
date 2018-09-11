@@ -5,20 +5,20 @@ using NUnit.Framework;
 
 namespace NZazu.Contracts
 {
-    [TestFixtureFor(typeof (DictionaryExtensions))]
+    [TestFixtureFor(typeof(DictionaryExtensions))]
     // ReSharper disable once InconsistentNaming
     internal class DictionaryExtensions_Should
     {
         [Test]
         public void Add_Or_Replace()
         {
-              var source = new Dictionary<string, string> { { "name", "thomas" }, { "street", "123 Ave" }, { "nullthing", null } };
+            var source = new Dictionary<string, string> { { "name", "thomas" }, { "street", "123 Ave" }, { "nullthing", null } };
 
             source.AddOrReplace("name", "horst").Should().Contain("name", "horst");
             source.AddOrReplace("street", "456 Ave").Should().Contain("street", "456 Ave");
 
             // handle null to return new dict with the parameter
-            ((Dictionary<string, string>) null).AddOrReplace("name", "horst").Should().Contain("name", "horst");
+            ((Dictionary<string, string>)null).AddOrReplace("name", "horst").Should().Contain("name", "horst");
         }
 
         [Test]
@@ -45,7 +45,7 @@ namespace NZazu.Contracts
         public void Test_Count_and_pairs_on_Equivalent()
         {
             var dict = new Dictionary<string, string>();
-            var dict2 = new Dictionary<string, string> { {"1","1"}};
+            var dict2 = new Dictionary<string, string> { { "1", "1" } };
 
             dict.Equivalent(dict2).Should().BeFalse("count differs");
 
@@ -97,6 +97,28 @@ namespace NZazu.Contracts
             dst = dst.MergedWith(src);
             dst["key"].Should().Be(src["key"]);
             dst["key2"].Should().Be("value2");
+        }
+
+        [Test]
+        public void Get_From_Dict()
+        {
+            var src = new Dictionary<string, string> { { "key", "value" } };
+            src.Get("key").Should().Be("value");
+            src.Get("foo").Should().Be(null);
+            src.Get("foo", "value2").Should().Be("value2");
+        }
+
+        [Test]
+        public void Get_Generic_From_Dict()
+        {
+            var src = new Dictionary<string, string>
+            {
+                { "key","100" },
+                { "key2","200.4" }
+            };
+            src.Get<double>("key").Should().Be(100);
+            src.Get<double>("key2").Should().Be(200.4);
+            src.Get<double>("foo").Should().Be(null);
         }
     }
 }

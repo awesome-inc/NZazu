@@ -36,7 +36,7 @@ namespace NZazu.Extensions
 
             view.SetFieldValues(input);
 
-            field.StringValue.Should().Be(value);
+            field.GetStringValue().Should().Be(value);
         }
 
         [Test]
@@ -67,7 +67,7 @@ namespace NZazu.Extensions
 
             view.SetFieldValues(input);
 
-            field.StringValue.Should().Be(value, because: "nothing can be changed");
+            field.GetStringValue().Should().Be(value, because: "nothing can be changed");
         }
 
         [Test]

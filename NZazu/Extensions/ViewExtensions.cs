@@ -13,7 +13,7 @@ namespace NZazu.Extensions
             {
                 if (!view.TryGetField(kvp.Key, out var field))
                     continue;
-                field.StringValue = kvp.Value;
+                field.SetStringValue(kvp.Value);
             }
         }
 

@@ -17,21 +17,18 @@ namespace NZazu.Fields
         [STAThread]
         public void Create_ValueControl_Matching_Description()
         {
-            var sut = new NZazuLabelField(new FieldDefinition {Key="test"})
-            {
-                Description = "superhero is alive"
-            };
+            var sut = new NZazuLabelField(new FieldDefinition { Key = "key", Description = "superhero is alive" }, type => null);
 
             var label = (Label)sut.ValueControl;
             label.Should().NotBeNull();
-            label.Content.Should().Be(sut.Description);
+            label.Content.Should().Be(sut.Definition.Description);
         }
 
         [Test]
         public void Not_Create_ValueControl_On_Empty_Description()
         {
-            var sut = new NZazuLabelField(new FieldDefinition {Key="test"});
-            sut.Description.Should().BeNullOrWhiteSpace();
+            var sut = new NZazuLabelField(new FieldDefinition { Key = "key" }, type => null);
+            sut.Definition.Description.Should().BeNullOrWhiteSpace();
             var label = (Label)sut.ValueControl;
             label.Should().BeNull();
         }
@@ -39,16 +36,16 @@ namespace NZazu.Fields
         [Test]
         public void Return_null_StringValue_and_not_set_StringValue()
         {
-            var sut = new NZazuLabelField(new FieldDefinition {Key="test"});
-            sut.StringValue.Should().BeNull();
-            sut.StringValue = "foobar";
-            sut.StringValue.Should().BeNull();
+            var sut = new NZazuLabelField(new FieldDefinition { Key = "key" }, type => null);
+            sut.GetStringValue().Should().BeNull();
+            sut.SetStringValue("foobar");
+            sut.GetStringValue().Should().BeNull();
         }
 
         [Test]
         public void Not_be_Editable()
         {
-            var sut = new NZazuLabelField(new FieldDefinition {Key="test"});
+            var sut = new NZazuLabelField(new FieldDefinition { Key = "key" }, type => null);
             sut.IsEditable.Should().BeFalse();
         }
     }

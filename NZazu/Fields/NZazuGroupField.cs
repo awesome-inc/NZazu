@@ -11,37 +11,32 @@ namespace NZazu.Fields
         : NZazuField
         , INZazuWpfFieldContainer
     {
-        public NZazuGroupField(FieldDefinition definition) : base(definition) { }
+        public NZazuGroupField(FieldDefinition definition, Func<Type, object> serviceLocatorFunc)
+            : base(definition, serviceLocatorFunc) {
+            _factory = (INZazuWpfFieldFactory)serviceLocatorFunc(typeof(INZazuWpfFieldFactory));
 
-        public override bool IsEditable => false;
-        private string _stringValue;
-        private INZazuWpfFieldFactory _factory;
+            IsEditable = false;
+            CreateChildControls();
+}
+
+        private readonly INZazuWpfFieldFactory _factory;
         public override DependencyProperty ContentProperty => null;
-        public override string Type => "group";
         public string Layout { get; set; }
 
-        protected override void SetStringValue(string value) { _stringValue = value; }
-        protected override string GetStringValue() { return _stringValue; }
+        public override void SetStringValue(string value) {  }
+        public override string GetStringValue(){return null; }
+
         public IEnumerable<INZazuWpfField> Fields { get; set; }
 
         protected override Control CreateValueControl()
         {
             if (Definition == null) throw new ArgumentNullException(nameof(Definition));
 
-            Control control = string.IsNullOrEmpty(Description) 
+            Control control = string.IsNullOrEmpty(Definition.Description) 
                 ? new ContentControl { Focusable = false } 
-                : new GroupBox { Focusable = false, Header = Description };
+                : new GroupBox { Focusable = false, Header = Definition.Description };
 
             return control;
-        }
-
-        public override NZazuField Initialize(Func<Type, object> propertyLookup)
-        {
-            _factory = (INZazuWpfFieldFactory)propertyLookup(typeof(INZazuWpfFieldFactory));
-
-            CreateChildControls();
-
-            return base.Initialize(propertyLookup);
         }
 
         private void CreateChildControls()

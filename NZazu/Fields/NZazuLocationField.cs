@@ -11,35 +11,23 @@ namespace NZazu.Fields
 {
     internal class NZazuLocationField : NZazuField<NZazuCoordinate>
     {
-        private GeoLocationBox _valueControl;
-        private ISupportGeoLocationBox _geoSupport;
+        private readonly ISupportGeoLocationBox _geoSupport;
 
-        public override string Type => "location";
-
-        public NZazuLocationField(FieldDefinition definition) : base(definition) { }
-
-        public override NZazuField Initialize(Func<Type, object> propertyLookup)
+        public NZazuLocationField(FieldDefinition definition, Func<Type, object> serviceLocatorFunc)
+            : base(definition, serviceLocatorFunc)
         {
-            _geoSupport = (ISupportGeoLocationBox)propertyLookup(typeof(ISupportGeoLocationBox));
-
-            _valueControl = new GeoLocationBox
-            {
-                ToolTip = Description,
-                GeoLocationSupport = _geoSupport
-            };
-
-            return base.Initialize(propertyLookup);
+            _geoSupport = (ISupportGeoLocationBox)serviceLocatorFunc(typeof(ISupportGeoLocationBox));
         }
 
-        protected override void SetStringValue(string value)
+        public override void SetStringValue(string value)
         {
             if (!string.IsNullOrWhiteSpace(value))
             {
-                Value =_geoSupport.Parse(value);
+                Value = _geoSupport.Parse(value);
             }
         }
 
-        protected override string GetStringValue()
+        public override string GetStringValue()
         {
             if (Value == null || !Value.GetIsValid()) return string.Empty;
             // ReSharper disable PossibleInvalidOperationException
@@ -56,7 +44,11 @@ namespace NZazu.Fields
 
         protected override Control CreateValueControl()
         {
-            return _valueControl;
+            return new GeoLocationBox
+            {
+                ToolTip = Definition.Description,
+                GeoLocationSupport = _geoSupport
+            };
         }
     }
 }

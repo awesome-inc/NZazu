@@ -1,31 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Windows;
 using System.Windows.Controls;
 using NZazu.Contracts.Checks;
 
 namespace NZazu
 {
-    public interface INZazuWpfField
+    public interface INZazuWpfField: IDisposable
     {
         string Key { get; }
-        string Type { get; }
-        string Prompt { get; }
-        string Hint { get; }
-        string Description { get; }
-
-        bool IsEditable { get; }
-        string StringValue { get; set; }
-        ValueCheckResult Validate();
 
         Control LabelControl { get; }
         Control ValueControl { get; }
-        Dictionary<string, string> Settings { get; }
-        List<INZazuWpfFieldBehavior> Behaviors { get; }
-        DependencyProperty ContentProperty { get; }
+        bool IsEditable { get; }
 
-        void DisposeField();
         IEnumerable<KeyValuePair<string, string>> GetState();
+        void SetStringValue(string value);
+        string GetStringValue();
+
+        ValueCheckResult Validate();
     }
 
     public interface INZazuWpfField<T> : INZazuWpfField

@@ -17,18 +17,15 @@ namespace NZazu.Fields
         private string _customValue;
         private readonly IEnumerable<string> _values;
 
-        public NZazuImageViewerField(FieldDefinition definition) : base(definition)
+        public NZazuImageViewerField(FieldDefinition definition, Func<Type, object> serviceLocatorFunc)
+            : base(definition, serviceLocatorFunc)
         {
             _values = Definition.Values ?? Enumerable.Empty<string>();
         }
 
-
-        public override string Type => "imageViewer";
-        public override bool IsEditable => true;
-
-        protected override void SetStringValue(string value)
+        public override void SetStringValue(string value)
         {
-            var allowCustomValues = GetSetting<bool>("AllowCustomValues");
+            var allowCustomValues = Definition.Settings.Get<bool>("AllowCustomValues");
             _stringValue = value;
 
             // lets see if the value is a URI if not set the stringValue to null
@@ -61,7 +58,7 @@ namespace NZazu.Fields
                 : new BitmapImage(new Uri(value));
         }
 
-        protected override string GetStringValue()
+        public override string GetStringValue()
         {
             return _stringValue;
         }
@@ -80,7 +77,7 @@ namespace NZazu.Fields
                     BorderThickness = new Thickness(1),
                     Child = new Image
                     {
-                        ToolTip = Description,
+                        ToolTip = Definition.Description,
                         Focusable = true,
 
                     }
@@ -119,8 +116,8 @@ namespace NZazu.Fields
 
         internal void ToggleValues(bool toggleBack = false)
         {
-            var allowNullValues = GetSetting<bool>("AllowNullValues");
-            var allowCustomValues = GetSetting<bool>("AllowCustomValues");
+            var allowNullValues = Definition.Settings.Get<bool>("AllowNullValues");
+            var allowCustomValues = Definition.Settings.Get<bool>("AllowCustomValues");
 
             var options = _values.ToArray();
             if (allowCustomValues != null && allowCustomValues.Value && !string.IsNullOrEmpty(_customValue))
@@ -137,20 +134,20 @@ namespace NZazu.Fields
             // just in case no options are given (and no custom value!)
             if (options.Length == 0)
             {
-                StringValue = null;
+                SetStringValue(null);
                 return;
             }
 
             if (toggleBack)
                 if (allowNullValues != null && allowNullValues.Value && (currentValueIsAt == 0))
-                    StringValue = null;
+                    SetStringValue(null);
                 else
-                    StringValue = options[(Math.Max(currentValueIsAt, 0) + options.Length - 1) % (options.Length)];
+                    SetStringValue(options[(Math.Max(currentValueIsAt, 0) + options.Length - 1) % (options.Length)]);
             else
                 if (allowNullValues != null && allowNullValues.Value && (currentValueIsAt == options.Length - 1))
-                StringValue = null;
+                SetStringValue(null);
             else
-                StringValue = options[(currentValueIsAt + 1) % (options.Length)];
+                SetStringValue(options[(currentValueIsAt + 1) % (options.Length)]);
             //StringValue = options.Length == 0 ? null : options[(currentValueIsAt + 1) % (options.Length)];
         }
     }

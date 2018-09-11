@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace NZazu.Contracts
 {
@@ -13,15 +14,15 @@ namespace NZazu.Contracts
         public string Description { get; set; }
 
         // option
-        public string[] Values { get; set; }
+        public IEnumerable<string> Values { get; set; } = Enumerable.Empty<string>();
 
-        public CheckDefinition[] Checks { get; set; }
-        public IEnumerable<BehaviorDefinition> Behaviors { get; set; }
+        public IEnumerable<CheckDefinition> Checks { get; set; } = Enumerable.Empty<CheckDefinition>();
+        public IEnumerable<BehaviorDefinition> Behaviors { get; set; } = Enumerable.Empty<BehaviorDefinition>();
 
-        public Dictionary<string,string> Settings { get; set; }
+        public Dictionary<string, string> Settings { get; set; } = new Dictionary<string, string>();
 
         // group fields
-        public FieldDefinition[] Fields { get; set; }
+        public IEnumerable<FieldDefinition> Fields { get; set; } = Enumerable.Empty<FieldDefinition>();
         public string Layout { get; set; }
     }
 }

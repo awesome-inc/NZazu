@@ -1,3 +1,4 @@
+using System;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
@@ -9,22 +10,21 @@ namespace NZazu.Xceed
 {
     public class XceedDoubleField : NZazuField<double?>
     {
-        public XceedDoubleField(FieldDefinition definition) : base(definition) { }
+        public XceedDoubleField(FieldDefinition definition, Func<Type, object> serviceLocatorFunc)
+            : base(definition, serviceLocatorFunc) { }
 
         public override DependencyProperty ContentProperty => DoubleUpDown.ValueProperty;
 
-        public override string Type => "double";
-
         protected override Control CreateValueControl()
         {
-            var control = new DoubleUpDown { ToolTip = Description, Watermark = Hint };
-            var formatString = GetSetting("Format");
+            var control = new DoubleUpDown { ToolTip = Definition.Description, Watermark = Definition.Hint };
+            var formatString = Definition.Settings.Get("Format");
             if (!string.IsNullOrWhiteSpace(formatString))
                 control.FormatString = formatString;
             return control;
         }
 
-        protected override void SetStringValue(string value)
+        public override void SetStringValue(string value)
         {
             double result;
             if (!string.IsNullOrWhiteSpace(value)
@@ -34,7 +34,7 @@ namespace NZazu.Xceed
                 Value = null;
         }
 
-        protected override string GetStringValue()
+        public override string GetStringValue()
         {
             return Value.HasValue ? Value.Value.ToString(FormatProvider) : string.Empty;
         }

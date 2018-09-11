@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
-using System.Globalization;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
@@ -10,71 +8,63 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using NZazu.Contracts;
 using NZazu.Contracts.Checks;
-using NZazu.Extensions;
 
 namespace NZazu.Fields
 {
     public abstract class NZazuField : INZazuWpfField
     {
-        protected readonly FieldDefinition Definition;
-        protected IFormatProvider FormatProvider => CultureInfo.InvariantCulture;
+        public bool IsEditable { get; protected set; } = true;
+        public string Key { get; }
 
-        /// <summary>
-        /// override this in case you need some information from the factory like serializer or the factory itself
-        /// </summary>
-        /// <param name="propertyLookup"></param>
-        public virtual NZazuField Initialize(Func<Type, object> propertyLookup) => this;
+        public FieldDefinition Definition { get; }
+        protected internal IEnumerable<INZazuWpfFieldBehavior> Behaviors { get; set; } = new List<INZazuWpfFieldBehavior>();
+        protected internal IValueCheck Check { get; set; }
 
+        #region private fields and wrapper
+
+        // lazy controls which should be loaded on first access
         private readonly Lazy<Control> _labelControl;
         private readonly Lazy<Control> _valueControl;
-        private readonly object _lockObj = new object();
-
-        public abstract bool IsEditable { get; }
-        public string StringValue
-        {
-            get => GetStringValue();
-            set => SetStringValue(value);
-        }
-
-        protected abstract void SetStringValue(string value);
-        protected abstract string GetStringValue();
-        public abstract DependencyProperty ContentProperty { get; }
-
-        public abstract string Type { get; }
-        public string Key { get; }
-        public string Prompt { get; protected internal set; }
-        public string Hint { get; protected internal set; }
-        public string Description { get; protected internal set; }
-
         public Control LabelControl => _labelControl.Value;
         public Control ValueControl => _valueControl.Value;
-        public Dictionary<string, string> Settings { get; }
-        [Obsolete("Please choose '" + nameof(Behaviors) + "' instead")]
-        public INZazuWpfFieldBehavior Behavior { get; set; }
-        public List<INZazuWpfFieldBehavior> Behaviors { get; set; } = new List<INZazuWpfFieldBehavior>();
 
-        protected NZazuField(FieldDefinition definition, IValueConverter valueConverter = null)
+        protected readonly IFormatProvider FormatProvider;
+        protected readonly IValueConverter ValueConverter;
+
+        #endregion
+
+        #region abstract methods
+
+        public abstract void SetStringValue(string value);
+        public abstract string GetStringValue();
+        public abstract DependencyProperty ContentProperty { get; }
+
+        // ReSharper disable once VirtualMemberNeverOverridden.Global
+        protected virtual Control CreateLabelControl()
         {
-            if (definition == null) throw new ArgumentNullException(nameof(definition));
-            if (string.IsNullOrWhiteSpace(definition.Key)) throw new ArgumentException("key");
-            Definition = definition;
-            Key = definition.Key;
-            Description = definition.Description;
+            return !string.IsNullOrWhiteSpace(Definition.Prompt)
+                ? new Label { Content = Definition.Prompt }
+                : null;
+        }
+        protected abstract Control CreateValueControl();
+
+        #endregion
+
+        protected NZazuField(FieldDefinition definition, Func<Type, object> serviceLocatorFunc)
+        {
+            Definition = definition ?? throw new ArgumentNullException(nameof(definition));
+            if (serviceLocatorFunc == null) throw new ArgumentNullException(nameof(serviceLocatorFunc));
 
             _labelControl = new Lazy<Control>(CreateLabelControl);
-            _valueControl = new Lazy<Control>(() =>
-            {
-                var ctrl = CreateValueControl();
-                ApplySettings(ctrl);
-                DecorateValidation(ctrl);
-                return ctrl;
-            });
+            _valueControl = new Lazy<Control>(CreateValueControl);
+            FormatProvider = serviceLocatorFunc(typeof(IFormatProvider)) as IFormatProvider
+                              ?? throw new ArgumentNullException(nameof(FormatProvider), "no IFormatProvider implementation in ServiceLocator from factory");
+            ValueConverter = serviceLocatorFunc(typeof(IValueConverter)) as IValueConverter
+                              ?? throw new ArgumentNullException(nameof(ValueConverter), "no IValueConverter implementation in ServiceLocator from factory");
 
-            ValueConverter = valueConverter ?? NoExceptionsConverter.Instance;
 
-            Settings = new Dictionary<string, string>();
-            foreach (var setting in (definition.Settings ?? new Dictionary<string, string>()))
-                Settings.Add(setting.Key, setting.Value);
+            if (string.IsNullOrWhiteSpace(definition.Key)) throw new ArgumentException("key");
+            Key = definition.Key;
         }
 
         public virtual ValueCheckResult Validate()
@@ -87,36 +77,7 @@ namespace NZazu.Fields
 
             if (Check == null) return ValueCheckResult.Success;
 
-            // TODO: how to customize the culture?
-            return Check.Validate(StringValue, FormatProvider);
-        }
-
-        protected internal IValueCheck Check { get; set; }
-
-        protected virtual Control CreateLabelControl() { return !string.IsNullOrWhiteSpace(Prompt) ? new Label { Content = Prompt } : null; }
-        protected abstract Control CreateValueControl();
-
-        public IValueConverter ValueConverter { get; private set; }
-
-        // ReSharper disable once UnusedMethodReturnValue.Local
-        private Control ApplySettings(Control control)
-        {
-            var height = GetSetting<double>("Height");
-            if (height.HasValue)
-                control.MinHeight = control.MaxHeight = height.Value;
-            var width = GetSetting<double>("Width");
-            if (width.HasValue)
-                control.MinWidth = control.MaxWidth = width.Value;
-
-            ApplyGenericSettings(control);
-            return control;
-        }
-
-        private void ApplyGenericSettings(Control control)
-        {
-            var controlSettings = Settings.Where(settings => control.CanSetProperty(settings.Key));
-            foreach (var setting in controlSettings)
-                control.SetProperty(setting.Key, setting.Value);
+            return Check.Validate(GetStringValue(), FormatProvider);
         }
 
         protected virtual Control DecorateValidation(Control control)
@@ -155,51 +116,17 @@ namespace NZazu.Fields
         /// binding needs to be changed by subclasses for example if the Nullable-binding should be set.
         /// </summary>
         /// <param name="binding"></param>
-        /// <returns></returns>
         protected virtual Binding DecorateBinding(Binding binding) { return binding; }
-
-        protected virtual string GetSetting(string key)
-        {
-            Settings.TryGetValue(key, out var value);
-            return value;
-        }
-
-        protected internal virtual T? GetSetting<T>(string key) where T : struct
-        {
-            var str = GetSetting(key);
-
-            try
-            {
-                if (str == null) return null;
-                return (T)Convert.ChangeType(str, typeof(T), CultureInfo.InvariantCulture);
-            }
-            catch (Exception)
-            {
-                Trace.TraceWarning($"Setting {key} with value '{str ?? "<null>"}' has the wrong type. A {typeof(T).Name} is expected.");
-                return null;
-            }
-        }
-
-        public virtual void DisposeField()
-        {
-#pragma warning disable 618
-            if (Behavior != null)
-            {
-                Behavior.Detach();
-                Behavior = null;
-            }
-#pragma warning restore 618
-
-            Behaviors?.ForEach(b =>
-            {
-                b?.Detach();
-            });
-            Behaviors = null;
-        }
 
         public virtual IEnumerable<KeyValuePair<string, string>> GetState()
         {
             return Enumerable.Empty<KeyValuePair<string, string>>();
+        }
+
+        public virtual void Dispose()
+        {
+            Behaviors?.ToList().ForEach(x => { x?.Detach(); });
+            Behaviors = null;
         }
     }
 
@@ -207,7 +134,8 @@ namespace NZazu.Fields
     {
         private T _value;
 
-        protected NZazuField(FieldDefinition definition) : base(definition) { }
+        protected NZazuField(FieldDefinition definition, Func<Type, object> serviceLocatorFunc)
+            : base(definition, serviceLocatorFunc) { }
 
         public T Value
         {
@@ -216,12 +144,8 @@ namespace NZazu.Fields
             {
                 _value = value;
                 OnPropertyChanged();
-                // ReSharper disable once ExplicitCallerInfoArgument
-                OnPropertyChanged("StringValue");
             }
         }
-
-        public override bool IsEditable => true;
 
         public event PropertyChangedEventHandler PropertyChanged = (sender, e) => { };
 

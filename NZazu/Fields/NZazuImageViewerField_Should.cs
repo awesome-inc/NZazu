@@ -19,18 +19,17 @@ namespace NZazu.Fields
         //[Ignore("skip for now")]
         public void Be_Creatable()
         {
-            var sut = new NZazuImageViewerField(new FieldDefinition { Key = "test", Type = "imageViewer" });
+            var sut = new NZazuImageViewerField(new FieldDefinition { Key = "test", Type = "imageViewer" }, type => null);
 
             sut.Key.Should().Be("test");
             sut.ValueControl.Should().BeAssignableTo<ContentControl>();
-            sut.Type.Should().Be("imageViewer");
             sut.IsEditable.Should().BeTrue();
 
-            sut.Settings.Add("AllowCustomValues", "true"); // so heise.de works
+            sut.Definition.Settings.Add("AllowCustomValues", "true"); // so heise.de works
 
             const string value = "http://heise.de";
-            sut.StringValue = value;
-            sut.StringValue.Should().Be(value);
+            sut.SetStringValue(value);
+            sut.GetStringValue().Should().Be(value);
         }
 
         [Test]
@@ -47,20 +46,20 @@ namespace NZazu.Fields
                 Key = "test",
                 Type = "imageViewer",
                 Values = new[] { @"http://img/1.jpg", @"http://img/2.jpg", @"http://img/3.jpg" }
-            })
-            { StringValue = initValue };
+            }, type => null);
+            sut.SetStringValue(initValue);
 
-            sut.StringValue.Should().Be(toggleStartValue);
+            sut.GetStringValue().Should().Be(toggleStartValue);
 
             // lets toggle a bit
             sut.ToggleValues();
-            sut.StringValue.Should().Be(@"http://img/1.jpg");
+            sut.GetStringValue().Should().Be(@"http://img/1.jpg");
             sut.ToggleValues();
-            sut.StringValue.Should().Be(@"http://img/2.jpg");
+            sut.GetStringValue().Should().Be(@"http://img/2.jpg");
             sut.ToggleValues();
-            sut.StringValue.Should().Be(@"http://img/3.jpg");
+            sut.GetStringValue().Should().Be(@"http://img/3.jpg");
             sut.ToggleValues();
-            sut.StringValue.Should().Be(@"http://img/1.jpg");
+            sut.GetStringValue().Should().Be(@"http://img/1.jpg");
         }
 
         [Test]
@@ -77,20 +76,20 @@ namespace NZazu.Fields
                 Key = "test",
                 Type = "imageViewer",
                 Values = new[] { @"http://img/1.jpg", @"http://img/2.jpg", @"http://img/3.jpg" }
-            })
-            { StringValue = initValue };
+            }, type => null);
+            sut.SetStringValue(initValue);
 
-            sut.StringValue.Should().Be(toggleStartValue);
+            sut.GetStringValue().Should().Be(toggleStartValue);
 
             // lets toggle a bit
             sut.ToggleValues();
-            sut.StringValue.Should().Be(@"http://img/1.jpg");
+            sut.GetStringValue().Should().Be(@"http://img/1.jpg");
             sut.ToggleValues();
-            sut.StringValue.Should().Be(@"http://img/2.jpg");
+            sut.GetStringValue().Should().Be(@"http://img/2.jpg");
             sut.ToggleValues(true);
-            sut.StringValue.Should().Be(@"http://img/1.jpg");
+            sut.GetStringValue().Should().Be(@"http://img/1.jpg");
             sut.ToggleValues(true);
-            sut.StringValue.Should().Be(@"http://img/3.jpg");
+            sut.GetStringValue().Should().Be(@"http://img/3.jpg");
         }
 
         [Test]
@@ -106,24 +105,24 @@ namespace NZazu.Fields
                 Key = "test",
                 Type = "imageViewer",
                 Values = new[] { @"http://img/1.jpg", @"http://img/2.jpg", @"http://img/3.jpg" },
-            });
-            sut.Settings.Add("AllowNullValues", "true");
-            sut.Settings.Add("AllowCustomValues", "false");
-            sut.StringValue = initValue;
+            }, type => null);
+            sut.Definition.Settings.Add("AllowNullValues", "true");
+            sut.Definition.Settings.Add("AllowCustomValues", "false");
+            sut.SetStringValue(initValue);
 
-            sut.StringValue.Should().Be(toggleStartValue);
+            sut.GetStringValue().Should().Be(toggleStartValue);
 
             // lets toggle a bit
             sut.ToggleValues();
-            sut.StringValue.Should().Be(@"http://img/1.jpg");
+            sut.GetStringValue().Should().Be(@"http://img/1.jpg");
             sut.ToggleValues();
-            sut.StringValue.Should().Be(@"http://img/2.jpg");
+            sut.GetStringValue().Should().Be(@"http://img/2.jpg");
             sut.ToggleValues();
-            sut.StringValue.Should().Be(@"http://img/3.jpg");
+            sut.GetStringValue().Should().Be(@"http://img/3.jpg");
             sut.ToggleValues();
-            sut.StringValue.Should().Be(null);
+            sut.GetStringValue().Should().Be(null);
             sut.ToggleValues();
-            sut.StringValue.Should().Be(@"http://img/1.jpg");
+            sut.GetStringValue().Should().Be(@"http://img/1.jpg");
         }
 
         [Test]
@@ -139,24 +138,24 @@ namespace NZazu.Fields
                 Key = "test",
                 Type = "imageViewer",
                 Values = new[] { @"http://img/1.jpg", @"http://img/2.jpg", @"http://img/3.jpg" },
-            });
-            sut.Settings.Add("AllowNullValues", "true");
-            sut.Settings.Add("AllowCustomValues", "false");
-            sut.StringValue = initValue;
+            }, type => null);
+            sut.Definition.Settings.Add("AllowNullValues", "true");
+            sut.Definition.Settings.Add("AllowCustomValues", "false");
+            sut.SetStringValue(initValue);
 
-            sut.StringValue.Should().Be(toggleStartValue);
+            sut.GetStringValue().Should().Be(toggleStartValue);
 
             // lets toggle a bit
             sut.ToggleValues();
-            sut.StringValue.Should().Be(@"http://img/1.jpg");
+            sut.GetStringValue().Should().Be(@"http://img/1.jpg");
             sut.ToggleValues();
-            sut.StringValue.Should().Be(@"http://img/2.jpg");
+            sut.GetStringValue().Should().Be(@"http://img/2.jpg");
             sut.ToggleValues(true);
-            sut.StringValue.Should().Be(@"http://img/1.jpg");
+            sut.GetStringValue().Should().Be(@"http://img/1.jpg");
             sut.ToggleValues(true);
-            sut.StringValue.Should().Be(null);
+            sut.GetStringValue().Should().Be(null);
             sut.ToggleValues(true);
-            sut.StringValue.Should().Be(@"http://img/3.jpg");
+            sut.GetStringValue().Should().Be(@"http://img/3.jpg");
         }
 
         [Test]
@@ -170,22 +169,22 @@ namespace NZazu.Fields
                 Key = "test",
                 Type = "imageViewer",
                 Values = new[] { @"http://img/1.jpg", @"http://img/2.jpg", @"http://img/3.jpg" },
-            });
-            sut.Settings.Add("AllowNullValues", "false");
-            sut.Settings.Add("AllowCustomValues", "true");
-            sut.StringValue = initValue;
+            }, type => null);
+            sut.Definition.Settings.Add("AllowNullValues", "false");
+            sut.Definition.Settings.Add("AllowCustomValues", "true");
+            sut.SetStringValue(initValue);
 
-            sut.StringValue.Should().Be(toggleStartValue);
+            sut.GetStringValue().Should().Be(toggleStartValue);
 
             // lets toggle a bit
             sut.ToggleValues();
-            sut.StringValue.Should().Be(@"http://img/1.jpg");
+            sut.GetStringValue().Should().Be(@"http://img/1.jpg");
             sut.ToggleValues();
-            sut.StringValue.Should().Be(@"http://img/2.jpg");
+            sut.GetStringValue().Should().Be(@"http://img/2.jpg");
             sut.ToggleValues();
-            sut.StringValue.Should().Be(@"http://img/3.jpg");
+            sut.GetStringValue().Should().Be(@"http://img/3.jpg");
             sut.ToggleValues();
-            sut.StringValue.Should().Be(toggleStartValue);
+            sut.GetStringValue().Should().Be(toggleStartValue);
         }
 
         [Test]
@@ -198,26 +197,26 @@ namespace NZazu.Fields
             {
                 Key = "test",
                 Type = "imageViewer"
-            });
-            sut.Settings.Add("AllowNullValues", "false");
-            sut.Settings.Add("AllowCustomValues", "true");
-            sut.StringValue = initValue;
+            }, type => null);
+            sut.Definition.Settings.Add("AllowNullValues", "false");
+            sut.Definition.Settings.Add("AllowCustomValues", "true");
+            sut.SetStringValue(initValue);
 
-            sut.StringValue.Should().Be(initValue);
+            sut.GetStringValue().Should().Be(initValue);
 
             // lets toggle a bit
             sut.ToggleValues();
-            sut.StringValue.Should().Be(initValue);
+            sut.GetStringValue().Should().Be(initValue);
             sut.ToggleValues();
-            sut.StringValue.Should().Be(initValue);
+            sut.GetStringValue().Should().Be(initValue);
 
-            sut.Settings["AllowNullValues"] = "true";
+            sut.Definition.Settings["AllowNullValues"] = "true";
             sut.ToggleValues();
-            sut.StringValue.Should().Be(null);
+            sut.GetStringValue().Should().Be(null);
             sut.ToggleValues();
-            sut.StringValue.Should().Be(initValue);
+            sut.GetStringValue().Should().Be(initValue);
             sut.ToggleValues();
-            sut.StringValue.Should().Be(null);
+            sut.GetStringValue().Should().Be(null);
         }
 
         [Test]
@@ -229,26 +228,26 @@ namespace NZazu.Fields
             {
                 Key = "test",
                 Type = "imageViewer"
-            });
-            sut.Settings.Add("AllowNullValues", "false");
-            sut.Settings.Add("AllowCustomValues", "false");
-            sut.StringValue = null;
+            }, type => null);
+            sut.Definition.Settings.Add("AllowNullValues", "false");
+            sut.Definition.Settings.Add("AllowCustomValues", "false");
+            sut.SetStringValue(null);
 
-            sut.StringValue.Should().Be(null);
+            sut.GetStringValue().Should().Be(null);
 
             // lets toggle a bit
             sut.ToggleValues();
-            sut.StringValue.Should().Be(null);
+            sut.GetStringValue().Should().Be(null);
             sut.ToggleValues();
-            sut.StringValue.Should().Be(null);
+            sut.GetStringValue().Should().Be(null);
 
-            sut.Settings["AllowNullValues"] = "true";
+            sut.Definition.Settings["AllowNullValues"] = "true";
             sut.ToggleValues();
-            sut.StringValue.Should().Be(null);
+            sut.GetStringValue().Should().Be(null);
             sut.ToggleValues();
-            sut.StringValue.Should().Be(null);
+            sut.GetStringValue().Should().Be(null);
             sut.ToggleValues();
-            sut.StringValue.Should().Be(null);
+            sut.GetStringValue().Should().Be(null);
         }
     }
 }

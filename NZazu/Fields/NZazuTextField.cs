@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Controls;
 using NZazu.Contracts;
 
@@ -6,25 +7,25 @@ namespace NZazu.Fields
 {
     public class NZazuTextField : NZazuField<string>
     {
-        public NZazuTextField(FieldDefinition definition) : base(definition) { }
+        public NZazuTextField(FieldDefinition definition, Func<Type, object> serviceLocatorFunc)
+            : base(definition, serviceLocatorFunc) { }
 
-        protected override void SetStringValue(string value)
+        public override void SetStringValue(string value)
         {
             Value = value;
         }
-        protected override string GetStringValue()
+
+        public override string GetStringValue()
         {
             CreateValueControl().GetValue(ContentProperty);
             return Value;
         }
 
-        public override string Type => "string";
-
         public override DependencyProperty ContentProperty => TextBox.TextProperty;
 
         protected override Control CreateValueControl()
         {
-            var control = new TextBox { ToolTip = Description };
+            var control = new TextBox { ToolTip = Definition.Description };
             return control;
         }
     }

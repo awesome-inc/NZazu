@@ -1,13 +1,16 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.Linq;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using FluentAssertions;
 using NEdifis.Attributes;
 using NUnit.Framework;
 using NZazu.Contracts;
+using NZazu.Extensions;
 using NZazu.Fields;
 
 namespace NZazu.LayoutStrategy
@@ -17,6 +20,13 @@ namespace NZazu.LayoutStrategy
     // ReSharper disable InconsistentNaming
     internal class StackedLayout_Should
     {
+        private object ServiceLocator(Type type)
+        {
+            if (type == typeof(IValueConverter)) return NoExceptionsConverter.Instance;
+            if (type == typeof(IFormatProvider)) return CultureInfo.InvariantCulture;
+            throw new NotSupportedException($"Cannot lookup {type.Name}");
+        }
+
         private Application application;
 
         [SetUp]
@@ -57,7 +67,7 @@ namespace NZazu.LayoutStrategy
             var container = new ContentControl();
             var fields = new NZazuField[]
             {
-                new NZazuLabelField(new FieldDefinition {Key="label01"}),
+                new NZazuLabelField(new FieldDefinition {Key="label01"}, ServiceLocator),
             };
 
             sut.DoLayout(container, fields);
@@ -77,9 +87,9 @@ namespace NZazu.LayoutStrategy
             var container = new ContentControl();
             var fields = new NZazuField[]
             {
-                new NZazuLabelField(new FieldDefinition {Key="lable01"}),
-                new NZazuTextField(new FieldDefinition {Key="text01"}),
-                new NZazuBoolField(new FieldDefinition {Key="bool01"})
+                new NZazuLabelField(new FieldDefinition {Key="lable01"}, ServiceLocator),
+                new NZazuTextField(new FieldDefinition {Key="text01"}, ServiceLocator),
+                new NZazuBoolField(new FieldDefinition {Key="bool01"}, ServiceLocator)
             };
 
             sut.DoLayout(container, fields);
@@ -101,9 +111,9 @@ namespace NZazu.LayoutStrategy
             var container = new ContentControl();
             var fields = new NZazuField[]
             {
-                new NZazuLabelField(new FieldDefinition {Key="label01"}) {Prompt = "heading"},
-                new NZazuTextField(new FieldDefinition {Key="text01"}),
-                new NZazuBoolField(new FieldDefinition {Key="bool01"})
+                new NZazuLabelField(new FieldDefinition {Key="label01",Prompt = "heading"}, ServiceLocator),
+                new NZazuTextField(new FieldDefinition {Key="text01"}, ServiceLocator),
+                new NZazuBoolField(new FieldDefinition {Key="bool01"}, ServiceLocator)
             };
 
             sut.DoLayout(container, fields);
@@ -127,9 +137,9 @@ namespace NZazu.LayoutStrategy
             var container = new ContentControl();
             var fields = new NZazuField[]
             {
-                new NZazuLabelField(new FieldDefinition {Key="label01"}),
-                new NZazuTextField(new FieldDefinition {Key="text01"}),
-                new NZazuBoolField(new FieldDefinition {Key="bool01"})
+                new NZazuLabelField(new FieldDefinition {Key="label01"}, ServiceLocator),
+                new NZazuTextField(new FieldDefinition {Key="text01"}, ServiceLocator),
+                new NZazuBoolField(new FieldDefinition {Key="bool01"}, ServiceLocator)
             };
 
             fields
