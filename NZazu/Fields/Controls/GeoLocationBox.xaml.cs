@@ -66,7 +66,10 @@ namespace NZazu.Fields.Controls
 
         #endregion
 
-        private static void UpdateControl(GeoLocationBox glb, NZazuCoordinate val, ISupportGeoLocationBox support)
+        private static void UpdateControl(
+            GeoLocationBox glb, 
+            NZazuCoordinate val, 
+            ISupportGeoLocationBox support)
         {
             glb.SetToCurrentLocation.Visibility = support != null && support.HasCurrentPosition
                 ? Visibility.Visible
@@ -78,7 +81,7 @@ namespace NZazu.Fields.Controls
 
             glb.OpenInGeoApp.IsEnabled = val != null && support != null && support.CanOpenGeoApp;
 
-            glb.LocationBox.IsReadOnly = glb.LocationBox.IsReadOnly || support == null;
+            glb.LocationBox.IsEnabled = support != null;
             glb.LocationBox.Text = support?.ToString(val) ?? "no valid coordinate converter added";
         }
 

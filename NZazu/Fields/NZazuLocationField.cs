@@ -1,5 +1,4 @@
 using System;
-using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -12,6 +11,7 @@ namespace NZazu.Fields
     internal class NZazuLocationField : NZazuField<NZazuCoordinate>
     {
         private readonly ISupportGeoLocationBox _geoSupport;
+        public override DependencyProperty ContentProperty => GeoLocationBox.ValueProperty;
 
         public NZazuLocationField(FieldDefinition definition, Func<Type, object> serviceLocatorFunc)
             : base(definition, serviceLocatorFunc)
@@ -19,23 +19,19 @@ namespace NZazu.Fields
             _geoSupport = (ISupportGeoLocationBox)serviceLocatorFunc(typeof(ISupportGeoLocationBox));
         }
 
-        public override void SetValue(string value)
+        public override void SetValue(string newValue)
         {
-            if (!string.IsNullOrWhiteSpace(value))
-            {
-                Value = _geoSupport.Parse(value);
-            }
+            Value = string.IsNullOrWhiteSpace(newValue) 
+                ? null 
+                : _geoSupport.Parse(newValue);
         }
 
         public override string GetValue()
         {
             if (Value == null || !Value.GetIsValid()) return string.Empty;
-            // ReSharper disable PossibleInvalidOperationException
-            return Value.Lat.ToString(CultureInfo.InvariantCulture) + ", " + Value.Lon.ToString(CultureInfo.InvariantCulture);
-            // ReSharper enable PossibleInvalidOperationException
+            return _geoSupport.ToString(Value);
         }
 
-        public override DependencyProperty ContentProperty => GeoLocationBox.ValueProperty;
         protected internal override Binding DecorateBinding(Binding binding)
         {
             binding.TargetNullValue = null;

@@ -31,7 +31,7 @@ namespace NZazu.Fields
         public Control ValueControl => _valueControl.Value;
 
         protected readonly IFormatProvider FormatProvider;
-        protected internal readonly IValueConverter ValueConverter;
+        protected internal IValueConverter ValueConverter;
 
         #endregion
 

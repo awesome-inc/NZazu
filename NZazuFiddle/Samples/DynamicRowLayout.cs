@@ -3,9 +3,9 @@ using NZazu.Contracts;
 
 namespace NZazuFiddle.Samples
 {
-    internal class DynamicRowLayout : SampleBase
+    internal class RadioTransmissionIncident : SampleBase
     {
-        public DynamicRowLayout() : base(-10)
+        public RadioTransmissionIncident() : base(0)
         {
             Sample = new SampleViewModel
             {

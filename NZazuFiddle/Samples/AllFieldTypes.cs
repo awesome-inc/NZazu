@@ -6,92 +6,238 @@ namespace NZazuFiddle.Samples
     // ReSharper disable once UnusedMember.Global
     internal class AllFieldTypes : SampleBase
     {
-        public AllFieldTypes() : base(10)
+        public AllFieldTypes() : base(-10)
         {
             Sample = new SampleViewModel
             {
                 Name = "All Available Fields",
-                Description = "",
+                Description = "Awesomeness Incremented with Awesome Inc's NZazu",
                 Fiddle = ToFiddle(new FormDefinition
                 {
                     Fields = new[]
                     {
                         new FieldDefinition
                         {
-                            Key = "caption",
+                            Key = "label",
                             Type = "label",
-                            Description = "A fancy caption!"
-                        },
-                        new FieldDefinition
-                        {
-                            Key = "where are you",
-                            Type = "location",
-                            Description = "Select where you are"
-                        },
-                        new FieldDefinition
-                        {
-                            Key = "settings",
-                            Type = "label",
-                            Prompt = "Settings",
-                            Description = "You can manage your account here."
-                        },
-                        new FieldDefinition
-                        {
-                            Key = "name",
-                            Type = "string",
-                            Prompt = "Name:",
-                            Hint = "Enter name",
-                            Description = "Your account name. Only alpha-numeric ..."
-                        },
-                        new FieldDefinition
-                        {
-                            Key = "isAdmin",
-                            Type = "bool",
-                            //Prompt = "Is Admin",
-                            Hint = "Is Admin",
-                            Description = "Check to grant administrator permissions"
-                        },
-                        new FieldDefinition
-                        {
-                            Key = "birthday",
-                            Type = "date",
-                            Prompt = "Birthday:",
-                            Hint = "dd-MM-yyyy",
-                            Description = "Enter your birthday (dd-MM-yyyy)",
-                            Settings = new Dictionary<string, string>{{"Format","dd-MM-yyyy"}}
-                        },
-                        new FieldDefinition
-                        {
-                            Key = "weight",
-                            Type = "double",
-                            Prompt = "Weight [kg]:",
-                            Hint = "type your weight with 2 digits after comma",
-                            Description = "Weight must be between 35 and 200 kg",
-                            Settings = new Dictionary<string, string>
+                            Description = "Caption or Heading!",
+                            Settings = new Dictionary<string, string>()
                             {
-                                {"Format","#.00"}
-                                // cf.: https://wpftoolkit.codeplex.com/wikipage?title=ByteUpDown&referringTitle=NumericUpDown-derived%20controls
-                                ,{"Minimum","35"},{"Maximum","200"}
-                                ,{"ClipValueToMinMax","True"}
+                                { "FontWeight", "Bold" } ,
+                                { "FontSize", "24" } ,
+                                { "HorizontalAlignment", "Center" }
                             }
                         },
                         new FieldDefinition
                         {
-                            Key = "ranking",
+                            Key = "location",
+                            Type = "location",
+                            Prompt = "location",
+                            Description = "Select where you are",
+                            Hint = "50.8 7.2"
+                        },
+                        new FieldDefinition()
+                        {
+                            Key="group",
+                            Type="group",
+                            Description = "group description",
+                            Prompt = "group",
+                            Fields = new []{
+                                new FieldDefinition
+                                {
+                                    Key = "group_label",
+                                    Type = "label",
+                                    Prompt = "Settings",
+                                    Description = "You can manage your account here."
+                                },
+                                new FieldDefinition
+                                {
+                                    Key = "group_name",
+                                    Type = "string",
+                                    Prompt = "group name",
+                                    Hint = "Enter group name",
+                                    Description = "Your account name. Only alpha-numeric ..."
+                                },
+                            }
+                        },
+                        new FieldDefinition()
+                        {
+                            Key="datatable",
+                            Type="datatable",
+                            Description = "datatable description",
+                            Prompt = "datatable",
+                            Fields = new []{
+                                new FieldDefinition
+                                {
+                                    Key = "datatable_label",
+                                    Type = "label",
+                                    Prompt = "Settings",
+                                    Description = "who are you"
+                                },
+                                new FieldDefinition
+                                {
+                                    Key = "datatable_name",
+                                    Type = "string",
+                                    Prompt = "datatable name",
+                                    Hint = "Enter table name",
+                                    Description = "your name"
+                                },
+                                new FieldDefinition
+                                {
+                                    Key = "datatable_location",
+                                    Type = "location",
+                                    Prompt = "datatable location",
+                                    Hint = "50.8 7.2",
+                                    Description = "where are you born"
+                                },
+                            }
+                        },
+                        new FieldDefinition
+                        {
+                            Key = "string",
+                            Type = "string",
+                            Prompt = "string",
+                            Hint = "Enter a single line string",
+                            Description = "Single line string with whatever you want to"
+                        },
+                        new FieldDefinition
+                        {
+                            Key = "int",
+                            Type = "int",
+                            Prompt = "int",
+                            Hint = "Enter a number",
+                            Description = "Some number you would like to enter"
+                        },
+                        new FieldDefinition
+                        {
+                            Key = "bool",
+                            Type = "bool",
+                            Prompt = "bool",
+                            Hint = "check if you want me to be true",
+                            Description = "I know for certain it is 'true' or 'false'"
+                        },
+                        new FieldDefinition
+                        {
+                            Key = "bool_tristate",
+                            Type = "bool",
+                            Prompt = "bool",
+                            Hint = "check if you want me to be true or false or dont-know",
+                            Description = "I know it is 'true' or 'false' or I don't know",
+                            Settings = new Dictionary<string, string>()
+                            {
+                                { "IsThreeState", "True"}
+                            }
+                        },
+                        new FieldDefinition
+                        {
+                            Key = "date",
+                            Type = "date",
+                            Prompt = "date:",
+                            Description = "enter a date with a custom format",
+                            Hint = "dd-MM-yyyy",
+                            Settings = new Dictionary<string, string>
+                            {
+                                {"Format","dd-MM-yyyy"}
+                            }
+                        },
+                        new FieldDefinition
+                        {
+                            Key = "double",
+                            Type = "double",
+                            Prompt = "double",
+                            Hint = "type your weight with 2 digits after comma",
+                            Description = "Weight must be between 35 and 200 kg",
+                            Settings = new Dictionary<string, string>
+                            {
+                                { "Format" , "#.00" },
+                                { "Minimum" , "35" },
+                                { "Maximum" , "200" },
+                                { "ClipValueToMinMax" , "True" }
+                            }
+                        },
+                        new FieldDefinition
+                        {
+                            Key = "option",
                             Type = "option",
-                            Prompt = "Rank",
-                            Values = new []{"1","2","3","4","5"},
-                            Settings = new Dictionary<string, string>{{"IsEditable","True"}}
-                        }
+                            Prompt = "option",
+                            Values = new []{ "Value 1", "Value 2", "Value 3", "Value 4", "Value 5"},
+                            Settings = new Dictionary<string, string>
+                            {
+                                { "IsEditable" , "True" }
+                            }
+                        },
+                        new FieldDefinition
+                        {
+                            Key = "option_fixed",
+                            Type = "option",
+                            Prompt = "option",
+                            Values = new []{ "Value 1", "Value 2", "Value 3", "Value 4", "Value 5"},
+                            Settings = new Dictionary<string, string>
+                            {
+                                { "IsEditable" , "False" }
+                            }
+                        },
+                        new FieldDefinition
+                        {
+                            Key = "keyedoption1",
+                            Type = "keyedoption",
+                            Prompt = "keyedoption",
+                            Description = "keyedoption share the entered values, but no value list is allowed",
+                            Settings = new Dictionary<string, string>
+                            {
+                                {"storekey", "store1"}
+                            }
+                        },
+                        new FieldDefinition
+                        {
+                            Key = "keyedoption2",
+                            Type = "keyedoption",
+                            Prompt = "keyedoption",
+                            Description = "keyedoption share the entered values, but no value list is allowed",
+                            Settings = new Dictionary<string, string>
+                            {
+                                {"storekey", "store1"}
+                            }
+                        },
+                        new FieldDefinition
+                        {
+                            Key = "keyedoption3",
+                            Type = "keyedoption",
+                            Prompt = "keyedoption",
+                            Description = "keyedoption share the entered values, but no value list is allowed",
+                            Settings = new Dictionary<string, string>
+                            {
+                                {"storekey", "store1"},
+                                { "IsEditable" , "False" }
+                            }
+                        },
+                        new FieldDefinition
+                        {
+                            Key = "imageViewer",
+                            Type = "imageViewer",
+                            Prompt = "imageViewer",
+                            Hint = "shows an image",
+                            Description = "use mouse click or space to toggle images. a single value just displays the image",
+                            Values = new []
+                            {
+                                "https://upload.wikimedia.org/wikipedia/commons/5/57/Gemmules_a1.jpg",
+                                "https://upload.wikimedia.org/wikipedia/commons/4/4c/Gemmules_a2.jpg",
+                            },
+                            Settings = new Dictionary<string, string>
+                            {
+                                { "Width", "200" },
+                                { "Height", "120" }
+                            }
+                        },
                     }
                 },
                 new Dictionary<string, string>
                 {
-                    { "name", "John" }, 
-                    { "isAdmin", "true" },
-                    { "birthday", "01-06-1990"},
-                    { "weight", "75.5"},
-                    { "ranking", "3"}
+                    { "string", "John" },
+                    { "location", "53.2 7.3" },
+                    { "date", "20-02-1980"},
+                    { "double", "75.5"},
+                    { "int", "3"}
                 })
             };
         }
