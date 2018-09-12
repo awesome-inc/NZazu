@@ -19,7 +19,7 @@ namespace NZazu.Fields
             _geoSupport = (ISupportGeoLocationBox)serviceLocatorFunc(typeof(ISupportGeoLocationBox));
         }
 
-        public override void SetStringValue(string value)
+        public override void SetValue(string value)
         {
             if (!string.IsNullOrWhiteSpace(value))
             {
@@ -27,7 +27,7 @@ namespace NZazu.Fields
             }
         }
 
-        public override string GetStringValue()
+        public override string GetValue()
         {
             if (Value == null || !Value.GetIsValid()) return string.Empty;
             // ReSharper disable PossibleInvalidOperationException
@@ -36,7 +36,7 @@ namespace NZazu.Fields
         }
 
         public override DependencyProperty ContentProperty => GeoLocationBox.ValueProperty;
-        protected override Binding DecorateBinding(Binding binding)
+        protected internal override Binding DecorateBinding(Binding binding)
         {
             binding.TargetNullValue = null;
             return base.DecorateBinding(binding);

@@ -88,13 +88,13 @@ namespace NZazu.Fields
             var sut = new NZazuOptionsField(new FieldDefinition { Key = "key" },ServiceLocator);
 
             sut.Value.Should().BeNull();
-            sut.GetStringValue().Should().Be(sut.Value);
+            sut.GetValue().Should().Be(sut.Value);
 
-            sut.SetStringValue("1");
-            sut.Value.Should().Be(sut.GetStringValue());
+            sut.SetValue("1");
+            sut.Value.Should().Be(sut.GetValue());
 
             sut.Value = "2";
-            sut.GetStringValue().Should().Be(sut.Value);
+            sut.GetValue().Should().Be(sut.Value);
         }
     }
 }

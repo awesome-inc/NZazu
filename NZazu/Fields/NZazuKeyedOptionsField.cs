@@ -128,12 +128,12 @@ namespace NZazu.Fields
             _currentValue = _valueControl.Text ?? string.Empty;
         }
 
-        public override void SetStringValue(string value)
+        public override void SetValue(string value)
         {
             Value = value;
             StoreAndPublishValue(this, new RoutedEventArgs());
         }
 
-        public override string GetStringValue() { return Value; }
+        public override string GetValue() { return Value; }
     }
 }

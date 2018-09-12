@@ -68,22 +68,23 @@ namespace NZazu.Fields
             return result;
         }
 
-        public override void SetStringValue(string value)
+        public override void SetValue(string value)
         {
-            double result;
             if (!string.IsNullOrWhiteSpace(value) &&
-                double.TryParse(value, NumberStyles.Number, FormatProvider, out result))
+                double.TryParse(value, NumberStyles.Number, FormatProvider, out var result))
                 Value = result;
             else
                 Value = null;
         }
 
-        public override string GetStringValue()
+        public override string GetValue()
         {
-            return Value.HasValue ? Value.Value.ToString(FormatProvider) : string.Empty;
+            return Value.HasValue 
+                ? Value.Value.ToString(FormatProvider) 
+                : string.Empty;
         }
 
-        protected override Binding DecorateBinding(Binding binding)
+        protected internal override Binding DecorateBinding(Binding binding)
         {
             var format = Definition.Settings.ContainsKey("Format") ? Definition.Settings["Format"] : "G";
             var decorated = base.DecorateBinding(binding);

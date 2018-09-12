@@ -21,7 +21,7 @@ namespace NZazu.Fields
             return new DatePicker { ToolTip = Definition.Description };
         }
 
-        public override void SetStringValue(string value)
+        public override void SetValue(string value)
         {
             var parsed = false;
             var result = new DateTime();
@@ -39,7 +39,7 @@ namespace NZazu.Fields
                 Value = null;
         }
 
-        public override string GetStringValue()
+        public override string GetValue()
         {
             if (!Value.HasValue) return string.Empty;
 

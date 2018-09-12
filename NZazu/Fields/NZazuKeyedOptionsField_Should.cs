@@ -1,10 +1,13 @@
 ﻿using System;
+using System.Globalization;
 using System.Threading;
 using System.Windows.Controls;
+using System.Windows.Data;
 using FluentAssertions;
 using NEdifis.Attributes;
 using NUnit.Framework;
 using NZazu.Contracts;
+using NZazu.Extensions;
 
 namespace NZazu.Fields
 {
@@ -13,10 +16,17 @@ namespace NZazu.Fields
     // ReSharper disable InconsistentNaming
     internal class NZazuKeyedOptionsField_Should
     {
+        private object ServiceLocator(Type type)
+        {
+            if (type == typeof(IValueConverter)) return NoExceptionsConverter.Instance;
+            if (type == typeof(IFormatProvider)) return CultureInfo.InvariantCulture;
+            throw new NotSupportedException($"Cannot lookup {type.Name}");
+        }
+
         [Test]
         public void Be_Creatable()
         {
-            var sut = new NZazuKeyedOptionsField(new FieldDefinition { Key = "test" }, type => null);
+            var sut = new NZazuKeyedOptionsField(new FieldDefinition { Key = "test" }, ServiceLocator);
 
             sut.Should().NotBeNull();
             sut.Should().BeAssignableTo<INZazuWpfField>();
@@ -27,7 +37,7 @@ namespace NZazu.Fields
         public void Create_ComboBox()
         {
             var definition = new FieldDefinition { Key = "test", Description = "description" };
-            var sut = new NZazuKeyedOptionsField(definition, type => null);
+            var sut = new NZazuKeyedOptionsField(definition, ServiceLocator);
 
             sut.ContentProperty.Should().Be(ComboBox.TextProperty);
             var control = (ComboBox)sut.ValueControl;
@@ -40,16 +50,16 @@ namespace NZazu.Fields
         [Apartment(ApartmentState.STA)]
         public void Identify_Value_with_StringValue()
         {
-            var sut = new NZazuKeyedOptionsField(new FieldDefinition { Key = "test", Description = "description" }, type => null);
+            var sut = new NZazuKeyedOptionsField(new FieldDefinition { Key = "test", Description = "description" }, ServiceLocator);
 
             sut.Value.Should().BeNull();
-            sut.GetStringValue().Should().Be(sut.Value);
+            sut.GetValue().Should().Be(sut.Value);
 
-            sut.SetStringValue( "1");
-            sut.Value.Should().Be(sut.GetStringValue());
+            sut.SetValue( "1");
+            sut.Value.Should().Be(sut.GetValue());
 
             sut.Value = "2";
-            sut.GetStringValue().Should().Be(sut.Value);
+            sut.GetValue().Should().Be(sut.Value);
         }
     }
 }

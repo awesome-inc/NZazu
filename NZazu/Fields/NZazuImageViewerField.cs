@@ -23,7 +23,7 @@ namespace NZazu.Fields
             _values = Definition.Values ?? Enumerable.Empty<string>();
         }
 
-        public override void SetStringValue(string value)
+        public override void SetValue(string value)
         {
             var allowCustomValues = Definition.Settings.Get<bool>("AllowCustomValues");
             _stringValue = value;
@@ -58,7 +58,7 @@ namespace NZazu.Fields
                 : new BitmapImage(new Uri(value));
         }
 
-        public override string GetStringValue()
+        public override string GetValue()
         {
             return _stringValue;
         }
@@ -87,7 +87,7 @@ namespace NZazu.Fields
             _clientControl.PreviewMouseWheel += ClientControl_MouseWheel;
             _clientControl.PreviewMouseLeftButtonUp += ClientControl_MouseLeftButtonUp;
 
-            SetStringValue(_stringValue);
+            SetValue(_stringValue);
 
             return _clientControl;
         }
@@ -125,7 +125,7 @@ namespace NZazu.Fields
 
             var currentValueIsAt = -1;
             for (var i = 0; i < options.Length; i++)
-                if (string.Compare(options[i], GetStringValue(), StringComparison.CurrentCultureIgnoreCase) == 0)
+                if (string.Compare(options[i], GetValue(), StringComparison.CurrentCultureIgnoreCase) == 0)
                 {
                     currentValueIsAt = i;
                     break;
@@ -134,21 +134,20 @@ namespace NZazu.Fields
             // just in case no options are given (and no custom value!)
             if (options.Length == 0)
             {
-                SetStringValue(null);
+                SetValue(null);
                 return;
             }
 
             if (toggleBack)
                 if (allowNullValues != null && allowNullValues.Value && (currentValueIsAt == 0))
-                    SetStringValue(null);
+                    SetValue(null);
                 else
-                    SetStringValue(options[(Math.Max(currentValueIsAt, 0) + options.Length - 1) % (options.Length)]);
+                    SetValue(options[(Math.Max(currentValueIsAt, 0) + options.Length - 1) % (options.Length)]);
             else
                 if (allowNullValues != null && allowNullValues.Value && (currentValueIsAt == options.Length - 1))
-                SetStringValue(null);
+                SetValue(null);
             else
-                SetStringValue(options[(currentValueIsAt + 1) % (options.Length)]);
-            //StringValue = options.Length == 0 ? null : options[(currentValueIsAt + 1) % (options.Length)];
+                SetValue(options[(currentValueIsAt + 1) % (options.Length)]);
         }
     }
 }

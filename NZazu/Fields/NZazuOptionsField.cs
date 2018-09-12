@@ -28,7 +28,7 @@ namespace NZazu.Fields
             return control;
         }
 
-        public override void SetStringValue(string value) { Value = value; }
-        public override string GetStringValue() { return Value; }
+        public override void SetValue(string value) { Value = value; }
+        public override string GetValue() { return Value; }
     }
 }

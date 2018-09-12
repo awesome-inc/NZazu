@@ -354,11 +354,11 @@ namespace NZazu.Fields
 
             // Append value to "StringValue" prop on each behaviour to simulate execution of behaviours
             behavior1.When(x => x.AttachTo(Arg.Any<INZazuWpfField>(), Arg.Any<INZazuWpfView>()))
-                .Do(x => ((INZazuWpfField)x.Args()[0]).SetStringValue(((INZazuWpfField)x.Args()[0]).GetStringValue() + "behavior 1 executed!"));
+                .Do(x => ((INZazuWpfField)x.Args()[0]).SetValue(((INZazuWpfField)x.Args()[0]).GetValue() + "behavior 1 executed!"));
             behavior2.When(x => x.AttachTo(Arg.Any<INZazuWpfField>(), Arg.Any<INZazuWpfView>()))
-                .Do(x => ((INZazuWpfField)x.Args()[0]).SetStringValue(((INZazuWpfField)x.Args()[0]).GetStringValue() + "|behavior 2 executed!"));
+                .Do(x => ((INZazuWpfField)x.Args()[0]).SetValue(((INZazuWpfField)x.Args()[0]).GetValue() + "|behavior 2 executed!"));
             behavior3.When(x => x.AttachTo(Arg.Any<INZazuWpfField>(), Arg.Any<INZazuWpfView>()))
-                .Do(x => ((INZazuWpfField)x.Args()[0]).SetStringValue(((INZazuWpfField)x.Args()[0]).GetStringValue() + "|behavior 3 executed!"));
+                .Do(x => ((INZazuWpfField)x.Args()[0]).SetValue(((INZazuWpfField)x.Args()[0]).GetValue() + "|behavior 3 executed!"));
 
             var fieldDefintion = new FieldDefinition
             {
@@ -384,7 +384,7 @@ namespace NZazu.Fields
             var fld1 = sut.CreateField(fieldDefintion);
 
             // Check if behaviours were executed
-            fld1.GetStringValue().Should().Be("behavior 1 executed!|behavior 2 executed!|behavior 3 executed!");
+            fld1.GetValue().Should().Be("behavior 1 executed!|behavior 2 executed!|behavior 3 executed!");
 
             //behavior1.When(x => x.AttachTo(fld1, Arg.Any<INZazuWpfView>())).Do(x => fld1.StringValue = "behaviorDefinition1");
             behavior1.Received(1).AttachTo(Arg.Any<INZazuWpfField>(), Arg.Any<INZazuWpfView>());

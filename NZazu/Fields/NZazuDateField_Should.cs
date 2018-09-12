@@ -66,7 +66,7 @@ namespace NZazu.Fields
             var now = DateTime.Now.Date;
             sut.Value = now;
             var expected = now.ToString(dateFormat);
-            sut.GetStringValue().Should().Be(expected);
+            sut.GetValue().Should().Be(expected);
 
             // NOTE: Formatted Dates seems complicated to setup with DatePicker
             // So we just skip it. It it only vital that StringValue matches the speicifed format
@@ -74,7 +74,7 @@ namespace NZazu.Fields
             //datePicker.Text.Should().Be(expected);
 
             sut.Value = null;
-            sut.GetStringValue().Should().BeEmpty();
+            sut.GetValue().Should().BeEmpty();
             datePicker.SelectedDate.Should().NotHaveValue();
         }
 
@@ -122,14 +122,14 @@ namespace NZazu.Fields
             var sut = new NZazuDateField(new FieldDefinition { Key = "key" }, ServiceLocator);
             var datePicker = (DatePicker)sut.ValueControl;
 
-            sut.GetStringValue().Should().BeNullOrEmpty();
+            sut.GetValue().Should().BeNullOrEmpty();
             datePicker.Text.Should().BeEmpty();
 
             var now = DateTime.Now.Date;
-            sut.SetStringValue(now.ToString(CultureInfo.InvariantCulture));
+            sut.SetValue(now.ToString(CultureInfo.InvariantCulture));
             datePicker.SelectedDate.Should().Be(now);
 
-            sut.SetStringValue(string.Empty);
+            sut.SetValue(string.Empty);
             datePicker.SelectedDate.Should().NotHaveValue();
         }
 
@@ -142,15 +142,15 @@ namespace NZazu.Fields
 
             var now = DateTime.Now.Date;
             datePicker.SelectedDate = now;
-            sut.GetStringValue().Should().Be(now.ToString(CultureInfo.InvariantCulture));
+            sut.GetValue().Should().Be(now.ToString(CultureInfo.InvariantCulture));
 
             datePicker.SelectedDate = null;
             sut.IsValid().Should().BeTrue();
-            sut.GetStringValue().Should().Be("");
+            sut.GetValue().Should().Be("");
 
             datePicker.Text = null;
             sut.IsValid().Should().BeTrue();
-            sut.GetStringValue().Should().Be(string.Empty);
+            sut.GetValue().Should().Be(string.Empty);
         }
 
         [Test]
@@ -161,30 +161,30 @@ namespace NZazu.Fields
             // DateFormat unspecified
             var date = DateTime.UtcNow;
             var dateStr = date.ToString(CultureInfo.InvariantCulture);
-            sut.SetStringValue(dateStr);
+            sut.SetValue(dateStr);
             sut.Value.Should().BeCloseTo(date, 1000, "parsing truncates millis");
 
             date += TimeSpan.FromSeconds(1);
             dateStr = date.ToString(CultureInfo.InvariantCulture);
             sut.Value = date;
-            sut.GetStringValue().Should().Be(dateStr);
+            sut.GetValue().Should().Be(dateStr);
 
             // now specify DateFormat
             const string dateFormat = "yyyy-MMM-dd";
             sut.DateFormat = dateFormat;
 
             dateStr = date.ToString(dateFormat, CultureInfo.InvariantCulture);
-            sut.GetStringValue().Should().Be(dateStr);
+            sut.GetValue().Should().Be(dateStr);
 
             date -= TimeSpan.FromDays(60);
             dateStr = date.ToString(dateFormat, CultureInfo.InvariantCulture);
             sut.Value = date;
-            sut.GetStringValue().Should().Be(dateStr);
+            sut.GetValue().Should().Be(dateStr);
 
             date += TimeSpan.FromDays(2);
             date = date.Date; // truncate time (we only check date --> format)
             dateStr = date.ToString(dateFormat, CultureInfo.InvariantCulture);
-            sut.SetStringValue(dateStr);
+            sut.SetValue(dateStr);
             sut.Value.Should().Be(date);
         }
     }

@@ -8,6 +8,7 @@ using NEdifis.Attributes;
 using NUnit.Framework;
 using NZazu.Contracts;
 using NZazu.Extensions;
+using NZazu.Fields;
 using Xceed.Wpf.Toolkit;
 using RichTextBox = Xceed.Wpf.Toolkit.RichTextBox;
 
@@ -43,14 +44,14 @@ namespace NZazu.Xceed
 
             var textBox = (RichTextBox)field.ValueControl;
 
-            field.GetStringValue().Should().BeNullOrEmpty();
+            field.GetValue().Should().BeNullOrEmpty();
             textBox.Text.Should().BeNullOrEmpty();
 
-            field.SetStringValue("foobar");
-            textBox.Text.Should().Be(field.GetStringValue());
+            field.SetValue("foobar");
+            textBox.Text.Should().Be(field.GetValue());
 
             textBox.Text = "not foobar";
-            field.GetStringValue().Should().Be(textBox.Text);
+            field.GetValue().Should().Be(textBox.Text);
         }
 
         [Test]
@@ -66,9 +67,12 @@ namespace NZazu.Xceed
         [STAThread]
         public void Respect_Height_Setting()
         {
-            var field = new XceedRichTextField(new FieldDefinition { Key = "key" }, ServiceLocator);
             var expectedHeight = 2 * XceedRichTextField.DefaultHeight;
-            field.Definition.Settings.Add("Height", expectedHeight.ToString(CultureInfo.InvariantCulture));
+            var definition = new FieldDefinition { Key = "key" };
+            definition.Settings.Add("Height", expectedHeight.ToString(CultureInfo.InvariantCulture));
+
+            var field = new XceedRichTextField(definition, ServiceLocator);
+            field.ApplySettings(definition);
 
             var textBox = (RichTextBox)field.ValueControl;
             textBox.MinHeight.Should().Be(expectedHeight);

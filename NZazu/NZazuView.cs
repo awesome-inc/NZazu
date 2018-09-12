@@ -45,7 +45,13 @@ namespace NZazu
         public INZazuWpfFieldFactory FieldFactory
         {
             get => (INZazuWpfFieldFactory)GetValue(FieldFactoryProperty);
-            set => SetValue(FieldFactoryProperty, value);
+            set
+            {
+                if (value == null)
+                    value = new NZazuFieldFactory();
+                value.Use(this);
+                SetValue(FieldFactoryProperty, value);
+            }
         }
 
         private static void FieldFactoryChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -196,12 +202,12 @@ namespace NZazu
             return _fields
                 // lets add the data
                 .Where(f => f.Value.IsEditable)
-                .Where(f => !string.IsNullOrEmpty(f.Value.GetStringValue()))
-                .Select(x => new KeyValuePair<string, string>(x.Key, x.Value.GetStringValue()))
+                .Where(f => !string.IsNullOrEmpty(f.Value.GetValue()))
+                .Select(x => new KeyValuePair<string, string>(x.Key, x.Value.GetValue()))
                 .Select(x => new KeyValuePair<string, string>(x.Key, x.Value))
                 // now lets add the control state
                 .Concat(_fields
-                    .Where(f => !string.IsNullOrEmpty(f.Value.GetStringValue()))
+                    .Where(f => !string.IsNullOrEmpty(f.Value.GetValue()))
                     .SelectMany(x => x.Value.GetState()))
                 // and dont forget the focus
                 .Concat(new[] { new KeyValuePair<string, string>("__focusOn", _lastFoussedElement?.Key), })
@@ -288,7 +294,7 @@ namespace NZazu
             {
                 // create field
                 var field = fieldFactory.CreateField(f);
-                _fields.Add(f.Key, field);
+                _fields.Add(field.Key, field);
                 AddGroupFieldKeys(field as INZazuWpfFieldContainer);
             });
         }

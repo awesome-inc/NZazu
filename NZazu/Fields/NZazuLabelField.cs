@@ -13,8 +13,8 @@ namespace NZazu.Fields
             IsEditable = false;
         }
 
-        public override void SetStringValue(string value) { }
-        public override string GetStringValue() { return null; }
+        public override void SetValue(string value) { }
+        public override string GetValue() { return null; }
 
         public override DependencyProperty ContentProperty => null;
 

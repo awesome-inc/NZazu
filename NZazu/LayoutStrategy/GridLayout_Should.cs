@@ -175,14 +175,20 @@ namespace NZazu.LayoutStrategy
             grid.Children[1].Should().Be(content2);
 
             var grid1 = (Grid)content1.Content;
-            var grid2 = (Grid)content2.Content;
+            grid1.Children.Should().HaveCount(fields1.Length * 2); // because we have label and value
+            foreach (var field in fields1)
+            {
+                grid1.Children.Should().Contain(field.LabelControl);
+                grid1.Children.Should().Contain(field.ValueControl);
+            }
 
-            grid1.Children.Should().HaveCount(fields1.Length);
-            grid2.Children.Should().HaveCount(fields2.Length);
-            for (int i = 0; i < fields1.Length; i++)
-                grid1.Children[i].Should().Be(fields1[i].ValueControl);
-            for (int i = 0; i < fields2.Length; i++)
-                grid2.Children[i].Should().Be(fields2[i].ValueControl);
+            var grid2 = (Grid)content2.Content;
+            grid2.Children.Should().HaveCount(fields2.Length * 2); // because we have label and value
+            foreach (var t in fields2)
+            {
+                grid2.Children.Should().Contain(t.LabelControl);
+                grid2.Children.Should().Contain(t.ValueControl);
+            }
         }
 
         [Test]

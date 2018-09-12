@@ -61,11 +61,12 @@ namespace NZazu.Fields
 
 #pragma warning disable 618
             return CreateFieldInstance(fieldDefinition)
-                .DecorateLabels(fieldDefinition)
                 .ApplySettings(fieldDefinition)
                 .AddOptionValues(fieldDefinition)
                 .AddBehaviors(fieldDefinition.Behaviors, behaviourFactory, view as INZazuWpfView)
-                .AddChecks(fieldDefinition.Checks, checkFactory, (view as INZazuView) != null ? () => ((INZazuView)view).FormData : (Func<FormData>)null, serializer, rowIdx);
+                .AddChecks(
+                    fieldDefinition.Checks, checkFactory,
+                    () => ((INZazuView)view)?.FormData ?? new Dictionary<string, string>(), serializer, rowIdx);
 #pragma warning restore 618
         }
 

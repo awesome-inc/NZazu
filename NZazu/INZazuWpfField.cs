@@ -5,7 +5,8 @@ using NZazu.Contracts.Checks;
 
 namespace NZazu
 {
-    public interface INZazuWpfField: IDisposable
+    public interface INZazuWpfField
+        : IDisposable
     {
         string Key { get; }
 
@@ -14,8 +15,8 @@ namespace NZazu
         bool IsEditable { get; }
 
         IEnumerable<KeyValuePair<string, string>> GetState();
-        void SetStringValue(string value);
-        string GetStringValue();
+        void SetValue(string value);
+        string GetValue();
 
         ValueCheckResult Validate();
     }

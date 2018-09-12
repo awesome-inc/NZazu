@@ -14,7 +14,7 @@ namespace NZazu.Fields
 
         public override DependencyProperty ContentProperty => TextBox.TextProperty;
 
-        protected override Binding DecorateBinding(Binding binding)
+        protected internal override Binding DecorateBinding(Binding binding)
         {
             binding.TargetNullValue = string.Empty;
             return base.DecorateBinding(binding);
@@ -25,7 +25,7 @@ namespace NZazu.Fields
             return new TextBox { ToolTip = Definition.Description };
         }
 
-        public override void SetStringValue(string value)
+        public override void SetValue(string value)
         {
             if (!string.IsNullOrWhiteSpace(value) && int.TryParse(value, out var result))
                 Value = result;
@@ -33,7 +33,7 @@ namespace NZazu.Fields
                 Value = null;
         }
 
-        public override string GetStringValue()
+        public override string GetValue()
         {
             return Value?.ToString(CultureInfo.InvariantCulture) ?? string.Empty;
         }

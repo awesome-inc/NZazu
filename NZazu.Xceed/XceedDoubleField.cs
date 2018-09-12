@@ -24,17 +24,16 @@ namespace NZazu.Xceed
             return control;
         }
 
-        public override void SetStringValue(string value)
+        public override void SetValue(string value)
         {
-            double result;
             if (!string.IsNullOrWhiteSpace(value)
-                && double.TryParse(value, NumberStyles.Number, FormatProvider, out result))
+                && double.TryParse(value, NumberStyles.Number, FormatProvider, out var result))
                 Value = result;
             else
                 Value = null;
         }
 
-        public override string GetStringValue()
+        public override string GetValue()
         {
             return Value.HasValue ? Value.Value.ToString(FormatProvider) : string.Empty;
         }

@@ -1,10 +1,13 @@
 using System;
+using System.Globalization;
 using System.Threading;
 using System.Windows.Controls;
+using System.Windows.Data;
 using FluentAssertions;
 using NEdifis.Attributes;
 using NUnit.Framework;
 using NZazu.Contracts;
+using NZazu.Extensions;
 
 namespace NZazu.Fields
 {
@@ -13,10 +16,17 @@ namespace NZazu.Fields
     // ReSharper disable InconsistentNaming
     internal class NZazuTextField_Should
     {
+        private object ServiceLocator(Type type)
+        {
+            if (type == typeof(IValueConverter)) return NoExceptionsConverter.Instance;
+            if (type == typeof(IFormatProvider)) return CultureInfo.InvariantCulture;
+            throw new NotSupportedException($"Cannot lookup {type.Name}");
+        }
+
         [Test]
         public void Be_Creatable()
         {
-            var sut = new NZazuTextField(new FieldDefinition { Key = "test" }, type => null);
+            var sut = new NZazuTextField(new FieldDefinition { Key = "test" }, ServiceLocator);
 
             sut.Should().NotBeNull();
             sut.Should().BeAssignableTo<INZazuWpfField>();
@@ -31,7 +41,7 @@ namespace NZazu.Fields
                 Key = "test",
                 Hint = "superhero",
                 Description = "check this if you are a registered superhero"
-            }, type => null);
+            }, ServiceLocator);
 
             var textBox = (TextBox)sut.ValueControl;
             textBox.Should().NotBeNull();
@@ -43,7 +53,7 @@ namespace NZazu.Fields
         [STAThread]
         public void Create_ValueControl_Even_If_Empty_Hint()
         {
-            var sut = new NZazuTextField(new FieldDefinition { Key = "test" }, type => null);
+            var sut = new NZazuTextField(new FieldDefinition { Key = "test" }, ServiceLocator);
 
             var textBox = (TextBox)sut.ValueControl;
             textBox.Should().NotBeNull();
@@ -54,19 +64,19 @@ namespace NZazu.Fields
         [STAThread]
         public void Get_Set_Value_should_propagate_to_ValueControl_Without_LostFocus()
         {
-            var sut = new NZazuTextField(new FieldDefinition { Key = "test" }, type => null);
+            var sut = new NZazuTextField(new FieldDefinition { Key = "test" }, ServiceLocator);
             var textBox = (TextBox)sut.ValueControl;
             textBox.Should().NotBeNull();
 
-            sut.GetStringValue().Should().BeNull();
+            sut.GetValue().Should().BeNull();
             textBox.Text.Should().BeNullOrEmpty();
 
-            sut.SetStringValue("test");
-            sut.GetStringValue().Should().Be("test");
+            sut.SetValue("test");
+            sut.GetValue().Should().Be("test");
             textBox.Text.Should().Be("test");
 
             textBox.Text = string.Empty;
-            sut.GetStringValue().Should().BeNullOrEmpty();
+            sut.GetValue().Should().BeNullOrEmpty();
         }
     }
 }

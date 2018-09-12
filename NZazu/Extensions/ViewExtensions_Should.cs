@@ -1,9 +1,7 @@
-﻿using System.Collections.Generic;
-using FluentAssertions;
+﻿using FluentAssertions;
 using NEdifis.Attributes;
 using NSubstitute;
 using NUnit.Framework;
-using NZazu.Contracts;
 using NZazu.Contracts.Checks;
 
 namespace NZazu.Extensions
@@ -12,64 +10,6 @@ namespace NZazu.Extensions
     // ReSharper disable InconsistentNaming
     internal class ViewExtensions_Should
     {
-        [Test]
-        public void Set_field_values_on_SetFieldValues()
-        {
-            var view = Substitute.For<INZazuWpfView>();
-
-            const string key = "name";
-            const string value = "John";
-
-            var formDefinition = new FormDefinition { Fields = new[] { new FieldDefinition { Key = key } } };
-            view.FormDefinition = formDefinition;
-
-            var field = Substitute.For<INZazuWpfField>();
-            // ReSharper disable once UnusedVariable
-            view.TryGetField(key, out var tmpField)
-                .Returns(x =>
-                {
-                    x[1] = field;
-                    return true;
-                });
-
-            var input = new Dictionary<string, string> { { key, value } };
-
-            view.SetFieldValues(input);
-
-            field.GetStringValue().Should().Be(value);
-        }
-
-        [Test]
-        public void Ignore_missing_field_on_SetFieldValues()
-        {
-            var view = Substitute.For<INZazuWpfView>();
-
-            const string key = "name";
-            const string value = "John";
-
-            var formDefinition = new FormDefinition { Fields = new[] { new FieldDefinition { Key = key } } };
-            view.FormDefinition = formDefinition;
-
-            var field = Substitute.For<INZazuWpfField>();
-            // ReSharper disable once UnusedVariable
-            view.TryGetField(key, out var tmpField)
-                .Returns(x =>
-                {
-                    x[1] = field;
-                    return true;
-                });
-
-            var input = new Dictionary<string, string>
-            {
-                { "another key", "somevalue" },
-                {key, value}
-            };
-
-            view.SetFieldValues(input);
-
-            field.GetStringValue().Should().Be(value, because: "nothing can be changed");
-        }
-
         [Test]
         public void Return_False_If_Validate_Has_Exception()
         {

@@ -10,12 +10,12 @@ namespace NZazu.Fields
         public NZazuTextField(FieldDefinition definition, Func<Type, object> serviceLocatorFunc)
             : base(definition, serviceLocatorFunc) { }
 
-        public override void SetStringValue(string value)
+        public override void SetValue(string value)
         {
             Value = value;
         }
 
-        public override string GetStringValue()
+        public override string GetValue()
         {
             CreateValueControl().GetValue(ContentProperty);
             return Value;

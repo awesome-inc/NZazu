@@ -14,6 +14,7 @@ using NSubstitute;
 using NUnit.Framework;
 using NZazu.Contracts;
 using NZazu.Contracts.Checks;
+using NZazu.Extensions;
 
 namespace NZazu.Fields
 {
@@ -22,6 +23,13 @@ namespace NZazu.Fields
     // ReSharper disable InconsistentNaming
     internal class NZazuField_Should
     {
+        private object ServiceLocator(Type type)
+        {
+            if (type == typeof(IValueConverter)) return NoExceptionsConverter.Instance;
+            if (type == typeof(IFormatProvider)) return CultureInfo.InvariantCulture;
+            throw new NotSupportedException($"Cannot lookup {type.Name}");
+        }
+
         #region Test fields to verify base class
 
         [ExcludeFromCodeCoverage]
@@ -31,8 +39,8 @@ namespace NZazu.Fields
                 : base(definition, serviceLocatorFunc) { }
 
             private string _stringValue;
-            public override void SetStringValue(string value) { _stringValue = value; }
-            public override string GetStringValue() { return _stringValue; }
+            public override void SetValue(string value) { _stringValue = value; }
+            public override string GetValue() { return _stringValue; }
             public override DependencyProperty ContentProperty => null;
             protected override Control CreateValueControl() { return null; }
         }
@@ -55,8 +63,8 @@ namespace NZazu.Fields
                 : base(definition, serviceLocatorFunc) { }
             public override DependencyProperty ContentProperty => throw new NotImplementedException();
             protected override Control CreateValueControl() { throw new NotImplementedException(); }
-            public override void SetStringValue(string value) { throw new NotImplementedException(); }
-            public override string GetStringValue() { throw new NotImplementedException(); }
+            public override void SetValue(string value) { throw new NotImplementedException(); }
+            public override string GetValue() { throw new NotImplementedException(); }
         }
         #endregion
 
@@ -64,16 +72,16 @@ namespace NZazu.Fields
         public void Validate_ctor_parameters()
         {
             // ReSharper disable ObjectCreationAsStatement
-            0.Invoking(x => new NZazuDummyField(new FieldDefinition { Key = "" }, type => null)).Should().Throw<ArgumentException>();
-            1.Invoking(x => new NZazuDummyField(new FieldDefinition(), type => null)).Should().Throw<ArgumentException>();
-            2.Invoking(x => new NZazuDummyField(new FieldDefinition { Key = "\t\r\n " }, type => null)).Should().Throw<ArgumentException>();
+            0.Invoking(x => new NZazuDummyField(new FieldDefinition { Key = "" }, ServiceLocator)).Should().Throw<ArgumentException>();
+            1.Invoking(x => new NZazuDummyField(new FieldDefinition(), ServiceLocator)).Should().Throw<ArgumentException>();
+            2.Invoking(x => new NZazuDummyField(new FieldDefinition { Key = "\t\r\n " }, ServiceLocator)).Should().Throw<ArgumentException>();
             // ReSharper restore ObjectCreationAsStatement
         }
 
         [Test]
         public void Not_Create_Label_if_no_prompt()
         {
-            var sut = new NZazuDummyField(new FieldDefinition { Key = "test" }, type => null);
+            var sut = new NZazuDummyField(new FieldDefinition { Key = "test" }, ServiceLocator);
             sut.Definition.Prompt.Should().BeNullOrWhiteSpace();
             sut.LabelControl.Should().BeNull();
         }
@@ -82,7 +90,7 @@ namespace NZazu.Fields
         [STAThread]
         public void Create_Label_Matching_Prompt()
         {
-            var sut = new NZazuDummyField(new FieldDefinition { Key = "test", Prompt = "superhero" }, type => null);
+            var sut = new NZazuDummyField(new FieldDefinition { Key = "test", Prompt = "superhero" }, ServiceLocator);
 
             var label = (Label)sut.LabelControl;
             label.Should().NotBeNull();
@@ -92,18 +100,18 @@ namespace NZazu.Fields
         [Test]
         public void Set_And_Get_Value()
         {
-            var sut = new NZazuDummyField(new FieldDefinition { Key = "test" }, type => null);
-            sut.GetStringValue().Should().BeNull();
+            var sut = new NZazuDummyField(new FieldDefinition { Key = "test" }, ServiceLocator);
+            sut.GetValue().Should().BeNull();
 
-            sut.SetStringValue("test");
-            sut.GetStringValue().Should().Be("test");
+            sut.SetValue("test");
+            sut.GetValue().Should().Be("test");
         }
 
         [Test]
         public void Pass_Validation_To_Checks()
         {
             var check = Substitute.For<IValueCheck>();
-            var sut = new NZazuDummyField(new FieldDefinition { Key = "test", Description = "description" }, type => null) { Check = check };
+            var sut = new NZazuDummyField(new FieldDefinition { Key = "test", Description = "description" }, ServiceLocator) { Check = check };
             sut.Validate();
 
             check.ReceivedWithAnyArgs().Validate(Arg.Any<string>());
@@ -115,7 +123,7 @@ namespace NZazu.Fields
             var check = Substitute.For<IValueCheck>();
             check.Validate(Arg.Any<string>(), Arg.Any<IFormatProvider>()).Returns(new ValueCheckResult(false, "test"));
 
-            var sut = new NZazuDummyField(new FieldDefinition { Key = "test", Description = "description" }, type => null) { Check = check };
+            var sut = new NZazuDummyField(new FieldDefinition { Key = "test", Description = "description" }, ServiceLocator) { Check = check };
             sut.Validate().IsValid.Should().BeFalse();
             check.ReceivedWithAnyArgs().Validate(Arg.Any<string>());
         }
@@ -124,9 +132,12 @@ namespace NZazu.Fields
         [STAThread]
         public void Respect_Height_Setting()
         {
-            var field = new NZazuField_With_Description_As_Content_Property(new FieldDefinition { Key = "key" }, type => null);
             const double expected = 65.5;
-            field.Definition.Settings.Add("Height", expected.ToString(CultureInfo.InvariantCulture));
+            var definition = new FieldDefinition { Key = "key" };
+            definition.Settings.Add("Height", expected.ToString(CultureInfo.InvariantCulture));
+
+            var field = new NZazuField_With_Description_As_Content_Property(definition, ServiceLocator);
+            field.ApplySettings(definition);
 
             var control = (ContentControl)field.ValueControl;
             control.MinHeight.Should().Be(expected);
@@ -137,9 +148,12 @@ namespace NZazu.Fields
         [STAThread]
         public void Respect_Width_Setting()
         {
-            var field = new NZazuField_With_Description_As_Content_Property(new FieldDefinition { Key = "key" }, type => null);
             const double expected = 65.5;
-            field.Definition.Settings.Add("Width", expected.ToString(CultureInfo.InvariantCulture));
+            var definition = new FieldDefinition { Key = "key" };
+            definition.Settings.Add("Width", expected.ToString(CultureInfo.InvariantCulture));
+
+            var field = new NZazuField_With_Description_As_Content_Property(definition, ServiceLocator);
+            field.ApplySettings(definition);
 
             var control = (ContentControl)field.ValueControl;
             control.MinWidth.Should().Be(expected);
@@ -150,7 +164,7 @@ namespace NZazu.Fields
         [SetCulture("fr")]
         public void Use_InvariantCulture_in_GetSettingT()
         {
-            var field = new NZazuDummyField(new FieldDefinition { Key = "key" }, type => null);
+            var field = new NZazuDummyField(new FieldDefinition { Key = "key" }, ServiceLocator);
             const double expectedHeight = 65.5;
             field.Definition.Settings.Add("Height", expectedHeight.ToString(CultureInfo.InvariantCulture));
 
@@ -168,7 +182,7 @@ namespace NZazu.Fields
             check.Validate(Arg.Any<string>(), Arg.Any<CultureInfo>())
                 .Returns(new ValueCheckResult(false, "test"));
 
-            var sut = new NZazuField_With_Description_As_Content_Property(new FieldDefinition { Key = "test", Description = "description" }, type => null)
+            var sut = new NZazuField_With_Description_As_Content_Property(new FieldDefinition { Key = "test", Description = "description" }, ServiceLocator)
             { Check = check };
 
             var expectedRule = new CheckValidationRule(check)
@@ -197,7 +211,7 @@ namespace NZazu.Fields
         [Test]
         public void Be_Editable()
         {
-            var sut = new GenericDummyField(new FieldDefinition { Key = "test" }, type => null);
+            var sut = new GenericDummyField(new FieldDefinition { Key = "test" }, ServiceLocator);
             sut.IsEditable.Should().BeTrue();
         }
 
@@ -205,23 +219,24 @@ namespace NZazu.Fields
         [STAThread]
         public void Respect_generic_settings()
         {
-            var sut = new NZazuField_With_Description_As_Content_Property(new FieldDefinition { Key = "test" }, type => null);
+            var definition = new FieldDefinition { Key = "test" };
+            definition.Settings.Add("ContentStringFormat", "dddd – d - MMMM");
+            definition.Settings.Add("FontFamily", "Century Gothic");
+            definition.Settings.Add("FontWeight", "UltraBold");
+            definition.Settings.Add("FontSize", "24");
+            definition.Settings.Add("Foreground", "BlueViolet");
+            definition.Settings.Add("Margin", "1,2,3,4");
+            definition.Settings.Add("Name", "myControl");
+            definition.Settings.Add("Opacity", "0.75");
+            definition.Settings.Add("Padding", "2.5");
+            definition.Settings.Add("TabIndex", "42");
+            definition.Settings.Add("Uid", "myId");
+            definition.Settings.Add("Visibility", "Collapsed");
+            definition.Settings.Add("HorizontalAlignment", "Left");
+            definition.Settings.Add("VerticalAlignment", "Bottom");
 
-            sut.Definition.Settings.Add("ContentStringFormat", "dddd – d - MMMM");
-            sut.Definition.Settings.Add("FontFamily", "Century Gothic");
-            sut.Definition.Settings.Add("FontWeight", "UltraBold");
-            sut.Definition.Settings.Add("FontSize", "24");
-            sut.Definition.Settings.Add("Foreground", "BlueViolet");
-            sut.Definition.Settings.Add("Margin", "1,2,3,4");
-            sut.Definition.Settings.Add("Name", "myControl");
-            sut.Definition.Settings.Add("Opacity", "0.75");
-            sut.Definition.Settings.Add("Padding", "2.5");
-            sut.Definition.Settings.Add("TabIndex", "42");
-            sut.Definition.Settings.Add("Uid", "myId");
-            sut.Definition.Settings.Add("Visibility", "Collapsed");
-            sut.Definition.Settings.Add("HorizontalAlignment", "Left");
-            sut.Definition.Settings.Add("VerticalAlignment", "Bottom");
-
+            var sut = new NZazuField_With_Description_As_Content_Property(definition, ServiceLocator);
+            sut.ApplySettings(definition);
             var control = (ContentControl)sut.ValueControl;
 
             control.FontFamily.ToString().Should().Be("Century Gothic");
@@ -253,7 +268,7 @@ namespace NZazu.Fields
             BehaviorDefinition behavior3 = null;
 
             fieldDefinition.Behaviors = new List<BehaviorDefinition>() { behavior1, behavior2, behavior3 };
-            var sut = new GenericDummyField(fieldDefinition, type => null);
+            var sut = new GenericDummyField(fieldDefinition, ServiceLocator);
 
             Assert.DoesNotThrow(() => sut.Dispose());
         }

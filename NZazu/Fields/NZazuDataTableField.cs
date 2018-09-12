@@ -251,12 +251,12 @@ namespace NZazu.Fields
 
         #endregion
 
-        public override void SetStringValue(string value)
+        public override void SetValue(string value)
         {
             UpdateGridValues(value);
         }
 
-        public override string GetStringValue()
+        public override string GetValue()
         {
             return GetGridValues();
         }
@@ -271,7 +271,7 @@ namespace NZazu.Fields
                         y => y.Key == x.Name.Split(new[] { "__" }, StringSplitOptions.RemoveEmptyEntries)[0]) != null)
                 .ToDictionary(
                     child => child.Name,
-                    child => _fields.Single(x => Equals(x.Value.ValueControl, child)).Value.GetStringValue()
+                    child => _fields.Single(x => Equals(x.Value.ValueControl, child)).Value.GetValue()
                  );
 
             return _serializer.Serialize(data);
@@ -312,7 +312,7 @@ namespace NZazu.Fields
                 var kv = newDict.FirstOrDefault(x => x.Key == field.Key);
                 if (string.IsNullOrEmpty(kv.Key)) continue;
 
-                field.Value.SetStringValue(kv.Value);
+                field.Value.SetValue(kv.Value);
             }
 
             if (layout.RowDefinitions.Count == 1)

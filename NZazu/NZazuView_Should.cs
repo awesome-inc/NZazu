@@ -44,12 +44,13 @@ namespace NZazu
             const string key = "key";
             const string value = "value";
 
-            var fieldDefinition = new FieldDefinition { Key = key };
+            var fieldDefinition = new FieldDefinition { Key = key, Type = "string" };
             var formDefinition = new FormDefinition { Fields = new[] { fieldDefinition } };
             var factory = Substitute.For<INZazuWpfFieldFactory>();
             var field = Substitute.For<INZazuWpfField>();
-            field.GetStringValue().Returns(value);
+            field.GetValue().Returns(value);
             field.IsEditable.Returns(true);
+            field.Key.Returns(key);
             factory.CreateField(fieldDefinition).Returns(field);
 
             var view = new NZazuView
@@ -255,7 +256,7 @@ namespace NZazu
 
             // simulate user editing
             const string changedValue = "other";
-            view.GetField(key).SetStringValue(changedValue);
+            view.GetField(key).SetValue(changedValue);
 
             // simulate user leaves the field -> LostFoucs
             view.RaiseEvent(new RoutedEventArgs(UIElement.LostFocusEvent));
@@ -269,7 +270,7 @@ namespace NZazu
         public void Validate_By_Calling_INZazuField_Validate()
         {
             var field = Substitute.For<INZazuWpfField>();
-            field.Key.ReturnsForAnyArgs("test");
+            field.Key.Returns("test");
             field.Validate().Returns(ValueCheckResult.Success);
             var fieldFactory = Substitute.For<INZazuWpfFieldFactory>();
             var layout = Substitute.For<IResolveLayout>();
@@ -330,9 +331,12 @@ namespace NZazu
             const string value = "value";
 
             var fieldDefinition = new FieldDefinition { Key = key, Type = "string", Prompt = "Name" };
+            var field = Substitute.For<INZazuWpfField>();
+            field.Key.Returns(key);
             var formDefinition = new FormDefinition { Fields = new[] { fieldDefinition } };
             var formData = new FormData(new Dictionary<string, string> { { key, value } });
             var factory = Substitute.For<INZazuWpfFieldFactory>();
+            factory.CreateField(fieldDefinition).Returns(field);
 
             var sut = new NZazuView { FormDefinition = formDefinition, FormData = formData, FieldFactory = factory };
             new Action(() => sut.GetField("I do not exist")).Invoking(a => a()).Should().Throw<KeyNotFoundException>();
@@ -415,6 +419,7 @@ namespace NZazu
         {
             var sut = new NZazuView
             {
+                FieldFactory = new NZazuFieldFactory(),
                 FormDefinition = new FormDefinition
                 {
                     Fields = new[]

@@ -11,7 +11,9 @@ using NZazu.Contracts.Checks;
 
 namespace NZazu.Fields
 {
-    public abstract class NZazuField : INZazuWpfField
+    public abstract class NZazuField
+        : INZazuWpfField
+        , INotifyPropertyChanged
     {
         public bool IsEditable { get; protected set; } = true;
         public string Key { get; }
@@ -29,14 +31,14 @@ namespace NZazu.Fields
         public Control ValueControl => _valueControl.Value;
 
         protected readonly IFormatProvider FormatProvider;
-        protected readonly IValueConverter ValueConverter;
+        protected internal readonly IValueConverter ValueConverter;
 
         #endregion
 
         #region abstract methods
 
-        public abstract void SetStringValue(string value);
-        public abstract string GetStringValue();
+        public abstract void SetValue(string value);
+        public abstract string GetValue();
         public abstract DependencyProperty ContentProperty { get; }
 
         // ReSharper disable once VirtualMemberNeverOverridden.Global
@@ -56,7 +58,13 @@ namespace NZazu.Fields
             if (serviceLocatorFunc == null) throw new ArgumentNullException(nameof(serviceLocatorFunc));
 
             _labelControl = new Lazy<Control>(CreateLabelControl);
-            _valueControl = new Lazy<Control>(CreateValueControl);
+            _valueControl = new Lazy<Control>(()=>
+            {
+                var ctrl = CreateValueControl();
+                AddValuePropertyBinding(this, ctrl);
+
+                return ctrl;
+            });
             FormatProvider = serviceLocatorFunc(typeof(IFormatProvider)) as IFormatProvider
                               ?? throw new ArgumentNullException(nameof(FormatProvider), "no IFormatProvider implementation in ServiceLocator from factory");
             ValueConverter = serviceLocatorFunc(typeof(IValueConverter)) as IValueConverter
@@ -77,46 +85,17 @@ namespace NZazu.Fields
 
             if (Check == null) return ValueCheckResult.Success;
 
-            return Check.Validate(GetStringValue(), FormatProvider);
-        }
-
-        protected virtual Control DecorateValidation(Control control)
-        {
-            if (control == null) return null;
-            if (ContentProperty == null) return control; // because no validation if no content!
-
-            var binding = new Binding("Value")
-            {
-                Source = this,
-                Mode = BindingMode.TwoWay,
-                ValidatesOnDataErrors = true,
-                ValidatesOnExceptions = true,
-                NotifyOnValidationError = false,
-                NotifyOnTargetUpdated = true,
-                NotifyOnSourceUpdated = true,
-                IsAsync = false,
-                UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged
-            };
-            if (ValueConverter != null)
-                binding.Converter = ValueConverter;
-
-            binding = DecorateBinding(binding);
-
-            if (Check != null)
-            {
-                binding.ValidationRules.Clear();
-                binding.ValidationRules.Add(new CheckValidationRule(Check) { ValidatesOnTargetUpdated = true });
-            }
-
-            control.SetBinding(ContentProperty, binding);
-            return control; // no checks, no validation required. saves performance
+            return Check.Validate(GetValue(), FormatProvider);
         }
 
         /// <summary>
         /// binding needs to be changed by subclasses for example if the Nullable-binding should be set.
         /// </summary>
         /// <param name="binding"></param>
-        protected virtual Binding DecorateBinding(Binding binding) { return binding; }
+        protected internal virtual Binding DecorateBinding(Binding binding)
+        {
+            return binding;
+        }
 
         public virtual IEnumerable<KeyValuePair<string, string>> GetState()
         {
@@ -128,9 +107,51 @@ namespace NZazu.Fields
             Behaviors?.ToList().ForEach(x => { x?.Detach(); });
             Behaviors = null;
         }
+
+        public event PropertyChangedEventHandler PropertyChanged = (sender, e) => { };
+
+        // ReSharper disable once MemberCanBePrivate.Global
+        protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        // this adds the binding. needs to be done here for contol testing
+        // otherwiese values are not added to the value control
+        private static void AddValuePropertyBinding(NZazuField field, Control control)
+        {
+            if (control == null) return;
+            if (field.ContentProperty == null) return;
+
+            var binding = new Binding("Value")
+            {
+                Source = field,
+                Mode = BindingMode.TwoWay,
+                ValidatesOnDataErrors = true,
+                ValidatesOnExceptions = true,
+                NotifyOnValidationError = false,
+                NotifyOnTargetUpdated = true,
+                NotifyOnSourceUpdated = true,
+                IsAsync = false,
+                UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged
+            };
+            if (field.ValueConverter != null)
+                binding.Converter = field.ValueConverter;
+
+            binding = field.DecorateBinding(binding);
+
+            if (field.Check != null)
+            {
+                binding.ValidationRules.Clear();
+                binding.ValidationRules.Add(new CheckValidationRule(field.Check) { ValidatesOnTargetUpdated = true });
+            }
+
+            control.SetBinding(field.ContentProperty, binding);
+        }
+
     }
 
-    public abstract class NZazuField<T> : NZazuField, INZazuWpfField<T>, INotifyPropertyChanged
+    public abstract class NZazuField<T> : NZazuField, INZazuWpfField<T>
     {
         private T _value;
 
@@ -147,15 +168,7 @@ namespace NZazu.Fields
             }
         }
 
-        public event PropertyChangedEventHandler PropertyChanged = (sender, e) => { };
-
-        // ReSharper disable once MemberCanBePrivate.Global
-        protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-        }
-
-        protected override Binding DecorateBinding(Binding binding)
+        protected internal override Binding DecorateBinding(Binding binding)
         {
             if (Nullable.GetUnderlyingType(typeof(T)) == null) return binding;
 

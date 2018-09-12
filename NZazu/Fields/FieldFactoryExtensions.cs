@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Windows.Controls;
+using System.Windows.Data;
 using NZazu.Contracts;
 using NZazu.Contracts.Checks;
 
@@ -9,15 +9,6 @@ namespace NZazu.Fields
 {
     public static class FieldFactoryExtensions
     {
-        public static NZazuField DecorateLabels(this NZazuField field, FieldDefinition fieldDefinition)
-        {
-            field.Definition.Prompt = fieldDefinition.Prompt;
-            field.Definition.Hint = fieldDefinition.Hint;
-            field.Definition.Description = fieldDefinition.Description;
-
-            return field;
-        }
-
         public static NZazuField ApplySettings(this NZazuField field, FieldDefinition fieldDefinition)
         {
             if (fieldDefinition.Settings == null) return field;

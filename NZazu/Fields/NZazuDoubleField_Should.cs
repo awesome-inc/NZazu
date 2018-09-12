@@ -181,13 +181,13 @@ namespace NZazu.Fields
             var sut = new NZazuDoubleField(new FieldDefinition { Key = "key" }, ServiceLocator);
             var control = (TextBox)sut.ValueControl;
 
-            sut.GetStringValue().Should().BeNullOrEmpty();
+            sut.GetValue().Should().BeNullOrEmpty();
             control.Text.Should().BeEmpty();
 
-            sut.SetStringValue("1.4");
+            sut.SetValue("1.4");
             control.Text.Should().Be("1.4");
 
-            sut.SetStringValue("");
+            sut.SetValue("");
             control.Text.Should().BeEmpty();
         }
 
@@ -200,16 +200,16 @@ namespace NZazu.Fields
             var control = (TextBox)sut.ValueControl;
 
             control.Text = "1.4";
-            sut.GetStringValue().Should().Be("1.4");
+            sut.GetValue().Should().Be("1.4");
 
             control.Text = string.Empty;
             sut.IsValid().Should().BeTrue();
-            sut.GetStringValue().Should().Be("");
+            sut.GetValue().Should().Be("");
 
             // ReSharper disable once AssignNullToNotNullAttribute
             control.Text = null;
             sut.IsValid().Should().BeTrue();
-            sut.GetStringValue().Should().Be(string.Empty);
+            sut.GetValue().Should().Be(string.Empty);
         }
     }
 }

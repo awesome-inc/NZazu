@@ -10,7 +10,7 @@ namespace NZazu.Fields
         public NZazuBoolField(FieldDefinition definition, Func<Type, object> serviceLocatorFunc)
             : base(definition, serviceLocatorFunc) { }
 
-        public override void SetStringValue(string value)
+        public override void SetValue(string value)
         {
             bool b;
             if (!string.IsNullOrWhiteSpace(value) && bool.TryParse(value, out b))
@@ -19,7 +19,7 @@ namespace NZazu.Fields
                 Value = null;
         }
 
-        public override string GetStringValue()
+        public override string GetValue()
         {
             return Value?.ToString() ?? string.Empty;
         }

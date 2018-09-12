@@ -50,13 +50,13 @@ namespace NZazu.Xceed
             var sut = new XceedDoubleField(new FieldDefinition { Key = "key" }, ServiceLocator);
             var control = (DoubleUpDown)sut.ValueControl;
 
-            sut.GetStringValue().Should().BeNullOrEmpty();
+            sut.GetValue().Should().BeNullOrEmpty();
             control.Value.Should().NotHaveValue();
 
-            sut.SetStringValue("1.4");
+            sut.SetValue("1.4");
             control.Value.Should().Be(1.4);
 
-            sut.SetStringValue(string.Empty);
+            sut.SetValue(string.Empty);
             control.Value.Should().NotHaveValue();
         }
 
@@ -68,15 +68,15 @@ namespace NZazu.Xceed
             var control = (DoubleUpDown)sut.ValueControl;
 
             control.Value = 1.4;
-            sut.GetStringValue().Should().Be("1.4");
+            sut.GetValue().Should().Be("1.4");
 
             control.Value = null;
             sut.IsValid().Should().BeTrue();
-            sut.GetStringValue().Should().Be("");
+            sut.GetValue().Should().Be("");
 
             control.Text = null;
             sut.IsValid().Should().BeTrue();
-            sut.GetStringValue().Should().Be(string.Empty);
+            sut.GetValue().Should().Be(string.Empty);
         }
 
         [Test]
