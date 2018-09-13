@@ -102,6 +102,18 @@ namespace NZazuFiddle.Samples
                         },
                         new FieldDefinition
                         {
+                            Key = "autocomplete",
+                            Type = "autocomplete",
+                            Prompt = "autocomplete",
+                            Hint = "Enter 'a' and wait for autocomplete",
+                            Description = "Enter a single line string and get suggestion from any source using a provider",
+                            Settings = new Dictionary<string, string>
+                            {
+                                {"dataconnection", "v:anton|adam|abraham|anna|annika|astrid"}
+                            }
+                        },
+                        new FieldDefinition
+                        {
                             Key = "int",
                             Type = "int",
                             Prompt = "int",
@@ -132,7 +144,7 @@ namespace NZazuFiddle.Samples
                         {
                             Key = "date",
                             Type = "date",
-                            Prompt = "date:",
+                            Prompt = "date",
                             Description = "enter a date with a custom format",
                             Hint = "dd-MM-yyyy",
                             Settings = new Dictionary<string, string>

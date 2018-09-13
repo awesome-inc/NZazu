@@ -63,6 +63,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Adapter\IProvideSuggestions.cs" />
+    <Compile Include="Adapter\ISuggestSuffix.cs" />
     <Compile Include="Adapter\NZazuCoordinate.cs" />
     <Compile Include="Adapter\ISupportGeoLocationBox.cs" />
     <Compile Include="Adapter\NZazuCoordinate_Should.cs" />

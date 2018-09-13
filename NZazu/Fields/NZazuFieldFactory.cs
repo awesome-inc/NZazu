@@ -28,6 +28,7 @@ namespace NZazu.Fields
             _serviceLocator.Add(typeof(IFormatProvider), CultureInfo.InvariantCulture);
             _serviceLocator.Add(typeof(IValueConverter), NoExceptionsConverter.Instance);
             _serviceLocator.Add(typeof(ISupportGeoLocationBox), new SupportGeoLocationBox());
+            _serviceLocator.Add(typeof(IProvideSuggestions), new ProvideValueSuggestions());
 
             // lets add all nzazu core fields and types
             FieldTypes.Add(DefaultType, typeof(NZazuLabelField)); // we add label twice to have it as default type
@@ -43,6 +44,7 @@ namespace NZazu.Fields
             FieldTypes.Add("keyedoption", typeof(NZazuKeyedOptionsField));
             FieldTypes.Add("imageViewer", typeof(NZazuImageViewerField));
             FieldTypes.Add("location", typeof(NZazuLocationField));
+            FieldTypes.Add("autocomplete", typeof(NZazuAutocompleteField));
         }
 
         public INZazuWpfField CreateField(FieldDefinition fieldDefinition, int rowIdx = -1)
