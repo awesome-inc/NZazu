@@ -2,8 +2,10 @@
 using Caliburn.Micro;
 using NZazu;
 using NZazu.Contracts;
+using NZazu.Contracts.Adapter;
 using NZazu.JsonSerializer;
 using NZazu.Xceed;
+using NZazuFiddle.Impls;
 
 namespace NZazuFiddle
 {
@@ -25,8 +27,8 @@ namespace NZazuFiddle
             _definition = definition ?? throw new ArgumentNullException(nameof(definition));
             _data = data ?? throw new ArgumentNullException(nameof(data));
             _fieldFactory = fieldFactory ?? new XceedFieldFactory();
-            _fieldFactory.Use(new NZazuTableDataJsonSerializer());
-            //_fieldFactory = fieldFactory ?? new XceedFieldFactory();
+            _fieldFactory.Use<INZazuTableDataSerializer>(new NZazuTableDataJsonSerializer());
+            _fieldFactory.Use<ISupportGeoLocationBox>(new SupportGeoLocationBoxWithDeviceLocation());
         }
 
         public FormDefinition Definition

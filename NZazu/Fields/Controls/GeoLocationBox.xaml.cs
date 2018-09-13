@@ -94,13 +94,13 @@ namespace NZazu.Fields.Controls
 
         private void OpenInGeoAppClick(object sender, RoutedEventArgs e)
         {
-            if (GeoLocationSupport?.CanOpenGeoApp ?? false) return;
+            if (!(GeoLocationSupport?.CanOpenGeoApp ?? false)) return;
             GeoLocationSupport?.OpenGeoApp(Value);
         }
 
         private void SetToCurrentLocationClick(object sender, RoutedEventArgs e)
         {
-            if (GeoLocationSupport?.HasCurrentPosition ?? false) return;
+            if (!(GeoLocationSupport?.HasCurrentPosition ?? false)) return;
             Value = GeoLocationSupport?.CurrentPosition;
         }
 

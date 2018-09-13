@@ -1,16 +1,19 @@
+using System.Diagnostics;
 using System.Threading.Tasks;
 
 namespace NZazu.Contracts.Adapter
 {
     public class SupportGeoLocationBox : ISupportGeoLocationBox
     {
-        public bool HasCurrentPosition { get; } = false;
-        public NZazuCoordinate CurrentPosition { get; } = null;
-        public bool CanOpenGeoApp { get; } = false;
+        public virtual bool HasCurrentPosition { get; } = false;
 
-        public Task OpenGeoApp(NZazuCoordinate nZazuCoordinate)
+        public virtual NZazuCoordinate CurrentPosition { get; } = null;
+
+        public bool CanOpenGeoApp { get; } = true;
+
+        public Task OpenGeoApp(NZazuCoordinate c)
         {
-            throw new System.NotImplementedException();
+            return Task.Run(() => Process.Start($"https://www.google.com/maps/place/@{c.Lat},{c.Lon},14z"));
         }
 
         public string ToString(NZazuCoordinate c)
