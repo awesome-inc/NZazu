@@ -5,7 +5,6 @@ using NZazu.Contracts;
 using NZazu.Contracts.Adapter;
 using NZazu.JsonSerializer;
 using NZazu.Xceed;
-using NZazuFiddle.Impls;
 
 namespace NZazuFiddle
 {
@@ -28,7 +27,7 @@ namespace NZazuFiddle
             _data = data ?? throw new ArgumentNullException(nameof(data));
             _fieldFactory = fieldFactory ?? new XceedFieldFactory();
             _fieldFactory.Use<INZazuTableDataSerializer>(new NZazuTableDataJsonSerializer());
-            _fieldFactory.Use<ISupportGeoLocationBox>(new SupportGeoLocationBoxWithDeviceLocation());
+            _fieldFactory.Use<ISupportGeoLocationBox>(new SupportGeoLocationBox());
         }
 
         public FormDefinition Definition
