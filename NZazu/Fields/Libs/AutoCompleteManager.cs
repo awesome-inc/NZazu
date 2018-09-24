@@ -11,7 +11,6 @@ using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using Microsoft.Windows.Themes;
-using NSuggest;
 using NZazu.Contracts.Adapter;
 
 namespace NZazu.Fields.Libs

@@ -2,7 +2,6 @@ using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using NSuggest;
 using NZazu.Contracts;
 using NZazu.Contracts.Adapter;
 using NZazu.Fields.Libs;

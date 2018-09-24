@@ -99,7 +99,11 @@
     <Compile Include="DateTimePickerWithUpdate.xaml.cs">
       <DependentUpon>DateTimePickerWithUpdate.xaml</DependentUpon>
     </Compile>
+    <Compile Include="DateTimePickerWithUpdate_Should.cs" />
+    <Compile Include="IActualDateTimeProvider.cs" />
+    <Compile Include="NowDateTimeProvider.cs" />
     <Compile Include="NZazuConventions.cs" />
+    <Compile Include="UtcDateTimeProvider.cs" />
     <Compile Include="XceedDateTimeField.cs" />
     <Compile Include="XceedDateTimeField_Should.cs" />
     <Compile Include="XceedDoubleField.cs" />

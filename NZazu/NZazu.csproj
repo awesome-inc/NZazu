@@ -163,7 +163,7 @@
     <Compile Include="Serializer\NZazuTableDataSerializerBase.cs" />
     <Compile Include="Serializer\NZazuTableDataSerializerBase_Should.cs" />
     <Compile Include="Serializer\NZazuTableDataXmlSerializer.cs" />
-    <Compile Include="Serializer\NZazuXmlSerializer_Should.cs" />
+    <Compile Include="Serializer\NZazuTableDataXmlSerializer_Should.cs" />
     <Page Include="Fields\Controls\DynamicDataTable.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

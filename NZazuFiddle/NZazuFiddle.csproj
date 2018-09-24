@@ -150,7 +150,7 @@
     <Compile Include="IFormDefinitionViewModel.cs" />
     <Compile Include="IHaveFormData.cs" />
     <Compile Include="IHaveFormDefinition.cs" />
-    <Compile Include="IHaveJson.cs" />
+    <Compile Include="IHaveJsonFor.cs" />
     <Compile Include="IPreviewViewModel.cs" />
     <Compile Include="ISample.cs" />
     <Compile Include="IShell.cs" />
@@ -171,7 +171,7 @@
     <Compile Include="AppBootstrapper.cs" />
     <Compile Include="IFiddle.cs" />
     <Compile Include="Samples\BehaviorSample.cs" />
-    <Compile Include="Samples\DynamicRowLayout.cs" />
+    <Compile Include="Samples\RadioTransmissionIncident.cs" />
     <Compile Include="Samples\FocusSample.cs" />
     <Compile Include="Samples\IHaveSample.cs" />
     <Compile Include="Samples\MixedGroupLayout.cs" />
