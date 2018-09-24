@@ -102,14 +102,26 @@ namespace NZazuFiddle.Samples
                         },
                         new FieldDefinition
                         {
-                            Key = "autocomplete",
+                            Key = "autocompleteV",
                             Type = "autocomplete",
-                            Prompt = "autocomplete",
+                            Prompt = "autocomplete from values",
                             Hint = "Enter 'a' and wait for autocomplete",
                             Description = "Enter a single line string and get suggestion from any source using a provider",
                             Settings = new Dictionary<string, string>
                             {
                                 {"dataconnection", "v:anton|adam|abraham|anna|annika|astrid"}
+                            }
+                        },
+                        new FieldDefinition
+                        {
+                            Key = "autocompleteF",
+                            Type = "autocomplete",
+                            Prompt = "autocomplete from file",
+                            Hint = "Enter 'b' and wait for autocomplete",
+                            Description = "Enter a single line string and get suggestion from any source using a provider",
+                            Settings = new Dictionary<string, string>
+                            {
+                                {"dataconnection", "f:cities.txt"}
                             }
                         },
                         new FieldDefinition

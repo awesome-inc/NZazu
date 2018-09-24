@@ -220,6 +220,9 @@
       <SubType>Code</SubType>
     </Compile>
     <EmbeddedResource Include="NZazu.xshd" />
+    <Content Include="cities.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="NZazuFiddle.targets" />
     <None Include="packages.config" />
     <AppDesigner Include="Properties\" />
@@ -247,6 +250,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\error.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Impls\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

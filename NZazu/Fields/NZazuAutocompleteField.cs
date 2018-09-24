@@ -42,7 +42,7 @@ namespace NZazu.Fields
             return result;
         }
 
-        internal void AttachSuggestor(object sender)
+        private void AttachSuggestor(object sender)
         {
 // no suggester, no suggestions ;)
             if (_suggester == null) return;

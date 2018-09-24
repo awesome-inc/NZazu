@@ -28,7 +28,11 @@ namespace NZazu.Fields
             _serviceLocator.Add(typeof(IFormatProvider), CultureInfo.InvariantCulture);
             _serviceLocator.Add(typeof(IValueConverter), NoExceptionsConverter.Instance);
             _serviceLocator.Add(typeof(ISupportGeoLocationBox), new SupportGeoLocationBox());
-            _serviceLocator.Add(typeof(IProvideSuggestions), new ProvideValueSuggestions());
+            _serviceLocator.Add(typeof(IProvideSuggestions), new AggregateProvideSuggestions(new IProvideSuggestions[]
+            {
+                new ProvideValueSuggestions(),
+                new ProvideFileSuggestions(),
+            }));
 
             // lets add all nzazu core fields and types
             FieldTypes.Add(DefaultType, typeof(NZazuLabelField)); // we add label twice to have it as default type

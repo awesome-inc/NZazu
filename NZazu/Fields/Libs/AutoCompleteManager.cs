@@ -94,7 +94,7 @@ namespace NZazu.Fields.Libs
         {
             _textBox = textBox ?? throw new ArgumentNullException(nameof(textBox));
 
-            if (Application.Current == null) return; // becauase we are in testing
+            if (Application.Current == null) return; // because we are in testing
 
             if (Application.Current.Resources.FindName("AcTb_ListBoxStyle") == null)
             {

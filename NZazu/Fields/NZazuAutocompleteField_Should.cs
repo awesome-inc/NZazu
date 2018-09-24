@@ -70,7 +70,8 @@ namespace NZazu.Fields
 
             var args = new RoutedEventArgs(FrameworkElement.LoadedEvent);
 
-            if (eventMethod != null) eventMethod.Invoke(element, new object[] {args});
+            if (eventMethod != null)
+                eventMethod.Invoke(element, new object[] {args});
         }
     }
 }

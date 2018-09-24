@@ -68,7 +68,7 @@
   <ItemGroup>
     <Compile Include="NZazuTableDataJsonSerializer.cs" />
     <Compile Include="NZazuConventions.cs" />
-    <Compile Include="NZazuJsonSerializer_Should.cs" />
+    <Compile Include="NZazuTableDataJsonSerializer_Should.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
