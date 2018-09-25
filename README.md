@@ -8,8 +8,6 @@
 ![NuGet Version](https://img.shields.io/nuget/v/NZazu.svg) 
 ![NuGet Version](https://img.shields.io/nuget/dt/NZazu.svg) 
 
-[![Issue Stats](http://issuestats.com/github/awesome-inc/NZazu/badge/issue)](http://issuestats.com/github/awesome-inc/NZazu) [![Issue Stats](http://issuestats.com/github/awesome-inc/NZazu/badge/pr)](http://issuestats.com/github/awesome-inc/NZazu) 
-
 # NZazuFiddle 
 
 The sample application **NZazuFiddle** can be used for designing forms in real-time
