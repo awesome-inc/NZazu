@@ -5,7 +5,7 @@ using NUnit.Framework;
 
 namespace NZazu.Contracts.Checks
 {
-    [TestFixtureFor(typeof (RequiredCheck))]
+    [TestFixtureFor(typeof(RequiredCheck))]
     // ReSharper disable InconsistentNaming
     internal class RequiredCheck_Should
     {
@@ -14,12 +14,12 @@ namespace NZazu.Contracts.Checks
         {
             var check = new RequiredCheck();
 
-            check.ShouldFailWith<ArgumentException>(null);
-            check.ShouldFailWith<ArgumentException>(string.Empty);
-            check.ShouldFailWith<ArgumentException>("\t\r\n");
-            check.ShouldFailWith<ArgumentException>(" ");
+            check.ShouldFailWith<ArgumentException>(null, null);
+            check.ShouldFailWith<ArgumentException>(string.Empty, string.Empty);
+            check.ShouldFailWith<ArgumentException>("\t\r\n", "\t\r\n");
+            check.ShouldFailWith<ArgumentException>(" ", " ");
 
-            check.Validate("a").IsValid.Should().BeTrue();
+            check.Validate("a", "a").IsValid.Should().BeTrue();
         }
     }
 }

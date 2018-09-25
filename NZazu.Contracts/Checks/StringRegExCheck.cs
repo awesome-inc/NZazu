@@ -19,7 +19,7 @@ namespace NZazu.Contracts.Checks
             _noMatch = new ValueCheckResult(false, new ArgumentException(hint));
         }
 
-        public ValueCheckResult Validate(string value, IFormatProvider formatProvider = null)
+        public ValueCheckResult Validate(string value, object parsedValue, IFormatProvider formatProvider = null)
         {
             if (string.IsNullOrWhiteSpace(value)) return ValueCheckResult.Success;
             var anyMatch = _regex.Any(r => r.IsMatch(value));

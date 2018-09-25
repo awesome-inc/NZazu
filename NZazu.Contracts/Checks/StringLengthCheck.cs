@@ -26,7 +26,7 @@ namespace NZazu.Contracts.Checks
                 $"The specified string is too long (at most {MaximumLength} characters)"));
         }
 
-        public ValueCheckResult Validate(string value, IFormatProvider formatProvider = null)
+        public ValueCheckResult Validate(string value, object parsedValue, IFormatProvider formatProvider = null)
         {
             if (string.IsNullOrWhiteSpace(value)) return ValueCheckResult.Success;
             

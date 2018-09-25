@@ -50,7 +50,7 @@ namespace NZazu.Contracts.Checks
         public void Validate_InsideMinMax_Should_Pass()
         {
             var cultureInfo = CultureInfo.InvariantCulture;
-            Enumerable.Range((int) _check.Minimum, (int)(_check.Maximum - _check.Minimum))
+            Enumerable.Range((int)_check.Minimum, (int)(_check.Maximum - _check.Minimum))
                     .Select(val => val.ToString(cultureInfo))
                     .ToList().ForEach(val => _check.Validate(val, cultureInfo).IsValid.Should().BeTrue());
         }
@@ -58,16 +58,16 @@ namespace NZazu.Contracts.Checks
         [Test]
         public void Validate_Value_NullOrWhiteSpace_Passes()
         {
-            _check.ShouldPass(null);
-            _check.ShouldPass(string.Empty);
-            _check.ShouldPass("\t\r\n");
-            _check.ShouldPass(" ");
+            _check.ShouldPass(null, null);
+            _check.ShouldPass(string.Empty, string.Empty);
+            _check.ShouldPass("\t\r\n", "\t\r\n");
+            _check.ShouldPass(" ", " ");
         }
 
         [Test]
         public void Validate_NaN_fails()
         {
-            var vr = _check.Validate("not a number");
+            var vr = _check.Validate("not a number", 0);
             vr.IsValid.Should().BeFalse();
             vr.Error.Should().BeOfType<ArgumentException>();
         }

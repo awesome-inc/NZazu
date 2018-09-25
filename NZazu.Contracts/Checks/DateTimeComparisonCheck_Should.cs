@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using FluentAssertions;
 using NEdifis.Attributes;
 using NSubstitute;
@@ -25,7 +26,7 @@ namespace NZazu.Contracts.Checks
 
             var dateTimeCheck = new DateTimeComparisonCheck("lorem ipsum", ">", "startTime", () => formData, tableDataSerializer);
             formData.Values.TryGetValue("stopTime", out var result);
-            var res = dateTimeCheck.Validate(result);
+            var res = dateTimeCheck.Validate(result, default(DateTime));
 
             res.IsValid.Should().BeFalse();
         }
@@ -44,7 +45,7 @@ namespace NZazu.Contracts.Checks
 
             var dateTimeCheck = new DateTimeComparisonCheck("lorem ipsum", ">", "startTime", () => formData, tableDataSerializer);
             formData.Values.TryGetValue("stopTime", out var result);
-            var res = dateTimeCheck.Validate(result);
+            var res = dateTimeCheck.Validate(result, default(DateTime));
 
             res.IsValid.Should().BeTrue();
         }
@@ -62,9 +63,9 @@ namespace NZazu.Contracts.Checks
             var tableDataSerializer = Substitute.For<INZazuTableDataSerializer>();
             var testFormats = new[] { "HHmm", "HHmmss", "HH:mm", "HH:mm:ss" };
 
-            var dateTimeCheck = new DateTimeComparisonCheck("lorem ipsum", ">", "startTime", () => formData, tableDataSerializer, specificDateTimeFormats:testFormats);
+            var dateTimeCheck = new DateTimeComparisonCheck("lorem ipsum", ">", "startTime", () => formData, tableDataSerializer, specificDateTimeFormats: testFormats);
             formData.Values.TryGetValue("stopTime", out var result);
-            var res = dateTimeCheck.Validate(result);
+            var res = dateTimeCheck.Validate(result, default(DateTime));
 
             res.IsValid.Should().BeFalse();
         }
@@ -84,7 +85,7 @@ namespace NZazu.Contracts.Checks
 
             var dateTimeCheck = new DateTimeComparisonCheck("lorem ipsum", ">", "startTime", () => formData, tableDataSerializer, specificDateTimeFormats: testFormats);
             formData.Values.TryGetValue("stopTime", out var result);
-            var res = dateTimeCheck.Validate(result);
+            var res = dateTimeCheck.Validate(result, default(DateTime));
 
             res.IsValid.Should().BeTrue();
         }
@@ -103,7 +104,7 @@ namespace NZazu.Contracts.Checks
 
             var dateTimeCheck = new DateTimeComparisonCheck("lorem ipsum", "<", "stopTime", () => formData, tableDataSerializer);
             formData.Values.TryGetValue("startTime", out var result);
-            var res = dateTimeCheck.Validate(result);
+            var res = dateTimeCheck.Validate(result, default(DateTime));
 
             res.IsValid.Should().BeFalse();
         }
@@ -122,7 +123,7 @@ namespace NZazu.Contracts.Checks
 
             var dateTimeCheck = new DateTimeComparisonCheck("lorem ipsum", "<", "stopTime", () => formData, tableDataSerializer);
             formData.Values.TryGetValue("startTime", out var result);
-            var res = dateTimeCheck.Validate(result);
+            var res = dateTimeCheck.Validate(result, default(DateTime));
 
             res.IsValid.Should().BeTrue();
         }
@@ -142,7 +143,7 @@ namespace NZazu.Contracts.Checks
 
             var dateTimeCheck = new DateTimeComparisonCheck("lorem ipsum", "<", "stopTime", () => formData, tableDataSerializer, specificDateTimeFormats: testFormats);
             formData.Values.TryGetValue("startTime", out var result);
-            var res = dateTimeCheck.Validate(result);
+            var res = dateTimeCheck.Validate(result, default(DateTime));
 
             res.IsValid.Should().BeFalse();
         }
@@ -162,7 +163,7 @@ namespace NZazu.Contracts.Checks
 
             var dateTimeCheck = new DateTimeComparisonCheck("lorem ipsum", "<", "stopTime", () => formData, tableDataSerializer, specificDateTimeFormats: testFormats);
             formData.Values.TryGetValue("startTime", out var result);
-            var res = dateTimeCheck.Validate(result);
+            var res = dateTimeCheck.Validate(result, default(DateTime));
 
             res.IsValid.Should().BeTrue();
         }
@@ -188,9 +189,9 @@ namespace NZazu.Contracts.Checks
             var testFormats = new[] { "HHmm", "HHmmss", "HH:mm", "HH:mm:ss" };
 
             var dateTimeCheck = new DateTimeComparisonCheck(
-                "lorem ipsum", "<", "columnStopRow", () => formData, tableDataSerializer, 
+                "lorem ipsum", "<", "columnStopRow", () => formData, tableDataSerializer,
                 tableKey: "tableKey", specificDateTimeFormats: testFormats, rowIdx: 1);
-            var res = dateTimeCheck.Validate("11:00");
+            var res = dateTimeCheck.Validate("11:00", default(DateTime));
 
             res.IsValid.Should().BeTrue();
         }

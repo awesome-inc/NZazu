@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
@@ -17,7 +18,7 @@ namespace NZazu.Xceed
 
         protected override Control CreateValueControl()
         {
-            var control = new IntegerUpDown {ToolTip = Definition.Description, Watermark = Definition.Hint};
+            var control = new IntegerUpDown { ToolTip = Definition.Description, Watermark = Definition.Hint };
             var formatString = Definition.Settings.Get("Format");
             if (IsSupported(formatString))
             {

@@ -2,6 +2,7 @@ using System;
 using System.Windows;
 using System.Windows.Controls;
 using NZazu.Contracts;
+using NZazu.Contracts.Checks;
 
 namespace NZazu.Fields
 {
@@ -15,6 +16,10 @@ namespace NZazu.Fields
 
         public override void SetValue(string value) { }
         public override string GetValue() { return null; }
+        public override ValueCheckResult Validate()
+        {
+            return ValueCheckResult.Success;
+        }
 
         public override DependencyProperty ContentProperty => null;
 

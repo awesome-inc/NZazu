@@ -6,7 +6,7 @@ using NUnit.Framework;
 
 namespace NZazu.Contracts.Checks
 {
-    [TestFixtureFor(typeof (AggregateCheck))]
+    [TestFixtureFor(typeof(AggregateCheck))]
     // ReSharper disable InconsistentNaming
     internal class AggregateCheck_Should
     {
@@ -22,29 +22,29 @@ namespace NZazu.Contracts.Checks
             var error = new ValueCheckResult(false, "test");
 
             // true AND true => true
-            check1.Validate(input, formatProvider).Returns(ValueCheckResult.Success);
-            check2.Validate(input, formatProvider).Returns(ValueCheckResult.Success);
-            sut.Validate(input, formatProvider);
+            check1.Validate(input, input, formatProvider).Returns(ValueCheckResult.Success);
+            check2.Validate(input, input, formatProvider).Returns(ValueCheckResult.Success);
+            sut.Validate(input, input, formatProvider);
 
-            check1.Received().Validate(input, formatProvider);
-            check2.Received().Validate(input, formatProvider);
+            check1.Received().Validate(input, input, formatProvider);
+            check2.Received().Validate(input, input, formatProvider);
 
             // false AND false => false
-            check1.Validate(input, formatProvider).Returns(error);
-            check2.Validate(input, formatProvider).Returns(error);
+            check1.Validate(input, input, formatProvider).Returns(error);
+            check2.Validate(input, input, formatProvider).Returns(error);
 
-            var actual = sut.Validate(input, formatProvider);
+            var actual = sut.Validate(input, input, formatProvider);
             actual.Should().Be(error);
 
             // false AND true => false
-            check2.Validate(input, formatProvider).Returns(ValueCheckResult.Success);
-            actual = sut.Validate(input, formatProvider);
+            check2.Validate(input, input, formatProvider).Returns(ValueCheckResult.Success);
+            actual = sut.Validate(input, input, formatProvider);
             actual.Should().Be(error);
 
             // true AND false => false
-            check1.Validate(input, formatProvider).Returns(ValueCheckResult.Success);
-            check2.Validate(input, formatProvider).Returns(error);
-            actual = sut.Validate(input, formatProvider);
+            check1.Validate(input, input, formatProvider).Returns(ValueCheckResult.Success);
+            check2.Validate(input, input, formatProvider).Returns(error);
+            actual = sut.Validate(input, input, formatProvider);
             actual.Should().Be(error);
         }
     }

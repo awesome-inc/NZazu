@@ -12,14 +12,14 @@ namespace NZazu.Contracts
     {
         [Test]
         [TestCase("required", null, typeof(RequiredCheck))]
-        [TestCase("length", new[]{"6", "8"}, typeof(StringLengthCheck))]
+        [TestCase("length", new[] { "6", "8" }, typeof(StringLengthCheck))]
         [TestCase("range", new[] { "-42", "42" }, typeof(RangeCheck))]
         [TestCase("regex", new[] { "Must be true or false", "true", "false" }, typeof(StringRegExCheck))]
         public void Support(string type, string[] values, Type checkType)
         {
             var sut = new CheckFactory();
 
-            var checkDefinition = new CheckDefinition {Type = type, Values = values};
+            var checkDefinition = new CheckDefinition { Type = type, Values = values };
             var check = sut.CreateCheck(checkDefinition);
 
             check.Should().NotBeNull();
@@ -34,20 +34,20 @@ namespace NZazu.Contracts
             sut.Invoking(x => x.CreateCheck(new CheckDefinition())).Should().Throw<ArgumentException>().WithMessage("check type not specified");
             sut.Invoking(x => x.CreateCheck(new CheckDefinition { Type = "foobar" })).Should().Throw<NotSupportedException>().WithMessage("The specified check is not supported");
         }
-        
+
         [Test]
         public void Support_Length_Check()
         {
             var sut = new CheckFactory();
 
-            var checkDefinition = new CheckDefinition { Type = "length", Values = new []{"6","8"} };
+            var checkDefinition = new CheckDefinition { Type = "length", Values = new[] { "6", "8" } };
 
             var check = sut.CreateCheck(checkDefinition);
-            var actual = (StringLengthCheck) check;
+            var actual = (StringLengthCheck)check;
             actual.MinimumLength.Should().Be(6);
             actual.MaximumLength.Should().Be(8);
 
-            checkDefinition.Values = new[] {"6"};
+            checkDefinition.Values = new[] { "6" };
             check = sut.CreateCheck(checkDefinition);
             actual = (StringLengthCheck)check;
             actual.MinimumLength.Should().Be(6);
@@ -58,7 +58,7 @@ namespace NZazu.Contracts
                 .Should().Throw<ArgumentException>()
                 .WithMessage("At least a minimum string length must be specified");
 
-            checkDefinition.Values = new []{"6", "4"};
+            checkDefinition.Values = new[] { "6", "4" };
             sut.Invoking(x => x.CreateCheck(checkDefinition))
                 .Should().Throw<ArgumentException>();
 
@@ -83,25 +83,25 @@ namespace NZazu.Contracts
 
             const string hint = "Not a \"pattern\"";
             const string pattern = "pattern";
-            var checkDefinition = new CheckDefinition {Type = "regex", Values = new[] {hint, pattern}};
+            var checkDefinition = new CheckDefinition { Type = "regex", Values = new[] { hint, pattern } };
 
             var check = sut.CreateCheck(checkDefinition);
-            var actual = (StringRegExCheck) check;
+            var actual = (StringRegExCheck)check;
             actual.Should().NotBeNull();
-            actual.Validate(pattern);
-            actual.ShouldFailWith<ArgumentException>("foobar", ex => ex.Message == hint);
+            actual.Validate(pattern, pattern);
+            actual.ShouldFailWith<ArgumentException>("foobar", "foobar", ex => ex.Message == hint);
 
             checkDefinition.Values = null;
             sut.Invoking(x => x.CreateCheck(checkDefinition))
                 .Should().Throw<ArgumentException>()
                 .WithMessage("At least a hint and one regex pattern must be specified");
 
-            checkDefinition.Values = new string[]{};
+            checkDefinition.Values = new string[] { };
             sut.Invoking(x => x.CreateCheck(checkDefinition))
                 .Should().Throw<ArgumentException>()
                 .WithMessage("At least a hint and one regex pattern must be specified");
 
-            checkDefinition.Values = new[] {hint};
+            checkDefinition.Values = new[] { hint };
             sut.Invoking(x => x.CreateCheck(checkDefinition))
                 .Should().Throw<ArgumentException>()
                 .WithMessage("At least a hint and one regex pattern must be specified");
@@ -119,7 +119,7 @@ namespace NZazu.Contracts
             actual.Minimum.Should().Be(0);
             actual.Maximum.Should().Be(4.5);
 
-            checkDefinition.Values = new[] {"5.1", "5.0"};
+            checkDefinition.Values = new[] { "5.1", "5.0" };
             sut.Invoking(x => x.CreateCheck(checkDefinition))
                 .Should().Throw<ArgumentOutOfRangeException>();
 

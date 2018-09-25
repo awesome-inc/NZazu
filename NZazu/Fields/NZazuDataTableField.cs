@@ -390,7 +390,9 @@ namespace NZazu.Fields
 
         public override ValueCheckResult Validate()
         {
-            var result = base.Validate();
+            //var result = base.Validate();
+
+            IList<ValueCheckResult> result = new List<ValueCheckResult>();
 
             foreach (var field in _fields)
             {
@@ -398,9 +400,20 @@ namespace NZazu.Fields
 
                 var iterRes = field.Value.Validate();
                 if (!iterRes.IsValid)
-                    result = new ValueCheckResult(false, iterRes.Error);
+                    result.Add(new ValueCheckResult(false, iterRes.Error));
             }
-            return result;
+
+            switch (result.Count)
+            {
+                case 0:
+                    return ValueCheckResult.Success;
+                case 1:
+                    return result.First();
+                default:
+                    return new ValueCheckResult(
+                        result.Any(x => x.IsValid),
+                        string.Concat(result.Select(x => x.ToString()).ToArray()));
+            }
         }
 
         public override void Dispose()

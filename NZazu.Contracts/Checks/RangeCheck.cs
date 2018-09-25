@@ -21,7 +21,7 @@ namespace NZazu.Contracts.Checks
                 $"The specified value must be between {Minimum} and {Maximum}"));
         }
 
-        public ValueCheckResult Validate(string value, IFormatProvider formatProvider = null)
+        public ValueCheckResult Validate(string value, object parsedValue, IFormatProvider formatProvider = null)
         {
             if (string.IsNullOrWhiteSpace(value)) return ValueCheckResult.Success;
 

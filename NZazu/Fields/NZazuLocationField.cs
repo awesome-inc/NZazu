@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -21,8 +22,8 @@ namespace NZazu.Fields
 
         public override void SetValue(string newValue)
         {
-            Value = string.IsNullOrWhiteSpace(newValue) 
-                ? null 
+            Value = string.IsNullOrWhiteSpace(newValue)
+                ? null
                 : _geoSupport.Parse(newValue);
         }
 

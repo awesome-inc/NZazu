@@ -7,6 +7,7 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using NZazu.Contracts;
+using NZazu.Contracts.Checks;
 
 namespace NZazu.Fields
 {
@@ -61,6 +62,11 @@ namespace NZazu.Fields
         public override string GetValue()
         {
             return _stringValue;
+        }
+
+        public override ValueCheckResult Validate()
+        {
+            return ValueCheckResult.Success;
         }
 
         public override DependencyProperty ContentProperty => Image.SourceProperty;

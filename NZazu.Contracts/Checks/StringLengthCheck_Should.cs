@@ -6,7 +6,7 @@ using NUnit.Framework;
 
 namespace NZazu.Contracts.Checks
 {
-    [TestFixtureFor(typeof (StringLengthCheck))]
+    [TestFixtureFor(typeof(StringLengthCheck))]
     // ReSharper disable InconsistentNaming
     internal class StringLengthCheck_Should
     {
@@ -29,7 +29,7 @@ namespace NZazu.Contracts.Checks
         {
             var _check = new StringLengthCheck(4, 6);
             var candidate = new string('A', _check.MinimumLength - 1);
-            _check.ShouldFailWith<ArgumentException>(candidate);
+            _check.ShouldFailWith<ArgumentException>(candidate, candidate);
         }
 
         [Test]
@@ -37,7 +37,7 @@ namespace NZazu.Contracts.Checks
         {
             var _check = new StringLengthCheck(4, 6);
             var candidate = new string('A', _check.MaximumLength + 1);
-            _check.ShouldFailWith<ArgumentException>(candidate);
+            _check.ShouldFailWith<ArgumentException>(candidate, candidate);
         }
 
         [Test]
@@ -46,17 +46,17 @@ namespace NZazu.Contracts.Checks
             var _check = new StringLengthCheck(4, 6);
             Enumerable.Range(_check.MinimumLength, _check.MaximumLength - _check.MinimumLength)
                 .Select(val => new string('A', val))
-                .ToList().ForEach(_check.ShouldPass);
+                .ToList().ForEach(x => _check.ShouldPass(x, x));
         }
 
         [Test]
         public void IsValid_NullOrWhitespace_passes()
         {
             var check = new StringLengthCheck(3, 4);
-            check.ShouldPass(null);
-            check.ShouldPass(string.Empty);
-            check.ShouldPass("\t\r\n");
-            check.ShouldPass(" ");
+            check.ShouldPass(null, null);
+            check.ShouldPass(string.Empty, string.Empty);
+            check.ShouldPass("\t\r\n", "\t\r\n");
+            check.ShouldPass(" ", " ");
         }
 
         [Test]

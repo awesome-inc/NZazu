@@ -33,7 +33,7 @@ namespace NZazu.Fields
         #region Test fields to verify base class
 
         [ExcludeFromCodeCoverage]
-        private class NZazuDummyField : NZazuField
+        private class NZazuDummyField : NZazuField<string>
         {
             public NZazuDummyField(FieldDefinition definition, Func<Type, object> serviceLocatorFunc)
                 : base(definition, serviceLocatorFunc) { }
@@ -41,6 +41,7 @@ namespace NZazu.Fields
             private string _stringValue;
             public override void SetValue(string value) { _stringValue = value; }
             public override string GetValue() { return _stringValue; }
+
             public override DependencyProperty ContentProperty => null;
             protected override Control CreateValueControl() { return null; }
         }
@@ -112,20 +113,20 @@ namespace NZazu.Fields
         {
             var check = Substitute.For<IValueCheck>();
             var sut = new NZazuDummyField(new FieldDefinition { Key = "test", Description = "description" }, ServiceLocator) { Check = check };
-            sut.Validate();
+            var result = sut.Validate();
 
-            check.ReceivedWithAnyArgs().Validate(Arg.Any<string>());
+            check.ReceivedWithAnyArgs().Validate(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<IFormatProvider>());
         }
 
         [Test]
         public void Pass_Validation_To_Checks_and_returns_first_error_if_any()
         {
             var check = Substitute.For<IValueCheck>();
-            check.Validate(Arg.Any<string>(), Arg.Any<IFormatProvider>()).Returns(new ValueCheckResult(false, "test"));
+            check.Validate(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<IFormatProvider>()).Returns(new ValueCheckResult(false, "test"));
 
             var sut = new NZazuDummyField(new FieldDefinition { Key = "test", Description = "description" }, ServiceLocator) { Check = check };
             sut.Validate().IsValid.Should().BeFalse();
-            check.ReceivedWithAnyArgs().Validate(Arg.Any<string>());
+            check.ReceivedWithAnyArgs().Validate(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<IFormatProvider>());
         }
 
         [Test]
@@ -179,7 +180,7 @@ namespace NZazu.Fields
         {
             // but we need a dummy content enabled field -> no content, no validation
             var check = Substitute.For<IValueCheck>();
-            check.Validate(Arg.Any<string>(), Arg.Any<CultureInfo>())
+            check.Validate(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<CultureInfo>())
                 .Returns(new ValueCheckResult(false, "test"));
 
             var sut = new NZazuField_With_Description_As_Content_Property(new FieldDefinition { Key = "test", Description = "description" }, ServiceLocator)

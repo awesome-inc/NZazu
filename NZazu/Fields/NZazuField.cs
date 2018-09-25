@@ -58,9 +58,11 @@ namespace NZazu.Fields
             if (serviceLocatorFunc == null) throw new ArgumentNullException(nameof(serviceLocatorFunc));
 
             _labelControl = new Lazy<Control>(CreateLabelControl);
-            _valueControl = new Lazy<Control>(()=>
+            _valueControl = new Lazy<Control>(() =>
             {
                 var ctrl = CreateValueControl();
+                if (ctrl != null)
+                    ctrl.LostFocus += (sender, e) => { Validate(); };
                 AddValuePropertyBinding(this, ctrl);
 
                 return ctrl;
@@ -75,18 +77,7 @@ namespace NZazu.Fields
             Key = definition.Key;
         }
 
-        public virtual ValueCheckResult Validate()
-        {
-            var bindingExpression = ContentProperty != null
-                ? ValueControl.GetBindingExpression(ContentProperty)
-                : null;
-            if (bindingExpression != null && bindingExpression.HasError)
-                return new ValueCheckResult(false, "UI has errors. Value could not be converted");
-
-            if (Check == null) return ValueCheckResult.Success;
-
-            return Check.Validate(GetValue(), FormatProvider);
-        }
+        public abstract ValueCheckResult Validate();
 
         /// <summary>
         /// binding needs to be changed by subclasses for example if the Nullable-binding should be set.
@@ -173,6 +164,19 @@ namespace NZazu.Fields
             if (Nullable.GetUnderlyingType(typeof(T)) == null) return binding;
 
             return binding;
+        }
+
+        public override ValueCheckResult Validate()
+        {
+            var bindingExpression = ContentProperty != null
+                ? ValueControl.GetBindingExpression(ContentProperty)
+                : null;
+            if (bindingExpression != null && bindingExpression.HasError)
+                return new ValueCheckResult(false, "UI has errors. Value could not be converted");
+
+            if (Check == null) return ValueCheckResult.Success;
+
+            return Check.Validate(GetValue(), Value, FormatProvider);
         }
     }
 }

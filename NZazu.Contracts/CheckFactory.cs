@@ -21,7 +21,7 @@ namespace NZazu.Contracts
                 case "length": return CreateLengthCheck(checkDefinition.Values);
                 case "range": return CreateRangeCheck(checkDefinition.Values);
                 case "regex": return CreateRegexCheck(checkDefinition.Values);
-                case "dateTime": return CreateDateTimeComparisonCheck(checkDefinition.Values, formData, tableSerializer, rowIdx); 
+                case "dateTime": return CreateDateTimeComparisonCheck(checkDefinition.Values, formData, tableSerializer, rowIdx);
                 default: throw new NotSupportedException("The specified check is not supported");
             }
         }

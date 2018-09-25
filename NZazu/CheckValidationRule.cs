@@ -17,11 +17,10 @@ namespace NZazu
         public override ValidationResult Validate(object value, CultureInfo cultureInfo)
         {
             var stringValue = Convert.ToString(value);
-            var vr = _check.Validate(stringValue, cultureInfo ?? CultureInfo.CurrentCulture);
+            var vr = _check.Validate(stringValue, stringValue, cultureInfo ?? CultureInfo.CurrentCulture);
 
             var error = vr.Error;
-            var exception = error as Exception;
-            if (exception != null)
+            if (error is Exception exception)
                 error = exception.Message;
 
             return new ValidationResult(vr.IsValid, error);

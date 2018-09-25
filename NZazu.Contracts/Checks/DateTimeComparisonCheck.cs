@@ -33,7 +33,7 @@ namespace NZazu.Contracts.Checks
             _hint = hint ?? string.Empty;
         }
 
-        public ValueCheckResult Validate(string value, IFormatProvider formatProvider = null)
+        public ValueCheckResult Validate(string value, object parsedValue, IFormatProvider formatProvider = null)
         {
             string valueToCompareWith;
             if (_tableKey != null && _rowIdx != -1)
