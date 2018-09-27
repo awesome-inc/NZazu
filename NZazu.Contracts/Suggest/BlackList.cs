@@ -16,8 +16,8 @@ namespace NSuggest
 
         public int Capacity
         {
-            get { return _cache.Capacity; }
-            set { _cache.Capacity = value; }
+            get => _cache.Capacity;
+            set => _cache.Capacity = value;
         }
 
         public int Count => _cache.Count;

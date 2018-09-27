@@ -12,12 +12,12 @@ namespace NZazu.Contracts.Suggest
     /// </summary>
     /// <typeparam name="TKey">The type of the keys to use for lookup.</typeparam>
     /// <typeparam name="TValue">The type of the values to keep in the cache.</typeparam>
-    public class Cache<TKey, TValue> : ICache<TKey, TValue> where TKey : IEquatable<TKey>
+    public sealed class Cache<TKey, TValue> : ICache<TKey, TValue> where TKey : IEquatable<TKey>
     {
         /// <summary>
         /// Cache node class, doubly linked list item.
         /// </summary>
-        protected class Node
+        private class Node
         {
             /// <summary>
             /// The key.
@@ -87,7 +87,7 @@ namespace NZazu.Contracts.Suggest
         /// <value>The keep free percentage.</value>
         public float KeepFree
         {
-            get { return _keepFree; }
+            get => _keepFree;
             set
             {
                 if ((value < 0f) || (value > 0.5f))
@@ -114,7 +114,7 @@ namespace NZazu.Contracts.Suggest
         /// </summary>
         public int Capacity
         {
-            get { return _capacity; }
+            get => _capacity;
             set
             {
                 if (value <= 0)
@@ -446,7 +446,7 @@ namespace NZazu.Contracts.Suggest
         /// Called when a nodes is removed.
         /// </summary>
         /// <param name="node">The node.</param>
-        protected virtual void OnRemoveNode(Node node)
+        private void OnRemoveNode(Node node)
         {
             if (NodeRemoved != null)
                 NodeRemoved(this, new Tuple<TKey, TValue>(node.Key, node.Value));

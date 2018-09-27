@@ -24,14 +24,14 @@ namespace NZazu.Contracts.Suggest
 
         public int CacheSize
         {
-            get { return _cache.Capacity; }
-            set { _cache.Capacity = value; }
+            get => _cache.Capacity;
+            set => _cache.Capacity = value;
         }
 
         public int BlackListSize
         {
-            get { return _blackList.Capacity; }
-            set { _blackList.Capacity = value; }
+            get => _blackList.Capacity;
+            set => _blackList.Capacity = value;
         }
 
         public int MaxFailures { get; set; }

@@ -34,8 +34,7 @@ namespace NZazuFiddle
 
             var dbSuggestor =
                 new SuggestionsProxy(
-                    new ElasticSearchSuggestions(
-                        new RestClient()))
+                    new ElasticSearchSuggestions())
                 {
                     BlackListSize = 10,
                     CacheSize = 3000,

@@ -12,9 +12,9 @@ namespace NZazu.JsonSerializer.RestSuggestor
         private readonly IDictionary<string, Uri> _baseAddressCache = new Dictionary<string, Uri>();
         private readonly IRestClient _client;
 
-        public ElasticSearchSuggestions(IRestClient client)
+        public ElasticSearchSuggestions(IRestClient client = null)
         {
-            _client = client ?? throw new ArgumentNullException(nameof(client));
+            _client = client ?? new RestClient();
         }
 
         public IEnumerable<string> For(string prefix, string connection)
