@@ -165,6 +165,7 @@ namespace NZazu.Fields.Libs
             GetInnerElementReferences();
             UpdateGripVisual();
             SetupEventHandlers();
+            _popup.IsOpen = false;
         }
 
         private void GetInnerElementReferences()
