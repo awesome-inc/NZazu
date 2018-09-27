@@ -74,10 +74,7 @@
     <Compile Include="Suggest\IBlackList.cs" />
     <Compile Include="Suggest\ICache.cs" />
     <Compile Include="Suggest\IHaveKeyedValues.cs" />
-    <Compile Include="Suggest\IHaveKeyStrings.cs" />
     <Compile Include="Suggest\IProvideSuggestions.cs" />
-    <Compile Include="Suggest\ISuffixTree.cs" />
-    <Compile Include="Suggest\ISuggestSuffix.cs" />
     <Compile Include="Adapter\NZazuCoordinate.cs" />
     <Compile Include="Suggest\ISupportGeoLocationBox.cs" />
     <Compile Include="Adapter\NZazuCoordinate_Should.cs" />
@@ -127,7 +124,6 @@
     <Compile Include="Checks\StringRegExCheck.cs" />
     <Compile Include="Suggest\SuggestionsProxy.cs" />
     <Compile Include="Suggest\TernarySearchTree.cs" />
-    <Compile Include="Suggest\TernarySearchTree`1.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

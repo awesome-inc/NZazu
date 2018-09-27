@@ -9,7 +9,7 @@ namespace NZazu.Contracts.Suggest
     {
         private readonly IBlackList<string> _blackList = new BlackList<string>();
         private readonly ICache<string, uint> _cache = new Cache<string, uint>();
-        private readonly ISuffixTree _suffixTree = new TernarySearchTree();
+        private readonly TernarySearchTree _suffixTree = new TernarySearchTree();
         private readonly IProvideSuggestions _suggestionProvider;
 
         public SuggestionsProxy(IProvideSuggestions suggestionProvider)

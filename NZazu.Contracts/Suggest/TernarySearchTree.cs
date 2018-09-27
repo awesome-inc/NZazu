@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -25,7 +26,7 @@ namespace NZazu.Contracts.Suggest
     /// Please read the paper to get some insight on the stucture used below.
     /// </para>	
     /// </remarks>
-    public class TernarySearchTree : ISuffixTree
+    public class TernarySearchTree
     {
         #region Nested Classes
 

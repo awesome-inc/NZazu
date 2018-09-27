@@ -11,7 +11,6 @@ using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using Microsoft.Windows.Themes;
-using NZazu.Contracts.Adapter;
 using NZazu.Contracts.Suggest;
 
 namespace NZazu.Fields.Libs
@@ -568,40 +567,35 @@ namespace NZazu.Fields.Libs
                 _popup.IsOpen = false;
                 return;
             }
+
             var firstSuggestion = (string)_listBox.Items[0];
             if (_listBox.Items.Count == 1 && text.Equals(firstSuggestion, StringComparison.OrdinalIgnoreCase))
             {
                 _popup.IsOpen = false;
+                return;
             }
-            else
+
+            _listBox.SelectedIndex = -1;
+            _textBeforeChangedByCode = text;
+            _scrollViewer.ScrollToHome();
+            ShowPopup();
+
+            //
+            if (AutoAppend && !_supressAutoAppend &&
+                _textBox.SelectionLength == 0 &&
+                _textBox.SelectionStart == _textBox.Text.Length)
             {
-                _listBox.SelectedIndex = -1;
-                _textBeforeChangedByCode = text;
-                _scrollViewer.ScrollToHome();
-                ShowPopup();
-
-                //
-                if (AutoAppend && !_supressAutoAppend &&
-                     _textBox.SelectionLength == 0 &&
-                     _textBox.SelectionStart == _textBox.Text.Length)
+                _textChangedByCode = true;
+                try
                 {
-                    _textChangedByCode = true;
-                    try
-                    {
-                        // ReSharper disable once UsePatternMatching
-                        // ReSharper disable once SuspiciousTypeConversion.Global
-                        var appendProvider = DataProvider as ISuggestSuffix;
-                        var appendText = appendProvider != null
-                            ? appendProvider.For(text, firstSuggestion)
-                            : firstSuggestion.Substring(_textBox.Text.Length);
+                    var appendText = firstSuggestion.Substring(_textBox.Text.Length);
 
-                        if (!string.IsNullOrEmpty(appendText))
-                            _textBox.SelectedText = appendText;
-                    }
-                    finally
-                    {
-                        _textChangedByCode = false;
-                    }
+                    if (!string.IsNullOrEmpty(appendText))
+                        _textBox.SelectedText = appendText;
+                }
+                finally
+                {
+                    _textChangedByCode = false;
                 }
             }
         }
