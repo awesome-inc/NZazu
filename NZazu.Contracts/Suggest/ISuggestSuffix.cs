@@ -1,4 +1,4 @@
-﻿namespace NZazu.Contracts.Adapter
+﻿namespace NZazu.Contracts.Suggest
 {
     public interface ISuggestSuffix
     {

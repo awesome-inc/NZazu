@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Shapes;
 using Microsoft.Windows.Themes;
 using NZazu.Contracts.Adapter;
+using NZazu.Contracts.Suggest;
 
 namespace NZazu.Fields.Libs
 {

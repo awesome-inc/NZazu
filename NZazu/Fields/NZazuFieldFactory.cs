@@ -5,6 +5,7 @@ using System.Globalization;
 using System.Windows.Data;
 using NZazu.Contracts;
 using NZazu.Contracts.Adapter;
+using NZazu.Contracts.Suggest;
 using NZazu.Extensions;
 using NZazu.FieldBehavior;
 using NZazu.Serializer;

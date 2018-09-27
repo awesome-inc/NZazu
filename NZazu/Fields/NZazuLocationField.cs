@@ -5,6 +5,7 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using NZazu.Contracts;
 using NZazu.Contracts.Adapter;
+using NZazu.Contracts.Suggest;
 using NZazu.Fields.Controls;
 
 namespace NZazu.Fields

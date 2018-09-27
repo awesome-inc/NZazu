@@ -1,5 +1,6 @@
 using System.Windows;
 using NZazu.Contracts.Adapter;
+using NZazu.Contracts.Suggest;
 
 namespace NZazu.Fields.Controls
 {

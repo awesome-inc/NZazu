@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using System.Threading.Tasks;
+using NZazu.Contracts.Suggest;
 
 namespace NZazu.Contracts.Adapter
 {

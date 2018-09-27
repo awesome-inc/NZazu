@@ -3,7 +3,9 @@ using Caliburn.Micro;
 using NZazu;
 using NZazu.Contracts;
 using NZazu.Contracts.Adapter;
+using NZazu.Contracts.Suggest;
 using NZazu.JsonSerializer;
+using NZazu.JsonSerializer.RestSuggestor;
 using NZazu.Xceed;
 
 namespace NZazuFiddle
@@ -25,9 +27,28 @@ namespace NZazuFiddle
             _events.Subscribe(this);
             _definition = definition ?? throw new ArgumentNullException(nameof(definition));
             _data = data ?? throw new ArgumentNullException(nameof(data));
+
             _fieldFactory = fieldFactory ?? new XceedFieldFactory();
             _fieldFactory.Use<INZazuTableDataSerializer>(new NZazuTableDataJsonSerializer());
             _fieldFactory.Use<ISupportGeoLocationBox>(new SupportGeoLocationBox());
+
+            var dbSuggestor =
+                new SuggestionsProxy(
+                    new ElasticSearchSuggestions(
+                        new RestClient()))
+                {
+                    BlackListSize = 10,
+                    CacheSize = 3000,
+                    MaxFailures = int.MaxValue
+                };
+
+            // lets do some stuff with the suggestor
+            _fieldFactory.Use<IProvideSuggestions>(new AggregateProvideSuggestions(new IProvideSuggestions[]
+            {
+                new ProvideValueSuggestions(),
+                new ProvideFileSuggestions(),
+                dbSuggestor
+            }));
         }
 
         public FormDefinition Definition

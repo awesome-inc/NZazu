@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace NZazu.Contracts.Adapter
+namespace NZazu.Contracts.Suggest
 {
     public interface IProvideSuggestions
     {

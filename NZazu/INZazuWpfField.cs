@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows.Controls;
+using NZazu.Contracts;
 using NZazu.Contracts.Checks;
 
 namespace NZazu
@@ -9,6 +10,7 @@ namespace NZazu
         : IDisposable
     {
         string Key { get; }
+        FieldDefinition Definition { get; }
 
         Control LabelControl { get; }
         Control ValueControl { get; }

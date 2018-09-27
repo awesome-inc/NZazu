@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 
-namespace NZazu.Contracts.Adapter
+namespace NZazu.Contracts.Suggest
 {
     /// <summary>
     /// provider for native values retrieved from a file containing a entry per row string array.

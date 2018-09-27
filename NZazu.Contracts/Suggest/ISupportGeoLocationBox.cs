@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
+using NZazu.Contracts.Adapter;
 
-namespace NZazu.Contracts.Adapter
+namespace NZazu.Contracts.Suggest
 {
     public interface ISupportGeoLocationBox
     {

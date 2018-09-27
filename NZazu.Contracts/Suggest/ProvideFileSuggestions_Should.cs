@@ -2,7 +2,7 @@
 using NEdifis.Attributes;
 using NUnit.Framework;
 
-namespace NZazu.Contracts.Adapter
+namespace NZazu.Contracts.Suggest
 {
     [TestFixtureFor(typeof(ProvideFileSuggestions))]
     // ReSharper disable once InconsistentNaming

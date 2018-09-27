@@ -4,6 +4,7 @@ using NEdifis.Attributes;
 using NSubstitute;
 using NUnit.Framework;
 using NZazu.Contracts.Adapter;
+using NZazu.Contracts.Suggest;
 
 namespace NZazu.Fields.Controls
 {

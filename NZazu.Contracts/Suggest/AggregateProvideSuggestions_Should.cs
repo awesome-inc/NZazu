@@ -4,7 +4,7 @@ using NEdifis.Attributes;
 using NSubstitute;
 using NUnit.Framework;
 
-namespace NZazu.Contracts.Adapter
+namespace NZazu.Contracts.Suggest
 {
     [TestFixtureFor(typeof(AggregateProvideSuggestions))]
     // ReSharper disable once InconsistentNaming

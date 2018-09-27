@@ -126,6 +126,18 @@ namespace NZazuFiddle.Samples
                         },
                         new FieldDefinition
                         {
+                            Key = "autocompleteE",
+                            Type = "autocomplete",
+                            Prompt = "autocomplete from elasticsearch",
+                            Hint = "Fill data in elasticsearch on localhost and add data",
+                            Description = "Enter a single line string and get suggestion from any source using a provider",
+                            Settings = new Dictionary<string, string>
+                            {
+                                {"dataconnection", "e:http://localhost:9200/nzazu/autocomplete|firstname,lastname"}
+                            }
+                        },
+                        new FieldDefinition
+                        {
                             Key = "int",
                             Type = "int",
                             Prompt = "int",
