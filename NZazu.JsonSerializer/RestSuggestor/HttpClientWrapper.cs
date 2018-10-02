@@ -9,8 +9,8 @@ namespace NZazu.JsonSerializer.RestSuggestor
         private HttpClient _httpClient = new HttpClient();
         public Uri BaseAddress
         {
-            get { return _httpClient.BaseAddress; }
-            set { SetBaseAddress(value); }
+            get => _httpClient.BaseAddress;
+            set => SetBaseAddress(value);
         }
         public Task<HttpResponseMessage> SendAsync(HttpRequestMessage message)
         {

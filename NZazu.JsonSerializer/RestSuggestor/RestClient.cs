@@ -39,8 +39,8 @@ namespace NZazu.JsonSerializer.RestSuggestor
 
         public Uri BaseAddress
         {
-            get { return _httpClient.BaseAddress; }
-            set { _httpClient.BaseAddress = value; }
+            get => _httpClient.BaseAddress;
+            set => _httpClient.BaseAddress = value;
         }
 
         public void Dispose()

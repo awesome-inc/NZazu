@@ -1,8 +1,10 @@
 using System.Linq;
+using System.Net.Http;
 using FluentAssertions;
 using Newtonsoft.Json.Linq;
 using NEdifis;
 using NEdifis.Attributes;
+using NSubstitute;
 using NUnit.Framework;
 
 namespace NZazu.JsonSerializer.RestSuggestor
@@ -122,6 +124,25 @@ namespace NZazu.JsonSerializer.RestSuggestor
 
             var items = sut.GetSuggestions(TestData.Hits, "Tho").ToArray();
 
+            items.Should().Equal("Thomate", "Thomas", "Thomas Smith");
+            items.Should().NotContain("Horst");
+        }
+
+        [Test]
+        public void Query_On_For()
+        {
+            var ctx = new ContextFor<ElasticSearchSuggestions>();
+            ctx.Use("http://127.0.0.1:9200", "connectionPrefix");
+            ctx.For<IRestClient>()
+                .Request(HttpMethod.Post, "_search", Arg.Any<JToken>())
+                .Returns(TestData.Hits);
+            var sut = ctx.BuildSut();
+
+            var items = sut.For("Tho", "e:/nzazu/autocomplete|director").ToArray();
+            items.Should().Equal("Thomate", "Thomas", "Thomas Smith");
+            items.Should().NotContain("Horst");
+
+            items = sut.For("Tho", "e:/nzazu/autocomplete|director").ToArray();
             items.Should().Equal("Thomate", "Thomas", "Thomas Smith");
             items.Should().NotContain("Horst");
         }

@@ -87,6 +87,7 @@
     <Compile Include="RestSuggestor\RestClient.cs" />
     <Compile Include="RestSuggestor\RestClient_Should.cs" />
     <Compile Include="RestSuggestor\RestExtensions.cs" />
+    <Compile Include="RestSuggestor\RestExtensions_Should.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

@@ -1,11 +1,10 @@
+using Newtonsoft.Json.Linq;
+using System.Diagnostics.CodeAnalysis;
 using System.Net.Http;
 using System.Threading.Tasks;
-using Newtonsoft.Json.Linq;
-using NEdifis.Attributes;
 
 namespace NZazu.JsonSerializer.RestSuggestor
 {
-    [ExcludeFromConventions("Trivial")]
     public static class RestExtensions
     {
         public static async Task<JToken> Head(this IRestClient client, string uri = null)
