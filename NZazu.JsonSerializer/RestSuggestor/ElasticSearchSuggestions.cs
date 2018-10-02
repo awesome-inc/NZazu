@@ -1,19 +1,21 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using NZazu.Contracts.Suggest;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using Newtonsoft.Json.Linq;
-using NZazu.Contracts.Suggest;
 
 namespace NZazu.JsonSerializer.RestSuggestor
 {
     public class ElasticSearchSuggestions : IProvideSuggestions
     {
+        private readonly string _connectionPrefix;
         private readonly IDictionary<string, JProperty> _fieldsPropertyCache = new Dictionary<string, JProperty>();
         private readonly IDictionary<string, Uri> _baseAddressCache = new Dictionary<string, Uri>();
         private readonly IRestClient _client;
 
-        public ElasticSearchSuggestions(IRestClient client = null)
+        public ElasticSearchSuggestions(IRestClient client = null, string connectionPrefix = "http://localhost:9200")
         {
+            _connectionPrefix = connectionPrefix ?? string.Empty;
             _client = client ?? new RestClient();
         }
 
@@ -54,10 +56,13 @@ namespace NZazu.JsonSerializer.RestSuggestor
 
         private Uri GetBaseAddress(string connection)
         {
+            // cache contains full uri with prefix. key is only the relative path.
             if (_baseAddressCache.ContainsKey(connection))
                 return _baseAddressCache[connection];
 
-            var uri = new Uri(connection.Substring(2).Split('|')[0]);
+            var relativeUri = connection.Substring(2).Split('|')[0];
+            var uri = new Uri(_connectionPrefix + relativeUri);
+
             _baseAddressCache.Add(connection, uri);
             return uri;
         }

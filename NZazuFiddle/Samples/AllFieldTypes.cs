@@ -133,7 +133,7 @@ namespace NZazuFiddle.Samples
                             Description = "Enter a single line string and get suggestion from any source using a provider",
                             Settings = new Dictionary<string, string>
                             {
-                                {"dataconnection", "e:http://localhost:9200/nzazu/autocomplete|firstname,lastname"}
+                                {"dataconnection", "e:/nzazu/autocomplete|firstname,lastname"}
                             }
                         },
                         new FieldDefinition

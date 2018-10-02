@@ -34,7 +34,7 @@ namespace NZazuFiddle
 
             var dbSuggestor =
                 new SuggestionsProxy(
-                    new ElasticSearchSuggestions())
+                    new ElasticSearchSuggestions(connectionPrefix:"http://127.0.0.1:9200")) // instead of localhost. this changes the server
                 {
                     BlackListSize = 10,
                     CacheSize = 3000,
