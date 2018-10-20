@@ -18,17 +18,7 @@ cache:
   - C:\ProgramData\chocolatey\bin -> appveyor.yml
   - C:\ProgramData\chocolatey\lib -> appveyor.yml
 
-for:
--
-  branches:
-# IMPORTANT: Building a TAG is on a branch with the TAG name. So this does not work
-    only:
-      - /\d+\.\d+\.\d+$/
-  build_script:
-    - build.bat /t:CoverageUpload;Deploy /v:m
-  skip_non_tags: true
-
-# all other branches
--
-  build_script:
-    - build.bat /t:CoverageUpload;Package /v:m
+build_script:
+  - cmd: set BUILD_TARGET=Package
+  - cmd: if "%APPVEYOR_REPO_TAG%" == "true" set BUILD_TARGET=Deploy
+  - cmd: build.bat /t:CoverageUpload;%BUILD_TARGET% /v:m
