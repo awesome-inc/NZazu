@@ -1,14 +1,17 @@
-using System;
-using System.Globalization;
-using System.Threading;
-using System.Windows.Controls;
-using System.Windows.Data;
 using FluentAssertions;
 using NEdifis.Attributes;
+using NSubstitute;
 using NUnit.Framework;
 using NZazu.Contracts;
 using NZazu.Extensions;
 using NZazu.Fields;
+using System;
+using System.Globalization;
+using System.Threading;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Input;
 using Xceed.Wpf.Toolkit;
 using RichTextBox = Xceed.Wpf.Toolkit.RichTextBox;
 
@@ -115,6 +118,26 @@ namespace NZazu.Xceed
             textBox = (RichTextBox)field.ValueControl;
             formatBar = RichTextBoxFormatBarManager.GetFormatBar(textBox);
             formatBar.Should().NotBeNull();
+        }
+
+        [Test]
+        [STAThread] // for NCrunch
+        [Apartment(ApartmentState.STA)]
+        public void Toggle_CallSigns_on_KeyGesture()
+        {
+            INZazuWpfField gistField = new XceedRichTextField(new FieldDefinition { Key = "myGist" }, ServiceLocator);
+            gistField.GetValue().Should().BeNullOrWhiteSpace();
+
+            var routedEvent = Keyboard.KeyUpEvent;
+            var source = Substitute.For<PresentationSource>();
+            var keyGesture = new KeyGesture(Key.Home);
+            var key = keyGesture.Key;
+            var device = Keyboard.PrimaryDevice;
+            var eventArgs = new KeyEventArgs(device, source, 0, key) { RoutedEvent = routedEvent };
+
+            var textBox = (RichTextBox)gistField.ValueControl;
+            textBox.RaiseEvent(eventArgs);
+            gistField.GetValue().Should().BeNullOrWhiteSpace("neither from or to has value that could be toggled");
         }
     }
 }

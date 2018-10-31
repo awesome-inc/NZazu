@@ -125,6 +125,7 @@ namespace NZazuFiddle.Samples
             public void AttachTo(INZazuWpfField field, INZazuWpfView view)
             {
                 if (field == null) throw new ArgumentNullException(nameof(field));
+                if (view == null) throw new ArgumentNullException(nameof(view), "this value should not be null and for testing we check it here");
                 var valueControl = field.ValueControl;
 
                 _control = valueControl;

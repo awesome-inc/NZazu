@@ -1,11 +1,13 @@
-using System;
-using System.Linq;
-using Newtonsoft.Json.Linq;
 using NEdifis.Attributes;
+using Newtonsoft.Json.Linq;
+using System;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 namespace NZazu.JsonSerializer.RestSuggestor
 {
     [ExcludeFromConventions("Copy&Paste, cf: http://stackoverflow.com/a/24067483/2592915")]
+    [ExcludeFromCodeCoverage]
     public static class JsonExtensions
     {
         public static bool IsNullOrEmpty(this JToken token)

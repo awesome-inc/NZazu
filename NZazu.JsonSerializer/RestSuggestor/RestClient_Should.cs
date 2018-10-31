@@ -34,5 +34,6 @@ namespace NZazu.JsonSerializer.RestSuggestor
             //actual = sut.Head().Result;
             act.Should().Throw<HttpRequestException>();
         }
+ 
     }
 }

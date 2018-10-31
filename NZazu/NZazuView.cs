@@ -47,7 +47,7 @@ namespace NZazu
             {
                 if (value == null)
                     value = new NZazuFieldFactory();
-                value.Use(this);
+                value.Use(this as INZazuWpfView);
                 SetValue(FieldFactoryProperty, value);
             }
         }
@@ -56,7 +56,7 @@ namespace NZazu
         {
             var view = (NZazuView)d;
             var fieldFactory = (INZazuWpfFieldFactory)e.NewValue;
-            fieldFactory.Use(view);
+            fieldFactory.Use<INZazuWpfView>(view);
             view.UpdateFields(view.FormDefinition, fieldFactory, view.ResolveLayout);
         }
 
