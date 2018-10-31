@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace NZazu.Contracts.Suggest
 {
@@ -21,7 +22,7 @@ namespace NZazu.Contracts.Suggest
             var result = new List<string>();
             foreach (var p in _provider)
             {
-                var res = p.For(prefix, dataconnection);
+                var res = p.For(prefix, dataconnection) ?? Enumerable.Empty<string>();
                 result.AddRange(res);
             }
 
