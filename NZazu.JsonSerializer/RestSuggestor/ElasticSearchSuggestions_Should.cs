@@ -138,11 +138,11 @@ namespace NZazu.JsonSerializer.RestSuggestor
                 .Returns(TestData.Hits);
             var sut = ctx.BuildSut();
 
-            var items = sut.For("Tho", "e:/nzazu/autocomplete|director").ToArray();
+            var items = sut.For("Tho", "elasticsearch://nzazu/autocomplete|director").ToArray();
             items.Should().Equal("Thomate", "Thomas", "Thomas Smith");
             items.Should().NotContain("Horst");
 
-            items = sut.For("Tho", "e:/nzazu/autocomplete|director").ToArray();
+            items = sut.For("Tho", "elasticsearch://nzazu/autocomplete|director").ToArray();
             items.Should().Equal("Thomate", "Thomas", "Thomas Smith");
             items.Should().NotContain("Horst");
         }

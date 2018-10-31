@@ -14,12 +14,14 @@ namespace NZazu.Contracts.Suggest
     {
         readonly IDictionary<string, IEnumerable<string>> _cache = new Dictionary<string, IEnumerable<string>>();
 
+        private const string ConnectionPrefix = "file://";
+
         public IEnumerable<string> For(string prefix, string dataconnection)
         {
-            if (!dataconnection.StartsWith("f:")) return Enumerable.Empty<string>();
+            if (!dataconnection.StartsWith(ConnectionPrefix)) return Enumerable.Empty<string>();
 
             Trace.WriteLine($"tring to get suggestions for {prefix} from {dataconnection}");
-            var file = dataconnection.Substring(2);
+            var file = dataconnection.Substring(ConnectionPrefix.Length);
             var values = GetValues(file);
             return values.Where(x => x.StartsWith(prefix, StringComparison.InvariantCultureIgnoreCase));
         }

@@ -20,7 +20,7 @@ namespace NZazu.Contracts.Suggest
         [Test]
         public void Return_Prefixes()
         {
-            const string dataConnection = "v:anton|adam|abraham|anna|annika|astrid";
+            const string dataConnection = "value://anton|adam|abraham|anna|annika|astrid";
             var prefix = "an";
             var expected = new[] { "anton", "anna", "annika" };
             var sut = new ProvideValueSuggestions();
@@ -37,7 +37,7 @@ namespace NZazu.Contracts.Suggest
         [Test]
         public void Return_Empty_If_Not_Match()
         {
-            const string dataConnection = "v:anton|adam|abraham|anna|annika|astrid";
+            const string dataConnection = "this is a crappy data connection";
             var prefix = "thomas";
             var expected = new string[] { };
             var sut = new ProvideValueSuggestions();

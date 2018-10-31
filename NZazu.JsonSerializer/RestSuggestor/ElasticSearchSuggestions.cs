@@ -8,6 +8,7 @@ namespace NZazu.JsonSerializer.RestSuggestor
 {
     public class ElasticSearchSuggestions : IProvideSuggestions
     {
+        private const string ConnectionPrefix = "elasticsearch://";
         private readonly string _connectionPrefix;
         private readonly IDictionary<string, JProperty> _fieldsPropertyCache = new Dictionary<string, JProperty>();
         private readonly IDictionary<string, Uri> _baseAddressCache = new Dictionary<string, Uri>();
@@ -21,7 +22,7 @@ namespace NZazu.JsonSerializer.RestSuggestor
 
         public IEnumerable<string> For(string prefix, string connection)
         {
-            if (!connection.StartsWith("e:")) return Enumerable.Empty<string>();
+            if (!connection.StartsWith(ConnectionPrefix)) return Enumerable.Empty<string>();
 
             _client.BaseAddress = GetBaseAddress(connection);
 
@@ -60,7 +61,7 @@ namespace NZazu.JsonSerializer.RestSuggestor
             if (_baseAddressCache.ContainsKey(connection))
                 return _baseAddressCache[connection];
 
-            var relativeUri = connection.Substring(2).Split('|')[0];
+            var relativeUri = "/" + connection.Substring(ConnectionPrefix.Length).Split('|')[0];
             var uri = new Uri(_connectionPrefix + relativeUri);
 
             _baseAddressCache.Add(connection, uri);

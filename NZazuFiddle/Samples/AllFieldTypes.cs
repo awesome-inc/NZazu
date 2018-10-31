@@ -109,7 +109,7 @@ namespace NZazuFiddle.Samples
                             Description = "Enter a single line string and get suggestion from any source using a provider",
                             Settings = new Dictionary<string, string>
                             {
-                                {"dataconnection", "v:anton|adam|abraham|anna|annika|astrid"}
+                                {"dataconnection", "value://anton|adam|abraham|anna|annika|astrid"}
                             }
                         },
                         new FieldDefinition
@@ -121,7 +121,7 @@ namespace NZazuFiddle.Samples
                             Description = "Enter a single line string and get suggestion from any source using a provider",
                             Settings = new Dictionary<string, string>
                             {
-                                {"dataconnection", "f:cities.txt"}
+                                {"dataconnection", "file://./cities.txt"}
                             }
                         },
                         new FieldDefinition
@@ -133,7 +133,7 @@ namespace NZazuFiddle.Samples
                             Description = "Enter a single line string and get suggestion from any source using a provider",
                             Settings = new Dictionary<string, string>
                             {
-                                {"dataconnection", "e:/nzazu/autocomplete|firstname,lastname"}
+                                {"dataconnection", "elasticsearch://nzazu/autocomplete|firstname,lastname"}
                             }
                         },
                         new FieldDefinition
