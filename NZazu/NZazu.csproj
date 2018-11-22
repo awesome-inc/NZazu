@@ -124,7 +124,7 @@
     <Compile Include="Fields\PropertyExtensions.cs" />
     <Compile Include="Fields\PropertyExtensions_Should.cs" />
     <Compile Include="Fields\ValueChangedEventArgs.cs" />
-    <Compile Include="EventArgs\FocusChangedEventArgs.cs" />
+    <Compile Include="EventArgs\FieldFocusChangedEventArgs.cs" />
     <Compile Include="IResolveLayout.cs" />
     <Compile Include="INZazuWpfFieldBehavior.cs" />
     <Compile Include="Extensions\ViewExtensions_Should.cs" />
