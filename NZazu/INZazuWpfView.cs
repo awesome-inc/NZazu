@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
 using NZazu.Contracts;
-using NZazu.Contracts.Checks;
+using NZazu.EventArgs;
 
 namespace NZazu
 {
@@ -10,5 +10,6 @@ namespace NZazu
         IResolveLayout ResolveLayout { get; set; }
         INZazuWpfField GetField(string key);
         bool TryGetField(string key, out INZazuWpfField field);
+        event EventHandler<FieldFocusChangedEventArgs> FieldFocusChanged;
     }
 }

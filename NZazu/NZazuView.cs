@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -6,6 +8,7 @@ using System.Windows.Media;
 using NZazu.Contracts;
 using NZazu.Contracts.Checks;
 using NZazu.Contracts.FormChecks;
+using NZazu.EventArgs;
 using NZazu.Extensions;
 using NZazu.Fields;
 
@@ -146,6 +149,7 @@ namespace NZazu
         }
 
         private ContentControl Layout => this;
+        public event EventHandler<FieldFocusChangedEventArgs> FieldFocusChanged;
 
         private void InitializeComponent()
         {
@@ -162,13 +166,17 @@ namespace NZazu
             Layout.LostFocus += (s, e) => ApplyChanges();
             Layout.GotKeyboardFocus += (s, e) =>
             {
+                var oldFocusedElement = _lastFocusedElement;
                 // remember ctrl with focus for state
-                var focusIsAt = GetFocussedControl(e.NewFocus as FrameworkElement);
+                var newFocusedElement = GetFocussedControl(e.NewFocus as FrameworkElement);
 
-                _lastFoussedElement = focusIsAt;
+                _lastFocusedElement = newFocusedElement;
                 // now if I focus on the control, I focus on the last field
                 if (Equals(e.NewFocus, Layout))
                     TrySetFocusOn();
+
+                Trace.WriteLine($"Field focus changed from <{oldFocusedElement?.Key ?? "empty"}> to <{newFocusedElement?.Key ?? "empty"}>");
+                OnFieldFocusChanged(new FieldFocusChangedEventArgs(oldFocusedElement, newFocusedElement));
             };
 
             FieldFactory = new NZazuFieldFactory();
@@ -208,7 +216,7 @@ namespace NZazu
                     .Where(f => !string.IsNullOrEmpty(f.Value.GetValue()))
                     .SelectMany(x => x.Value.GetState()))
                 // and dont forget the focus
-                .Concat(new[] { new KeyValuePair<string, string>("__focusOn", _lastFoussedElement?.Key), })
+                .Concat(new[] { new KeyValuePair<string, string>("__focusOn", _lastFocusedElement?.Key), })
                 .ToDictionary(x => x.Key, x => x.Value);
         }
 
@@ -252,7 +260,7 @@ namespace NZazu
         }
 
         private readonly Dictionary<string, INZazuWpfField> _fields = new Dictionary<string, INZazuWpfField>();
-        private INZazuWpfField _lastFoussedElement;
+        private INZazuWpfField _lastFocusedElement;
         private readonly List<IFormCheck> _checks = new List<IFormCheck>();
 
         private void UpdateFields(
@@ -328,6 +336,11 @@ namespace NZazu
         private void DisposeChecks()
         {
             _checks.Clear();
+        }
+
+        protected virtual void OnFieldFocusChanged(FieldFocusChangedEventArgs e)
+        {
+            FieldFocusChanged?.Invoke(this, e);
         }
     }
 }
