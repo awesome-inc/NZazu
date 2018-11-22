@@ -1,5 +1,6 @@
 using System;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Globalization;
 using System.Reflection;
 
@@ -90,8 +91,9 @@ namespace NZazu.Fields
                     ? converter.ConvertFrom(null, CultureInfo.InvariantCulture, propValue) 
                     : Convert.ChangeType(propValue, propInfo.PropertyType);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Trace.TraceError("Could not convert the value \"{0}\" for property type \"{1}\" of prop \"{2}\": {3}", propValue, propInfo?.PropertyType.Name, propInfo?.Name, ex);
                 return null;
             }
         }
