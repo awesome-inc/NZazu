@@ -28,14 +28,6 @@ namespace NZazuFiddle.Samples
                                 { "HorizontalAlignment", "Center" }
                             }
                         },
-                        new FieldDefinition
-                        {
-                            Key = "location",
-                            Type = "location",
-                            Prompt = "location",
-                            Description = "Select where you are",
-                            Hint = "50.8 7.2"
-                        },
                         new FieldDefinition()
                         {
                             Key="group",
@@ -99,6 +91,14 @@ namespace NZazuFiddle.Samples
                             Prompt = "string",
                             Hint = "Enter a single line string",
                             Description = "Single line string with whatever you want to"
+                        },
+                        new FieldDefinition
+                        {
+                            Key = "location",
+                            Type = "location",
+                            Prompt = "location",
+                            Description = "Select where you are",
+                            Hint = "50.8 7.2"
                         },
                         new FieldDefinition
                         {

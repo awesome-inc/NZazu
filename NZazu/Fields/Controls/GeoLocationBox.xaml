@@ -5,11 +5,25 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:controls="clr-namespace:NZazu.Fields.Controls"
     Margin="0"
     Padding="0"
     d:DesignHeight="24"
     d:DesignWidth="300"
     mc:Ignorable="d">
+    <UserControl.Resources>
+        <!--This style solves the problem with the redundant margins created by an automatically created border element around the GeoLocationBox-->
+        <Style TargetType="{x:Type controls:GeoLocationBox}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="controls:GeoLocationBox">
+                        <ContentPresenter />
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+
     <Grid Margin="0" HorizontalAlignment="Stretch">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
