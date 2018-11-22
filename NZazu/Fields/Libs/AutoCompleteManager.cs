@@ -120,7 +120,7 @@ namespace NZazu.Fields.Libs
             // ReSharper restore PossibleNullReferenceException
         }
 
-        private void OwnerWindowLocationChanged(object sender, EventArgs e)
+        private void OwnerWindowLocationChanged(object sender, System.EventArgs e)
         {
             _popup.IsOpen = false;
         }
@@ -526,7 +526,7 @@ namespace NZazu.Fields.Libs
 
         #region Window event handling
 
-        private void OwnerWindowDeactivated(object sender, EventArgs e)
+        private void OwnerWindowDeactivated(object sender, System.EventArgs e)
         {
             _popup.IsOpen = false;
         }

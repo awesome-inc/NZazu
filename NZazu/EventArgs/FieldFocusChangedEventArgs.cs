@@ -1,3 +1,4 @@
+using System;
 using NEdifis.Attributes;
 
 namespace NZazu.EventArgs
@@ -5,12 +6,15 @@ namespace NZazu.EventArgs
     [ExcludeFromConventions("this is just an event arg class")]
     public class FieldFocusChangedEventArgs
     {
-        public FieldFocusChangedEventArgs(INZazuWpfField oldFocusedElement, INZazuWpfField newFocusedElement)
+        public FieldFocusChangedEventArgs(INZazuWpfField newFocusedElement, INZazuWpfField oldFocusedElement = null, INZazuWpfField parentElement = null)
         {
-            OldFocusedElement = oldFocusedElement;
+            //NewFocusedElement = newFocusedElement ?? throw new ArgumentNullException(nameof(newFocusedElement));
             NewFocusedElement = newFocusedElement;
+            OldFocusedElement = oldFocusedElement;
+            ParentElement = parentElement;
         }
         public INZazuWpfField OldFocusedElement { get;  }
         public INZazuWpfField NewFocusedElement { get;  }
+        public INZazuWpfField ParentElement { get;  }
     }
 }

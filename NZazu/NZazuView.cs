@@ -17,6 +17,7 @@ namespace NZazu
     public class NZazuView : ScrollViewer, INZazuWpfView
     {
         public static string FocusOnFieldName => "__focusOn";
+        public event EventHandler<FieldFocusChangedEventArgs> FieldFocusChanged;
 
         #region dependency properties
 
@@ -149,7 +150,6 @@ namespace NZazu
         }
 
         private ContentControl Layout => this;
-        public event EventHandler<FieldFocusChangedEventArgs> FieldFocusChanged;
 
         private void InitializeComponent()
         {
@@ -170,13 +170,15 @@ namespace NZazu
                 // remember ctrl with focus for state
                 var newFocusedElement = GetFocussedControl(e.NewFocus as FrameworkElement);
 
-                _lastFocusedElement = newFocusedElement;
                 // now if I focus on the control, I focus on the last field
                 if (Equals(e.NewFocus, Layout))
                     TrySetFocusOn();
 
-                Trace.WriteLine($"Field focus changed from <{oldFocusedElement?.Key ?? "empty"}> to <{newFocusedElement?.Key ?? "empty"}>");
-                OnFieldFocusChanged(new FieldFocusChangedEventArgs(oldFocusedElement, newFocusedElement));
+                if (!(newFocusedElement is NZazuDataTableField))
+                {
+                    _lastFocusedElement = newFocusedElement;
+                    OnFieldFocusChanged(new FieldFocusChangedEventArgs(newFocusedElement, oldFocusedElement));
+                }
             };
 
             FieldFactory = new NZazuFieldFactory();
@@ -300,6 +302,10 @@ namespace NZazu
             {
                 // create field
                 var field = fieldFactory.CreateField(f);
+                if (field is NZazuDataTableField dataTableField)
+                {
+                    dataTableField.TableFieldFocusChanged += DataTableFieldOnTableFieldFocusChanged;
+                }
                 _fields.Add(field.Key, field);
                 AddGroupFieldKeys(field as INZazuWpfFieldContainer);
             });
@@ -328,7 +334,13 @@ namespace NZazu
         private void Dispose()
         {
             foreach (var field in _fields.Values)
+            {
+                if (field is NZazuDataTableField dataTableField)
+                {
+                    dataTableField.TableFieldFocusChanged -= DataTableFieldOnTableFieldFocusChanged;
+                }
                 field.Dispose();
+            }
 
             _fields.Clear();
         }
@@ -338,9 +350,22 @@ namespace NZazu
             _checks.Clear();
         }
 
+        private void DataTableFieldOnTableFieldFocusChanged(object sender, FieldFocusChangedEventArgs e)
+        {
+            var oldFocusedElement = _lastFocusedElement;
+            _lastFocusedElement = e.NewFocusedElement;
+
+            OnFieldFocusChanged(new FieldFocusChangedEventArgs(_lastFocusedElement, oldFocusedElement, e.ParentElement));
+        }
+
         protected virtual void OnFieldFocusChanged(FieldFocusChangedEventArgs e)
         {
+            var oldFocusedElement = (string.IsNullOrWhiteSpace(e.OldFocusedElement?.ValueControl?.Name) ? e.OldFocusedElement?.Key : e.OldFocusedElement?.ValueControl?.Name) ?? "empty";
+            var newFocusedElement = (string.IsNullOrWhiteSpace(e.NewFocusedElement?.ValueControl?.Name) ? e.NewFocusedElement?.Key : e.NewFocusedElement?.ValueControl?.Name) ?? "empty";
+            Trace.WriteLine($"Field focus changed from <{oldFocusedElement}> to <{newFocusedElement}>");
+            
             FieldFocusChanged?.Invoke(this, e);
         }
+
     }
 }

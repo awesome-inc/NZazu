@@ -11,6 +11,7 @@ using FontAwesome.Sharp;
 using NEdifis.Attributes;
 using NZazu.Contracts;
 using NZazu.Contracts.Checks;
+using NZazu.EventArgs;
 using NZazu.Fields.Controls;
 
 namespace NZazu.Fields
@@ -18,6 +19,10 @@ namespace NZazu.Fields
     public class NZazuDataTableField
         : NZazuField
     {
+
+        private INZazuWpfField _lastFocusedElement;
+        public event EventHandler<FieldFocusChangedEventArgs> TableFieldFocusChanged;
+
         #region crappy code to create a new row after tabbing the last field
 
 #pragma warning disable 612
@@ -69,6 +74,18 @@ namespace NZazu.Fields
             ctrl.PreviewKeyDown -= ValueControl_PreviewKeyDown;
         }
 
+        private void AttachFocusAwarenessTo(UIElement ctrl)
+        {
+            if (ctrl == null) throw new ArgumentNullException(nameof(ctrl));
+            ctrl.GotKeyboardFocus += ValueControlOnGotKeyboardFocus;
+        }
+
+        private void RemoveFocusAwarenessFrom(UIElement ctrl)
+        {
+            if (ctrl == null) throw new ArgumentNullException(nameof(ctrl));
+            ctrl.GotKeyboardFocus -= ValueControlOnGotKeyboardFocus;
+        }
+
         [ExcludeFromCodeCoverage]
         [Because("I need to find out how to test shortcuts with modifier keys")]
         private void ValueControl_PreviewKeyDown(object sender, KeyEventArgs e)
@@ -77,6 +94,25 @@ namespace NZazu.Fields
                 AddRowAbove(sender);
             if (_deleteRowShortcut1.Gesture.Matches(sender, e) || _deleteRowShortcut2.Gesture.Matches(sender, e))
                 DeleteRow(sender);
+        }
+
+        [ExcludeFromCodeCoverage]
+        [Because("I need to find out how to test focus awareness")]
+        private void ValueControlOnGotKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
+        {
+            if (sender is Control control)
+            {
+                if (_fields.ContainsKey(control.Name))
+                {
+                    var oldFocusedElement = _lastFocusedElement;
+                    // remember ctrl with focus for state
+                    var newFocusedElement = _fields[control.Name];
+
+                    _lastFocusedElement = newFocusedElement;
+                    
+                    OnTableFieldFocusChanged(new FieldFocusChangedEventArgs(newFocusedElement, oldFocusedElement, this));
+                }
+            }
         }
 
         internal void DeleteRow(object sender)
@@ -94,6 +130,8 @@ namespace NZazu.Fields
             controlsToDelete.ForEach(delegate (UIElement control)
             {
                 RemoveShortcutsFrom(control);
+                RemoveFocusAwarenessFrom(control);
+
                 ((DynamicDataTable)ValueControl).LayoutGrid.Children.Remove(control);
                 var elemToDel = _fields.First(x => Equals(x.Value.ValueControl, control));
                 elemToDel.Value.Dispose();
@@ -230,7 +268,9 @@ namespace NZazu.Fields
                 var ctrl = _factory.CreateField(field, rowNo);
                 ctrl.ValueControl.Name = field.Key + "__" + rowNo;
                 ctrl.ValueControl.TabIndex = _tabOrder++;
+
                 AttachShortcutsTo(ctrl.ValueControl);
+                AttachFocusAwarenessTo(ctrl.ValueControl);
 
                 grid.Children.Add(ctrl.ValueControl);
                 Grid.SetRow(ctrl.ValueControl, rowNo);
@@ -420,9 +460,17 @@ namespace NZazu.Fields
         {
             foreach (var field in _fields.Values)
             {
+                RemoveShortcutsFrom(field.ValueControl);
+                RemoveFocusAwarenessFrom(field.ValueControl);
+
                 field.Dispose();
             }
             base.Dispose();
+        }
+
+        protected virtual void OnTableFieldFocusChanged(FieldFocusChangedEventArgs e)
+        {
+            TableFieldFocusChanged?.Invoke(this, e);
         }
     }
 }
