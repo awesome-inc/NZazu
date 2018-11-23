@@ -302,11 +302,7 @@ namespace NZazu
             {
                 // create field
                 var field = fieldFactory.CreateField(f);
-                if (field is NZazuDataTableField dataTableField)
-                {
-                    dataTableField.TableFieldFocusChanged += DataTableFieldOnTableFieldFocusChanged;
-                }
-                _fields.Add(field.Key, field);
+                AddField(field);
                 AddGroupFieldKeys(field as INZazuWpfFieldContainer);
             });
         }
@@ -326,9 +322,19 @@ namespace NZazu
             if (groupField?.Fields == null) return;
             foreach (var field in groupField.Fields)
             {
-                _fields.Add(field.Key, field);
+                AddField(field);
                 AddGroupFieldKeys(field as INZazuWpfFieldContainer);
             }
+        }
+
+        private void AddField(INZazuWpfField field)
+        {
+            if (field is NZazuDataTableField dataTableField)
+            {
+                dataTableField.TableFieldFocusChanged += DataTableFieldOnTableFieldFocusChanged;
+            }
+
+            _fields.Add(field.Key, field);
         }
 
         private void Dispose()
