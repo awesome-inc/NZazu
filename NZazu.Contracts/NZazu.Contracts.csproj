@@ -67,6 +67,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Checks\AggregateValueCheckResult.cs" />
+    <Compile Include="Checks\AggregateValueCheckResult_Should.cs" />
     <Compile Include="Suggest\AggregateProvideSuggestions.cs" />
     <Compile Include="Suggest\AggregateProvideSuggestions_Should.cs" />
     <Compile Include="Suggest\BlackList.cs" />
