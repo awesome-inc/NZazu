@@ -1,3 +1,4 @@
+using System;
 using System.Globalization;
 using FluentAssertions;
 using NEdifis.Attributes;
@@ -19,7 +20,7 @@ namespace NZazu.Contracts.Checks
 
             const string input = "foobar";
             var formatProvider = CultureInfo.InvariantCulture;
-            var error = new ValueCheckResult(false, "test");
+            var error = new ValueCheckResult(new Exception("test"));
 
             // true AND true => true
             check1.Validate(input, input, formatProvider).Returns(ValueCheckResult.Success);

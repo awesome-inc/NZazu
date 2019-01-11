@@ -1,3 +1,5 @@
+using NZazu.Contracts;
+using NZazu.Contracts.Checks;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -6,8 +8,6 @@ using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using NZazu.Contracts;
-using NZazu.Contracts.Checks;
 
 namespace NZazu.Fields
 {
@@ -172,7 +172,7 @@ namespace NZazu.Fields
                 ? ValueControl.GetBindingExpression(ContentProperty)
                 : null;
             if (bindingExpression != null && bindingExpression.HasError)
-                return new ValueCheckResult(false, "UI has errors. Value could not be converted");
+                return new ValueCheckResult(new Exception("UI has errors. Value could not be converted"));
 
             if (Check == null) return ValueCheckResult.Success;
 

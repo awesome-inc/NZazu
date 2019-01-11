@@ -1,3 +1,9 @@
+using FontAwesome.Sharp;
+using NEdifis.Attributes;
+using NZazu.Contracts;
+using NZazu.Contracts.Checks;
+using NZazu.EventArgs;
+using NZazu.Fields.Controls;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -7,12 +13,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using FontAwesome.Sharp;
-using NEdifis.Attributes;
-using NZazu.Contracts;
-using NZazu.Contracts.Checks;
-using NZazu.EventArgs;
-using NZazu.Fields.Controls;
 
 namespace NZazu.Fields
 {
@@ -109,7 +109,7 @@ namespace NZazu.Fields
                     var newFocusedElement = _fields[control.Name];
 
                     _lastFocusedElement = newFocusedElement;
-                    
+
                     OnTableFieldFocusChanged(new FieldFocusChangedEventArgs(newFocusedElement, oldFocusedElement, this));
                 }
             }
@@ -452,7 +452,7 @@ namespace NZazu.Fields
                 default:
                     return new ValueCheckResult(
                         result.Any(x => x.IsValid),
-                        string.Concat(result.Select(x => x.ToString()).ToArray()));
+                       new Exception(string.Concat(result.Select(x => x.ToString()).ToArray())));
             }
         }
 

@@ -9,6 +9,7 @@ namespace NZazu.Contracts.Checks
     internal static class TestExtensions
     {
         public static void ShouldFailWith<TError>(this IValueCheck check, string value, object parsedValue, Predicate<TError> matchError = null)
+            where TError: Exception
         {
             var vr = check.Validate(value, parsedValue, CultureInfo.CurrentCulture);
             vr.IsValid.Should().BeFalse();

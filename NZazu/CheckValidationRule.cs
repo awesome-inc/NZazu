@@ -21,7 +21,7 @@ namespace NZazu
 
             var error = vr.Error;
             if (error is Exception exception)
-                error = exception.Message;
+                error = exception;
 
             return new ValidationResult(vr.IsValid, error);
         }

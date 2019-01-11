@@ -1,10 +1,10 @@
-﻿using System;
-using System.Globalization;
-using FluentAssertions;
+﻿using FluentAssertions;
 using NEdifis.Attributes;
 using NSubstitute;
 using NUnit.Framework;
 using NZazu.Contracts.Checks;
+using System;
+using System.Globalization;
 
 namespace NZazu
 {
@@ -28,7 +28,7 @@ namespace NZazu
             result.ErrorContent.Should().BeNull();
 
             // validation is false
-            var error = new ValueCheckResult(false, "test");
+            var error = new ValueCheckResult(false, new Exception("test"));
             check.Validate(input, input, cultureInfo).Returns(error);
             result = sut.Validate(input, cultureInfo);
             result.IsValid.Should().BeFalse();

@@ -122,7 +122,7 @@ namespace NZazu.Fields
         public void Pass_Validation_To_Checks_and_returns_first_error_if_any()
         {
             var check = Substitute.For<IValueCheck>();
-            check.Validate(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<IFormatProvider>()).Returns(new ValueCheckResult(false, "test"));
+            check.Validate(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<IFormatProvider>()).Returns(new ValueCheckResult(false, new Exception("test")));
 
             var sut = new NZazuDummyField(new FieldDefinition { Key = "test", Description = "description" }, ServiceLocator) { Check = check };
             sut.Validate().IsValid.Should().BeFalse();
@@ -181,7 +181,7 @@ namespace NZazu.Fields
             // but we need a dummy content enabled field -> no content, no validation
             var check = Substitute.For<IValueCheck>();
             check.Validate(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<CultureInfo>())
-                .Returns(new ValueCheckResult(false, "test"));
+                .Returns(new ValueCheckResult(false, new Exception("test")));
 
             var sut = new NZazuField_With_Description_As_Content_Property(new FieldDefinition { Key = "test", Description = "description" }, ServiceLocator)
             { Check = check };

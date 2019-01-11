@@ -1,15 +1,15 @@
-﻿using System;
-using System.Threading;
-using System.Windows.Controls;
-using FluentAssertions;
+﻿using FluentAssertions;
 using NEdifis.Attributes;
 using NSubstitute;
 using NUnit.Framework;
 using NZazu.Contracts.Checks;
+using System;
+using System.Threading;
+using System.Windows.Controls;
 
 namespace NZazu.Extensions
 {
-    [TestFixtureFor(typeof (FieldExtensions))]
+    [TestFixtureFor(typeof(FieldExtensions))]
     [Apartment(ApartmentState.STA)]
     // ReSharper disable InconsistentNaming
     internal class FieldExtensions_Should
@@ -18,7 +18,7 @@ namespace NZazu.Extensions
         public void Return_False_If_Validate_Has_Exception()
         {
             var field = Substitute.For<INZazuWpfField>();
-            field.Validate().Returns(new ValueCheckResult(false, "I am invalid"));
+            field.Validate().Returns(new ValueCheckResult(false, new Exception("I am invalid")));
 
             field.IsValid().Should().BeFalse();
 
@@ -58,7 +58,7 @@ namespace NZazu.Extensions
             field.IsReadOnly().Should().Be(true, "field.control is disabled");
 
 
-            var textBox  = new TextBox();
+            var textBox = new TextBox();
             field.ValueControl.Returns(textBox);
             textBox.IsEnabled.Should().BeTrue();
             textBox.IsReadOnly.Should().BeFalse();

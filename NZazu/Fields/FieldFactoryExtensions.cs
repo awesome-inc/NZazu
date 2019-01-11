@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Windows.Data;
 using NZazu.Contracts;
 using NZazu.Contracts.Checks;
 
@@ -60,7 +59,7 @@ namespace NZazu.Fields
         {
             if (checkDefinitions == null) return field;
 
-            var checks = checkDefinitions.Select(checkdef => checkFactory.CreateCheck(checkdef, formData, tableSerializer, rowIdx)).ToArray();
+            var checks = checkDefinitions.Select(x => checkFactory.CreateCheck(x, formData, tableSerializer, rowIdx)).ToArray();
             field.Check = checks.Length == 1
                 ? checks.First()
                 : new AggregateCheck(checks.ToArray());
