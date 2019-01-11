@@ -46,7 +46,7 @@
             Margin="0"
             Padding="0"
             Click="SetToCurrentLocationClick"
-            Content="{fa:Icon Refresh}" />
+            Content="{fa:Icon SyncAlt}" />
         <Button
             Name="OpenInGeoApp"
             Grid.Column="2"
