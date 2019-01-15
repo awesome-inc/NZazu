@@ -438,9 +438,9 @@ namespace NZazu.Fields
             {
                 if (!field.Value.IsEditable) continue;
 
-                var iterRes = field.Value.Validate();
-                if (!iterRes.IsValid)
-                    result.Add(new ValueCheckResult(false, iterRes.Error));
+                var tempResult = field.Value.Validate();
+                if (!tempResult.IsValid)
+                    result.Add(new ValueCheckResult(false, tempResult.Exception));
             }
 
             switch (result.Count)

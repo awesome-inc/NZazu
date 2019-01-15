@@ -13,7 +13,7 @@ namespace NZazu.Contracts.Checks
         {
             var vr = check.Validate(value, parsedValue, CultureInfo.CurrentCulture);
             vr.IsValid.Should().BeFalse();
-            var error = (TError)vr.Error;
+            var error = (TError)vr.Exception;
             error.Should().NotBeNull();
             matchError?.Invoke(error).Should().BeTrue();
         }
@@ -22,7 +22,7 @@ namespace NZazu.Contracts.Checks
         {
             var vr = check.Validate(value, parsedValue, CultureInfo.CurrentCulture);
             vr.IsValid.Should().BeTrue();
-            vr.Error.Should().BeNull();
+            vr.Exception.Should().BeNull();
         }
     }
 }

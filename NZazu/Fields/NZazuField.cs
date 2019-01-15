@@ -20,7 +20,16 @@ namespace NZazu.Fields
 
         public FieldDefinition Definition { get; }
         protected internal IEnumerable<INZazuWpfFieldBehavior> Behaviors { get; set; } = new List<INZazuWpfFieldBehavior>();
-        protected internal IValueCheck Check { get; set; }
+
+        protected internal IValueCheck Check
+        {
+            get => _check;
+            set
+            {
+                _check = value;
+                UpdateBindingValidation(_check, _binding);
+            }
+        }
 
         #region private fields and wrapper
 
@@ -32,6 +41,8 @@ namespace NZazu.Fields
 
         protected readonly IFormatProvider FormatProvider;
         protected internal IValueConverter ValueConverter;
+        private IValueCheck _check;
+        private static Binding _binding;
 
         #endregion
 
@@ -107,39 +118,44 @@ namespace NZazu.Fields
             PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        // this adds the binding. needs to be done here for contol testing
-        // otherwiese values are not added to the value control
+        // this adds the binding. needs to be done here for control testing
+        // otherwise values are not added to the value control
         private static void AddValuePropertyBinding(NZazuField field, Control control)
         {
             if (control == null) return;
             if (field.ContentProperty == null) return;
 
-            var binding = new Binding("Value")
+            _binding = new Binding("Value")
             {
                 Source = field,
                 Mode = BindingMode.TwoWay,
                 ValidatesOnDataErrors = true,
                 ValidatesOnExceptions = true,
-                NotifyOnValidationError = false,
+                NotifyOnValidationError = true,
                 NotifyOnTargetUpdated = true,
                 NotifyOnSourceUpdated = true,
                 IsAsync = false,
                 UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged
             };
+
             if (field.ValueConverter != null)
-                binding.Converter = field.ValueConverter;
+                _binding.Converter = field.ValueConverter;
 
-            binding = field.DecorateBinding(binding);
+            _binding = field.DecorateBinding(_binding);
 
-            if (field.Check != null)
-            {
-                binding.ValidationRules.Clear();
-                binding.ValidationRules.Add(new CheckValidationRule(field.Check) { ValidatesOnTargetUpdated = true });
-            }
+            UpdateBindingValidation(field.Check, _binding);
 
-            control.SetBinding(field.ContentProperty, binding);
+            control.SetBinding(field.ContentProperty, _binding);
         }
 
+        private static void UpdateBindingValidation(IValueCheck check, Binding binding)
+        {
+            binding?.ValidationRules.Clear();
+
+            if (check == null || binding == null) return;
+
+            binding.ValidationRules.Add(new CheckValidationRule(check) { ValidatesOnTargetUpdated = true });
+        }
     }
 
     public abstract class NZazuField<T> : NZazuField, INZazuWpfField<T>
@@ -176,7 +192,9 @@ namespace NZazu.Fields
 
             if (Check == null) return ValueCheckResult.Success;
 
-            return Check.Validate(GetValue(), Value, FormatProvider);
+            var result = Check.Validate(GetValue(), Value, FormatProvider);
+
+            return result;
         }
     }
 }

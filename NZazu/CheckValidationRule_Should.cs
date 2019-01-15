@@ -32,7 +32,7 @@ namespace NZazu
             check.Validate(input, input, cultureInfo).Returns(error);
             result = sut.Validate(input, cultureInfo);
             result.IsValid.Should().BeFalse();
-            result.ErrorContent.Should().Be(error.Error);
+            result.ErrorContent.Should().Be(error.Exception);
 
             var exception = new ArgumentException("test");
             error = new ValueCheckResult(false, exception);

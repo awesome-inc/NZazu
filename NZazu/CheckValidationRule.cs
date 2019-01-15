@@ -19,11 +19,9 @@ namespace NZazu
             var stringValue = Convert.ToString(value);
             var vr = _check.Validate(stringValue, stringValue, cultureInfo ?? CultureInfo.CurrentCulture);
 
-            var error = vr.Error;
-            if (error is Exception exception)
-                error = exception;
+            var error = vr.Exception;
 
-            return new ValidationResult(vr.IsValid, error);
+            return new ValidationResult(vr.IsValid, error?.Message??string.Empty);
         }
     }
 }

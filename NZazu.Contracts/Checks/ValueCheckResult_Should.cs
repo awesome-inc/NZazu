@@ -14,7 +14,7 @@ namespace NZazu.Contracts.Checks
         {
             var sut = new ValueCheckResult(true);
             sut.IsValid.Should().BeTrue();
-            sut.Error.Should().BeNull();
+            sut.Exception.Should().BeNull();
         }
 
         [Test]
@@ -23,7 +23,7 @@ namespace NZazu.Contracts.Checks
             var exception = new InvalidCastException();
             var sut = new ValueCheckResult(false, exception);
             sut.IsValid.Should().BeFalse();
-            sut.Error.Should().Be(exception);
+            sut.Exception.Should().Be(exception);
         }
 
         [Test]
@@ -32,7 +32,7 @@ namespace NZazu.Contracts.Checks
             var exception = new InvalidCastException();
             var sut = new ValueCheckResult(exception);
             sut.IsValid.Should().BeFalse();
-            sut.Error.Should().Be(exception);
+            sut.Exception.Should().Be(exception);
         }
     }
 }

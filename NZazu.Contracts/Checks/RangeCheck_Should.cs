@@ -33,7 +33,7 @@ namespace NZazu.Contracts.Checks
             var value = (_check.Minimum - 1).ToString(cultureInfo);
             var vr = _check.Validate(value, cultureInfo);
             vr.IsValid.Should().BeFalse();
-            vr.Error.Should().BeOfType<ArgumentOutOfRangeException>();
+            vr.Exception.Should().BeOfType<ArgumentOutOfRangeException>();
         }
 
         [Test]
@@ -43,7 +43,7 @@ namespace NZazu.Contracts.Checks
             var value = (_check.Maximum + 1).ToString(cultureInfo);
             var vr = _check.Validate(value, cultureInfo);
             vr.IsValid.Should().BeFalse();
-            vr.Error.Should().BeOfType<ArgumentOutOfRangeException>();
+            vr.Exception.Should().BeOfType<ArgumentOutOfRangeException>();
         }
 
         [Test]
@@ -69,7 +69,7 @@ namespace NZazu.Contracts.Checks
         {
             var vr = _check.Validate("not a number", 0);
             vr.IsValid.Should().BeFalse();
-            vr.Error.Should().BeOfType<ArgumentException>();
+            vr.Exception.Should().BeOfType<ArgumentException>();
         }
     }
 }

@@ -28,7 +28,7 @@ namespace NZazu.Contracts.Checks
 
         public ValueCheckResult Validate(string value, object parsedValue, IFormatProvider formatProvider = null)
         {
-            if (string.IsNullOrWhiteSpace(value)) return ValueCheckResult.Success;
+            //if (string.IsNullOrWhiteSpace(value)) return ValueCheckResult.Success;
             
             var length = value.Length;
             if (length < MinimumLength)

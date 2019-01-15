@@ -21,11 +21,11 @@ namespace NZazu.Contracts.Checks
 
             var message = string.Join(", ", checkResultsArray
                 .Where(x => !x.IsValid)
-                .Select(x => x.Error.Message));
+                .Select(x => x.Exception.Message));
 
-            Error = new AggregateException(message, checkResultsArray
+            Exception = new AggregateException(message, checkResultsArray
                 .Where(x => !x.IsValid)
-                .Select(x => x.Error));
+                .Select(x => x.Exception));
         }
 
     }
