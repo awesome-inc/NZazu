@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
 using NEdifis.Attributes;
@@ -11,7 +12,30 @@ namespace NZazu.Contracts.Checks
     internal class StringLengthCheck_Should
     {
         [Test]
-        public void Ctor_MaxLEQMin_ShouldT_hrow()
+        public void Be_Creatable()
+        {
+            Assert.Fail("should be implemented");
+        }
+
+        [Test]
+        public void Registered_At_CheckFactory()
+        {
+            var type = StringLengthCheck.Name;
+            var checkType = typeof(StringLengthCheck);
+            var settings = new Dictionary<string, string>() { { "Min", "-42" }, { "Max", "42" } };
+
+            var sut = new CheckFactory();
+
+            var checkDefinition = new CheckDefinition { Type = type, Settings = settings };
+
+            var check = sut.CreateCheck(checkDefinition);
+
+            check.Should().NotBeNull();
+            check.Should().BeOfType(checkType);
+        }
+
+        [Test]
+        public void Ctor_MaxLEQMin_Should_Throw()
         {
             // ReSharper disable once ObjectCreationAsStatement
             new Action(() => new StringLengthCheck(1, 0)).Invoking(a => a()).Should().Throw<ArgumentOutOfRangeException>();

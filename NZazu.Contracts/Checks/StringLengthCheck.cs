@@ -1,4 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using NUnit.Framework;
 
 namespace NZazu.Contracts.Checks
 {
@@ -6,6 +10,8 @@ namespace NZazu.Contracts.Checks
     {
         private readonly ValueCheckResult _valueTooShort;
         private readonly ValueCheckResult _valueTooLong;
+
+        public static string Name = "length";
 
         public int MinimumLength { get; }
         public int MaximumLength { get; }
@@ -37,6 +43,30 @@ namespace NZazu.Contracts.Checks
                 return _valueTooLong;
 
             return ValueCheckResult.Success;
+        }
+
+        internal class StringLengthCheckSettings
+        {
+            public string Min { get; set; }
+            public string Max { get; set; }
+        }
+
+        public static IValueCheck Create(IDictionary<string, string> settings)
+        {
+            var config = settings.ToDictionary(x => x.Key, x => (object) x.Value).ToObject<StringLengthCheckSettings>();
+
+            Assert.Fail("implement me");
+
+            return null;
+            //if (config.Min)
+
+            //if (!settings.ContainsKey("min")) throw new ArgumentException("Setting 'min' required. At least a minimum string length must be specified");
+            //if (values == null || values.Count < 1) t
+            //if (values.Count > 2) throw new ArgumentException("At most minimum and maximum string length can be specified");
+
+            //if (values.Count == 1)
+            //    return new StringLengthCheck(int.Parse(values[0]));
+            //return new StringLengthCheck(int.Parse(values[0]), int.Parse(values[1]));
         }
     }
 }

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using FluentAssertions;
@@ -12,6 +13,29 @@ namespace NZazu.Contracts.Checks
     internal class RangeCheck_Should
     {
         private RangeCheck _check;
+
+        [Test]
+        public void Be_Creatable()
+        {
+            Assert.Fail("should be implemented");
+        }
+
+        [Test]
+        public void Registered_At_CheckFactory()
+        {
+            var type = RangeCheck.Name;
+            var checkType = typeof(RangeCheck);
+            var settings = new Dictionary<string, string>() { { "Min", "-42" }, { "Max", "+42" } };
+
+            var sut = new CheckFactory();
+
+            var checkDefinition = new CheckDefinition { Type = type, Settings = settings };
+
+            var check = sut.CreateCheck(checkDefinition);
+
+            check.Should().NotBeNull();
+            check.Should().BeOfType(checkType);
+        }
 
         [SetUp]
         public void SetUp()

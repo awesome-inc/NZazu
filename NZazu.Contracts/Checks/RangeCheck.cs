@@ -1,10 +1,14 @@
-﻿using System;
+﻿using NUnit.Framework;
+using System;
+using System.Collections.Generic;
 using System.Globalization;
 
 namespace NZazu.Contracts.Checks
 {
     public class RangeCheck : IValueCheck
     {
+        public static string Name = "range";
+
         private readonly ValueCheckResult _outOfRange;
         private readonly ValueCheckResult _notAValidNumber = new ValueCheckResult(false, new ArgumentException("The specified value is not a number"));
 
@@ -35,6 +39,16 @@ namespace NZazu.Contracts.Checks
             }
 
             return _notAValidNumber;
+        }
+
+        public static IValueCheck Create(IDictionary<string, string> settings)
+        {
+            Assert.Fail("implement me");
+            return null;
+
+            //if (values == null || values.Count != 2) throw new ArgumentException("Must sepcify minimum and maximum");
+            //return new RangeCheck(double.Parse(values[0], CultureInfo.InvariantCulture), double.Parse(values[1], CultureInfo.InvariantCulture));
+
         }
     }
 }

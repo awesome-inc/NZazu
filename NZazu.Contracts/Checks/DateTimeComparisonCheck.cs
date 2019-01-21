@@ -3,12 +3,15 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using Castle.Core.Internal;
+using NUnit.Framework;
 
 namespace NZazu.Contracts.Checks
 {
     public class DateTimeComparisonCheck : IValueCheck
     {
         private delegate bool Compare(DateTime value, DateTime valueToCompare);
+
+        public static string Name = "dateTime";
 
         private readonly int _rowIdx;
         private readonly string _compareOperator;
@@ -122,6 +125,18 @@ namespace NZazu.Contracts.Checks
                 case "=": return (value, compare) => value == compare;
                 default: throw new NotSupportedException("Operator not specified!");
             }
+        }
+
+        public static IValueCheck Create(IDictionary<string, string> settings, Func<FormData> formData, INZazuTableDataSerializer tableSerializer, int rowIdx)
+        {
+            Assert.Fail("implement me");
+            return null;
+            //if (values == null || values.Count < 3) throw new ArgumentException("Hint, comparison operator and field id to compare values needs to be specified");
+            //if (values[1] != "<=" && values[1] != ">=" && values[1] != "=" && values[1] != "<" && values[1] != ">") throw new ArgumentException("Only <=, >=, =, < and > are supported operators!");
+            //var optionalDateFormat = values.Count >= 4 ? values[3].Split('|') : null;
+            //var tableId = values.Count >= 5 && values[4] != string.Empty ? values[4] : null;
+
+            //return new DateTimeComparisonCheck(values[0], values[1], values[2], formData, tableSerializer, tableId, optionalDateFormat, rowIdx);
         }
     }
 }

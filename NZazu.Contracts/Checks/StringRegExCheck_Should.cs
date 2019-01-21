@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using FluentAssertions;
 using NEdifis.Attributes;
 using NUnit.Framework;
 
@@ -9,6 +11,29 @@ namespace NZazu.Contracts.Checks
     // ReSharper disable InconsistentNaming
     internal class StringRegExCheck_Should
     {
+        [Test]
+        public void Be_Creatable()
+        {
+            Assert.Fail("should be implemented");
+        }
+
+        [Test]
+        public void Registered_At_CheckFactory()
+        {
+            var type = StringRegExCheck.Name;
+            var checkType = typeof(StringRegExCheck);
+            var settings = new Dictionary<string, string>() { { "Hint", "Must be true or false" }, { "RegEx", "true|false" } };
+
+            var sut = new CheckFactory();
+
+            var checkDefinition = new CheckDefinition { Type = type, Settings = settings };
+
+            var check = sut.CreateCheck(checkDefinition);
+
+            check.Should().NotBeNull();
+            check.Should().BeOfType(checkType);
+        }
+
         [Test]
         public void IsValid_null_or_whitespace_should_pass()
         {
