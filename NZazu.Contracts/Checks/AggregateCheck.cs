@@ -10,7 +10,7 @@ namespace NZazu.Contracts.Checks
         public IEnumerable<IValueCheck> Checks => _checks;
 
 
-        public AggregateCheck(params IValueCheck[] checks)
+        public AggregateCheck(IEnumerable<IValueCheck> checks)
         {
             _checks = (checks ?? Enumerable.Empty<IValueCheck>()).ToList();
         }
@@ -22,8 +22,8 @@ namespace NZazu.Contracts.Checks
                 .Where(x => !x.IsValid)
                 .ToArray();
 
-            return invalidChecks.Length == 0 
-                ? ValueCheckResult.Success 
+            return invalidChecks.Length == 0
+                ? ValueCheckResult.Success
                 : new AggregateValueCheckResult(invalidChecks);
         }
     }

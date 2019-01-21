@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using NZazu.Contracts;
+﻿using NZazu.Contracts;
+using System.Collections.Generic;
 
 namespace NZazuFiddle.Samples
 {
@@ -26,7 +26,10 @@ namespace NZazuFiddle.Samples
                             Checks = new []
                             {
                                 new CheckDefinition { Type = "required" },
-                                new CheckDefinition { Type="length", Values=new []{"6"} }
+                                new CheckDefinition {
+                                    Type ="length",
+                                    Settings = new Dictionary<string ,string>{ {"Min", "6" } }
+                                }
                             }
                         },
                         new FieldDefinition
@@ -39,7 +42,11 @@ namespace NZazuFiddle.Samples
                             Checks = new []
                             {
                                 new CheckDefinition { Type = "required" },
-                                new CheckDefinition { Type = "regex", Values= new []{"Must be a valid e-mail address", @"^.+@.+\..+$"}}
+                                new CheckDefinition
+                                {
+                                    Type = "regex",
+                                    Settings = new Dictionary<string ,string>{{"Hint", "Must be a valid e-mail address" },{"RegEx", @"^.+@.+\..+$" } }
+                                }
                             }
                         },
                         new FieldDefinition
@@ -52,7 +59,11 @@ namespace NZazuFiddle.Samples
                             Checks = new []
                             {
                                 new CheckDefinition { Type = "required" },
-                                new CheckDefinition { Type = "regex", Values= new []{"Must be Checked or Unchecked", "True", "False"}}
+                                new CheckDefinition
+                                {
+                                    Type = "regex",
+                                    Settings = new Dictionary<string ,string>{{"Hint", "Must be Checked or Unchecked" },{"RegEx", "True|False" } }
+                                }
                             }
                         },
                         new FieldDefinition
@@ -99,12 +110,15 @@ namespace NZazuFiddle.Samples
                             Key = "endTimeWithFormats",
                             Type = "string",
                             Prompt = "Another end time",
-                            Hint = "Set end time with specific format to compare with anothe start time format",
+                            Hint = "Set end time with specific format to compare with another start time format",
                             Checks = new []
                             {
                                 new CheckDefinition
                                 {
-                                    Type = "dateTime", Values = new []{ "End time must lie in future compared to start time", ">", "startTimeWithFormats", "HHmm|HHmmss|HH:mm|HH:mm:ss" }
+                                    Type = "dateTime",
+                                    Settings = new Dictionary<string ,string>{{"Hint", "Must be a valid e-mail address" },{"RegEx", "^.+@.+\\..+$" } }
+
+                                    Values = new []{ "End time must lie in future compared to start time", ">", "startTimeWithFormats", "HHmm|HHmmss|HH:mm|HH:mm:ss" }
                                 }
                             }
                         },
@@ -145,9 +159,9 @@ namespace NZazuFiddle.Samples
                         }
                     }
                 },
-                new Dictionary<string, string>
+                    new Dictionary<string, string>
                 {
-                    { "name", "John" }, 
+                    { "name", "John" },
                     { "email", "foobar"},
                     { "isAdmin", "false" }
                 })

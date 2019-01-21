@@ -1,5 +1,5 @@
-using System.Collections.Generic;
 using NZazu.Contracts;
+using System.Collections.Generic;
 
 namespace NZazuFiddle.Samples
 {
@@ -99,7 +99,7 @@ namespace NZazuFiddle.Samples
                                                 new CheckDefinition
                                                 {
                                                     Type = "regex",
-                                                    Values = new  []{"Must be a valid e-mail address","^.+@.+\\..+$"}
+                                                    Settings = new Dictionary<string ,string>{{"Hint", "Must be a valid e-mail address" },{"RegEx", "^.+@.+\\..+$" } }
                                                 }
                                             }
                                         },

@@ -1,9 +1,12 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using FluentAssertions;
+using NEdifis;
 using NEdifis.Attributes;
 using NUnit.Framework;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
+using System.Reflection;
 
 namespace NZazu.Contracts.Checks
 {
@@ -14,20 +17,24 @@ namespace NZazu.Contracts.Checks
         [Test]
         public void Be_Creatable()
         {
-            Assert.Fail("should be implemented");
+            var settings = new Dictionary<string, string>() { { "Min", "2" }, { "Max", "6" } } as IDictionary<string, string>;
+            var ctx = new ContextFor<StringLengthCheck>();
+            ctx.Use(settings);
+            var sut = ctx.BuildSut();
+
+            sut.Should().NotBeNull();
+            sut.GetType().GetCustomAttribute<DisplayNameAttribute>().DisplayName.Should().Be("length");
         }
 
         [Test]
         public void Registered_At_CheckFactory()
         {
-            var type = StringLengthCheck.Name;
+            var settings = new Dictionary<string, string>() { { "Min", "2" }, { "Max", "6" } } as IDictionary<string, string>;
             var checkType = typeof(StringLengthCheck);
-            var settings = new Dictionary<string, string>() { { "Min", "-42" }, { "Max", "42" } };
 
             var sut = new CheckFactory();
 
-            var checkDefinition = new CheckDefinition { Type = type, Settings = settings };
-
+            var checkDefinition = new CheckDefinition { Type = "length", Settings = settings };
             var check = sut.CreateCheck(checkDefinition);
 
             check.Should().NotBeNull();
@@ -35,61 +42,82 @@ namespace NZazu.Contracts.Checks
         }
 
         [Test]
-        public void Ctor_MaxLEQMin_Should_Throw()
+        public void Ctor_MaxLessOrEqualMin_Should_Throw()
         {
+            var settings = new Dictionary<string, string>() { { "Min", "6" }, { "Max", "2" } } as IDictionary<string, string>;
+
             // ReSharper disable once ObjectCreationAsStatement
-            new Action(() => new StringLengthCheck(1, 0)).Invoking(a => a()).Should().Throw<ArgumentOutOfRangeException>();
+            new Action(() => new StringLengthCheck(settings, null, null, 0)).Invoking(a => a()).Should().Throw<ArgumentOutOfRangeException>();
         }
 
         [Test]
         public void Ctor_NegativeLength_Should_Throw()
         {
+            var settings = new Dictionary<string, string>() { { "Min", "-2" } } as IDictionary<string, string>;
+
             // ReSharper disable once ObjectCreationAsStatement
-            new Action(() => new StringLengthCheck(-1, -1)).Invoking(a => a()).Should().Throw<ArgumentOutOfRangeException>();
+            new Action(() => new StringLengthCheck(settings, null, null, 0)).Invoking(a => a()).Should().Throw<ArgumentOutOfRangeException>();
         }
 
         [Test]
         public void IsValid_BelowMin_fails()
         {
-            var _check = new StringLengthCheck(4, 6);
-            var candidate = new string('A', _check.MinimumLength - 1);
-            _check.ShouldFailWith<ArgumentException>(candidate, candidate);
+            var settings = new Dictionary<string, string>() { { "Min", "2" }, { "Max", "42" } } as IDictionary<string, string>;
+            var ctx = new ContextFor<StringLengthCheck>();
+            ctx.Use(settings);
+            var sut = ctx.BuildSut();
+
+            var candidate = new string('A', 1);
+            sut.ShouldFailWith<ArgumentException>(candidate, candidate);
         }
 
         [Test]
         public void IsValid_AboveMax_fails()
         {
-            var _check = new StringLengthCheck(4, 6);
-            var candidate = new string('A', _check.MaximumLength + 1);
-            _check.ShouldFailWith<ArgumentException>(candidate, candidate);
+            var settings = new Dictionary<string, string>() { { "Min", "2" }, { "Max", "42" } } as IDictionary<string, string>;
+            var ctx = new ContextFor<StringLengthCheck>();
+            ctx.Use(settings);
+            var sut = ctx.BuildSut();
+
+            var candidate = new string('A', 100);
+            sut.ShouldFailWith<ArgumentException>(candidate, candidate);
         }
 
         [Test]
         public void IsValid_InsideMinMax_passes()
         {
-            var _check = new StringLengthCheck(4, 6);
-            Enumerable.Range(_check.MinimumLength, _check.MaximumLength - _check.MinimumLength)
+            var settings = new Dictionary<string, string>() { { "Min", "2" }, { "Max", "42" } } as IDictionary<string, string>;
+            var ctx = new ContextFor<StringLengthCheck>();
+            ctx.Use(settings);
+            var sut = ctx.BuildSut();
+
+            Enumerable.Range(2, 40)
                 .Select(val => new string('A', val))
-                .ToList().ForEach(x => _check.ShouldPass(x, x));
+                .ToList().ForEach(x => sut.ShouldPass(x, x));
         }
 
         [Test]
         public void IsValid_NullOrWhitespace_passes()
         {
-            var check = new StringLengthCheck(3, 4);
-            check.ShouldPass(null, null);
-            check.ShouldPass(string.Empty, string.Empty);
-            check.ShouldPass("\t\r\n", "\t\r\n");
-            check.ShouldPass(" ", " ");
+            var ctx = new ContextFor<StringLengthCheck>();
+            var sut = ctx.BuildSut();
+
+            sut.ShouldPass(null, null);
+            sut.ShouldPass(string.Empty, string.Empty);
+            sut.ShouldPass("\t\r\n", "\t\r\n");
+            sut.ShouldPass(" ", " ");
         }
 
         [Test]
         public void Ctor_with_min_only_should_set_max_to_int_maxvalue()
         {
-            const int min = 4;
-            var sut = new StringLengthCheck(min);
-            sut.MinimumLength.Should().Be(min);
-            sut.MaximumLength.Should().Be(int.MaxValue);
+            var settings = new Dictionary<string, string>() { { "Min", "4" } } as IDictionary<string, string>;
+            var ctx = new ContextFor<StringLengthCheck>();
+            ctx.Use(settings);
+            var sut = ctx.BuildSut();
+
+            sut.Settings.MinInt.Should().Be(4);
+            sut.Settings.MaxInt.Should().Be(int.MaxValue);
         }
     }
 }

@@ -11,8 +11,6 @@ namespace NZazu.Contracts.Checks
     {
         private delegate bool Compare(DateTime value, DateTime valueToCompare);
 
-        public static string Name = "dateTime";
-
         private readonly int _rowIdx;
         private readonly string _compareOperator;
         private readonly string _fieldToCompareWith;
