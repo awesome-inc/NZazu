@@ -19,12 +19,17 @@ namespace NZazu.Xceed
             var control = new DateTimePickerWithUpdate { ToolTip = Definition.Description, Watermark = Definition.Hint };
 
             // set date time format
-            DateFormat = Definition.Settings.Get("Format");
+            DateFormat = Definition.Settings.Get(nameof(control.Format));
             // ReSharper disable once InvertIf
             if (!string.IsNullOrWhiteSpace(DateFormat))
             {
                 control.Format = DateTimeFormat.Custom;
                 control.FormatString = DateFormat;
+
+                if (Definition.Settings.ContainsKey(nameof(control.Format)))
+                {
+                    Definition.Settings[nameof(control.Format)] = Enum.GetName(typeof(DateTimeFormat), DateTimeFormat.Custom);
+                }
             }
 
             return control;
