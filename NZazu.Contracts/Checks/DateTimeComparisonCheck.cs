@@ -1,12 +1,14 @@
-﻿using System;
+﻿using Castle.Core.Internal;
+using NUnit.Framework;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
-using Castle.Core.Internal;
-using NUnit.Framework;
 
 namespace NZazu.Contracts.Checks
 {
+    [DisplayName("datetime")]
     public class DateTimeComparisonCheck : IValueCheck
     {
         private delegate bool Compare(DateTime value, DateTime valueToCompare);
@@ -21,17 +23,25 @@ namespace NZazu.Contracts.Checks
         private readonly IEnumerable<string> _specificDateTimeFormats;
 
         public DateTimeComparisonCheck(
-            string hint, string compareOperator, string fieldToCompareWith, Func<FormData> formData, INZazuTableDataSerializer tableSerializer, string tableKey = null,
-            IEnumerable<string> specificDateTimeFormats = null, int rowIdx = -1)
+            IDictionary<string, string> settings, Func<FormData> formData,
+            INZazuTableDataSerializer tableSerializer, int rowIdx)
+
+        //public DateTimeComparisonCheck(
+        //    string hint, string compareOperator, string fieldToCompareWith, Func<FormData> formData, INZazuTableDataSerializer tableSerializer, string tableKey = null,
+        //    IEnumerable<string> specificDateTimeFormats = null, int rowIdx = -1)
         {
+            if (settings == null) throw new ArgumentNullException(nameof(settings));
+
             _rowIdx = rowIdx;
-            _compareOperator = compareOperator ?? throw new ArgumentNullException(nameof(compareOperator));
-            _fieldToCompareWith = fieldToCompareWith ?? throw new ArgumentNullException(nameof(fieldToCompareWith));
-            _formData = formData ?? throw new ArgumentNullException(nameof(formData));
             _tableSerializer = tableSerializer ?? throw new ArgumentNullException(nameof(tableSerializer));
-            _tableKey = tableKey;
-            _specificDateTimeFormats = specificDateTimeFormats;
-            _hint = hint ?? string.Empty;
+
+            _hint = settings.Get("Hint", string.Empty);
+            _compareOperator = settings.Get("CompareOperator") ?? throw new ArgumentNullException(nameof(settings), "for datetime comparison a 'CompareOperator' must be given");
+            _fieldToCompareWith = settings.Get("FieldToCompareWith") ?? throw new ArgumentNullException(nameof(settings), "for datetime comparison a 'FieldToCompareWith' must be given");
+            _tableKey = settings.Get("TableToCompareWith");
+            _specificDateTimeFormats = settings.Get("SpecificDateTimeFormats", string.Empty).Split('|');
+
+            _formData = formData ?? throw new ArgumentNullException(nameof(formData));
         }
 
         public ValueCheckResult Validate(string value, object parsedValue, IFormatProvider formatProvider = null)
@@ -45,15 +55,18 @@ namespace NZazu.Contracts.Checks
             {
                 _formData().Values.TryGetValue(_fieldToCompareWith, out valueToCompareWith);
             }
-           
+
             if (value.IsNullOrEmpty() || valueToCompareWith.IsNullOrEmpty()) return ValueCheckResult.Success; // do not mark not yet set values
-            
+
             var compareOperation = GetCompareOperation();
-            var dateTimeResults = _specificDateTimeFormats == null 
-                ? ParseValuesToDateTime(value, valueToCompareWith) 
+            var dateTimeResults = _specificDateTimeFormats == null
+                ? ParseValuesToDateTime(value, valueToCompareWith)
                 : ParseValuesToDateTimeUsingSpecificFormats(value, valueToCompareWith);
 
-            var result =  compareOperation(dateTimeResults.ValueAsDateTime, dateTimeResults.ValuteToCompareWithAsDateTime) 
+            if (!dateTimeResults.ValueAsDateTime.HasValue || !dateTimeResults.ValueToCompareWithAsDateTime.HasValue)
+                return new ValueCheckResult(new Exception("Cannot parse value to datetime."));
+
+            var result = compareOperation(dateTimeResults.ValueAsDateTime.Value, dateTimeResults.ValueToCompareWithAsDateTime.Value)
                 ? ValueCheckResult.Success
                 : new ValueCheckResult(false, new ArgumentException(_hint));
 
@@ -69,20 +82,20 @@ namespace NZazu.Contracts.Checks
             var tableFieldToCompareWith = $"{_fieldToCompareWith}__{_rowIdx}";
             var tableFieldValueToCompareWithDoesExist =
                 tableDict.TryGetValue(tableFieldToCompareWith, out var valueToCompareWith);
-      
+
             return valueToCompareWith;
         }
 
 
         protected class DataToCompare
         {
-            public DateTime ValueAsDateTime { get; }
-            public DateTime ValuteToCompareWithAsDateTime { get; }
+            public DateTime? ValueAsDateTime { get; }
+            public DateTime? ValueToCompareWithAsDateTime { get; }
 
-            public DataToCompare(DateTime valueAsDateTime, DateTime valuteToCompareWithAsDateTime)
+            public DataToCompare(DateTime? valueAsDateTime, DateTime? valueToCompareWithAsDateTime)
             {
                 ValueAsDateTime = valueAsDateTime;
-                ValuteToCompareWithAsDateTime = valuteToCompareWithAsDateTime;
+                ValueToCompareWithAsDateTime = valueToCompareWithAsDateTime;
             }
         }
 
@@ -97,19 +110,21 @@ namespace NZazu.Contracts.Checks
 
         private DataToCompare ParseValuesToDateTimeUsingSpecificFormats(string value, string valueToCompareWith)
         {
-            DateTime.TryParseExact(
+            var canParseValue = DateTime.TryParseExact(
                 value,
                 _specificDateTimeFormats.ToArray(),
                 CultureInfo.InvariantCulture,
                 DateTimeStyles.None,
                 out var valueDateTime);
-            DateTime.TryParseExact(
+            var canParseValueToCompare = DateTime.TryParseExact(
                 valueToCompareWith,
                 _specificDateTimeFormats.ToArray(),
                 CultureInfo.InvariantCulture,
                 DateTimeStyles.None,
                 out var valueToCompareWithDateTime);
-            return new DataToCompare(valueDateTime, valueToCompareWithDateTime);
+            return new DataToCompare(
+                canParseValue ? valueDateTime : (DateTime?)null,
+                canParseValueToCompare ? valueToCompareWithDateTime : (DateTime?)null);
         }
 
         private Compare GetCompareOperation()
@@ -121,6 +136,7 @@ namespace NZazu.Contracts.Checks
                 case ">=": return (value, compare) => value >= compare;
                 case ">": return (value, compare) => value > compare;
                 case "=": return (value, compare) => value == compare;
+                case "==": return (value, compare) => value == compare;
                 default: throw new NotSupportedException("Operator not specified!");
             }
         }

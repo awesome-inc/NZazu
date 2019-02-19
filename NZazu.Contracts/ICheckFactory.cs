@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using NZazu.Contracts.Checks;
 using NZazu.Contracts.FormChecks;
 
@@ -13,5 +14,6 @@ namespace NZazu.Contracts
             int rowIdx = -1);
 
         IFormCheck CreateFormCheck(CheckDefinition checkDefinition);
+        IEnumerable<string> AvailableTypes { get; }
     }
 }

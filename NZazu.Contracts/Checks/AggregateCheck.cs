@@ -18,13 +18,16 @@ namespace NZazu.Contracts.Checks
         public ValueCheckResult Validate(string value, object parsedValue, IFormatProvider formatProvider)
         {
             var invalidChecks = _checks
-                .Select(c => c.Validate(value, parsedValue, formatProvider))
+                .Select(c => c.Validate(value, parsedValue, formatProvider) ?? ValueCheckResult.Success)
                 .Where(x => !x.IsValid)
                 .ToArray();
 
-            return invalidChecks.Length == 0
-                ? ValueCheckResult.Success
-                : new AggregateValueCheckResult(invalidChecks);
+            switch (invalidChecks.Length)
+            {
+                case 0: return ValueCheckResult.Success;
+                case 1: return invalidChecks.First();
+                default: return new AggregateValueCheckResult(invalidChecks);
+            }
         }
     }
 }

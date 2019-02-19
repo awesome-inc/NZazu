@@ -94,7 +94,13 @@ namespace NZazuFiddle.Samples
                             {
                                 new CheckDefinition
                                 {
-                                    Type = "dateTime", Values = new []{ "End time must lie in future compared to start time", ">", "startTime" }
+                                    Type = "dateTime",
+                                    Settings = new Dictionary<string, string>
+                                    {
+                                        {"Hint", "End time must lie in future compared to start time" },
+                                        {"CompareOperator",">"},
+                                        {"FieldToCompareWith","startTime"},
+                                    }
                                 }
                             }
                         },
@@ -116,9 +122,13 @@ namespace NZazuFiddle.Samples
                                 new CheckDefinition
                                 {
                                     Type = "dateTime",
-                                    Settings = new Dictionary<string ,string>{{"Hint", "Must be a valid e-mail address" },{"RegEx", "^.+@.+\\..+$" } }
-
-                                    Values = new []{ "End time must lie in future compared to start time", ">", "startTimeWithFormats", "HHmm|HHmmss|HH:mm|HH:mm:ss" }
+                                    Settings = new Dictionary<string, string>
+                                    {
+                                        {"Hint", "End time must lie in future compared to start time" },
+                                        {"CompareOperator",">"},
+                                        {"FieldToCompareWith","startTimeWithFormats"},
+                                        {"SpecificDateTimeFormats", "HHmm|HHmmss|HH:mm|HH:mm:ss" }
+                                    }
                                 }
                             }
                         },
@@ -144,13 +154,13 @@ namespace NZazuFiddle.Samples
                                         new CheckDefinition
                                         {
                                             Type = "dateTime",
-                                            Values = new []
+                                            Settings = new Dictionary<string, string>
                                             {
-                                                "End time must lie in future compared to start time",
-                                                ">",
-                                                "startTimeTable",
-                                                "HHmm|HHmmss|HH:mm|HH:mm:ss",
-                                                "intraTableComparison"
+                                                {"Hint", "End time must lie in future compared to start time" },
+                                                {"CompareOperator",">"},
+                                                {"FieldToCompareWith","startTime"},
+                                                {"TableToCompareWith","intraTableComparison"},
+                                                {"SpecificDateTimeFormats", "HHmm|HHmmss|HH:mm|HH:mm:ss" }
                                             }
                                         }
                                     }

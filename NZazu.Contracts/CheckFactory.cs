@@ -3,6 +3,7 @@ using NZazu.Contracts.FormChecks;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 
@@ -12,25 +13,30 @@ namespace NZazu.Contracts
     {
         private IDictionary<string, Type> _registrations = new Dictionary<string, Type>();
 
+        public IEnumerable<string> AvailableTypes => _registrations.Keys;
+
         public CheckFactory()
         {
-            RegisterAssemblyValueChecks();
+            RegisterCurrentAssemblyValueChecks();
         }
 
-        private void RegisterAssemblyValueChecks()
+        private void RegisterCurrentAssemblyValueChecks()
         {
             _registrations = Assembly.GetExecutingAssembly().GetTypes()
                 .Where(x => x.GetInterface(typeof(IValueCheck).Name) != null)
                 .ToDictionary(
                     GetClassDisplayName,
                     x => x);
+
+            var types = string.Join(",", AvailableTypes);
+            Trace.WriteLine($"[CheckFactory] Available check types: {types}");
         }
 
         private static string GetClassDisplayName(Type cls)
         {
             var nameAttribute = cls.GetCustomAttribute<DisplayNameAttribute>();
 
-            return nameAttribute != null 
+            return nameAttribute != null
                 ? nameAttribute.DisplayName.ToLower()
                 : cls.Name.ToLower();
         }
@@ -41,10 +47,14 @@ namespace NZazu.Contracts
             if (checkDefinition == null) throw new ArgumentNullException(nameof(checkDefinition));
             if (string.IsNullOrWhiteSpace(checkDefinition.Type)) throw new ArgumentException("check type not specified");
 
-            var concrete = _registrations.ContainsKey(checkDefinition.Type.ToLower())
-                ? _registrations[checkDefinition.Type.ToLower()]
-                : throw new NotSupportedException($"The specified check '{checkDefinition.Type}' is not supported");
+            // lets check if the given validation type is available
+            if (!_registrations.ContainsKey(checkDefinition.Type.ToLower()))
+                throw new NotSupportedException($"The specified check '{checkDefinition.Type}' is not supported");
 
+            var concrete = _registrations[checkDefinition.Type.ToLower()];
+            Trace.WriteLine($"Found check for '{checkDefinition.Type.ToLower()}' as ({concrete.FullName})");
+
+            // lets use reflection to create an instance
             var result = (IValueCheck)
                 Activator.CreateInstance(concrete, checkDefinition.Settings, formData, tableSerializer, rowIdx);
 
