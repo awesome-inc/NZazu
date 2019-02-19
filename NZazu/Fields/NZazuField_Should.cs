@@ -273,5 +273,28 @@ namespace NZazu.Fields
 
             Assert.DoesNotThrow(() => sut.Dispose());
         }
+
+        [Test]
+        [TestCase("Width")]
+        [TestCase("Height")]
+        [TestCase("Format")]
+        public void Handle_Empty_Property_Values(string propertyName)
+        {
+            var fieldDefinition = new FieldDefinition { Key = "test" };
+            Exception exception = null;
+
+            try
+            {
+                fieldDefinition.Settings.Add(propertyName, "");
+                var field = new NZazuField_With_Description_As_Content_Property(fieldDefinition, ServiceLocator);
+                field.ApplySettings(fieldDefinition);
+            }
+            catch (Exception e)
+            {
+                exception = e;
+            }
+
+            exception.Should().BeNull();
+        }
     }
 }
