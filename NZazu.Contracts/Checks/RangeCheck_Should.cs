@@ -1,7 +1,10 @@
 using System;
-using System.Globalization;
+using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using System.Reflection;
 using FluentAssertions;
+using NEdifis;
 using NEdifis.Attributes;
 using NUnit.Framework;
 
@@ -11,65 +14,109 @@ namespace NZazu.Contracts.Checks
     // ReSharper disable InconsistentNaming
     internal class RangeCheck_Should
     {
-        private RangeCheck _check;
-
-        [SetUp]
-        public void SetUp()
+        [Test]
+        public void Be_Creatable()
         {
-            _check = new RangeCheck(0, 10);
+            var settings = new Dictionary<string, string>() { { "Min", "2" }, { "Max", "6" } } as IDictionary<string, string>;
+            var ctx = new ContextFor<RangeCheck>();
+            ctx.Use(settings);
+            var sut = ctx.BuildSut();
+
+            sut.Should().NotBeNull();
+            sut.GetType().GetCustomAttribute<DisplayNameAttribute>().DisplayName.Should().Be("range");
         }
 
         [Test]
-        public void Ctor_MaxLEQMin_Should_Throw()
+        public void Registered_At_CheckFactory()
         {
+            var settings = new Dictionary<string, string>() { { "Min", "2" }, { "Max", "6" } } as IDictionary<string, string>;
+            var checkType = typeof(RangeCheck);
+
+            var sut = new CheckFactory();
+
+            var checkDefinition = new CheckDefinition { Type = "range", Settings = settings };
+            var check = sut.CreateCheck(checkDefinition);
+
+            check.Should().NotBeNull();
+            check.Should().BeOfType(checkType);
+        }
+
+        [Test]
+        public void Ctor_MaxLessOrEqualMin_Should_Throw()
+        {
+            var settings = new Dictionary<string, string>() { { "Min", "6" }, { "Max", "2" } } as IDictionary<string, string>;
+
             // ReSharper disable once ObjectCreationAsStatement
-            new Action(() => new RangeCheck(1, 0)).Invoking(a => a()).Should().Throw<ArgumentOutOfRangeException>();
+            new Action(() => new RangeCheck(settings, null, null, 0)).Invoking(a => a()).Should().Throw<ArgumentOutOfRangeException>();
         }
 
         [Test]
-        public void Validate_BelowMin_fails()
+        public void Ctor_NegativeLength_Should_Throw()
         {
-            var cultureInfo = CultureInfo.InvariantCulture;
-            var value = (_check.Minimum - 1).ToString(cultureInfo);
-            var vr = _check.Validate(value, cultureInfo);
-            vr.IsValid.Should().BeFalse();
-            vr.Exception.Should().BeOfType<ArgumentOutOfRangeException>();
+            var settings = new Dictionary<string, string>() { { "Min", "-2" } } as IDictionary<string, string>;
+
+            // ReSharper disable once ObjectCreationAsStatement
+            new Action(() => new RangeCheck(settings, null, null, 0)).Invoking(a => a()).Should().Throw<ArgumentOutOfRangeException>();
         }
 
         [Test]
-        public void Validate_AboveMax_fails()
+        public void IsValid_BelowMin_fails()
         {
-            var cultureInfo = CultureInfo.InvariantCulture;
-            var value = (_check.Maximum + 1).ToString(cultureInfo);
-            var vr = _check.Validate(value, cultureInfo);
-            vr.IsValid.Should().BeFalse();
-            vr.Exception.Should().BeOfType<ArgumentOutOfRangeException>();
+            var settings = new Dictionary<string, string>() { { "Min", "2" }, { "Max", "42" } } as IDictionary<string, string>;
+            var ctx = new ContextFor<RangeCheck>();
+            ctx.Use(settings);
+            var sut = ctx.BuildSut();
+
+            var candidate = new string('A', 1);
+            sut.ShouldFailWith<ArgumentException>(candidate, candidate);
         }
 
         [Test]
-        public void Validate_InsideMinMax_Should_Pass()
+        public void IsValid_AboveMax_fails()
         {
-            var cultureInfo = CultureInfo.InvariantCulture;
-            Enumerable.Range((int)_check.Minimum, (int)(_check.Maximum - _check.Minimum))
-                    .Select(val => val.ToString(cultureInfo))
-                    .ToList().ForEach(val => _check.Validate(val, cultureInfo).IsValid.Should().BeTrue());
+            var settings = new Dictionary<string, string>() { { "Min", "2" }, { "Max", "42" } } as IDictionary<string, string>;
+            var ctx = new ContextFor<RangeCheck>();
+            ctx.Use(settings);
+            var sut = ctx.BuildSut();
+
+            var candidate = new string('A', 100);
+            sut.ShouldFailWith<ArgumentException>(candidate, candidate);
         }
 
         [Test]
-        public void Validate_Value_NullOrWhiteSpace_Passes()
+        public void IsValid_InsideMinMax_passes()
         {
-            _check.ShouldPass(null, null);
-            _check.ShouldPass(string.Empty, string.Empty);
-            _check.ShouldPass("\t\r\n", "\t\r\n");
-            _check.ShouldPass(" ", " ");
+            var settings = new Dictionary<string, string>() { { "Min", "2" }, { "Max", "42" } } as IDictionary<string, string>;
+            var ctx = new ContextFor<RangeCheck>();
+            ctx.Use(settings);
+            var sut = ctx.BuildSut();
+
+            Enumerable.Range(2, 40)
+                .ToList().ForEach(x => sut.ShouldPass(x, x.ToString()));
         }
 
         [Test]
-        public void Validate_NaN_fails()
+        public void IsValid_NullOrWhitespace_passes()
         {
-            var vr = _check.Validate("not a number", 0);
-            vr.IsValid.Should().BeFalse();
-            vr.Exception.Should().BeOfType<ArgumentException>();
+            var ctx = new ContextFor<RangeCheck>();
+            var sut = ctx.BuildSut();
+
+            sut.ShouldPass(null, null);
+            sut.ShouldPass(string.Empty, string.Empty);
+            sut.ShouldPass("\t\r\n", "\t\r\n");
+            sut.ShouldPass(" ", " ");
+        }
+
+        [Test]
+        public void Ctor_with_min_only_should_set_max_to_int_maxvalue()
+        {
+            var settings = new Dictionary<string, string>() { { "Min", "4" } } as IDictionary<string, string>;
+            var ctx = new ContextFor<RangeCheck>();
+            ctx.Use(settings);
+            var sut = ctx.BuildSut();
+
+            sut.Settings.MinInt.Should().Be(4);
+            sut.Settings.MaxInt.Should().Be(int.MaxValue);
         }
     }
 }

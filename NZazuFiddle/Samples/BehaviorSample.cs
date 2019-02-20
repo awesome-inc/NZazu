@@ -223,7 +223,7 @@ namespace NZazuFiddle.Samples
                     var sut = new SetBorderBehavior();
                     var field = Substitute.For<INZazuWpfField>();
                     field.ValueControl.Returns(Substitute.For<Control>());
-                    sut.AttachTo(field, Arg.Any<INZazuWpfView>());
+                    sut.AttachTo(field, Substitute.For<INZazuWpfView>());
 
                     var control = sut._control;
                     control.BorderBrush.Should().Be(SystemColors.HotTrackBrush);

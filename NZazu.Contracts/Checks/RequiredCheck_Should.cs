@@ -1,7 +1,11 @@
-﻿using System;
-using FluentAssertions;
+﻿using FluentAssertions;
 using NEdifis.Attributes;
 using NUnit.Framework;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Reflection;
+using NEdifis;
 
 namespace NZazu.Contracts.Checks
 {
@@ -10,16 +14,44 @@ namespace NZazu.Contracts.Checks
     internal class RequiredCheck_Should
     {
         [Test]
+        public void Be_Creatable()
+        {
+            var ctx = new ContextFor<RequiredCheck>();
+            var sut = ctx.BuildSut();
+
+            sut.Should().NotBeNull();
+
+            sut.GetType().GetCustomAttribute<DisplayNameAttribute>().DisplayName.Should().Be("required");
+        }
+
+        [Test]
+        public void Registered_At_CheckFactory()
+        {
+            var checkType = typeof(RequiredCheck);
+            var settings = new Dictionary<string, string>();
+
+            var sut = new CheckFactory();
+
+            var checkDefinition = new CheckDefinition { Type = "required", Settings = settings };
+
+            var check = sut.CreateCheck(checkDefinition);
+
+            check.Should().NotBeNull();
+            check.Should().BeOfType(checkType);
+        }
+
+        [Test]
         public void Throw_ValidationException_if_value_null_or_whitespace()
         {
-            var check = new RequiredCheck();
+            var ctx = new ContextFor<RequiredCheck>();
+            var sut = ctx.BuildSut();
 
-            check.ShouldFailWith<ArgumentException>(null, null);
-            check.ShouldFailWith<ArgumentException>(string.Empty, string.Empty);
-            check.ShouldFailWith<ArgumentException>("\t\r\n", "\t\r\n");
-            check.ShouldFailWith<ArgumentException>(" ", " ");
+            sut.ShouldFailWith<ArgumentException>(null, null);
+            sut.ShouldFailWith<ArgumentException>(string.Empty, string.Empty);
+            sut.ShouldFailWith<ArgumentException>("\t\r\n", "\t\r\n");
+            sut.ShouldFailWith<ArgumentException>(" ", " ");
 
-            check.Validate("a", "a").IsValid.Should().BeTrue();
+            sut.Validate("a", "a").IsValid.Should().BeTrue();
         }
     }
 }

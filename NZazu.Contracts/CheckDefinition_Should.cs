@@ -1,20 +1,21 @@
 ﻿using FluentAssertions;
 using NEdifis.Attributes;
 using NUnit.Framework;
+using System.Collections.Generic;
 
 namespace NZazu.Contracts
 {
-    [TestFixtureFor(typeof (CheckDefinition))]
+    [TestFixtureFor(typeof(CheckDefinition))]
     // ReSharper disable InconsistentNaming
     internal class CheckDefinition_Should
     {
         [Test]
         public void Be_Creatable()
         {
-            var values = new[]{"value1", "value2"};
-            var sut = new CheckDefinition {Type = "type", Values = values};
+            var settings = new Dictionary<string, string>() { { "key1", "value1" }, { "key2", "value2" } };
+            var sut = new CheckDefinition { Type = "type", Settings = settings };
             sut.Type.Should().Be("type");
-            sut.Values.Should().BeEquivalentTo(values);
+            sut.Settings.Should().BeEquivalentTo(settings);
         }
     }
 }

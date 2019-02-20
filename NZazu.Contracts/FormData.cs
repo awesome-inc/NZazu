@@ -10,7 +10,7 @@ namespace NZazu.Contracts
     {
         public Dictionary<string, string> Values { get; }
 
-        public FormData(Dictionary<string, string> values = null)
+        public FormData(IDictionary<string, string> values = null)
         {
             Values = values?.ToDictionary(v => v.Key, v => v.Value) ?? new Dictionary<string, string>();
         }

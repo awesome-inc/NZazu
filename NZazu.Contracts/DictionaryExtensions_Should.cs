@@ -1,7 +1,7 @@
-using System.Collections.Generic;
 using FluentAssertions;
 using NEdifis.Attributes;
 using NUnit.Framework;
+using System.Collections.Generic;
 
 namespace NZazu.Contracts
 {
@@ -119,6 +119,67 @@ namespace NZazu.Contracts
             src.Get<double>("key").Should().Be(100);
             src.Get<double>("key2").Should().Be(200.4);
             src.Get<double>("foo").Should().Be(null);
+        }
+
+        [Test]
+        public void Object_To_Dictionary()
+        {
+            var obj = new
+            {
+                Name = "Thomas",
+                Age = 42
+            };
+
+            var dict = obj.AsDictionary();
+            dict["Name"].Should().Be("Thomas");
+            dict["Age"].Should().Be(42);
+        }
+
+        private class TestDummy
+        {
+            public string Name { get; set; }
+            public int Age { get; set; }
+        }
+
+        [Test]
+        public void TestDummy_Dictionary_To_Object()
+        {
+            var dict = new Dictionary<string, object>() {
+                { "Name", "Thomas"},
+                { "Age", 42 }
+            };
+
+            var obj = dict.ToObject<TestDummy>();
+            obj.Name.Should().Be("Thomas");
+            obj.Age.Should().Be(42);
+        }
+
+        [Test]
+        public void TestDummy_Object_To_Dictionary()
+        {
+            var obj = new TestDummy()
+            {
+                Name = "Thomas",
+                Age = 42
+            };
+
+            var dict = obj.AsDictionary();
+            dict["Name"].Should().Be("Thomas");
+            dict["Age"].Should().Be(42);
+        }
+
+        [Test]
+        public void Anonymous_Object_To_Dictionary()
+        {
+            var obj = new
+            {
+                Name = "Thomas",
+                Age = 42
+            };
+
+            var dict = obj.AsDictionary();
+            dict["Name"].Should().Be("Thomas");
+            dict["Age"].Should().Be(42);
         }
     }
 }
