@@ -69,7 +69,6 @@ namespace NZazu.Contracts.Checks
             ctx.Use(settings);
             ctx.Use<Func<FormData>>(() => formData);
             var sut = ctx.BuildSut();
-            //var dateTimeCheck = new DateTimeComparisonCheck("lorem ipsum", ">", "startTime", () => formData, tableDataSerializer);
 
             formData.Values.TryGetValue("stopTime", out var result);
             var res = sut.Validate(result, default(DateTime));
@@ -130,7 +129,6 @@ namespace NZazu.Contracts.Checks
             ctx.Use<Func<FormData>>(() => formData);
             var sut = ctx.BuildSut();
 
-            //var dateTimeCheck = new DateTimeComparisonCheck("lorem ipsum", ">", "startTime", () => formData, tableDataSerializer, specificDateTimeFormats: testFormats);
             formData.Values.TryGetValue("stopTime", out var result);
             var res = sut.Validate(result, default(DateTime));
 
@@ -160,7 +158,6 @@ namespace NZazu.Contracts.Checks
             ctx.Use<Func<FormData>>(() => formData);
             var sut = ctx.BuildSut();
 
-            //var dateTimeCheck = new DateTimeComparisonCheck("lorem ipsum", ">", "startTime", () => formData, tableDataSerializer, specificDateTimeFormats: testFormats);
             formData.Values.TryGetValue("startTime", out var result);
             var res = sut.Validate(result, default(DateTime));
 
@@ -187,12 +184,47 @@ namespace NZazu.Contracts.Checks
             ctx.Use(settings);
             ctx.Use<Func<FormData>>(() => formData);
             var sut = ctx.BuildSut();
-            //            var dateTimeCheck = new DateTimeComparisonCheck("lorem ipsum", "<", "stopTime", () => formData, tableDataSerializer);
 
             formData.Values.TryGetValue("startTime", out var result);
             var res = sut.Validate(result, default(DateTime));
 
             res.IsValid.Should().BeFalse();
+        }
+
+        [Test]
+        [TestCase("11/7/2018", "9/7/2018", "<", false)]
+        [TestCase("6/7/2018", "9/7/2018", "<", true)]
+        [TestCase("9/7/2018", "7/7/2018", "=", false)]
+        [TestCase("9/7/2018", "9/7/2018", "=", true)]
+        [TestCase("9/7/2018", "7/7/2018", "==", false)]
+        [TestCase("9/7/2018", "9/7/2018", "==", true)]
+        [TestCase("9/7/2018", "9/7/2018", ">=", true)]
+        [TestCase("9/7/2018", "6/7/2018", ">=", true)]
+        [TestCase("9/7/2018", "11/7/2018", ">=", false)]
+        public void Use_Compare_Strategy(string start, string end, string compare, bool expected)
+        {
+            var testDict = new Dictionary<string, string>
+            {
+                {"startTime", start},
+                {"stopTime", end}
+            };
+
+            var formData = new FormData(testDict);
+
+            var settings = new Dictionary<string, string>()
+            {
+                { "FieldToCompareWith", "stopTime" },
+                { "CompareOperator", compare},
+            } as IDictionary<string, string>;
+            var ctx = new ContextFor<DateTimeComparisonCheck>();
+            ctx.Use(settings);
+            ctx.Use<Func<FormData>>(() => formData);
+            var sut = ctx.BuildSut();
+
+            formData.Values.TryGetValue("startTime", out var result);
+            var res = sut.Validate(result, default(DateTime));
+
+            res.IsValid.Should().Be(expected);
         }
 
         [Test]
@@ -215,11 +247,124 @@ namespace NZazu.Contracts.Checks
             ctx.Use<Func<FormData>>(() => formData);
             var sut = ctx.BuildSut();
 
-            //var dateTimeCheck = new DateTimeComparisonCheck("lorem ipsum", "<", "stopTime", () => formData, tableDataSerializer);
             formData.Values.TryGetValue("startTime", out var result);
             var res = sut.Validate(result, default(DateTime));
 
             res.IsValid.Should().BeTrue();
+        }
+
+        [Test]
+        public void Return_True_Use_TableKey_And_Row_Index_For_InterTable_Comparison()
+        {
+            var testDict = new Dictionary<string, string>
+            {
+                {"startTime", "8/7/2018"},
+                {"theTable", "foobar"},
+            };
+            var formData = new FormData(testDict);
+            var serializer = Substitute.For<INZazuTableDataSerializer>();
+            serializer.Deserialize("foobar").Returns(new Dictionary<string, string>() { { "stopTime__0", "9/7/2018" } });
+            var settings = new Dictionary<string, string>()
+            {
+                { "FieldToCompareWith", "stopTime" },
+                { "CompareOperator", "<"},
+                { "SpecificDateTimeFormats", "d/M/yyyy" },
+                { "TableKey", "theTable" },
+            } as IDictionary<string, string>;
+            var ctx = new ContextFor<DateTimeComparisonCheck>();
+            ctx.Use(settings);
+            ctx.Use(serializer);
+            ctx.Use<Func<FormData>>(() => formData);
+            var sut = ctx.BuildSut();
+
+            formData.Values.TryGetValue("startTime", out var result);
+            var res = sut.Validate(result, default(DateTime));
+
+            res.IsValid.Should().BeTrue();
+        }
+
+        [Test]
+        public void Return_False_Use_TableKey_And_Row_Index_For_InterTable_Comparison()
+        {
+            var testDict = new Dictionary<string, string>
+            {
+                {"startTime", "8/7/2018"},
+                {"theTable", "foobar"},
+            };
+            var formData = new FormData(testDict);
+            var serializer = Substitute.For<INZazuTableDataSerializer>();
+            serializer.Deserialize("foobar").Returns(new Dictionary<string, string>() { { "stopTime__0", "10/10/2018" } });
+            var settings = new Dictionary<string, string>()
+            {
+                { "FieldToCompareWith", "stopTime" },
+                { "CompareOperator", ">"},
+                { "SpecificDateTimeFormats", "d/M/yyyy" },
+                { "TableKey", "theTable" },
+            } as IDictionary<string, string>;
+            var ctx = new ContextFor<DateTimeComparisonCheck>();
+            ctx.Use(settings);
+            ctx.Use(serializer);
+            ctx.Use<Func<FormData>>(() => formData);
+            var sut = ctx.BuildSut();
+
+            formData.Values.TryGetValue("startTime", out var result);
+            var res = sut.Validate(result, default(DateTime));
+
+            res.IsValid.Should().BeFalse();
+        }
+
+        [Test]
+        public void Return_False_If_Cannot_Parse_Source_Date()
+        {
+            var testDict = new Dictionary<string, string>
+            {
+                {"startTime", "cannot parse"},
+                {"stopTime", "9/7/2018"}
+            };
+            var formData = new FormData(testDict);
+            var settings = new Dictionary<string, string>()
+            {
+                { "FieldToCompareWith", "stopTime" },
+                { "CompareOperator", "<"},
+                { "SpecificDateTimeFormats", "d/M/yyyy" }
+            } as IDictionary<string, string>;
+            var ctx = new ContextFor<DateTimeComparisonCheck>();
+            ctx.Use(settings);
+            ctx.Use<Func<FormData>>(() => formData);
+            var sut = ctx.BuildSut();
+
+            formData.Values.TryGetValue("startTime", out var result);
+            var res = sut.Validate(result, default(DateTime));
+
+            res.IsValid.Should().BeFalse();
+            res.Exception.Message.Should().Be("Cannot parse source value to datetime.");
+        }
+
+        [Test]
+        public void Return_False_If_Cannot_Parse_CompareWith_Date()
+        {
+            var testDict = new Dictionary<string, string>
+            {
+                {"startTime", "9/7/2018"},
+                {"stopTime", "cannot parse"}
+            };
+            var formData = new FormData(testDict);
+            var settings = new Dictionary<string, string>()
+            {
+                { "FieldToCompareWith", "stopTime" },
+                { "CompareOperator", "<"},
+                { "SpecificDateTimeFormats", "d/M/yyyy" }
+            } as IDictionary<string, string>;
+            var ctx = new ContextFor<DateTimeComparisonCheck>();
+            ctx.Use(settings);
+            ctx.Use<Func<FormData>>(() => formData);
+            var sut = ctx.BuildSut();
+
+            formData.Values.TryGetValue("startTime", out var result);
+            var res = sut.Validate(result, default(DateTime));
+
+            res.IsValid.Should().BeFalse();
+            res.Exception.Message.Should().Be("Cannot parse 'compareWith' value to datetime.");
         }
 
         [Test]
@@ -245,7 +390,6 @@ namespace NZazu.Contracts.Checks
             ctx.Use<Func<FormData>>(() => formData);
             var sut = ctx.BuildSut();
 
-            //var dateTimeCheck = new DateTimeComparisonCheck("lorem ipsum", "<", "stopTime", () => formData, tableDataSerializer, specificDateTimeFormats: testFormats);
             formData.Values.TryGetValue("startTime", out var result);
             var res = sut.Validate(result, default(DateTime));
 
