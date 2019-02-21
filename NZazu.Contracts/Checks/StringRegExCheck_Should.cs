@@ -34,7 +34,7 @@ namespace NZazu.Contracts.Checks
             var sut = new CheckFactory();
 
             var checkDefinition = new CheckDefinition { Type = "regex", Settings = settings };
-            var check = sut.CreateCheck(checkDefinition);
+            var check = sut.CreateCheck(checkDefinition, new FieldDefinition() { Key = "key1" });
 
             check.Should().NotBeNull();
             check.Should().BeOfType(checkType);

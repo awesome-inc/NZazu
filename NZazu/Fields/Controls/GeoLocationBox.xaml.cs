@@ -93,19 +93,19 @@ namespace NZazu.Fields.Controls
             UpdateControl(this, Value, GeoLocationSupport);
         }
 
-        private void OpenInGeoAppClick(object sender, RoutedEventArgs e)
+        internal void OpenInGeoAppClick(object sender, RoutedEventArgs e)
         {
             if (!(GeoLocationSupport?.CanOpenGeoApp ?? false)) return;
             GeoLocationSupport?.OpenGeoApp(Value);
         }
 
-        private void SetToCurrentLocationClick(object sender, RoutedEventArgs e)
+        internal void SetToCurrentLocationClick(object sender, RoutedEventArgs e)
         {
             if (!(GeoLocationSupport?.HasCurrentPosition ?? false)) return;
             Value = GeoLocationSupport?.CurrentPosition;
         }
 
-        private void LocationBoxLostFocus(object sender, RoutedEventArgs e)
+        internal void LocationBoxLostFocus(object sender, RoutedEventArgs e)
         {
             // lat lon decimal firmatter is always supported -even if null
             if (GeoLocationSupport == null)

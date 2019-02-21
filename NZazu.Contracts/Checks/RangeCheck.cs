@@ -26,7 +26,8 @@ namespace NZazu.Contracts.Checks
         // ReSharper disable UnusedParameter.Local
         public RangeCheck(
             IDictionary<string, string> settings, Func<FormData> formData,
-            INZazuTableDataSerializer tableSerializer, int rowIdx)
+            INZazuTableDataSerializer tableSerializer, int rowIdx,
+            FieldDefinition fieldDefinition)
         {
             Settings = settings.ToDictionary(x => x.Key, x => (object)x.Value).ToObject<RangeCheckSettings>();
 

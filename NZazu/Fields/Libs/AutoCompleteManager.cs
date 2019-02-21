@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading;
 using System.Windows;
@@ -11,10 +12,13 @@ using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using Microsoft.Windows.Themes;
+using NEdifis.Attributes;
 using NZazu.Contracts.Suggest;
 
 namespace NZazu.Fields.Libs
 {
+    [ExcludeFromCodeCoverage()]
+    [Because("Public classes are untestable. A lot of windows internal calls")]
     public class AutoCompleteManager
     {
         // ReSharper disable InconsistentNaming

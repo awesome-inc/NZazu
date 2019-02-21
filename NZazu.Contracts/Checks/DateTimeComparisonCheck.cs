@@ -26,7 +26,7 @@ namespace NZazu.Contracts.Checks
         private readonly int _rowIdx;
         private readonly INZazuTableDataSerializer _tableSerializer;
         private readonly Func<FormData> _formData;
-
+        
 
         public DateTimeComparisonCheck(
             IDictionary<string, string> settings, Func<FormData> formData,

@@ -17,7 +17,7 @@ namespace NZazu.Contracts.Checks
         [Test]
         public void Be_Creatable()
         {
-            var settings = new Dictionary<string, string>()
+            var settings = new Dictionary<string, string>
             {
                 { "FieldToCompareWith", "stopTime" },
                 { "CompareOperator", "<"}
@@ -37,13 +37,13 @@ namespace NZazu.Contracts.Checks
         [Test]
         public void Registered_At_CheckFactory()
         {
-            var settings = new Dictionary<string, string>() { { "Min", "2" }, { "Max", "6" } } as IDictionary<string, string>;
+            var settings = new Dictionary<string, string> { { "Min", "2" }, { "Max", "6" } } as IDictionary<string, string>;
             var checkType = typeof(RangeCheck);
 
             var sut = new CheckFactory();
 
             var checkDefinition = new CheckDefinition { Type = "range", Settings = settings };
-            var check = sut.CreateCheck(checkDefinition);
+            var check = sut.CreateCheck(checkDefinition, new FieldDefinition { Key = "key1" });
 
             check.Should().NotBeNull();
             check.Should().BeOfType(checkType);
@@ -60,7 +60,7 @@ namespace NZazu.Contracts.Checks
 
             var formData = new FormData(testDict);
 
-            var settings = new Dictionary<string, string>()
+            var settings = new Dictionary<string, string>
             {
                 { "FieldToCompareWith", "stopTime" },
                 { "CompareOperator", "<"}
@@ -87,7 +87,7 @@ namespace NZazu.Contracts.Checks
 
             var formData = new FormData(testDict);
 
-            var settings = new Dictionary<string, string>()
+            var settings = new Dictionary<string, string>
             {
                 { "FieldToCompareWith", "stopTime" },
                 { "CompareOperator", "<"},
@@ -118,7 +118,7 @@ namespace NZazu.Contracts.Checks
             var formData = new FormData(testDict);
             var testFormats = new[] { "HHmm", "HHmmss", "HH:mm", "HH:mm:ss" };
 
-            var settings = new Dictionary<string, string>()
+            var settings = new Dictionary<string, string>
             {
                 { "FieldToCompareWith", "stopTime" },
                 { "CompareOperator", "<"},
@@ -147,7 +147,7 @@ namespace NZazu.Contracts.Checks
             var formData = new FormData(testDict);
             var testFormats = new[] { "HHmm", "HHmmss", "HH:mm", "HH:mm:ss" };
 
-            var settings = new Dictionary<string, string>()
+            var settings = new Dictionary<string, string>
             {
                 { "FieldToCompareWith", "stopTime" },
                 { "CompareOperator", "<"},
@@ -175,7 +175,7 @@ namespace NZazu.Contracts.Checks
 
             var formData = new FormData(testDict);
 
-            var settings = new Dictionary<string, string>()
+            var settings = new Dictionary<string, string>
             {
                 { "FieldToCompareWith", "stopTime" },
                 { "CompareOperator", "<"},
@@ -201,6 +201,9 @@ namespace NZazu.Contracts.Checks
         [TestCase("9/7/2018", "9/7/2018", ">=", true)]
         [TestCase("9/7/2018", "6/7/2018", ">=", true)]
         [TestCase("9/7/2018", "11/7/2018", ">=", false)]
+        [TestCase("9/7/2018", "9/7/2018", "<=", true)]
+        [TestCase("9/7/2018", "10/7/2018", "<=", true)]
+        [TestCase("9/7/2018", "1/7/2018", "<=", false)]
         public void Use_Compare_Strategy(string start, string end, string compare, bool expected)
         {
             var testDict = new Dictionary<string, string>
@@ -211,7 +214,7 @@ namespace NZazu.Contracts.Checks
 
             var formData = new FormData(testDict);
 
-            var settings = new Dictionary<string, string>()
+            var settings = new Dictionary<string, string>
             {
                 { "FieldToCompareWith", "stopTime" },
                 { "CompareOperator", compare},
@@ -236,7 +239,7 @@ namespace NZazu.Contracts.Checks
                 {"stopTime", "9/7/2018"}
             };
             var formData = new FormData(testDict);
-            var settings = new Dictionary<string, string>()
+            var settings = new Dictionary<string, string>
             {
                 { "FieldToCompareWith", "stopTime" },
                 { "CompareOperator", "<"},
@@ -263,8 +266,8 @@ namespace NZazu.Contracts.Checks
             };
             var formData = new FormData(testDict);
             var serializer = Substitute.For<INZazuTableDataSerializer>();
-            serializer.Deserialize("foobar").Returns(new Dictionary<string, string>() { { "stopTime__0", "9/7/2018" } });
-            var settings = new Dictionary<string, string>()
+            serializer.Deserialize("foobar").Returns(new Dictionary<string, string> { { "stopTime__0", "9/7/2018" } });
+            var settings = new Dictionary<string, string>
             {
                 { "FieldToCompareWith", "stopTime" },
                 { "CompareOperator", "<"},
@@ -293,8 +296,8 @@ namespace NZazu.Contracts.Checks
             };
             var formData = new FormData(testDict);
             var serializer = Substitute.For<INZazuTableDataSerializer>();
-            serializer.Deserialize("foobar").Returns(new Dictionary<string, string>() { { "stopTime__0", "10/10/2018" } });
-            var settings = new Dictionary<string, string>()
+            serializer.Deserialize("foobar").Returns(new Dictionary<string, string> { { "stopTime__0", "10/10/2018" } });
+            var settings = new Dictionary<string, string>
             {
                 { "FieldToCompareWith", "stopTime" },
                 { "CompareOperator", ">"},
@@ -322,7 +325,7 @@ namespace NZazu.Contracts.Checks
                 {"stopTime", "9/7/2018"}
             };
             var formData = new FormData(testDict);
-            var settings = new Dictionary<string, string>()
+            var settings = new Dictionary<string, string>
             {
                 { "FieldToCompareWith", "stopTime" },
                 { "CompareOperator", "<"},
@@ -349,7 +352,7 @@ namespace NZazu.Contracts.Checks
                 {"stopTime", "cannot parse"}
             };
             var formData = new FormData(testDict);
-            var settings = new Dictionary<string, string>()
+            var settings = new Dictionary<string, string>
             {
                 { "FieldToCompareWith", "stopTime" },
                 { "CompareOperator", "<"},
@@ -379,7 +382,7 @@ namespace NZazu.Contracts.Checks
             var formData = new FormData(testDict);
             var testFormats = new[] { "HHmm", "HHmmss", "HH:mm", "HH:mm:ss" };
 
-            var settings = new Dictionary<string, string>()
+            var settings = new Dictionary<string, string>
             {
                 { "FieldToCompareWith", "stopTime" },
                 { "CompareOperator", "<"},
@@ -408,7 +411,7 @@ namespace NZazu.Contracts.Checks
             var formData = new FormData(testDict);
             var testFormats = new[] { "HHmm", "HHmmss", "HH:mm", "HH:mm:ss" };
 
-            var settings = new Dictionary<string, string>()
+            var settings = new Dictionary<string, string>
             {
                 { "FieldToCompareWith", "stopTime" },
                 { "CompareOperator", "<"},
@@ -438,7 +441,7 @@ namespace NZazu.Contracts.Checks
             var formData = new FormData(testDict);
             var tableDataSerializer = Substitute.For<INZazuTableDataSerializer>();
             tableDataSerializer.Deserialize(tableData)
-                .Returns(new Dictionary<string, string>()
+                .Returns(new Dictionary<string, string>
                 {
                     {"columnStartRow__1", "11:00"},
                     {"columnStopRow__1", "12:00"}
@@ -446,7 +449,7 @@ namespace NZazu.Contracts.Checks
 
             var testFormats = new[] { "HHmm", "HHmmss", "HH:mm", "HH:mm:ss" };
 
-            var settings = new Dictionary<string, string>()
+            var settings = new Dictionary<string, string>
             {
                 { "FieldToCompareWith", "stopTime" },
                 { "CompareOperator", "<"},

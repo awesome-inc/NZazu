@@ -35,7 +35,7 @@ namespace NZazu.Contracts.Checks
             var sut = new CheckFactory();
 
             var checkDefinition = new CheckDefinition { Type = "length", Settings = settings };
-            var check = sut.CreateCheck(checkDefinition);
+            var check = sut.CreateCheck(checkDefinition, new FieldDefinition() { Key = "key1" });
 
             check.Should().NotBeNull();
             check.Should().BeOfType(checkType);
@@ -47,7 +47,7 @@ namespace NZazu.Contracts.Checks
             var settings = new Dictionary<string, string>() { { "Min", "6" }, { "Max", "2" } } as IDictionary<string, string>;
 
             // ReSharper disable once ObjectCreationAsStatement
-            new Action(() => new StringLengthCheck(settings, null, null, 0)).Invoking(a => a()).Should().Throw<ArgumentOutOfRangeException>();
+            new Action(() => new StringLengthCheck(settings, null, null, 0, null)).Invoking(a => a()).Should().Throw<ArgumentOutOfRangeException>();
         }
 
         [Test]
@@ -56,7 +56,7 @@ namespace NZazu.Contracts.Checks
             var settings = new Dictionary<string, string>() { { "Min", "-2" } } as IDictionary<string, string>;
 
             // ReSharper disable once ObjectCreationAsStatement
-            new Action(() => new StringLengthCheck(settings, null, null, 0)).Invoking(a => a()).Should().Throw<ArgumentOutOfRangeException>();
+            new Action(() => new StringLengthCheck(settings, null, null, 0, null)).Invoking(a => a()).Should().Throw<ArgumentOutOfRangeException>();
         }
 
         [Test]

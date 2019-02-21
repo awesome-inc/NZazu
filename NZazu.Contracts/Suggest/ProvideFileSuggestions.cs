@@ -1,27 +1,33 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
 
 namespace NZazu.Contracts.Suggest
 {
     /// <summary>
     /// provider for native values retrieved from a file containing a entry per row string array.
-    /// settings: "dataconnection" -> "f:[file path]"
+    /// settings: "dataConnection" -> "f:[file path]"
     /// </summary>
     public class ProvideFileSuggestions : IProvideSuggestions
     {
-        readonly IDictionary<string, IEnumerable<string>> _cache = new Dictionary<string, IEnumerable<string>>();
+        private readonly IFileSystem _filesystem;
+        private readonly IDictionary<string, IEnumerable<string>> _cache = new Dictionary<string, IEnumerable<string>>();
 
         private const string ConnectionPrefix = "file://";
 
-        public IEnumerable<string> For(string prefix, string dataconnection)
+        public ProvideFileSuggestions(IFileSystem filesystem = null)
         {
-            if (!dataconnection.StartsWith(ConnectionPrefix)) return Enumerable.Empty<string>();
+            _filesystem = filesystem ?? new FileSystem();
+        }
 
-            Trace.WriteLine($"tring to get suggestions for {prefix} from {dataconnection}");
-            var file = dataconnection.Substring(ConnectionPrefix.Length);
+        public IEnumerable<string> For(string prefix, string dataConnection)
+        {
+            if (!dataConnection.StartsWith(ConnectionPrefix)) return Enumerable.Empty<string>();
+            if (string.IsNullOrWhiteSpace(prefix)) return Enumerable.Empty<string>();
+
+            Trace.WriteLine($"string to get suggestions for {prefix} from {dataConnection}");
+            var file = dataConnection.Substring(ConnectionPrefix.Length);
             var values = GetValues(file);
             return values.Where(x => x.StartsWith(prefix, StringComparison.InvariantCultureIgnoreCase));
         }
@@ -32,16 +38,15 @@ namespace NZazu.Contracts.Suggest
             if (_cache.ContainsKey(file))
                 return _cache[file];
 
-            // we dont cache non existing file
-            var fi = new FileInfo(file);
-            if (!fi.Exists)
+            // we don't cache non existing file
+            if (!_filesystem.FileExists(file))
             {
-                Trace.WriteLine($"cannot get calues from file '{file}' because file does not exist. returning empty array. nothing added to cache");
+                Trace.WriteLine($"cannot get values from file '{file}' because file does not exist. returning empty array. nothing added to cache");
                 return Enumerable.Empty<string>();
             }
 
             // lets get the data, cache it and return it
-            var fileContent = File.ReadAllLines(file);
+            var fileContent = _filesystem.ReadAllLines(file);
             _cache.Add(file, fileContent);
             return fileContent;
         }

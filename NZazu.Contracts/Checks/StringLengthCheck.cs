@@ -25,7 +25,7 @@ namespace NZazu.Contracts.Checks
         // ReSharper disable UnusedParameter.Local
         public StringLengthCheck(
             IDictionary<string, string> settings, Func<FormData> formData,
-            INZazuTableDataSerializer tableSerializer, int rowIdx)
+            INZazuTableDataSerializer tableSerializer, int rowIdx, FieldDefinition field)
         {
             Settings = settings.ToDictionary(x => x.Key, x => (object)x.Value).ToObject<StringLengthCheckSettings>();
 

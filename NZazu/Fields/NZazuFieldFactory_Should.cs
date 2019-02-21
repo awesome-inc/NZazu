@@ -106,18 +106,18 @@ namespace NZazu.Fields
             var checkFactory = Substitute.For<ICheckFactory>();
 
             var checkDefinition = new CheckDefinition { Type = "required" };
-            var check = new RequiredCheck(checkDefinition.Settings, null, null, 0);
-            checkFactory.CreateCheck(checkDefinition, Arg.Any<Func<FormData>>(), Arg.Any<INZazuTableDataSerializer>(), Arg.Any<int>()).Returns(check);
+            var fieldDefinition = new FieldDefinition { Key = "test", Type = "string", Checks = new[] { checkDefinition } };
+            var check = new RequiredCheck(checkDefinition.Settings, null, null, 0, fieldDefinition);
+            checkFactory.CreateCheck(checkDefinition, fieldDefinition, Arg.Any<Func<FormData>>(), Arg.Any<INZazuTableDataSerializer>(), Arg.Any<int>()).Returns(check);
 
             var sut = new NZazuFieldFactory();
             sut.Use(behaviorFactory);
             sut.Use(checkFactory);
             sut.Use(serializer);
 
-            var fieldDefinition = new FieldDefinition { Key = "test", Type = "string", Checks = new[] { checkDefinition } };
             var field = (NZazuField)sut.CreateField(fieldDefinition);
 
-            checkFactory.Received(1).CreateCheck(checkDefinition, Arg.Any<Func<FormData>>(), Arg.Any<INZazuTableDataSerializer>(), Arg.Any<int>());
+            checkFactory.Received(1).CreateCheck(checkDefinition, fieldDefinition, Arg.Any<Func<FormData>>(), Arg.Any<INZazuTableDataSerializer>(), Arg.Any<int>());
 
             field.Should().NotBeNull();
             field.Check.Should().Be(check);
@@ -132,27 +132,27 @@ namespace NZazu.Fields
 
             var checkDefinition1 = new CheckDefinition { Type = "required" };
             var checkDefinition2 = new CheckDefinition { Type = "length", Settings = new Dictionary<string, string>() { { "Min", "4" }, { "Max", "6" } } };
-            var check1 = new RequiredCheck(checkDefinition1.Settings, null, null, 0);
-            var check2 = new StringLengthCheck(checkDefinition2.Settings, null, null, 0);
-            checkFactory.CreateCheck(checkDefinition1, Arg.Any<Func<FormData>>(), Arg.Any<INZazuTableDataSerializer>(), Arg.Any<int>()).Returns(check1);
-            checkFactory.CreateCheck(checkDefinition2, Arg.Any<Func<FormData>>(), Arg.Any<INZazuTableDataSerializer>(), Arg.Any<int>()).Returns(check2);
-
-            var sut = new NZazuFieldFactory();
-            sut.Use(behaviorFactory);
-            sut.Use(checkFactory);
-            sut.Use(serializer);
-
             var fieldDefinition = new FieldDefinition
             {
                 Key = "test",
                 Type = "string",
                 Checks = new[] { checkDefinition1, checkDefinition2 }
             };
+            var check1 = new RequiredCheck(checkDefinition1.Settings, null, null, 0, fieldDefinition);
+            var check2 = new StringLengthCheck(checkDefinition2.Settings, null, null, 0, fieldDefinition);
+
+            checkFactory.CreateCheck(checkDefinition1, fieldDefinition, Arg.Any<Func<FormData>>(), Arg.Any<INZazuTableDataSerializer>(), Arg.Any<int>()).Returns(check1);
+            checkFactory.CreateCheck(checkDefinition2, fieldDefinition, Arg.Any<Func<FormData>>(), Arg.Any<INZazuTableDataSerializer>(), Arg.Any<int>()).Returns(check2);
+
+            var sut = new NZazuFieldFactory();
+            sut.Use(behaviorFactory);
+            sut.Use(checkFactory);
+            sut.Use(serializer);
 
             var field = (NZazuField)sut.CreateField(fieldDefinition);
 
-            checkFactory.Received(1).CreateCheck(checkDefinition1, Arg.Any<Func<FormData>>(), Arg.Any<INZazuTableDataSerializer>(), Arg.Any<int>());
-            checkFactory.Received(1).CreateCheck(checkDefinition2, Arg.Any<Func<FormData>>(), Arg.Any<INZazuTableDataSerializer>(), Arg.Any<int>());
+            checkFactory.Received(1).CreateCheck(checkDefinition1, fieldDefinition, Arg.Any<Func<FormData>>(), Arg.Any<INZazuTableDataSerializer>(), Arg.Any<int>());
+            checkFactory.Received(1).CreateCheck(checkDefinition2, fieldDefinition, Arg.Any<Func<FormData>>(), Arg.Any<INZazuTableDataSerializer>(), Arg.Any<int>());
 
             var aggregateCheck = (AggregateCheck)field.Check;
             aggregateCheck.Should().NotBeNull();
@@ -301,6 +301,23 @@ namespace NZazu.Fields
             };
 
             var field = (NZazuOptionsField)sut.CreateField(fieldDefinition);
+
+            field.Options.Should().BeEquivalentTo(fieldDefinition.Values);
+        }
+
+        [Test]
+        public void Copy_values_for_keyedoption_field()
+        {
+            var sut = new NZazuFieldFactory();
+
+            var fieldDefinition = new FieldDefinition
+            {
+                Key = "test",
+                Type = "keyedoption",
+                Values = new[] { "1", "2", "3" }
+            };
+
+            var field = (NZazuKeyedOptionsField)sut.CreateField(fieldDefinition);
 
             field.Options.Should().BeEquivalentTo(fieldDefinition.Values);
         }

@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using FluentAssertions;
+﻿using FluentAssertions;
 using NEdifis.Attributes;
 using NUnit.Framework;
-using NZazu.Contracts.Checks;
+using System;
 
 namespace NZazu.Contracts
 {
@@ -15,9 +13,9 @@ namespace NZazu.Contracts
         public void Throw_on_unsupported_types()
         {
             var sut = new CheckFactory();
-            sut.Invoking(x => x.CreateCheck(null)).Should().Throw<ArgumentNullException>();
-            sut.Invoking(x => x.CreateCheck(new CheckDefinition())).Should().Throw<ArgumentException>().WithMessage("check type not specified");
-            sut.Invoking(x => x.CreateCheck(new CheckDefinition { Type = "foobar" })).Should().Throw<NotSupportedException>().WithMessage("The specified check 'foobar' is not supported");
+            sut.Invoking(x => x.CreateCheck(null, null)).Should().Throw<ArgumentNullException>();
+            sut.Invoking(x => x.CreateCheck(new CheckDefinition(), null)).Should().Throw<ArgumentException>().WithMessage("check type not specified");
+            sut.Invoking(x => x.CreateCheck(new CheckDefinition { Type = "foobar" }, null)).Should().Throw<NotSupportedException>().WithMessage("The specified check 'foobar' is not supported");
         }
     }
 }

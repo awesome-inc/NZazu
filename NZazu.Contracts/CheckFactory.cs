@@ -41,8 +41,12 @@ namespace NZazu.Contracts
                 : cls.Name.ToLower();
         }
 
-        public IValueCheck CreateCheck(CheckDefinition checkDefinition, Func<FormData> formData = null,
-            INZazuTableDataSerializer tableSerializer = null, int rowIdx = -1)
+        public IValueCheck CreateCheck(
+            CheckDefinition checkDefinition,
+            FieldDefinition fieldDefinition,
+            Func<FormData> formData = null,
+            INZazuTableDataSerializer tableSerializer = null,
+            int rowIdx = -1)
         {
             if (checkDefinition == null) throw new ArgumentNullException(nameof(checkDefinition));
             if (string.IsNullOrWhiteSpace(checkDefinition.Type)) throw new ArgumentException("check type not specified");
@@ -56,7 +60,7 @@ namespace NZazu.Contracts
 
             // lets use reflection to create an instance
             var result = (IValueCheck)
-                Activator.CreateInstance(concrete, checkDefinition.Settings, formData, tableSerializer, rowIdx);
+                Activator.CreateInstance(concrete, checkDefinition.Settings, formData, tableSerializer, rowIdx, fieldDefinition);
 
             return result;
         }
@@ -67,7 +71,7 @@ namespace NZazu.Contracts
             if (string.IsNullOrWhiteSpace(checkDefinition.Type)) throw new ArgumentException("form check type not specified");
             switch (checkDefinition.Type)
             {
-                case "gt": return GreaterThanFormCheck.Create(checkDefinition.Settings);
+                case "gt": return new GreaterThanFormCheck(checkDefinition.Settings);
                 default: throw new NotSupportedException("The specified check is not supported");
             }
         }

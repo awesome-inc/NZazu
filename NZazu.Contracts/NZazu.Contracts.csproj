@@ -75,8 +75,10 @@
     <Compile Include="Suggest\BlackList_Should.cs" />
     <Compile Include="Suggest\Cache.cs" />
     <Compile Include="Suggest\Cache_Should.cs" />
+    <Compile Include="Suggest\FileSystem.cs" />
     <Compile Include="Suggest\IBlackList.cs" />
     <Compile Include="Suggest\ICache.cs" />
+    <Compile Include="Suggest\IFileSystem.cs" />
     <Compile Include="Suggest\IHaveKeyedValues.cs" />
     <Compile Include="Suggest\IProvideSuggestions.cs" />
     <Compile Include="Adapter\NZazuCoordinate.cs" />
@@ -129,7 +131,6 @@
     <Compile Include="Suggest\SuggestionsProxy.cs" />
     <Compile Include="Suggest\SuggestionsProxy_Should.cs" />
     <Compile Include="Suggest\TernarySearchTree.cs" />
-    <Compile Include="Suggest\TernarySearchTree_Should.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

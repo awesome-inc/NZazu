@@ -17,7 +17,7 @@ namespace NZazu.Fields.Controls
         public void Be_Creatable()
         {
             var sut = new GeoLocationBox();
-            // we need to set the formatter first (so we dont get an exception if the default formatter is wrong
+            // we need to set the formatter first (so we don't get an exception if the default formatter is wrong
             var formatter = Substitute.For<ISupportGeoLocationBox>();
 
             sut.GeoLocationSupport.Should().BeNull();
@@ -33,5 +33,17 @@ namespace NZazu.Fields.Controls
             sut.IsReadOnly = true;
             sut.IsReadOnly.Should().BeTrue();
         }
+
+        [Test]
+        [Apartment(ApartmentState.STA)]
+        public void Foo()
+        {
+            var sut = new GeoLocationBox();
+            var formatter = Substitute.For<ISupportGeoLocationBox>();
+            sut.GeoLocationSupport = formatter;
+
+            sut.OpenInGeoAppClick(null, null);
+            sut.SetToCurrentLocationClick(null, null);
+        }
     }
-}
+    }

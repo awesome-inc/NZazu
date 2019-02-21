@@ -1,9 +1,7 @@
 ﻿using System;
 using NEdifis.Attributes;
 
-// ReSharper disable CheckNamespace
-namespace NSuggest
-// ReSharper restore CheckNamespace
+namespace NZazu.Contracts.Suggest
 {
     [ExcludeFromConventions("nothing to test here")]
     public delegate void CacheEventHandler<TKey, TValue>(object sender, Tuple<TKey, TValue> e);
