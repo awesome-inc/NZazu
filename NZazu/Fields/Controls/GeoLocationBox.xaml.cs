@@ -107,7 +107,7 @@ namespace NZazu.Fields.Controls
 
         internal void LocationBoxLostFocus(object sender, RoutedEventArgs e)
         {
-            // lat lon decimal firmatter is always supported -even if null
+            // lat lon decimal formatter is always supported -even if null
             if (GeoLocationSupport == null)
                 Value = NZazuCoordinate.Parse(LocationBox.Text.Trim());
             else

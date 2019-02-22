@@ -1,8 +1,7 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
-using System.Reflection;
 using System.Threading;
-using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using FluentAssertions;
@@ -19,6 +18,7 @@ namespace NZazu.Fields
     // ReSharper disable once InconsistentNaming
     internal class NZazuAutocompleteField_Should
     {
+        [ExcludeFromCodeCoverage]
         private object ServiceLocator(Type type, IProvideSuggestions suggestor)
         {
             if (type == typeof(IValueConverter)) return NoExceptionsConverter.Instance;
@@ -41,36 +41,6 @@ namespace NZazu.Fields
             sut.Value.Should().BeNull();
 
             sut.DataConnection.Should().Be("datakey");
-        }
-
-        [Test]
-        [Apartment(ApartmentState.STA)]
-        public void Pass_Through_StoreKey()
-        {
-            var sug = Substitute.For<IProvideSuggestions>();
-            var sut = new NZazuAutocompleteField(
-                new FieldDefinition { Key = "test", Settings = { { "dataconnection", "datakey" } } },
-                x => ServiceLocator(x, sug));
-
-            var box = (TextBox)sut.ValueControl;
-
-            RaiseLoadedEvent(box);
-            box.Text = "ant";
-
-            Assert.Inconclusive("wont work because no app therefore the manager is not initialized");
-            sug.Received(1).For(Arg.Any<string>(), Arg.Any<string>());
-            sug.Received(1).For("ant", "datakey");
-        }
-
-        private static void RaiseLoadedEvent(FrameworkElement element)
-        {
-            var eventMethod = typeof(FrameworkElement).GetMethod("OnLoaded",
-                BindingFlags.Instance | BindingFlags.NonPublic);
-
-            var args = new RoutedEventArgs(FrameworkElement.LoadedEvent);
-
-            if (eventMethod != null)
-                eventMethod.Invoke(element, new object[] {args});
         }
     }
 }

@@ -23,6 +23,7 @@ namespace NZazu.Fields
     // ReSharper disable InconsistentNaming
     internal class NZazuField_Should
     {
+        [ExcludeFromCodeCoverage]
         private object ServiceLocator(Type type)
         {
             if (type == typeof(IValueConverter)) return NoExceptionsConverter.Instance;

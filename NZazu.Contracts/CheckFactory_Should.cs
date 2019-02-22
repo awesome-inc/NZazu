@@ -42,7 +42,7 @@ namespace NZazu.Contracts
 
             foreach (var type in sut.AvailableTypes)
             {
-                Console.WriteLine($"CheckFactory {typeof(CheckFactory).Name} supports type:\t{type}");
+                Console.WriteLine($"factory '{typeof(CheckFactory).Name}' supports type:\t{type}");
             }
         }
 

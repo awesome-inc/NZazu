@@ -4,6 +4,7 @@ using NUnit.Framework;
 using NZazu.Contracts;
 using NZazu.Extensions;
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Threading;
 using System.Windows.Controls;
@@ -16,6 +17,7 @@ namespace NZazu.Fields
     // ReSharper disable InconsistentNaming
     internal class NZazuKeyedOptionsField_Should
     {
+        [ExcludeFromCodeCoverage]
         private object ServiceLocator(Type type)
         {
             if (type == typeof(IValueConverter)) return NoExceptionsConverter.Instance;
@@ -38,6 +40,22 @@ namespace NZazu.Fields
             var sut = new NZazuKeyedOptionsField(new FieldDefinition { Key = "test" }, ServiceLocator);
 
             1.Invoking(i => { sut.Options = new string[] { }; }).Should().Throw<ArgumentException>();
+        }
+
+        [Test]
+        [STAThread]
+        [Apartment(ApartmentState.STA)]
+        public void Add_Values_To_List()
+        {
+            // TODO FIX ME
+            var definition = new FieldDefinition { Key = "test", Description = "description", Prompt = "prompt" };
+            var sut = new NZazuKeyedOptionsField(definition, ServiceLocator);
+
+            var control = (ComboBox)sut.ValueControl;
+            control.Text = "Foo";
+            sut.LabelControl.SetFocus();
+
+            control.Text.Should().Be("Foo");
         }
 
         [Test(Description = "https://github.com/awesome-inc/NZazu/issues/68")]
@@ -63,7 +81,7 @@ namespace NZazu.Fields
             using (var sut = new NZazuKeyedOptionsField(definition, ServiceLocator))
             {
                 sut.ContentProperty.Should().Be(ComboBox.TextProperty);
-                var control = (ComboBox) sut.ValueControl;
+                var control = (ComboBox)sut.ValueControl;
                 control.Should().NotBeNull();
 
                 control.ToolTip.Should().Be(sut.Definition.Description);
