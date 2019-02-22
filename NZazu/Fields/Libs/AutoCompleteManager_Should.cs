@@ -16,11 +16,6 @@ namespace NZazu.Fields.Libs
         public void a()
         {
             0.Invoking(x => new AutoCompleteManager(null)).Should().Throw<ArgumentNullException>();
-
-            Assert.Inconclusive("TODO");
-
-            var textBox = new TextBox();
-            var sut = new AutoCompleteManager(textBox);
         }
     }
 }

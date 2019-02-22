@@ -24,19 +24,22 @@ namespace NZazu.Contracts.Checks
 
         private DateTimeComparisonCheckSettings Settings { get; }
         private readonly int _rowIdx;
+        private readonly FieldDefinition _fieldDefinition;
         private readonly INZazuTableDataSerializer _tableSerializer;
         private readonly Func<FormData> _formData;
         
 
         public DateTimeComparisonCheck(
             IDictionary<string, string> settings, Func<FormData> formData,
-            INZazuTableDataSerializer tableSerializer, int rowIdx)
+            INZazuTableDataSerializer tableSerializer, int rowIdx,
+            FieldDefinition fieldDefinition)
 
         {
             if (settings == null) throw new ArgumentNullException(nameof(settings));
             Settings = settings.ToDictionary(x => x.Key, x => (object)x.Value).ToObject<DateTimeComparisonCheckSettings>();
 
             _rowIdx = rowIdx;
+            _fieldDefinition = fieldDefinition ?? throw new ArgumentNullException(nameof(fieldDefinition));
             _tableSerializer = tableSerializer ?? throw new ArgumentNullException(nameof(tableSerializer));
 
             _formData = formData ?? throw new ArgumentNullException(nameof(formData));

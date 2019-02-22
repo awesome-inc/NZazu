@@ -23,7 +23,7 @@ namespace NZazu.Contracts
         private void RegisterCurrentAssemblyValueChecks()
         {
             _registrations = Assembly.GetExecutingAssembly().GetTypes()
-                .Where(x => x.GetInterface(typeof(IValueCheck).Name) != null)
+                .Where(x => x.GetInterface(typeof(IValueCheck).Name) != null && x != typeof(AggregateCheck))
                 .ToDictionary(
                     GetClassDisplayName,
                     x => x);
