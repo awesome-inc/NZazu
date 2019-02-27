@@ -44,6 +44,8 @@ namespace NZazu.Contracts
             {
                 Console.WriteLine($"factory '{typeof(CheckFactory).Name}' supports type:\t{type}");
             }
+
+            Assert.Pass();
         }
 
         [Test]
