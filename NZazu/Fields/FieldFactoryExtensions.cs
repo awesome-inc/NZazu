@@ -59,7 +59,7 @@ namespace NZazu.Fields
         {
             if (checkDefinitions == null) return field;
 
-            var checks = checkDefinitions.Select(x => checkFactory.CreateCheck(x, formData, tableSerializer, rowIdx)).ToArray();
+            var checks = checkDefinitions.Select(x => checkFactory.CreateCheck(x, field.Definition, formData, tableSerializer, rowIdx)).ToArray();
             field.Check = checks.Length == 1
                 ? checks.First()
                 : new AggregateCheck(checks.ToArray());

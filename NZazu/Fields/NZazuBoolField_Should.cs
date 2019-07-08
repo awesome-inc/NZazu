@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Threading;
 using System.Windows;
@@ -17,6 +18,7 @@ namespace NZazu.Fields
     // ReSharper disable InconsistentNaming
     internal class NZazuBoolField_Should
     {
+        [ExcludeFromCodeCoverage]
         private object ServiceLocator(Type type)
         {
             if (type == typeof(IValueConverter)) return NoExceptionsConverter.Instance;

@@ -25,14 +25,14 @@ namespace NZazu
             check.Validate(input, input, cultureInfo).Returns(ValueCheckResult.Success);
             var result = sut.Validate(input, cultureInfo);
             result.IsValid.Should().BeTrue();
-            result.ErrorContent.Should().BeNull();
+            result.ErrorContent.Should().Be(string.Empty);
 
             // validation is false
             var error = new ValueCheckResult(false, new Exception("test"));
             check.Validate(input, input, cultureInfo).Returns(error);
             result = sut.Validate(input, cultureInfo);
             result.IsValid.Should().BeFalse();
-            result.ErrorContent.Should().Be(error.Exception);
+            result.ErrorContent.Should().Be(error.Exception.Message);
 
             var exception = new ArgumentException("test");
             error = new ValueCheckResult(false, exception);

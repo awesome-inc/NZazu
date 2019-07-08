@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using NZazu.Contracts;
+﻿using NZazu.Contracts;
+using System.Collections.Generic;
 
 namespace NZazuFiddle.Samples
 {
@@ -22,11 +22,14 @@ namespace NZazuFiddle.Samples
                             Type = "string",
                             Prompt = "Name",
                             Hint = "Enter name",
-                            Description = "Your account name. At least 6 characters (Required)...",
+                            Description = "Validation: required field (required) and at least 6 characters (length)",
                             Checks = new []
                             {
                                 new CheckDefinition { Type = "required" },
-                                new CheckDefinition { Type="length", Values=new []{"6"} }
+                                new CheckDefinition {
+                                    Type ="length",
+                                    Settings = new Dictionary<string ,string>{ {"Min", "6" } }
+                                }
                             }
                         },
                         new FieldDefinition
@@ -35,42 +38,61 @@ namespace NZazuFiddle.Samples
                             Type = "string",
                             Prompt = "Email",
                             Hint = "Enter valid e-mail address",
-                            Description = "Your e-mail address",
+                            Description = "Validation: regular expression (regex) [^.+@.+\\..+$]",
                             Checks = new []
                             {
-                                new CheckDefinition { Type = "required" },
-                                new CheckDefinition { Type = "regex", Values= new []{"Must be a valid e-mail address", @"^.+@.+\..+$"}}
+                                new CheckDefinition
+                                {
+                                    Type = "regex",
+                                    Settings = new Dictionary<string ,string>{{"Hint", "Must be a valid e-mail address" },{"RegEx", @"^.+@.+\..+$" } }
+                                }
                             }
                         },
                         new FieldDefinition
                         {
                             Key = "isAdmin",
                             Type = "bool",
-                            //Prompt = "Is Admin",
                             Hint = "Is Admin",
-                            Description = "Check to grant administrator permissions",
+                            Description = "Validation: regular expression (regex) [True|False]",
                             Checks = new []
                             {
                                 new CheckDefinition { Type = "required" },
-                                new CheckDefinition { Type = "regex", Values= new []{"Must be Checked or Unchecked", "True", "False"}}
+                                new CheckDefinition
+                                {
+                                    Type = "regex",
+                                    Settings = new Dictionary<string ,string>{{"Hint", "Must be Checked or Unchecked" },{"RegEx", "True|False" } }
+                                }
+                            },
+                            Settings = new Dictionary<string, string>()
+                            {
+                                { "IsThreeState", "True" }
                             }
                         },
                         new FieldDefinition
                         {
-                            Key = "birthday",
-                            Type = "date",
-                            Prompt = "Birthday",
-                            Hint = "type your birthday",
+                            Key = "int",
+                            Type = "int",
+                            Prompt = "int",
+                            Hint = "Enter a number",
+                            Description = "Validation: Value must be between 10 and 100 (range)",
                             Checks = new []
                             {
-                                new CheckDefinition { Type = "required" }
+                                new CheckDefinition
+                                {
+                                    Type = "range",
+                                    Settings = new Dictionary<string, string>
+                                    {
+                                        {"Min","10"},
+                                        {"Max","100"},
+                                    }
+                                }
                             }
                         },
                         new FieldDefinition
                         {
                             Key = "startTime",
                             Type = "string",
-                            Prompt = "Star time",
+                            Prompt = "Start time",
                             Hint = "Set start time"
                         },
                         new FieldDefinition
@@ -83,7 +105,13 @@ namespace NZazuFiddle.Samples
                             {
                                 new CheckDefinition
                                 {
-                                    Type = "dateTime", Values = new []{ "End time must lie in future compared to start time", ">", "startTime" }
+                                    Type = "datetime",
+                                    Settings = new Dictionary<string, string>
+                                    {
+                                        {"Hint", "End time must lie in future compared to start time" },
+                                        {"CompareOperator",">"},
+                                        {"FieldToCompareWith","startTime"},
+                                    }
                                 }
                             }
                         },
@@ -99,19 +127,27 @@ namespace NZazuFiddle.Samples
                             Key = "endTimeWithFormats",
                             Type = "string",
                             Prompt = "Another end time",
-                            Hint = "Set end time with specific format to compare with anothe start time format",
+                            Hint = "Set end time with specific format to compare with another start time format",
+                            Description = "Validation: Value must be between 10 and 100 (range)",
                             Checks = new []
                             {
                                 new CheckDefinition
                                 {
-                                    Type = "dateTime", Values = new []{ "End time must lie in future compared to start time", ">", "startTimeWithFormats", "HHmm|HHmmss|HH:mm|HH:mm:ss" }
+                                    Type = "datetime",
+                                    Settings = new Dictionary<string, string>
+                                    {
+                                        {"Hint", "End time must lie in future compared to start time" },
+                                        {"CompareOperator",">"},
+                                        {"FieldToCompareWith","startTimeWithFormats"},
+                                        {"SpecificDateTimeFormats", "HHmm|HHmmss|HH:mm|HH:mm:ss" }
+                                    }
                                 }
                             }
                         },
                         new FieldDefinition
                         {
                             Type = "datatable",
-                            Key = "intraTableComparison",
+                            Key = "interTableComparison",
                             Fields = new []
                             {
                                 new FieldDefinition
@@ -129,14 +165,14 @@ namespace NZazuFiddle.Samples
                                     {
                                         new CheckDefinition
                                         {
-                                            Type = "dateTime",
-                                            Values = new []
+                                            Type = "datetime",
+                                            Settings = new Dictionary<string, string>
                                             {
-                                                "End time must lie in future compared to start time",
-                                                ">",
-                                                "startTimeTable",
-                                                "HHmm|HHmmss|HH:mm|HH:mm:ss",
-                                                "intraTableComparison"
+                                                {"Hint", "End time must lie in future compared to start time" },
+                                                {"CompareOperator",">"},
+                                                {"FieldToCompareWith","startTime"},
+                                                {"TableToCompareWith","interTableComparison"},
+                                                {"SpecificDateTimeFormats", "HHmm|HHmmss|HH:mm|HH:mm:ss" }
                                             }
                                         }
                                     }
@@ -145,9 +181,9 @@ namespace NZazuFiddle.Samples
                         }
                     }
                 },
-                new Dictionary<string, string>
+                    new Dictionary<string, string>
                 {
-                    { "name", "John" }, 
+                    { "name", "John" },
                     { "email", "foobar"},
                     { "isAdmin", "false" }
                 })

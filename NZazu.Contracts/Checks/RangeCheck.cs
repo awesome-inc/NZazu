@@ -1,40 +1,56 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
 using System.Globalization;
+using System.Linq;
 
 namespace NZazu.Contracts.Checks
 {
+    [DisplayName("range")]
     public class RangeCheck : IValueCheck
     {
+        internal class RangeCheckSettings
+        {
+            public string Min { private get; set; }
+            public string Max { private get; set; }
+
+            public int MinInt => Convert.ToInt32(Min ?? "0");
+            public int MaxInt => Convert.ToInt32(Max ?? int.MaxValue.ToString());
+        }
+
+        internal readonly RangeCheckSettings Settings;
+
         private readonly ValueCheckResult _outOfRange;
         private readonly ValueCheckResult _notAValidNumber = new ValueCheckResult(false, new ArgumentException("The specified value is not a number"));
 
-        public double Minimum { get; }
-        public double Maximum { get; }
-
-        public RangeCheck(double min, double max)
+        // ReSharper disable UnusedParameter.Local
+        public RangeCheck(
+            IDictionary<string, string> settings, Func<FormData> formData,
+            INZazuTableDataSerializer tableSerializer, int rowIdx,
+            FieldDefinition fieldDefinition)
         {
-            if (max.CompareTo(min) < 0) throw new ArgumentOutOfRangeException(
-                $"min={min} must be less than or equal to max={max}.");
-            Minimum = min;
-            Maximum = max;
+            Settings = settings.ToDictionary(x => x.Key, x => (object)x.Value).ToObject<RangeCheckSettings>();
+
+            if (Settings.MinInt < 0) throw new ArgumentOutOfRangeException(nameof(Settings.Min), $"The specified value must be between {Settings.MinInt} and {Settings.MaxInt}");
+            if (Settings.MaxInt < Settings.MinInt) throw new ArgumentOutOfRangeException($"min={Settings.MinInt} must be less than or equal to max={Settings.MaxInt}.");
+
             _outOfRange = new ValueCheckResult(false, new ArgumentOutOfRangeException(
-                $"The specified value must be between {Minimum} and {Maximum}"));
+                $"The specified value must be between {Settings.MinInt} and {Settings.MaxInt}"));
         }
 
         public ValueCheckResult Validate(string value, object parsedValue, IFormatProvider formatProvider = null)
         {
             if (string.IsNullOrWhiteSpace(value)) return ValueCheckResult.Success;
 
-            double result;
             var safeFormatProvider = formatProvider ?? CultureInfo.InvariantCulture;
-            if (double.TryParse(value, NumberStyles.Number, safeFormatProvider, out result))
-            {
-                if (result < Minimum || result > Maximum)
-                    return _outOfRange;
-                return ValueCheckResult.Success;
-            }
+            if (!double.TryParse(value, NumberStyles.Number, safeFormatProvider, out var result))
+                return _notAValidNumber;
 
-            return _notAValidNumber;
+            if (result < Settings.MinInt || result > Settings.MaxInt)
+                return _outOfRange;
+
+            return ValueCheckResult.Success;
+
         }
     }
 }

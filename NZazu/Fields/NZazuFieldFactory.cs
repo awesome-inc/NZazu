@@ -1,19 +1,20 @@
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Globalization;
-using System.Windows.Data;
 using NZazu.Contracts;
 using NZazu.Contracts.Adapter;
 using NZazu.Contracts.Suggest;
 using NZazu.Extensions;
 using NZazu.FieldBehavior;
 using NZazu.Serializer;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Globalization;
+using System.Windows.Data;
 
 namespace NZazu.Fields
 {
     public class NZazuFieldFactory : INZazuWpfFieldFactory
     {
+        // ReSharper disable once InconsistentNaming
         private const string DefaultType = "default";
 
         protected readonly IDictionary<string, Type> FieldTypes = new Dictionary<string, Type>();
@@ -35,7 +36,7 @@ namespace NZazu.Fields
                 new ProvideFileSuggestions(),
             }));
 
-            // lets add all nzazu core fields and types
+            // lets add all NZazu core fields and types
             FieldTypes.Add(DefaultType, typeof(NZazuLabelField)); // we add label twice to have it as default type
             FieldTypes.Add("label", typeof(NZazuLabelField));
             FieldTypes.Add("string", typeof(NZazuTextField));

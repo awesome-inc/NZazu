@@ -1,7 +1,11 @@
-using System;
-using System.Text.RegularExpressions;
+using FluentAssertions;
+using NEdifis;
 using NEdifis.Attributes;
 using NUnit.Framework;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Reflection;
 
 namespace NZazu.Contracts.Checks
 {
@@ -10,58 +14,75 @@ namespace NZazu.Contracts.Checks
     internal class StringRegExCheck_Should
     {
         [Test]
+        public void Be_Creatable()
+        {
+            var settings = new Dictionary<string, string>() { { "Hint", "this is the hint" }, { "RegEx", "false|true" } } as IDictionary<string, string>;
+            var ctx = new ContextFor<StringRegExCheck>();
+            ctx.Use(settings);
+            var sut = ctx.BuildSut();
+
+            sut.Should().NotBeNull();
+            sut.GetType().GetCustomAttribute<DisplayNameAttribute>().DisplayName.Should().Be("regex");
+        }
+
+        [Test]
+        public void Registered_At_CheckFactory()
+        {
+            var settings = new Dictionary<string, string>() { { "Hint", "this is the hint" }, { "RegEx", "false|true" } } as IDictionary<string, string>;
+            var checkType = typeof(StringRegExCheck);
+
+            var sut = new CheckFactory();
+
+            var checkDefinition = new CheckDefinition { Type = "regex", Settings = settings };
+            var check = sut.CreateCheck(checkDefinition, new FieldDefinition() { Key = "key1" });
+
+            check.Should().NotBeNull();
+            check.Should().BeOfType(checkType);
+        }
+
+        [Test]
         public void IsValid_null_or_whitespace_should_pass()
         {
-            var check = new StringRegExCheck("test", new Regex(@"^.*$", RegexOptions.IgnoreCase));
+            var settings = new Dictionary<string, string>() { { "Hint", "Must be true or false" }, { "RegEx", "true|false" } } as IDictionary<string, string>;
+            var ctx = new ContextFor<StringRegExCheck>();
+            ctx.Use(settings);
+            var sut = ctx.BuildSut();
 
-            check.ShouldPass(null, null);
-            check.ShouldPass(string.Empty, string.Empty);
-            check.ShouldPass("\t\r\n", "\t\r\n");
-            check.ShouldPass(" ", " ");
+            sut.ShouldPass(null, null);
+            sut.ShouldPass(string.Empty, string.Empty);
+            sut.ShouldPass("\t\r\n", "\t\r\n");
+            sut.ShouldPass(" ", " ");
         }
 
         [Test]
         public void EmailChecks()
         {
-            var check = new StringRegExCheck("Not a valid e-mail", new Regex(@"^.+@.+\..+$", RegexOptions.IgnoreCase));
+            var settings = new Dictionary<string, string>() { { "Hint", "Not a valid e-mail" }, { "RegEx", @"^.+@.+\..+$" } } as IDictionary<string, string>;
+            var ctx = new ContextFor<StringRegExCheck>();
+            ctx.Use(settings);
+            var sut = ctx.BuildSut();
 
-            check.ShouldPass("joe.doe@domain.com", "joe.doe@domain.com");
-            check.ShouldFailWith<ArgumentException>("@domain.com", null); // missing account prefix
-            check.ShouldFailWith<ArgumentException>("joe.doe_domain.com", null); // missing separator '@'
-            check.ShouldFailWith<ArgumentException>("joe.doe@", null); // missing domain
-            check.ShouldFailWith<ArgumentException>("joe.doe@domain_de", null); // missing domain separator '.'
+            sut.ShouldPass("joe.doe@domain.com", "joe.doe@domain.com");
+            sut.ShouldFailWith<ArgumentException>("@domain.com", null); // missing account prefix
+            sut.ShouldFailWith<ArgumentException>("joe.doe_domain.com", null); // missing separator '@'
+            sut.ShouldFailWith<ArgumentException>("joe.doe@", null); // missing domain
+            sut.ShouldFailWith<ArgumentException>("joe.doe@domain_de", null); // missing domain separator '.'
         }
 
         [Test]
         public void IpAddressChecks()
         {
-            var check = new StringRegExCheck("Not a valid ip.", new Regex(@"^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$"));
+            var settings = new Dictionary<string, string>() { { "Hint", "Not a valid ip." }, { "RegEx", @"^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$" } } as IDictionary<string, string>;
+            var ctx = new ContextFor<StringRegExCheck>();
+            ctx.Use(settings);
+            var sut = ctx.BuildSut();
 
-            check.ShouldPass("1.1.1.1", "1.1.1.1");
-            check.ShouldPass("22.22.22.22", "22.22.22.22");
-            check.ShouldPass("333.333.333.333", "333.333.333.333"); // actually this is not a valid IP address. However, we check the RegEx here!
+            sut.ShouldPass("1.1.1.1", "1.1.1.1");
+            sut.ShouldPass("22.22.22.22", "22.22.22.22");
+            sut.ShouldPass("333.333.333.333", "333.333.333.333"); // actually this is not a valid IP address. However, we check the RegEx here!
 
-            check.ShouldFailWith<ArgumentException>("1.1.11", 0); // missing separator
-            check.ShouldFailWith<ArgumentException>("1.22.33.4444", 0); // field with 4 digits
-        }
-
-        [Test]
-        public void Validate_should_OR_all_regexes()
-        {
-            var twoChars = new Regex("[a-b]{2}");
-            var twoDigits = new Regex(@"\d{2}");
-            var check = new StringRegExCheck("Enter 2 chars or 2 digits", twoChars, twoDigits);
-
-            check.ShouldFailWith<ArgumentException>("a", "a");
-
-            // false OR false => false
-            check.ShouldFailWith<ArgumentException>("a", "a");
-
-            // false OR true => true
-            check.ShouldPass("12", "12");
-
-            // true OR false => true
-            check.ShouldPass("ab", "ab");
+            sut.ShouldFailWith<ArgumentException>("1.1.11", 0); // missing separator
+            sut.ShouldFailWith<ArgumentException>("1.22.33.4444", 0); // field with 4 digits
         }
     }
 }

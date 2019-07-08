@@ -184,7 +184,6 @@ namespace NZazu.Fields
             var row = Grid.GetRow(ctrl);
             if (row == 0) return; // cannot insert above header
 
-
             var fieldsAboveInsert =
                 _fields.Where(x => int.Parse(x.Key.Split(new[] { "__" }, StringSplitOptions.None)[1]) < row).ToArray();
             var fieldsBelowInsert =
@@ -221,8 +220,8 @@ namespace NZazu.Fields
 
         private Button _addBtn;
         private Button _delBtn;
-        private INZazuTableDataSerializer _serializer;
-        private INZazuWpfFieldFactory _factory;
+        private readonly INZazuTableDataSerializer _serializer;
+        private readonly INZazuWpfFieldFactory _factory;
 
         public NZazuDataTableField(FieldDefinition definition, Func<Type, object> serviceLocatorFunc)
             : base(definition, serviceLocatorFunc)

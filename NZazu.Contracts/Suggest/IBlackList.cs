@@ -1,8 +1,6 @@
 ﻿using System;
 
-// ReSharper disable CheckNamespace
-namespace NSuggest
-// ReSharper restore CheckNamespace
+namespace NZazu.Contracts.Suggest
 {
     /// <summary>
     /// An generic blacklist interface.

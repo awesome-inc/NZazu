@@ -37,15 +37,15 @@
     <Reference Include="Castle.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
       <HintPath>..\packages\Castle.Core.4.3.1\lib\net45\Castle.Core.dll</HintPath>
     </Reference>
-    <Reference Include="FluentAssertions, Version=5.5.3.0, Culture=neutral, PublicKeyToken=33f2691a05b67b6a, processorArchitecture=MSIL">
-      <HintPath>..\packages\FluentAssertions.5.5.3\lib\net45\FluentAssertions.dll</HintPath>
+    <Reference Include="FluentAssertions, Version=5.6.0.0, Culture=neutral, PublicKeyToken=33f2691a05b67b6a, processorArchitecture=MSIL">
+      <HintPath>..\packages\FluentAssertions.5.6.0\lib\net45\FluentAssertions.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="NEdifis, Version=0.8.1.0, Culture=neutral, PublicKeyToken=68bd55412466663d, processorArchitecture=MSIL">
-      <HintPath>..\packages\NEdifis.0.8.1\lib\net45\NEdifis.dll</HintPath>
+    <Reference Include="NEdifis, Version=0.8.3.0, Culture=neutral, PublicKeyToken=68bd55412466663d, processorArchitecture=MSIL">
+      <HintPath>..\packages\NEdifis.0.8.3\lib\net45\NEdifis.dll</HintPath>
     </Reference>
-    <Reference Include="NSubstitute, Version=3.1.0.0, Culture=neutral, PublicKeyToken=92dd2e9066daa5ca, processorArchitecture=MSIL">
-      <HintPath>..\packages\NSubstitute.3.1.0\lib\net45\NSubstitute.dll</HintPath>
+    <Reference Include="NSubstitute, Version=4.0.0.0, Culture=neutral, PublicKeyToken=92dd2e9066daa5ca, processorArchitecture=MSIL">
+      <HintPath>..\packages\NSubstitute.4.0.0\lib\net45\NSubstitute.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework, Version=3.11.0.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
       <HintPath>..\packages\NUnit.3.11.0\lib\net45\nunit.framework.dll</HintPath>
@@ -75,8 +75,10 @@
     <Compile Include="Suggest\BlackList_Should.cs" />
     <Compile Include="Suggest\Cache.cs" />
     <Compile Include="Suggest\Cache_Should.cs" />
+    <Compile Include="Suggest\FileSystem.cs" />
     <Compile Include="Suggest\IBlackList.cs" />
     <Compile Include="Suggest\ICache.cs" />
+    <Compile Include="Suggest\IFileSystem.cs" />
     <Compile Include="Suggest\IHaveKeyedValues.cs" />
     <Compile Include="Suggest\IProvideSuggestions.cs" />
     <Compile Include="Adapter\NZazuCoordinate.cs" />
@@ -129,7 +131,6 @@
     <Compile Include="Suggest\SuggestionsProxy.cs" />
     <Compile Include="Suggest\SuggestionsProxy_Should.cs" />
     <Compile Include="Suggest\TernarySearchTree.cs" />
-    <Compile Include="Suggest\TernarySearchTree_Should.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

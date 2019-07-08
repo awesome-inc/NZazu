@@ -1,9 +1,6 @@
 ﻿using System;
-using NZazu.Contracts.Suggest;
 
-// ReSharper disable CheckNamespace
-namespace NSuggest
-// ReSharper restore CheckNamespace
+namespace NZazu.Contracts.Suggest
 {
     public class BlackList<TKey> : IBlackList<TKey> where TKey : IEquatable<TKey>
     {
@@ -24,8 +21,7 @@ namespace NSuggest
 
         public bool Push(TKey key)
         {
-            int count;
-            if (_cache.TryGetValue(key, out count))
+            if (_cache.TryGetValue(key, out var count))
                 _cache[key] = count + 1;
             else
                 _cache.Add(key, 1);
@@ -39,8 +35,7 @@ namespace NSuggest
 
         public bool IsBlackListed(TKey key, int maxFails)
         {
-            int count;
-            _cache.TryGetValue(key, out count);
+            _cache.TryGetValue(key, out var count);
             return (count >= maxFails); // NOTE: count = 0, if not contained in the black list.
         }
 

@@ -1,7 +1,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using NEdifis.Attributes;
 
 namespace NZazu.Contracts.Suggest
 {
@@ -23,9 +25,12 @@ namespace NZazu.Contracts.Suggest
     /// such as near-neighbor search.
     /// </para>
     /// <para>
-    /// Please read the paper to get some insight on the stucture used below.
+    /// Please read the paper to get some insight on the structure used below.
     /// </para>	
     /// </remarks>
+    [ExcludeFromCodeCoverage()]
+    [Because("stolen from the internet")]
+    [ExcludeFromConventions("stolen from the internet")]
     public class TernarySearchTree
     {
         #region Nested Classes

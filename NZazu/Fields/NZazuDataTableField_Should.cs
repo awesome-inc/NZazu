@@ -1,9 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Threading;
-using System.Windows.Controls;
-using System.Windows.Data;
 using FluentAssertions;
 using NEdifis.Attributes;
 using NUnit.Framework;
@@ -11,6 +5,12 @@ using NZazu.Contracts;
 using NZazu.Extensions;
 using NZazu.Fields.Controls;
 using NZazu.Serializer;
+using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Threading;
+using System.Windows.Controls;
+using System.Windows.Data;
 
 #pragma warning disable 618
 
@@ -32,12 +32,38 @@ namespace NZazu.Fields
         [Test]
         public void Be_Creatable()
         {
-            var sut = new NZazuDataTableField(new FieldDefinition { Key = "table01" }, ServiceLocator);
+            var sut = new NZazuDataTableField(new FieldDefinition
+            {
+                Key = "table01",
+                Fields = new[]
+                {
+                    new FieldDefinition {Key = "table01_field01", Type = "string"},
+                    new FieldDefinition {Key = "table01_field02", Type = "bool"}
+                }
+            }, ServiceLocator);
 
             sut.Should().NotBeNull();
             sut.Should().BeAssignableTo<INZazuWpfField>();
         }
 
+        [Test]
+        [STAThread]
+        [Apartment(ApartmentState.STA)]
+        public void Be_Disposable()
+        {
+            using (var sut = new NZazuDataTableField(new FieldDefinition
+            {
+                Key = "table01",
+                Fields = new[]
+                {
+                    new FieldDefinition {Key = "table01_field01", Type = "string"},
+                    new FieldDefinition {Key = "table01_field02", Type = "bool"}
+                }
+            }, ServiceLocator))
+            {
+                sut.AddRowAbove(sut.ValueControl);
+            }
+        }
 
         private static dynamic GetField()
         {

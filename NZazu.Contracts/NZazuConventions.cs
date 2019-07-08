@@ -15,7 +15,7 @@ namespace NZazu.Contracts
 
         public NZazuConventions()
         {
-            // NEDifis built-in
+            // NEdifis built-in
             Conventions.AddRange(new IVerifyConvention[]
             {
                 new ExcludeFromCodeCoverageClassHasBecauseAttribute(),

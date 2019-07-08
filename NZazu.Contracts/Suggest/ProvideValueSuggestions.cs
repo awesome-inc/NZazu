@@ -7,7 +7,7 @@ namespace NZazu.Contracts.Suggest
 {
     /// <summary>
     /// provider for native values retrieved from nzazu form definition file.
-    /// settings: "dataconnection" -> "v:anton|adam|abraham|anna|annika|astrid"
+    /// settings: "dataConnection" -> "v:anton|adam|abraham|anna|annika|astrid"
     /// </summary>
     public class ProvideValueSuggestions : IProvideSuggestions
     {
