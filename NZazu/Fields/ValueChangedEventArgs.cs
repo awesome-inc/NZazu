@@ -4,7 +4,7 @@ using NEdifis.Attributes;
 namespace NZazu.Fields
 {
     [ExcludeFromConventions("this is a simple DTO")]
-    internal class ValueChangedEventArgs<T>
+    internal class ValueChangedEventArgs<T> : System.EventArgs
     {
         public string StoreKey { get; }
         public Guid CtrlGuid { get; }

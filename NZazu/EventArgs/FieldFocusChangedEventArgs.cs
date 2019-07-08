@@ -1,10 +1,9 @@
-using System;
 using NEdifis.Attributes;
 
 namespace NZazu.EventArgs
 {
     [ExcludeFromConventions("this is just an event arg class")]
-    public class FieldFocusChangedEventArgs
+    public class FieldFocusChangedEventArgs : System.EventArgs
     {
         public FieldFocusChangedEventArgs(INZazuWpfField newFocusedElement, INZazuWpfField oldFocusedElement = null, INZazuWpfField parentElement = null)
         {
