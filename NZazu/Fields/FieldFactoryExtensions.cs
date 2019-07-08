@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using NZazu.Contracts;
 using NZazu.Contracts.Checks;
@@ -23,8 +24,16 @@ namespace NZazu.Fields
 
             // apply generic settings
             var controlSettings = fieldDefinition.Settings.Where(s => control.CanSetProperty(s.Key));
-            foreach (var setting in controlSettings)
-                control.SetProperty(setting.Key, setting.Value);
+
+            try
+            {
+                foreach (var setting in controlSettings)
+                    control.SetProperty(setting.Key, setting.Value);
+            }
+            catch (ArgumentException exception)
+            {
+                Trace.TraceError($"Following error occured while setting the properties for the field <{field.Key}>: {Environment.NewLine}{exception}");
+            }
 
             return field;
         }
