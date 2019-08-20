@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
@@ -99,7 +99,7 @@ namespace NZazu.Fields.Libs
 
             if (Application.Current == null) return; // because we are in testing
 
-            if (Application.Current.Resources.FindName("AcTb_ListBoxStyle") == null)
+            if (!Application.Current.Resources.Contains("AcTb_ListBoxStyle"))
             {
                 var myResourceDictionary = new ResourceDictionary();
                 // TODO: hard coded namespace. this can break on namespace changes! avoid that!
