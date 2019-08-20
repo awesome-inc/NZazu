@@ -1,6 +1,5 @@
 using System;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Globalization;
 using System.Reflection;
 
@@ -93,8 +92,8 @@ namespace NZazu.Fields
             }
             catch (Exception ex)
             {
-                Trace.TraceError("Could not convert the value \"{0}\" for property type \"{1}\" of prop \"{2}\": {3}", propValue, propInfo?.PropertyType.Name, propInfo?.Name, ex);
-                return null;
+                var message = $"Could not convert the value \"{propValue}\" for property type \"{propInfo?.PropertyType.Name}\" of prop \"{propInfo?.Name}\"";
+                throw new ArgumentException(message, ex);
             }
         }
     }
