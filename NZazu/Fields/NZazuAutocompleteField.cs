@@ -12,6 +12,7 @@ namespace NZazu.Fields
     internal class NZazuAutocompleteField : NZazuField<string>
     {
         private readonly IProvideSuggestions _suggester;
+        private bool _suggesterAttached;
 
         public NZazuAutocompleteField(FieldDefinition definition, Func<Type, object> serviceLocatorFunc)
             : base(definition, serviceLocatorFunc)
@@ -37,14 +38,20 @@ namespace NZazu.Fields
 
             // we have to do this on load because some wpf stuff does not work if no parent is set
             // i.e. some popup magic on window
-            result.Loaded += (sender, args) => { AttachSuggestor(sender); };
+            result.Loaded += (sender, args) =>
+            {
+                if (_suggesterAttached) return;
+                _suggesterAttached = true;
+
+                AttachSuggester(sender);
+            };
 
             return result;
         }
 
-        private void AttachSuggestor(object sender)
+        private void AttachSuggester(object sender)
         {
-// no suggester, no suggestions ;)
+            // no suggester, no suggestions ;)
             if (_suggester == null) return;
 
             var tb = (TextBox) sender;
