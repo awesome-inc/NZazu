@@ -51,6 +51,8 @@ namespace NZazu.FieldBehavior
         {
             // over here you can add new default behaviors
             _fieldTypes.Add("Empty", typeof(EmptyNZazuFieldBehavior));
+            _fieldTypes.Add("OpenUrlOnStringEnter", typeof(OpenUrlOnStringEnterBehavior));
+            _fieldTypes.Add("SetBorder", typeof(SetBorderBehavior));
         }
 
         internal IEnumerable<KeyValuePair<string, Type>> Behaviors => _fieldTypes.ToArray();

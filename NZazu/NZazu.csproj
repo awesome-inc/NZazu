@@ -94,6 +94,10 @@
     <Compile Include="FieldBehavior\NZazuFieldBehavior.cs" />
     <Compile Include="FieldBehavior\NZazuFieldBehaviorFactory.cs" />
     <Compile Include="FieldBehavior\NZazuFieldBehaviorFactory_Should.cs" />
+    <Compile Include="FieldBehavior\OpenUrlOnStringEnterBehavior.cs" />
+    <Compile Include="FieldBehavior\OpenUrlOnStringEnterBehavior_Should.cs" />
+    <Compile Include="FieldBehavior\SetBorderBehavior.cs" />
+    <Compile Include="FieldBehavior\SetBorderBehavior_Should.cs" />
     <Compile Include="Fields\Controls\DynamicDataTable.xaml.cs">
       <DependentUpon>DynamicDataTable.xaml</DependentUpon>
     </Compile>
