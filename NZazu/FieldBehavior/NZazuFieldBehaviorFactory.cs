@@ -30,14 +30,11 @@ namespace NZazu.FieldBehavior
             if (behaviorDefinition == null) throw new ArgumentNullException(nameof(behaviorDefinition));
 
             var settings = behaviorDefinition.Settings;
-            if (settings != null)
-            {
-                var behaviorSettings = settings.Where(setting => behavior.CanSetProperty(setting.Key));
-                foreach (var setting in behaviorSettings)
-                {
-                    behavior.SetProperty(setting.Key, setting.Value);
-                }
-            }
+            if (settings == null) return behavior;
+
+            var behaviorSettings = settings.Where(setting => behavior.CanSetProperty(setting.Key));
+            foreach (var setting in behaviorSettings)
+                behavior.SetProperty(setting.Key, setting.Value);
 
             return behavior;
         }

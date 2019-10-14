@@ -5,6 +5,6 @@ namespace NZazu
 {
     public interface INZazuWpfFieldBehaviorFactory
     {
-        INZazuWpfFieldBehavior CreateFieldBehavior(BehaviorDefinition fieldDefinition);
+        INZazuWpfFieldBehavior CreateFieldBehavior(BehaviorDefinition behaviorDefinition);
     }
 }

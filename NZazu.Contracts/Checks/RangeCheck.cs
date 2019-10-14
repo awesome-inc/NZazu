@@ -31,7 +31,8 @@ namespace NZazu.Contracts.Checks
         {
             Settings = settings.ToDictionary(x => x.Key, x => (object)x.Value).ToObject<RangeCheckSettings>();
 
-            if (Settings.MinInt < 0) throw new ArgumentOutOfRangeException(nameof(Settings.Min), $"The specified value must be between {Settings.MinInt} and {Settings.MaxInt}");
+            if (Settings.MinInt < 0)
+                throw new ArgumentOutOfRangeException(nameof(Settings.Min), $"The specified value must be between {Settings.MinInt} and {Settings.MaxInt}");
             if (Settings.MaxInt < Settings.MinInt) throw new ArgumentOutOfRangeException($"min={Settings.MinInt} must be less than or equal to max={Settings.MaxInt}.");
 
             _outOfRange = new ValueCheckResult(false, new ArgumentOutOfRangeException(
