@@ -10,23 +10,31 @@ namespace NZazu.Fields
 {
     public class NZazuGroupField
         : NZazuField
-        , INZazuWpfFieldContainer
+            , INZazuWpfFieldContainer
     {
+        private readonly INZazuWpfFieldFactory _factory;
+
         public NZazuGroupField(FieldDefinition definition, Func<Type, object> serviceLocatorFunc)
             : base(definition, serviceLocatorFunc)
         {
-            _factory = (INZazuWpfFieldFactory)serviceLocatorFunc(typeof(INZazuWpfFieldFactory));
+            _factory = (INZazuWpfFieldFactory) serviceLocatorFunc(typeof(INZazuWpfFieldFactory));
 
             IsEditable = false;
             CreateChildControls();
         }
 
-        private readonly INZazuWpfFieldFactory _factory;
         public override DependencyProperty ContentProperty => null;
         public string Layout { get; set; }
 
-        public override void SetValue(string value) { }
-        public override string GetValue() { return null; }
+        public override void SetValue(string value)
+        {
+        }
+
+        public override string GetValue()
+        {
+            return null;
+        }
+
         public override ValueCheckResult Validate()
         {
             return ValueCheckResult.Success;
@@ -39,8 +47,8 @@ namespace NZazu.Fields
             if (Definition == null) throw new ArgumentNullException(nameof(Definition));
 
             Control control = string.IsNullOrEmpty(Definition.Description)
-                ? new ContentControl { Focusable = false }
-                : new GroupBox { Focusable = false, Header = Definition.Description };
+                ? new ContentControl {Focusable = false}
+                : new GroupBox {Focusable = false, Header = Definition.Description};
 
             return control;
         }

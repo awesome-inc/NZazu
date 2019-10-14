@@ -31,7 +31,7 @@ namespace NZazu.Fields
         [Apartment(ApartmentState.STA)]
         public void Be_Creatable()
         {
-            var sut = new NZazuLocationField(new FieldDefinition { Key = "test" }, ServiceLocator);
+            var sut = new NZazuLocationField(new FieldDefinition {Key = "test"}, ServiceLocator);
 
             sut.Should().NotBeNull();
             sut.ValueControl.Should().BeOfType<GeoLocationBox>();
@@ -42,15 +42,15 @@ namespace NZazu.Fields
         [Apartment(ApartmentState.STA)]
         public void Get_And_Set_Values()
         {
-            var sut = new NZazuLocationField(new FieldDefinition { Key = "test" }, ServiceLocator);
+            var sut = new NZazuLocationField(new FieldDefinition {Key = "test"}, ServiceLocator);
             var box = (GeoLocationBox) sut.ValueControl;
-            
+
             sut.SetValue("23 34");
             sut.GetValue().Should().Be("23 34");
             box.Value.Lat.Should().Be(23);
             box.Value.Lon.Should().Be(34);
 
-            box.Value = new NZazuCoordinate() {Lat = 11, Lon = 22};
+            box.Value = new NZazuCoordinate {Lat = 11, Lon = 22};
             sut.GetValue().Should().Be("11 22");
         }
     }

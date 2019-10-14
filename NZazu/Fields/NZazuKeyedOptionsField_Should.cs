@@ -1,14 +1,14 @@
-﻿using FluentAssertions;
-using NEdifis.Attributes;
-using NUnit.Framework;
-using NZazu.Contracts;
-using NZazu.Extensions;
-using System;
+﻿using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Threading;
 using System.Windows.Controls;
 using System.Windows.Data;
+using FluentAssertions;
+using NEdifis.Attributes;
+using NUnit.Framework;
+using NZazu.Contracts;
+using NZazu.Extensions;
 
 namespace NZazu.Fields
 {
@@ -28,7 +28,7 @@ namespace NZazu.Fields
         [Test]
         public void Be_Creatable()
         {
-            var sut = new NZazuKeyedOptionsField(new FieldDefinition { Key = "test" }, ServiceLocator);
+            var sut = new NZazuKeyedOptionsField(new FieldDefinition {Key = "test"}, ServiceLocator);
 
             sut.Should().NotBeNull();
             sut.Should().BeAssignableTo<INZazuWpfField>();
@@ -37,7 +37,7 @@ namespace NZazu.Fields
         [Test]
         public void Not_Accept_Empty_Options()
         {
-            var sut = new NZazuKeyedOptionsField(new FieldDefinition { Key = "test" }, ServiceLocator);
+            var sut = new NZazuKeyedOptionsField(new FieldDefinition {Key = "test"}, ServiceLocator);
 
             1.Invoking(i => { sut.Options = new string[] { }; }).Should().Throw<ArgumentException>();
         }
@@ -48,10 +48,10 @@ namespace NZazu.Fields
         public void Add_Values_To_List()
         {
             // TODO FIX ME
-            var definition = new FieldDefinition { Key = "test", Description = "description", Prompt = "prompt" };
+            var definition = new FieldDefinition {Key = "test", Description = "description", Prompt = "prompt"};
             var sut = new NZazuKeyedOptionsField(definition, ServiceLocator);
 
-            var control = (ComboBox)sut.ValueControl;
+            var control = (ComboBox) sut.ValueControl;
             control.Text = "Foo";
             sut.LabelControl.SetFocus();
 
@@ -62,11 +62,11 @@ namespace NZazu.Fields
         [STAThread]
         public void Create_ComboBox()
         {
-            var definition = new FieldDefinition { Key = "test", Description = "description" };
+            var definition = new FieldDefinition {Key = "test", Description = "description"};
             var sut = new NZazuKeyedOptionsField(definition, ServiceLocator);
 
             sut.ContentProperty.Should().Be(ComboBox.TextProperty);
-            var control = (ComboBox)sut.ValueControl;
+            var control = (ComboBox) sut.ValueControl;
             control.Should().NotBeNull();
 
             control.ToolTip.Should().Be(sut.Definition.Description);
@@ -76,12 +76,12 @@ namespace NZazu.Fields
         [STAThread]
         public void Create_Dispose_ComboBox()
         {
-            var definition = new FieldDefinition { Key = "test", Description = "description" };
+            var definition = new FieldDefinition {Key = "test", Description = "description"};
 
             using (var sut = new NZazuKeyedOptionsField(definition, ServiceLocator))
             {
                 sut.ContentProperty.Should().Be(ComboBox.TextProperty);
-                var control = (ComboBox)sut.ValueControl;
+                var control = (ComboBox) sut.ValueControl;
                 control.Should().NotBeNull();
 
                 control.ToolTip.Should().Be(sut.Definition.Description);
@@ -92,7 +92,8 @@ namespace NZazu.Fields
         [Apartment(ApartmentState.STA)]
         public void Identify_Value_with_StringValue()
         {
-            var sut = new NZazuKeyedOptionsField(new FieldDefinition { Key = "test", Description = "description" }, ServiceLocator);
+            var sut = new NZazuKeyedOptionsField(new FieldDefinition {Key = "test", Description = "description"},
+                ServiceLocator);
 
             sut.Value.Should().BeNull();
             sut.GetValue().Should().Be(sut.Value);

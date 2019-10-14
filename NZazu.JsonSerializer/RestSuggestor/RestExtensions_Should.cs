@@ -20,6 +20,7 @@ namespace NZazu.JsonSerializer.RestSuggestor
 
             client.Received(1).Request(HttpMethod.Head, uri);
         }
+
         [Test]
         public void Wrap_Get()
         {
@@ -30,6 +31,7 @@ namespace NZazu.JsonSerializer.RestSuggestor
 
             client.Received(1).Request(HttpMethod.Get, uri);
         }
+
         [Test]
         public void Wrap_Post()
         {
@@ -40,6 +42,7 @@ namespace NZazu.JsonSerializer.RestSuggestor
 
             client.Received(1).Request(HttpMethod.Post, uri);
         }
+
         [Test]
         public void Wrap_Put()
         {
@@ -50,6 +53,7 @@ namespace NZazu.JsonSerializer.RestSuggestor
 
             client.Received(1).Request(HttpMethod.Put, uri);
         }
+
         [Test]
         public void Wrap_Delete()
         {

@@ -3,8 +3,8 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using FluentAssertions;
-using Newtonsoft.Json;
 using NEdifis.Attributes;
+using Newtonsoft.Json;
 using NSubstitute;
 using NUnit.Framework;
 
@@ -34,6 +34,5 @@ namespace NZazu.JsonSerializer.RestSuggestor
             //actual = sut.Head().Result;
             act.Should().Throw<HttpRequestException>();
         }
- 
     }
 }

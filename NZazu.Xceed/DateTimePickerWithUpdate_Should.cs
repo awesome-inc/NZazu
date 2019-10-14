@@ -27,9 +27,10 @@ namespace NZazu.Xceed
         {
             var bd = new DateTime(1980, 2, 20, 14, 23, 12);
             var sut = new DateTimePickerWithUpdate();
-            var field = sut.GetType().GetField("_valuePicker", BindingFlags.NonPublic | BindingFlags.GetField | BindingFlags.Instance);
+            var field = sut.GetType().GetField("_valuePicker",
+                BindingFlags.NonPublic | BindingFlags.GetField | BindingFlags.Instance);
             // ReSharper disable once PossibleNullReferenceException
-            var ctrl = (DateTimePicker)field.GetValue(sut);
+            var ctrl = (DateTimePicker) field.GetValue(sut);
 
             // lest test...
             sut.Value = bd;
@@ -47,7 +48,7 @@ namespace NZazu.Xceed
         [Apartment(ApartmentState.STA)]
         public void Use_Format_Settings()
         {
-            var sut = new DateTimePickerWithUpdate()
+            var sut = new DateTimePickerWithUpdate
             {
                 Watermark = "the watermark",
                 Format = DateTimeFormat.Custom,
@@ -57,14 +58,14 @@ namespace NZazu.Xceed
             sut.Format.Should().Be(DateTimeFormat.Custom);
             sut.FormatString.Should().Be("yyyy-MMM-dd");
 
-            var field = sut.GetType().GetField("_valuePicker", BindingFlags.NonPublic | BindingFlags.GetField | BindingFlags.Instance);
+            var field = sut.GetType().GetField("_valuePicker",
+                BindingFlags.NonPublic | BindingFlags.GetField | BindingFlags.Instance);
             // ReSharper disable once PossibleNullReferenceException
-            var ctrl = (DateTimePicker)field.GetValue(sut);
+            var ctrl = (DateTimePicker) field.GetValue(sut);
 
             ctrl.Watermark.Should().Be("the watermark");
             ctrl.Format.Should().Be(DateTimeFormat.Custom);
             ctrl.FormatString.Should().Be("yyyy-MMM-dd");
         }
-
     }
 }

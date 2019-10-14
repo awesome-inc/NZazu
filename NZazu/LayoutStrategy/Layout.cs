@@ -16,8 +16,8 @@ namespace NZazu.LayoutStrategy
         }
 
         public abstract void DoLayout(
-            ContentControl contentControl, 
-            IEnumerable<INZazuWpfField> fields, 
+            ContentControl contentControl,
+            IEnumerable<INZazuWpfField> fields,
             IResolveLayout resolveLayout = null);
 
         protected void SetErrorTemplate(Control valueElement)
@@ -27,7 +27,7 @@ namespace NZazu.LayoutStrategy
 
         protected void ProcessGroupField(
             IResolveLayout resolveLayout,
-            Control control, 
+            Control control,
             INZazuWpfField field)
         {
             var contentControl = control as ContentControl;
@@ -46,8 +46,8 @@ namespace NZazu.LayoutStrategy
             }
 
             var uri = new Uri("pack://application:,,,/NZazu;component/Themes/Generic.xaml", UriKind.Absolute);
-            var resources = new ResourceDictionary { Source = uri };
-            return (ControlTemplate)resources["NZazuErrorTemplate"];
+            var resources = new ResourceDictionary {Source = uri};
+            return (ControlTemplate) resources["NZazuErrorTemplate"];
         }
 
         private INZazuWpfLayoutStrategy SafeResolve(IResolveLayout resolveLayout, string name)

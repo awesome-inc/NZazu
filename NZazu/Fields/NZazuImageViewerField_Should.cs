@@ -31,7 +31,8 @@ namespace NZazu.Fields
         //[Ignore("skip for now")]
         public void Be_Creatable()
         {
-            var sut = new NZazuImageViewerField(new FieldDefinition { Key = "test", Type = "imageViewer" }, ServiceLocator);
+            var sut = new NZazuImageViewerField(new FieldDefinition {Key = "test", Type = "imageViewer"},
+                ServiceLocator);
 
             sut.Key.Should().Be("test");
             sut.ValueControl.Should().BeAssignableTo<ContentControl>();
@@ -57,7 +58,7 @@ namespace NZazu.Fields
             {
                 Key = "test",
                 Type = "imageViewer",
-                Values = new[] { @"http://img/1.jpg", @"http://img/2.jpg", @"http://img/3.jpg" }
+                Values = new[] {@"http://img/1.jpg", @"http://img/2.jpg", @"http://img/3.jpg"}
             }, ServiceLocator);
             sut.SetValue(initValue);
 
@@ -87,7 +88,7 @@ namespace NZazu.Fields
             {
                 Key = "test",
                 Type = "imageViewer",
-                Values = new[] { @"http://img/1.jpg", @"http://img/2.jpg", @"http://img/3.jpg" }
+                Values = new[] {@"http://img/1.jpg", @"http://img/2.jpg", @"http://img/3.jpg"}
             }, ServiceLocator);
             sut.SetValue(initValue);
 
@@ -116,7 +117,7 @@ namespace NZazu.Fields
             {
                 Key = "test",
                 Type = "imageViewer",
-                Values = new[] { @"http://img/1.jpg", @"http://img/2.jpg", @"http://img/3.jpg" },
+                Values = new[] {@"http://img/1.jpg", @"http://img/2.jpg", @"http://img/3.jpg"}
             }, ServiceLocator);
             sut.Definition.Settings.Add("AllowNullValues", "true");
             sut.Definition.Settings.Add("AllowCustomValues", "false");
@@ -149,7 +150,7 @@ namespace NZazu.Fields
             {
                 Key = "test",
                 Type = "imageViewer",
-                Values = new[] { @"http://img/1.jpg", @"http://img/2.jpg", @"http://img/3.jpg" },
+                Values = new[] {@"http://img/1.jpg", @"http://img/2.jpg", @"http://img/3.jpg"}
             }, ServiceLocator);
             sut.Definition.Settings.Add("AllowNullValues", "true");
             sut.Definition.Settings.Add("AllowCustomValues", "false");
@@ -180,7 +181,7 @@ namespace NZazu.Fields
             {
                 Key = "test",
                 Type = "imageViewer",
-                Values = new[] { @"http://img/1.jpg", @"http://img/2.jpg", @"http://img/3.jpg" },
+                Values = new[] {@"http://img/1.jpg", @"http://img/2.jpg", @"http://img/3.jpg"}
             }, ServiceLocator);
             sut.Definition.Settings.Add("AllowNullValues", "false");
             sut.Definition.Settings.Add("AllowCustomValues", "true");
@@ -204,7 +205,7 @@ namespace NZazu.Fields
         [Apartment(ApartmentState.STA)]
         public void Toggle_EmptyValues_With_CustomValues()
         {
-            string initValue = "http://img/4.jpg";
+            var initValue = "http://img/4.jpg";
             var sut = new NZazuImageViewerField(new FieldDefinition
             {
                 Key = "test",

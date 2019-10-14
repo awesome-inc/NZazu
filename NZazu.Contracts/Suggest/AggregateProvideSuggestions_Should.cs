@@ -1,8 +1,8 @@
-﻿using FluentAssertions;
+﻿using System.Linq;
+using FluentAssertions;
 using NEdifis.Attributes;
 using NSubstitute;
 using NUnit.Framework;
-using System.Linq;
 
 namespace NZazu.Contracts.Suggest
 {
@@ -24,12 +24,12 @@ namespace NZazu.Contracts.Suggest
         {
             var p1 = Substitute.For<IProvideSuggestions>();
             p1.For(Arg.Any<string>(), Arg.Any<string>())
-                .ReturnsForAnyArgs(new[] { "A", "B" });
+                .ReturnsForAnyArgs(new[] {"A", "B"});
             var p2 = Substitute.For<IProvideSuggestions>();
             p2.For(Arg.Any<string>(), Arg.Any<string>())
-                .ReturnsForAnyArgs(new[] { "1", "2" });
+                .ReturnsForAnyArgs(new[] {"1", "2"});
 
-            var sut = new AggregateProvideSuggestions(new[] { p1, p2 });
+            var sut = new AggregateProvideSuggestions(new[] {p1, p2});
 
             var sug = sut.For("jo", "cs").ToArray();
 
@@ -47,12 +47,12 @@ namespace NZazu.Contracts.Suggest
         {
             var p1 = Substitute.For<IProvideSuggestions>();
             p1.For(Arg.Any<string>(), Arg.Any<string>())
-                .ReturnsForAnyArgs(new[] { "A", "B" });
+                .ReturnsForAnyArgs(new[] {"A", "B"});
             var p2 = Substitute.For<IProvideSuggestions>();
             p2.For(Arg.Any<string>(), Arg.Any<string>())
                 .ReturnsForAnyArgs((string[]) null);
 
-            var sut = new AggregateProvideSuggestions(new[] { p1, p2 });
+            var sut = new AggregateProvideSuggestions(new[] {p1, p2});
 
             var sug = sut.For("jo", "cs").ToArray();
 

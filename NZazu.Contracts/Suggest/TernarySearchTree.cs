@@ -8,31 +8,33 @@ using NEdifis.Attributes;
 namespace NZazu.Contracts.Suggest
 {
     /// <summary>
-    /// Ternary Search Tree.
+    ///     Ternary Search Tree.
     /// </summary>
     /// <remarks>
-    /// <para>
-    /// This class is an implementation of the <b>Ternary Search Tree</b>
-    /// data structure proposed by J. L. Bentley and R. Sedgewick in their 
-    /// paper: Fast algorithms for sorting and searching strings
-    /// in Proceedings of the Eighth Annual ACM-SIAM Symposium on Discrete Algorithms, 
-    /// New Orleans Louisiana, January 5-7, 1997. 
-    /// </para>
-    /// <para>
-    /// The tree acts as a symbol table: The keys must be strings. 
-    /// It is generally faster to find a symbol than the <see cref="Hashtable"/> or
-    /// <see cref="SortedList"/> classes. It can also perform more complex searches
-    /// such as near-neighbor search.
-    /// </para>
-    /// <para>
-    /// Please read the paper to get some insight on the structure used below.
-    /// </para>	
+    ///     <para>
+    ///         This class is an implementation of the <b>Ternary Search Tree</b>
+    ///         data structure proposed by J. L. Bentley and R. Sedgewick in their
+    ///         paper: Fast algorithms for sorting and searching strings
+    ///         in Proceedings of the Eighth Annual ACM-SIAM Symposium on Discrete Algorithms,
+    ///         New Orleans Louisiana, January 5-7, 1997.
+    ///     </para>
+    ///     <para>
+    ///         The tree acts as a symbol table: The keys must be strings.
+    ///         It is generally faster to find a symbol than the <see cref="Hashtable" /> or
+    ///         <see cref="SortedList" /> classes. It can also perform more complex searches
+    ///         such as near-neighbor search.
+    ///     </para>
+    ///     <para>
+    ///         Please read the paper to get some insight on the structure used below.
+    ///     </para>
     /// </remarks>
-    [ExcludeFromCodeCoverage()]
+    [ExcludeFromCodeCoverage]
     [Because("stolen from the internet")]
     [ExcludeFromConventions("stolen from the internet")]
     public class TernarySearchTree
     {
+        private Node _root;
+
         #region Nested Classes
 
         private class Node
@@ -50,13 +52,13 @@ namespace NZazu.Contracts.Suggest
                 SplitChar = splitChar;
             }
 
-            public bool HasChildren => (LowChild != null || MiddleChild != null || HighChild != null);
+            public bool HasChildren => LowChild != null || MiddleChild != null || HighChild != null;
 
-            public bool IsLowChild => (Parent != null && ReferenceEquals(Parent.LowChild, this));
+            public bool IsLowChild => Parent != null && ReferenceEquals(Parent.LowChild, this);
 
-            public bool IsHighChild => (Parent != null && ReferenceEquals(Parent.HighChild, this));
+            public bool IsHighChild => Parent != null && ReferenceEquals(Parent.HighChild, this);
 
-            private bool IsMiddleChild => (Parent != null && ReferenceEquals(Parent.MiddleChild, this));
+            private bool IsMiddleChild => Parent != null && ReferenceEquals(Parent.MiddleChild, this);
 
             public override string ToString()
             {
@@ -76,8 +78,6 @@ namespace NZazu.Contracts.Suggest
 
         #endregion
 
-        private Node _root;
-
         #region Public Interface
 
         public int Count { get; private set; }
@@ -95,24 +95,24 @@ namespace NZazu.Contracts.Suggest
         public bool Any(string prefix)
         {
             var node = Find(prefix);
-            return (node != null);
+            return node != null;
         }
 
         public bool Single(string key)
         {
             var node = Find(key);
-            return (node != null && node.IsKey);
+            return node != null && node.IsKey;
         }
 
         /// <summary>
-        /// Adds the specified prefix to the tree.
+        ///     Adds the specified prefix to the tree.
         /// </summary>
         /// <param name="key">The prefix to add.</param>
         /// <returns>True, if the prefix could be added; otherwise false</returns>
         /// <exception cref="ArgumentNullException">"Invalid prefix specified (null or empty).</exception>
-        public bool TryAdd(String key)
+        public bool TryAdd(string key)
         {
-            if (String.IsNullOrEmpty(key))
+            if (string.IsNullOrEmpty(key))
                 throw new ArgumentNullException(nameof(key));
 
             // create root node if necessary.		
@@ -120,11 +120,11 @@ namespace NZazu.Contracts.Suggest
                 _root = new Node(null, key[0]);
 
             // add prefix
-            Node node = _root;
-            int i = 0;
+            var node = _root;
+            var i = 0;
             while (i < key.Length)
             {
-                char c = key[i];
+                var c = key[i];
                 if (c < node.SplitChar)
                 {
                     if (node.LowChild == null)
@@ -143,10 +143,8 @@ namespace NZazu.Contracts.Suggest
                     if (i == key.Length)
                     {
                         if (node.IsKey)
-                        {
                             //throw new ArgumentException("prefix already in dictionary.");
                             return false;
-                        }
                         break;
                     }
 
@@ -164,10 +162,10 @@ namespace NZazu.Contracts.Suggest
         }
 
         /// <summary>
-        /// Adds a range of keys using a recursive partioning around the median element strategy
-        /// which is an fair approximation to keeping the tree balanced. 
-        /// See the paper "Fast Algorithms for Sorting and Searching Keys" of Bentley and Sedgewick,
-        /// e.g. at http://www.cs.princeton.edu/~rs/strings/
+        ///     Adds a range of keys using a recursive partioning around the median element strategy
+        ///     which is an fair approximation to keeping the tree balanced.
+        ///     See the paper "Fast Algorithms for Sorting and Searching Keys" of Bentley and Sedgewick,
+        ///     e.g. at http://www.cs.princeton.edu/~rs/strings/
         /// </summary>
         /// <param name="keys">The keys to add.</param>
         /// <param name="needSorting">if set to <c>true</c> input values will be sorted in ascending prefix order.</param>
@@ -183,14 +181,14 @@ namespace NZazu.Contracts.Suggest
         }
 
         /// <summary>
-        /// Removes the specified prefix from the tree.
+        ///     Removes the specified prefix from the tree.
         /// </summary>
         /// <param name="key">The prefix to remove.</param>
         /// <returns>True, if the prefix could be removed; otherwise false</returns>
         /// <exception cref="ArgumentNullException">Invalid prefix string specified (null or empty).</exception>
-        public bool TryRemove(String key)
+        public bool TryRemove(string key)
         {
-            if (String.IsNullOrEmpty(key))
+            if (string.IsNullOrEmpty(key))
                 throw new ArgumentException("Invalid prefix string specified (null or empty).");
 
             var node = Find(key);
@@ -205,7 +203,7 @@ namespace NZazu.Contracts.Suggest
             node.Key = null;
 
             // remove all single linked parent nodes up the hierarchy
-            while (!node.IsKey && !node.HasChildren && (node.Parent != null))
+            while (!node.IsKey && !node.HasChildren && node.Parent != null)
             {
                 // remove node from parent link
                 if (node.IsLowChild)
@@ -227,7 +225,7 @@ namespace NZazu.Contracts.Suggest
         }
 
         /// <summary>
-        /// Removes all elements from the tree.
+        ///     Removes all elements from the tree.
         /// </summary>
         public void Clear()
         {
@@ -236,7 +234,7 @@ namespace NZazu.Contracts.Suggest
         }
 
         /// <summary>
-        /// Gets all keys matching the specified prefix. If a null prefix is specified, all keys are returned.
+        ///     Gets all keys matching the specified prefix. If a null prefix is specified, all keys are returned.
         /// </summary>
         /// <param name="prefix">The prefix.</param>
         /// <returns />
@@ -250,11 +248,12 @@ namespace NZazu.Contracts.Suggest
                     matches.Add(node.Key);
                 GetKeys(node.MiddleChild, matches);
             }
+
             return matches;
         }
 
         /// <summary>
-        /// Partial match search with wild-char character.
+        ///     Partial match search with wild-char character.
         /// </summary>
         /// <param name="pattern">text pattern to match</param>
         /// <param name="wildChar">"don't care" character</param>
@@ -262,7 +261,7 @@ namespace NZazu.Contracts.Suggest
         /// <exception cref="ArgumentNullException">Invalid prefix string specified (null or empty).</exception>
         public IEnumerable<string> KeysLike(string pattern, char wildChar = '*')
         {
-            if (String.IsNullOrEmpty(pattern))
+            if (string.IsNullOrEmpty(pattern))
                 throw new ArgumentNullException(nameof(pattern));
 
             var matches = new List<string>();
@@ -271,16 +270,16 @@ namespace NZazu.Contracts.Suggest
         }
 
         /// <summary>
-        /// Near-neighbor search in the tree.
+        ///     Near-neighbor search in the tree.
         /// </summary>
         /// <param name="pattern">The pattern to search neighbors for.</param>
         /// <param name="distance">The maximum allowed hamming distance to the pattern.</param>
-        /// <returns>The neighbors within <paramref name="distance"/> to the pattern.</returns>
+        /// <returns>The neighbors within <paramref name="distance" /> to the pattern.</returns>
         /// <exception cref="ArgumentNullException">Invalid pattern (null or empty).</exception>
         /// <exception cref="ArgumentOutOfRangeException">Negative distance specified.</exception>
         public IEnumerable<string> KeysNearBy(string pattern, int distance)
         {
-            if (String.IsNullOrEmpty(pattern))
+            if (string.IsNullOrEmpty(pattern))
                 throw new ArgumentNullException(nameof(pattern));
             if (distance < 0)
                 throw new ArgumentOutOfRangeException(nameof(distance));
@@ -299,29 +298,33 @@ namespace NZazu.Contracts.Suggest
             if (keys == null) throw new ArgumentNullException(nameof(keys));
             if (left >= right)
                 return;
-            var pivot = (left + right)/2;
+            var pivot = (left + right) / 2;
             TryAdd(keys[pivot]);
             AddBalanced(keys, left, pivot);
             AddBalanced(keys, pivot + 1, right);
         }
 
         /// <summary>
-        /// Finds the closest node for the specified prefix.
+        ///     Finds the closest node for the specified prefix.
         /// </summary>
         /// <returns>The node closest to the specified prefix, null if not found.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="prefix"/> is null or empty.</exception>
-        private Node Find(String prefix)
+        /// <exception cref="ArgumentNullException"><paramref name="prefix" /> is null or empty.</exception>
+        private Node Find(string prefix)
         {
-            if (String.IsNullOrEmpty(prefix)) throw new ArgumentNullException(nameof(prefix));
+            if (string.IsNullOrEmpty(prefix)) throw new ArgumentNullException(nameof(prefix));
             var node = _root;
             var index = 0;
             while (index < prefix.Length && node != null)
             {
                 var c = prefix[index];
                 if (c < node.SplitChar)
+                {
                     node = node.LowChild;
+                }
                 else if (c > node.SplitChar)
+                {
                     node = node.HighChild;
+                }
                 else // c == node.SplitChar
                 {
                     if (index + 1 == prefix.Length) // found!
@@ -330,6 +333,7 @@ namespace NZazu.Contracts.Suggest
                     node = node.MiddleChild;
                 }
             }
+
             return null;
         }
 
@@ -345,7 +349,7 @@ namespace NZazu.Contracts.Suggest
         }
 
         private static void PartialMatch(Node node, string pattern, int index,
-                                         char wildChar, ICollection<string> matches)
+            char wildChar, ICollection<string> matches)
         {
             if (node == null)
                 return;
@@ -367,7 +371,7 @@ namespace NZazu.Contracts.Suggest
         }
 
         private static void NearNeighbors(Node node, string pattern, int index,
-                                          int dist, ICollection<string> matches)
+            int dist, ICollection<string> matches)
         {
             if (node == null || dist < 0)
                 return;

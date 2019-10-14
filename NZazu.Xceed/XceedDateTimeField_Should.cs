@@ -26,7 +26,7 @@ namespace NZazu.Xceed
         [Test]
         public void Be_Creatable()
         {
-            var sut = new XceedDateTimeField(new FieldDefinition { Key = "key" }, ServiceLocator);
+            var sut = new XceedDateTimeField(new FieldDefinition {Key = "key"}, ServiceLocator);
 
             sut.Should().NotBeNull();
             sut.Should().BeAssignableTo<INZazuWpfField>();
@@ -35,7 +35,7 @@ namespace NZazu.Xceed
         [Test]
         public void Override_ContentProperty()
         {
-            var sut = new XceedDateTimeField(new FieldDefinition { Key = "date" }, ServiceLocator);
+            var sut = new XceedDateTimeField(new FieldDefinition {Key = "date"}, ServiceLocator);
             sut.ContentProperty.Should().Be(DateTimePickerWithUpdate.ValueProperty);
         }
 
@@ -43,16 +43,16 @@ namespace NZazu.Xceed
         [STAThread]
         public void Use_Format_Settings()
         {
-            var sut = new XceedDateTimeField(new FieldDefinition { Key = "date" }, ServiceLocator);
+            var sut = new XceedDateTimeField(new FieldDefinition {Key = "date"}, ServiceLocator);
             const string dateFormat = "yyyy/MM/dd";
             sut.Definition.Settings.Add("Format", dateFormat);
 
-            var control = (DateTimePickerWithUpdate)sut.ValueControl;
+            var control = (DateTimePickerWithUpdate) sut.ValueControl;
             control.Format.Should().Be(DateTimeFormat.Custom);
             control.FormatString.Should().Be(dateFormat);
 
-            sut = new XceedDateTimeField(new FieldDefinition { Key = "date" }, ServiceLocator);
-            control = (DateTimePickerWithUpdate)sut.ValueControl;
+            sut = new XceedDateTimeField(new FieldDefinition {Key = "date"}, ServiceLocator);
+            control = (DateTimePickerWithUpdate) sut.ValueControl;
             control.Format.Should().Be(DateTimeFormat.FullDateTime);
             control.FormatString.Should().BeNull();
         }

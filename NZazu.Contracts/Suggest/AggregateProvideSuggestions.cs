@@ -4,8 +4,8 @@ using System.Linq;
 namespace NZazu.Contracts.Suggest
 {
     /// <summary>
-    /// aggregation provider merging different providers into one. this provider
-    /// uses a select many in case many provider handle the same data connection.
+    ///     aggregation provider merging different providers into one. this provider
+    ///     uses a select many in case many provider handle the same data connection.
     /// </summary>
     public class AggregateProvideSuggestions : IProvideSuggestions
     {

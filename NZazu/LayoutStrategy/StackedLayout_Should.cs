@@ -20,14 +20,14 @@ namespace NZazu.LayoutStrategy
     // ReSharper disable InconsistentNaming
     internal class StackedLayout_Should
     {
+        private Application application;
+
         private object ServiceLocator(Type type)
         {
             if (type == typeof(IValueConverter)) return NoExceptionsConverter.Instance;
             if (type == typeof(IFormatProvider)) return CultureInfo.InvariantCulture;
             throw new NotSupportedException($"Cannot lookup {type.Name}");
         }
-
-        private Application application;
 
         [SetUp]
         [ExcludeFromCodeCoverage]
@@ -67,12 +67,12 @@ namespace NZazu.LayoutStrategy
             var container = new ContentControl();
             var fields = new NZazuField[]
             {
-                new NZazuLabelField(new FieldDefinition {Key="label01"}, ServiceLocator),
+                new NZazuLabelField(new FieldDefinition {Key = "label01"}, ServiceLocator)
             };
 
             sut.DoLayout(container, fields);
 
-            var panel = (StackPanel)container.Content;
+            var panel = (StackPanel) container.Content;
             panel.Should().NotBeNull();
             panel.Orientation.Should().Be(Orientation.Horizontal);
             panel.VerticalAlignment.Should().Be(VerticalAlignment.Top);
@@ -87,14 +87,14 @@ namespace NZazu.LayoutStrategy
             var container = new ContentControl();
             var fields = new NZazuField[]
             {
-                new NZazuLabelField(new FieldDefinition {Key="lable01"}, ServiceLocator),
-                new NZazuTextField(new FieldDefinition {Key="text01"}, ServiceLocator),
-                new NZazuBoolField(new FieldDefinition {Key="bool01"}, ServiceLocator)
+                new NZazuLabelField(new FieldDefinition {Key = "lable01"}, ServiceLocator),
+                new NZazuTextField(new FieldDefinition {Key = "text01"}, ServiceLocator),
+                new NZazuBoolField(new FieldDefinition {Key = "bool01"}, ServiceLocator)
             };
 
             sut.DoLayout(container, fields);
 
-            var panel = (StackPanel)container.Content;
+            var panel = (StackPanel) container.Content;
             panel.Should().NotBeNull();
 
             panel.Children.Should().HaveCount(2);
@@ -111,20 +111,20 @@ namespace NZazu.LayoutStrategy
             var container = new ContentControl();
             var fields = new NZazuField[]
             {
-                new NZazuLabelField(new FieldDefinition {Key="label01",Prompt = "heading"}, ServiceLocator),
-                new NZazuTextField(new FieldDefinition {Key="text01"}, ServiceLocator),
-                new NZazuBoolField(new FieldDefinition {Key="bool01"}, ServiceLocator)
+                new NZazuLabelField(new FieldDefinition {Key = "label01", Prompt = "heading"}, ServiceLocator),
+                new NZazuTextField(new FieldDefinition {Key = "text01"}, ServiceLocator),
+                new NZazuBoolField(new FieldDefinition {Key = "bool01"}, ServiceLocator)
             };
 
             sut.DoLayout(container, fields);
 
-            var panel = (StackPanel)container.Content;
+            var panel = (StackPanel) container.Content;
             panel.Should().NotBeNull();
 
             panel.Children.Should().HaveCount(3);
-            panel.Children[0].Should().Be(fields[0].LabelControl, because: "we have a label bu no 'value'");
-            panel.Children[1].Should().Be(fields[1].ValueControl, because: "we have no labels");
-            panel.Children[2].Should().Be(fields[2].ValueControl, because: "we have no labels");
+            panel.Children[0].Should().Be(fields[0].LabelControl, "we have a label bu no 'value'");
+            panel.Children[1].Should().Be(fields[1].ValueControl, "we have no labels");
+            panel.Children[2].Should().Be(fields[2].ValueControl, "we have no labels");
         }
 
         [Test]
@@ -137,9 +137,9 @@ namespace NZazu.LayoutStrategy
             var container = new ContentControl();
             var fields = new NZazuField[]
             {
-                new NZazuLabelField(new FieldDefinition {Key="label01"}, ServiceLocator),
-                new NZazuTextField(new FieldDefinition {Key="text01"}, ServiceLocator),
-                new NZazuBoolField(new FieldDefinition {Key="bool01"}, ServiceLocator)
+                new NZazuLabelField(new FieldDefinition {Key = "label01"}, ServiceLocator),
+                new NZazuTextField(new FieldDefinition {Key = "text01"}, ServiceLocator),
+                new NZazuBoolField(new FieldDefinition {Key = "bool01"}, ServiceLocator)
             };
 
             fields

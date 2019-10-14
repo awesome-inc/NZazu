@@ -7,16 +7,10 @@ using NUnit.Framework;
 
 namespace NZazu.FieldBehavior
 {
-    [TestFixtureFor(typeof (BehaviorExtender))]
+    [TestFixtureFor(typeof(BehaviorExtender))]
     // ReSharper disable once InconsistentNaming
     internal class BehaviorExtender_Should
     {
-        #region inner classes for testing
-
-        private class DummyFieldBehavior : EmptyNZazuFieldBehavior { }
-
-        #endregion
-
         [Test]
         public void Be_Creatable()
         {
@@ -49,7 +43,8 @@ namespace NZazu.FieldBehavior
             var sut = new BehaviorExtender();
 
             sut.RegisterType(name, type);
-            sut.Behaviors.Should().Contain(kvp => string.Compare(kvp.Key, name, StringComparison.Ordinal) == 0 && kvp.Value == type);
+            sut.Behaviors.Should().Contain(kvp =>
+                string.Compare(kvp.Key, name, StringComparison.Ordinal) == 0 && kvp.Value == type);
 
             sut.UnregisterType(name);
             sut.Behaviors.Should().NotContain(kvp => string.Compare(kvp.Key, name, StringComparison.Ordinal) == 0);
@@ -58,7 +53,7 @@ namespace NZazu.FieldBehavior
         [Test]
         public void Do_Nothing_On_Remove_Registration_Of_Wrong_Name()
         {
-            var name = "I do not exist as registration. " + Guid.NewGuid().ToString();
+            var name = "I do not exist as registration. " + Guid.NewGuid();
             var sut = new BehaviorExtender();
 
             sut.UnregisterType(name);
@@ -95,8 +90,14 @@ namespace NZazu.FieldBehavior
                 const string name = "dummy";
                 BehaviorExtender.IsRegistered(name).Should().BeFalse();
                 BehaviorExtender.Register<DummyFieldBehavior>(name);
-                try { BehaviorExtender.IsRegistered(name).Should().BeTrue(); }
-                finally { BehaviorExtender.Unregister(name); }
+                try
+                {
+                    BehaviorExtender.IsRegistered(name).Should().BeTrue();
+                }
+                finally
+                {
+                    BehaviorExtender.Unregister(name);
+                }
             }
         }
 
@@ -112,5 +113,13 @@ namespace NZazu.FieldBehavior
             sut.Behaviors.Should()
                 .Contain(kvp => string.Compare(kvp.Key, name, StringComparison.Ordinal) == 0 && kvp.Value == type);
         }
+
+        #region inner classes for testing
+
+        private class DummyFieldBehavior : EmptyNZazuFieldBehavior
+        {
+        }
+
+        #endregion
     }
 }

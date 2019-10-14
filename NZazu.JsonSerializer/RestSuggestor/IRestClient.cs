@@ -7,7 +7,7 @@ namespace NZazu.JsonSerializer.RestSuggestor
 {
     public interface IRestClient
     {
-        Task<JToken> Request(HttpMethod method = null, string uri = null, JToken body = null);
         Uri BaseAddress { get; set; }
+        Task<JToken> Request(HttpMethod method = null, string uri = null, JToken body = null);
     }
 }

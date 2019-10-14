@@ -1,14 +1,14 @@
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Globalization;
+using System.Windows.Data;
 using NZazu.Contracts;
 using NZazu.Contracts.Adapter;
 using NZazu.Contracts.Suggest;
 using NZazu.Extensions;
 using NZazu.FieldBehavior;
 using NZazu.Serializer;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Globalization;
-using System.Windows.Data;
 
 namespace NZazu.Fields
 {
@@ -16,9 +16,9 @@ namespace NZazu.Fields
     {
         // ReSharper disable once InconsistentNaming
         private const string DefaultType = "default";
+        private readonly IDictionary<Type, object> _serviceLocator = new Dictionary<Type, object>();
 
         protected readonly IDictionary<string, Type> FieldTypes = new Dictionary<string, Type>();
-        private readonly IDictionary<Type, object> _serviceLocator = new Dictionary<Type, object>();
 
         public NZazuFieldFactory()
         {
@@ -33,7 +33,7 @@ namespace NZazu.Fields
             _serviceLocator.Add(typeof(IProvideSuggestions), new AggregateProvideSuggestions(new IProvideSuggestions[]
             {
                 new ProvideValueSuggestions(),
-                new ProvideFileSuggestions(),
+                new ProvideFileSuggestions()
             }));
 
             // lets add all NZazu core fields and types
@@ -55,9 +55,10 @@ namespace NZazu.Fields
 
         public INZazuWpfField CreateField(FieldDefinition fieldDefinition, int rowIdx = -1)
         {
-            var behaviourFactory = (INZazuWpfFieldBehaviorFactory)_serviceLocator[typeof(INZazuWpfFieldBehaviorFactory)];
-            var checkFactory = (ICheckFactory)_serviceLocator[typeof(ICheckFactory)];
-            var serializer = (INZazuTableDataSerializer)_serviceLocator[typeof(INZazuTableDataSerializer)];
+            var behaviourFactory =
+                (INZazuWpfFieldBehaviorFactory) _serviceLocator[typeof(INZazuWpfFieldBehaviorFactory)];
+            var checkFactory = (ICheckFactory) _serviceLocator[typeof(ICheckFactory)];
+            var serializer = (INZazuTableDataSerializer) _serviceLocator[typeof(INZazuTableDataSerializer)];
             _serviceLocator.TryGetValue(typeof(INZazuWpfView), out var view);
 
             if (fieldDefinition == null) throw new ArgumentNullException(nameof(fieldDefinition));
@@ -74,43 +75,15 @@ namespace NZazu.Fields
                 .AddBehaviors(fieldDefinition.Behaviors, behaviourFactory, view as INZazuWpfView)
                 .AddChecks(
                     fieldDefinition.Checks, checkFactory,
-                    () => ((INZazuView)view)?.FormData ?? new Dictionary<string, string>(), serializer, rowIdx);
+                    () => ((INZazuView) view)?.FormData ?? new Dictionary<string, string>(), serializer, rowIdx);
 #pragma warning restore 618
-        }
-
-        private NZazuField CreateFieldInstance(FieldDefinition fieldDefinition)
-        {
-            var fieldTypeSafe = fieldDefinition.Type ?? DefaultType;
-
-            NZazuField field;
-            if (FieldTypes.ContainsKey(fieldTypeSafe))
-                field = (NZazuField)Activator.CreateInstance(FieldTypes[fieldTypeSafe], fieldDefinition, (Func<Type, object>)Resolve<object>);
-            else
-            {
-                Trace.TraceWarning("The specified field type is not supported: " + fieldTypeSafe);
-                var res = ProofForAvailableDescription(fieldDefinition);
-                field = (NZazuField)Activator.CreateInstance(FieldTypes[DefaultType], res, (Func<Type, object>)Resolve<object>);
-            }
-
-            return field;
-        }
-
-        /// <summary>
-        /// Some unknown types which are mapped to "label" does not carry a "Description" with them.
-        /// The "Description" is taken as content for "label". If "Description" is not set you run into a System.NullReference exception otherwise.
-        /// <see cref="NZazuLabelField.CreateValueControl()"/>
-        /// </summary>
-        private static FieldDefinition ProofForAvailableDescription(FieldDefinition fieldDefinition)
-        {
-            fieldDefinition.Description = fieldDefinition.Description ?? "-";
-            return fieldDefinition;
         }
 
         public T Resolve<T>(Type x = null)
         {
             if (x == null) x = typeof(T);
 
-            return (T)(_serviceLocator.ContainsKey(x) ? _serviceLocator[x] : null);
+            return (T) (_serviceLocator.ContainsKey(x) ? _serviceLocator[x] : null);
         }
 
         public void Use<T>(T service)
@@ -120,6 +93,38 @@ namespace NZazu.Fields
             else
                 _serviceLocator.Add(typeof(T), service);
         }
-    }
 
+        private NZazuField CreateFieldInstance(FieldDefinition fieldDefinition)
+        {
+            var fieldTypeSafe = fieldDefinition.Type ?? DefaultType;
+
+            NZazuField field;
+            if (FieldTypes.ContainsKey(fieldTypeSafe))
+            {
+                field = (NZazuField) Activator.CreateInstance(FieldTypes[fieldTypeSafe], fieldDefinition,
+                    (Func<Type, object>) Resolve<object>);
+            }
+            else
+            {
+                Trace.TraceWarning("The specified field type is not supported: " + fieldTypeSafe);
+                var res = ProofForAvailableDescription(fieldDefinition);
+                field = (NZazuField) Activator.CreateInstance(FieldTypes[DefaultType], res,
+                    (Func<Type, object>) Resolve<object>);
+            }
+
+            return field;
+        }
+
+        /// <summary>
+        ///     Some unknown types which are mapped to "label" does not carry a "Description" with them.
+        ///     The "Description" is taken as content for "label". If "Description" is not set you run into a System.NullReference
+        ///     exception otherwise.
+        ///     <see cref="NZazuLabelField.CreateValueControl()" />
+        /// </summary>
+        private static FieldDefinition ProofForAvailableDescription(FieldDefinition fieldDefinition)
+        {
+            fieldDefinition.Description = fieldDefinition.Description ?? "-";
+            return fieldDefinition;
+        }
+    }
 }

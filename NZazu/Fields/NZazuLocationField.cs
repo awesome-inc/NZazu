@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -13,13 +12,14 @@ namespace NZazu.Fields
     internal class NZazuLocationField : NZazuField<NZazuCoordinate>
     {
         private readonly ISupportGeoLocationBox _geoSupport;
-        public override DependencyProperty ContentProperty => GeoLocationBox.ValueProperty;
 
         public NZazuLocationField(FieldDefinition definition, Func<Type, object> serviceLocatorFunc)
             : base(definition, serviceLocatorFunc)
         {
-            _geoSupport = (ISupportGeoLocationBox)serviceLocatorFunc(typeof(ISupportGeoLocationBox));
+            _geoSupport = (ISupportGeoLocationBox) serviceLocatorFunc(typeof(ISupportGeoLocationBox));
         }
+
+        public override DependencyProperty ContentProperty => GeoLocationBox.ValueProperty;
 
         public override void SetValue(string newValue)
         {

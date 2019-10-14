@@ -28,7 +28,7 @@ namespace NZazu.Fields
         [Test]
         public void Be_Creatable()
         {
-            var sut = new NZazuDateField(new FieldDefinition { Key = "key" }, ServiceLocator);
+            var sut = new NZazuDateField(new FieldDefinition {Key = "key"}, ServiceLocator);
 
             sut.Should().NotBeNull();
             sut.Should().BeAssignableTo<INZazuWpfField>();
@@ -45,7 +45,7 @@ namespace NZazu.Fields
                 Description = "check this if you are a registered superhero"
             }, ServiceLocator);
 
-            var datePicker = (DatePicker)sut.ValueControl;
+            var datePicker = (DatePicker) sut.ValueControl;
             datePicker.Should().NotBeNull();
             datePicker.Text.Should().BeEmpty();
             datePicker.ToolTip.Should().Be(sut.Definition.Description);
@@ -57,10 +57,10 @@ namespace NZazu.Fields
         public void Format_UIText_From_Value()
         {
             // ReSharper disable once UseObjectOrCollectionInitializer
-            var sut = new NZazuDateField(new FieldDefinition { Key = "key" }, ServiceLocator);
+            var sut = new NZazuDateField(new FieldDefinition {Key = "key"}, ServiceLocator);
             const string dateFormat = "yyyy_MM_dd";
             sut.Definition.Settings.Add("Format", dateFormat);
-            var datePicker = (DatePicker)sut.ValueControl;
+            var datePicker = (DatePicker) sut.ValueControl;
 
             sut.Value.Should().NotHaveValue();
             datePicker.Text.Should().BeEmpty();
@@ -84,8 +84,8 @@ namespace NZazu.Fields
         [STAThread]
         public void Format_SelectedDate_From_Value()
         {
-            var sut = new NZazuDateField(new FieldDefinition { Key = "key" }, ServiceLocator);
-            var datePicker = (DatePicker)sut.ValueControl;
+            var sut = new NZazuDateField(new FieldDefinition {Key = "key"}, ServiceLocator);
+            var datePicker = (DatePicker) sut.ValueControl;
 
             sut.Value.Should().NotHaveValue();
             datePicker.Text.Should().BeEmpty();
@@ -102,8 +102,8 @@ namespace NZazu.Fields
         [STAThread]
         public void Format_Value_From_TextBox()
         {
-            var sut = new NZazuDateField(new FieldDefinition { Key = "key" }, ServiceLocator);
-            var datePicker = (DatePicker)sut.ValueControl;
+            var sut = new NZazuDateField(new FieldDefinition {Key = "key"}, ServiceLocator);
+            var datePicker = (DatePicker) sut.ValueControl;
 
             sut.Value.Should().NotHaveValue();
             datePicker.Text.Should().BeEmpty();
@@ -121,8 +121,8 @@ namespace NZazu.Fields
         [STAThread]
         public void Format_TextBox_From_StringValue()
         {
-            var sut = new NZazuDateField(new FieldDefinition { Key = "key" }, ServiceLocator);
-            var datePicker = (DatePicker)sut.ValueControl;
+            var sut = new NZazuDateField(new FieldDefinition {Key = "key"}, ServiceLocator);
+            var datePicker = (DatePicker) sut.ValueControl;
 
             sut.GetValue().Should().BeNullOrEmpty();
             datePicker.Text.Should().BeEmpty();
@@ -139,8 +139,8 @@ namespace NZazu.Fields
         [STAThread]
         public void Format_StringValue_From_TextBox()
         {
-            var sut = new NZazuDateField(new FieldDefinition { Key = "key" }, ServiceLocator);
-            var datePicker = (DatePicker)sut.ValueControl;
+            var sut = new NZazuDateField(new FieldDefinition {Key = "key"}, ServiceLocator);
+            var datePicker = (DatePicker) sut.ValueControl;
 
             var now = DateTime.Now.Date;
             datePicker.SelectedDate = now;
@@ -158,7 +158,7 @@ namespace NZazu.Fields
         [Test]
         public void Consider_DateFormat_in_StringValue()
         {
-            var sut = new NZazuDateField(new FieldDefinition { Key = "key" }, ServiceLocator);
+            var sut = new NZazuDateField(new FieldDefinition {Key = "key"}, ServiceLocator);
 
             // DateFormat unspecified
             var date = DateTime.UtcNow;

@@ -16,7 +16,8 @@ namespace NZazu.Contracts.Checks
             int rowIdx,
             FieldDefinition field)
         {
-            _fieldMissing = new ValueCheckResult(new ArgumentException($"The field '{field.Prompt ?? field.Key}' is required"));
+            _fieldMissing =
+                new ValueCheckResult(new ArgumentException($"The field '{field.Prompt ?? field.Key}' is required"));
         }
 
         public ValueCheckResult Validate(string value, object parsedValue, IFormatProvider formatProvider = null)

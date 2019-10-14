@@ -11,14 +11,20 @@ namespace NZazu.JsonSerializer.RestSuggestor
     public class RestClient : IRestClient, IDisposable
     {
         internal static readonly JObject EmptyJson = new JObject();
-        private readonly List<IHookHttpRequest> _requestHooks;
         private readonly IHttpClient _httpClient;
-        public bool ThrowOnErrors { get; set; } = true;
+        private readonly List<IHookHttpRequest> _requestHooks;
 
         public RestClient(IHttpClient httpClient = null, IEnumerable<IHookHttpRequest> requestHooks = null)
         {
             _httpClient = httpClient ?? new HttpClientWrapper();
             _requestHooks = (requestHooks ?? Enumerable.Empty<IHookHttpRequest>()).ToList();
+        }
+
+        public bool ThrowOnErrors { get; set; } = true;
+
+        public void Dispose()
+        {
+            _httpClient.Dispose();
         }
 
         public async Task<JToken> Request(HttpMethod method = null, string uri = null, JToken body = null)
@@ -41,11 +47,6 @@ namespace NZazu.JsonSerializer.RestSuggestor
         {
             get => _httpClient.BaseAddress;
             set => _httpClient.BaseAddress = value;
-        }
-
-        public void Dispose()
-        {
-            _httpClient.Dispose();
         }
     }
 }

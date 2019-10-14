@@ -1,6 +1,4 @@
-﻿using System.IO;
-
-namespace NZazu.Contracts.Suggest
+﻿namespace NZazu.Contracts.Suggest
 {
     public interface IFileSystem
     {

@@ -22,7 +22,9 @@ namespace NZazu.FieldBehavior
         public void AttachTo(INZazuWpfField field, INZazuWpfView view)
         {
             if (field == null) throw new ArgumentNullException(nameof(field));
-            if (view == null) throw new ArgumentNullException(nameof(view), "this value should not be null and for testing we check it here");
+            if (view == null)
+                throw new ArgumentNullException(nameof(view),
+                    "this value should not be null and for testing we check it here");
             var valueControl = field.ValueControl;
 
             _control = valueControl;
@@ -42,9 +44,9 @@ namespace NZazu.FieldBehavior
 
         private void HandleKeyUp(object sender, KeyEventArgs e)
         {
-            if (!((Keyboard.Modifiers == ModifierKeys.Control) && (e.Key == Key.Return))) return;
+            if (!(Keyboard.Modifiers == ModifierKeys.Control && e.Key == Key.Return)) return;
 
-            var link = GetLinkAtPosition(((TextBox)_control).Text, ((TextBox)_control).SelectionStart);
+            var link = GetLinkAtPosition(((TextBox) _control).Text, ((TextBox) _control).SelectionStart);
             if (link == null) return;
 
             Process.Start(link);

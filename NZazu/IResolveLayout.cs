@@ -1,4 +1,6 @@
 namespace NZazu
 {
-    public interface IResolveLayout : IResolveFromName<INZazuWpfLayoutStrategy> { }
+    public interface IResolveLayout : IResolveFromName<INZazuWpfLayoutStrategy>
+    {
+    }
 }

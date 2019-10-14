@@ -10,7 +10,8 @@ namespace NZazu.FieldBehavior
         public INZazuWpfFieldBehavior CreateFieldBehavior(BehaviorDefinition behaviorDefinition)
         {
             if (behaviorDefinition == null) throw new ArgumentNullException(nameof(behaviorDefinition));
-            if (string.IsNullOrWhiteSpace(behaviorDefinition.Name)) throw new ArgumentException("BehaviorDefinition.Name should be set");
+            if (string.IsNullOrWhiteSpace(behaviorDefinition.Name))
+                throw new ArgumentException("BehaviorDefinition.Name should be set");
 
             var behaviorTypes = BehaviorExtender.Instance.Behaviors.ToArray();
             var behaviorType =
@@ -19,12 +20,13 @@ namespace NZazu.FieldBehavior
 
             if (behaviorType == null) return null;
 
-            var behavior = (INZazuWpfFieldBehavior)Activator.CreateInstance(behaviorType);
+            var behavior = (INZazuWpfFieldBehavior) Activator.CreateInstance(behaviorType);
             return Decorate(behavior, behaviorDefinition);
         }
 
 
-        private static INZazuWpfFieldBehavior Decorate(INZazuWpfFieldBehavior behavior, BehaviorDefinition behaviorDefinition)
+        private static INZazuWpfFieldBehavior Decorate(INZazuWpfFieldBehavior behavior,
+            BehaviorDefinition behaviorDefinition)
         {
             if (behavior == null) throw new ArgumentNullException(nameof(behavior));
             if (behaviorDefinition == null) throw new ArgumentNullException(nameof(behaviorDefinition));

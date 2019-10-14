@@ -6,15 +6,17 @@ using System.Linq;
 namespace NZazu.Contracts.Suggest
 {
     /// <summary>
-    /// provider for native values retrieved from a file containing a entry per row string array.
-    /// settings: "dataConnection" -> "f:[file path]"
+    ///     provider for native values retrieved from a file containing a entry per row string array.
+    ///     settings: "dataConnection" -> "f:[file path]"
     /// </summary>
     public class ProvideFileSuggestions : IProvideSuggestions
     {
-        private readonly IFileSystem _filesystem;
-        private readonly IDictionary<string, IEnumerable<string>> _cache = new Dictionary<string, IEnumerable<string>>();
-
         private const string ConnectionPrefix = "file://";
+
+        private readonly IDictionary<string, IEnumerable<string>>
+            _cache = new Dictionary<string, IEnumerable<string>>();
+
+        private readonly IFileSystem _filesystem;
 
         public ProvideFileSuggestions(IFileSystem filesystem = null)
         {
@@ -41,7 +43,8 @@ namespace NZazu.Contracts.Suggest
             // we don't cache non existing file
             if (!_filesystem.FileExists(file))
             {
-                Trace.WriteLine($"cannot get values from file '{file}' because file does not exist. returning empty array. nothing added to cache");
+                Trace.WriteLine(
+                    $"cannot get values from file '{file}' because file does not exist. returning empty array. nothing added to cache");
                 return Enumerable.Empty<string>();
             }
 

@@ -20,14 +20,15 @@ namespace NZazu.Xceed
             {
                 new ExcludeFromCodeCoverageClassHasBecauseAttribute(),
                 new AllClassesNeedATest(),
-                new TestClassesShouldMatchClassToTest(), 
-                new TestClassesShouldBePrivate(),
+                new TestClassesShouldMatchClassToTest(),
+                new TestClassesShouldBePrivate()
             });
             // customized
             Conventions.AddRange(ConventionsFor<NZazuConventions>());
         }
 
-        [Test, TestCaseSource(nameof(TypesToTest))]
+        [Test]
+        [TestCaseSource(nameof(TypesToTest))]
         public void Check(Type typeToTest)
         {
             Conventions.Check(typeToTest);

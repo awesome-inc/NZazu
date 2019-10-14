@@ -5,7 +5,8 @@ namespace NZazu.Extensions
 {
     public static class ViewExtensions
     {
-        public static void SetFieldValues(this INZazuWpfView view, IEnumerable<KeyValuePair<string, string>> fieldValues)
+        public static void SetFieldValues(this INZazuWpfView view,
+            IEnumerable<KeyValuePair<string, string>> fieldValues)
         {
             if (view == null) throw new ArgumentNullException(nameof(view));
             if (fieldValues == null) throw new ArgumentNullException(nameof(fieldValues));

@@ -10,7 +10,9 @@ namespace NZazu.Fields
     public class NZazuIntegerField : NZazuField<int?>
     {
         public NZazuIntegerField(FieldDefinition definition, Func<Type, object> serviceLocatorFunc)
-            : base(definition, serviceLocatorFunc) { }
+            : base(definition, serviceLocatorFunc)
+        {
+        }
 
         public override DependencyProperty ContentProperty => TextBox.TextProperty;
 
@@ -22,7 +24,7 @@ namespace NZazu.Fields
 
         protected override Control CreateValueControl()
         {
-            return new TextBox { ToolTip = Definition.Description };
+            return new TextBox {ToolTip = Definition.Description};
         }
 
         public override void SetValue(string value)
@@ -39,4 +41,3 @@ namespace NZazu.Fields
         }
     }
 }
-

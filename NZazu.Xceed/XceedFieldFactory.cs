@@ -1,12 +1,10 @@
-﻿using NZazu.Contracts;
-using NZazu.Fields;
+﻿using NZazu.Fields;
 
 namespace NZazu.Xceed
 {
     public class XceedFieldFactory : NZazuFieldFactory
     {
         public XceedFieldFactory()
-            : base()
         {
             FieldTypes["string"] = typeof(XceedTextBoxField);
             FieldTypes["date"] = typeof(XceedDateTimeField);

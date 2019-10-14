@@ -9,6 +9,8 @@ namespace NZazu.FieldBehavior
             if (field == null) throw new ArgumentNullException(nameof(field));
         }
 
-        public override void Detach() { }
+        public override void Detach()
+        {
+        }
     }
 }

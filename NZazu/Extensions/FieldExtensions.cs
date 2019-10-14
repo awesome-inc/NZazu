@@ -14,9 +14,9 @@ namespace NZazu.Extensions
         public static bool IsReadOnly(this INZazuWpfField field)
         {
             if (field == null) throw new ArgumentNullException(nameof(field));
-            if (!field.IsEditable) 
+            if (!field.IsEditable)
                 return true;
-            if (field is INZazuWpfFieldContainer) 
+            if (field is INZazuWpfFieldContainer)
                 return true;
 
             var control = field.ValueControl;
@@ -29,9 +29,9 @@ namespace NZazu.Extensions
         public static void SetReadOnly(this INZazuWpfField field, bool isReadOnly)
         {
             if (field == null) throw new ArgumentNullException(nameof(field));
-            if (!field.IsEditable) 
+            if (!field.IsEditable)
                 return;
-            if (field is INZazuWpfFieldContainer) 
+            if (field is INZazuWpfFieldContainer)
                 return;
 
             var control = field.ValueControl;

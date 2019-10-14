@@ -1,9 +1,9 @@
 using System.Linq;
 using System.Net.Http;
 using FluentAssertions;
-using Newtonsoft.Json.Linq;
 using NEdifis;
 using NEdifis.Attributes;
+using Newtonsoft.Json.Linq;
 using NSubstitute;
 using NUnit.Framework;
 
@@ -13,6 +13,37 @@ namespace NZazu.JsonSerializer.RestSuggestor
     // ReSharper disable once InconsistentNaming
     internal class ElasticSearchSuggestions_Should
     {
+        [Test]
+        public void Read_JToken_From_Response()
+        {
+            var ctx = new ContextFor<ElasticSearchSuggestions>();
+            var sut = ctx.BuildSut();
+
+            var items = sut.GetSuggestions(TestData.Hits, "Tho").ToArray();
+
+            items.Should().Equal("Thomate", "Thomas", "Thomas Smith");
+            items.Should().NotContain("Horst");
+        }
+
+        [Test]
+        public void Query_On_For()
+        {
+            var ctx = new ContextFor<ElasticSearchSuggestions>();
+            ctx.Use("http://127.0.0.1:9200", "connectionPrefix");
+            ctx.For<IRestClient>()
+                .Request(HttpMethod.Post, "_search", Arg.Any<JToken>())
+                .Returns(TestData.Hits);
+            var sut = ctx.BuildSut();
+
+            var items = sut.For("Tho", "elasticsearch://nzazu/autocomplete|director").ToArray();
+            items.Should().Equal("Thomate", "Thomas", "Thomas Smith");
+            items.Should().NotContain("Horst");
+
+            items = sut.For("Tho", "elasticsearch://nzazu/autocomplete|director").ToArray();
+            items.Should().Equal("Thomate", "Thomas", "Thomas Smith");
+            items.Should().NotContain("Horst");
+        }
+
         private static class TestData
         {
             #region sample hits
@@ -113,38 +144,8 @@ namespace NZazu.JsonSerializer.RestSuggestor
     ]
   }
 }");
+
             #endregion
-        }
-
-        [Test]
-        public void Read_JToken_From_Response()
-        {
-            var ctx = new ContextFor<ElasticSearchSuggestions>();
-            var sut = ctx.BuildSut();
-
-            var items = sut.GetSuggestions(TestData.Hits, "Tho").ToArray();
-
-            items.Should().Equal("Thomate", "Thomas", "Thomas Smith");
-            items.Should().NotContain("Horst");
-        }
-
-        [Test]
-        public void Query_On_For()
-        {
-            var ctx = new ContextFor<ElasticSearchSuggestions>();
-            ctx.Use("http://127.0.0.1:9200", "connectionPrefix");
-            ctx.For<IRestClient>()
-                .Request(HttpMethod.Post, "_search", Arg.Any<JToken>())
-                .Returns(TestData.Hits);
-            var sut = ctx.BuildSut();
-
-            var items = sut.For("Tho", "elasticsearch://nzazu/autocomplete|director").ToArray();
-            items.Should().Equal("Thomate", "Thomas", "Thomas Smith");
-            items.Should().NotContain("Horst");
-
-            items = sut.For("Tho", "elasticsearch://nzazu/autocomplete|director").ToArray();
-            items.Should().Equal("Thomate", "Thomas", "Thomas Smith");
-            items.Should().NotContain("Horst");
         }
     }
 }

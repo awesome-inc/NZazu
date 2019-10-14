@@ -13,10 +13,10 @@ namespace NZazuFiddle
     public class PreviewViewModel : Screen, IPreviewViewModel
     {
         private readonly IEventAggregator _events;
-        private FormDefinition _definition;
         private FormData _data;
-        private bool _inHandle;
+        private FormDefinition _definition;
         private INZazuWpfFieldFactory _fieldFactory;
+        private bool _inHandle;
         private bool _isReadOnly;
 
         public PreviewViewModel(IEventAggregator events,
@@ -34,12 +34,13 @@ namespace NZazuFiddle
 
             var dbSuggestor =
                 new SuggestionsProxy(
-                    new ElasticSearchSuggestions(connectionPrefix:"http://127.0.0.1:9200")) // instead of localhost. this changes the server
-                {
-                    BlackListSize = 10,
-                    CacheSize = 3000,
-                    MaxFailures = int.MaxValue
-                };
+                        new ElasticSearchSuggestions(
+                            connectionPrefix: "http://127.0.0.1:9200")) // instead of localhost. this changes the server
+                    {
+                        BlackListSize = 10,
+                        CacheSize = 3000,
+                        MaxFailures = int.MaxValue
+                    };
 
             // lets do some stuff with the suggestor
             _fieldFactory.Use<IProvideSuggestions>(new AggregateProvideSuggestions(new IProvideSuggestions[]
@@ -95,15 +96,6 @@ namespace NZazuFiddle
             }
         }
 
-        protected override void OnActivate()
-        {
-            base.OnActivate();
-            if (Data.Values == null || !Data.Values.ContainsKey(NZazuView.FocusOnFieldName)) return;
-
-            var view = GetView() as PreviewView;
-            view?.View.TrySetFocusOn();
-        }
-
         public void Handle(FormDefinition definition)
         {
             Definition = definition;
@@ -113,8 +105,23 @@ namespace NZazuFiddle
         {
             if (_inHandle) return;
             _inHandle = true;
-            try { Data = data; }
-            finally { _inHandle = false; }
+            try
+            {
+                Data = data;
+            }
+            finally
+            {
+                _inHandle = false;
+            }
+        }
+
+        protected override void OnActivate()
+        {
+            base.OnActivate();
+            if (Data.Values == null || !Data.Values.ContainsKey(NZazuView.FocusOnFieldName)) return;
+
+            var view = GetView() as PreviewView;
+            view?.View.TrySetFocusOn();
         }
     }
 }

@@ -13,7 +13,9 @@ namespace NZazu.Xceed
         public const double DefaultHeight = 80.0d;
 
         public XceedRichTextField(FieldDefinition definition, Func<Type, object> serviceLocatorFunc)
-            : base(definition, serviceLocatorFunc) { }
+            : base(definition, serviceLocatorFunc)
+        {
+        }
 
         public override DependencyProperty ContentProperty => RichTextBox.TextProperty;
 

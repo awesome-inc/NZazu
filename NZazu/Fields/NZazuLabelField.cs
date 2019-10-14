@@ -14,15 +14,27 @@ namespace NZazu.Fields
             IsEditable = false;
         }
 
-        public override void SetValue(string value) { }
-        public override string GetValue() { return null; }
+        public override DependencyProperty ContentProperty => null;
+
+        public override void SetValue(string value)
+        {
+        }
+
+        public override string GetValue()
+        {
+            return null;
+        }
+
         public override ValueCheckResult Validate()
         {
             return ValueCheckResult.Success;
         }
 
-        public override DependencyProperty ContentProperty => null;
-
-        protected override Control CreateValueControl() { return !string.IsNullOrWhiteSpace(Definition.Description) ? new Label { Content = Definition.Description } : null; }
+        protected override Control CreateValueControl()
+        {
+            return !string.IsNullOrWhiteSpace(Definition.Description)
+                ? new Label {Content = Definition.Description}
+                : null;
+        }
     }
 }

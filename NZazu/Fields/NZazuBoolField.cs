@@ -8,7 +8,12 @@ namespace NZazu.Fields
     public class NZazuBoolField : NZazuField<bool?>
     {
         public NZazuBoolField(FieldDefinition definition, Func<Type, object> serviceLocatorFunc)
-            : base(definition, serviceLocatorFunc) { }
+            : base(definition, serviceLocatorFunc)
+        {
+        }
+
+        // ReSharper disable once AccessToStaticMemberViaDerivedType
+        public override DependencyProperty ContentProperty => CheckBox.IsCheckedProperty;
 
         public override void SetValue(string value)
         {
@@ -23,9 +28,6 @@ namespace NZazu.Fields
         {
             return Value?.ToString() ?? string.Empty;
         }
-
-        // ReSharper disable once AccessToStaticMemberViaDerivedType
-        public override DependencyProperty ContentProperty => CheckBox.IsCheckedProperty;
 
         protected override Control CreateValueControl()
         {

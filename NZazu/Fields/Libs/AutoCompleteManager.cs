@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
@@ -17,15 +18,17 @@ using NZazu.Contracts.Suggest;
 
 namespace NZazu.Fields.Libs
 {
-    [ExcludeFromCodeCoverage()]
+    [ExcludeFromCodeCoverage]
     [Because("Public classes are untestable. A lot of windows internal calls")]
     public class AutoCompleteManager
     {
+        private const int PopupShadowDepth = 5;
+
         // ReSharper disable InconsistentNaming
         private const int WM_NCLBUTTONDOWN = 0x00A1;
+
         private const int WM_NCRBUTTONDOWN = 0x00A4;
         // ReSharper restore InconsistentNaming
-        private const int PopupShadowDepth = 5;
 
         #region Internal States
 
@@ -59,14 +62,11 @@ namespace NZazu.Fields.Libs
 
         public bool Disabled
         {
-            get { return _disabled; }
+            get => _disabled;
             set
             {
                 _disabled = value;
-                if (_disabled && _popup != null)
-                {
-                    _popup.IsOpen = false;
-                }
+                if (_disabled && _popup != null) _popup.IsOpen = false;
             }
         }
 
@@ -110,7 +110,7 @@ namespace NZazu.Fields.Libs
 
 
             // when not in design mode, hook up initialization to owner window events
-            if (System.ComponentModel.DesignerProperties.GetIsInDesignMode(textBox)) return;
+            if (DesignerProperties.GetIsInDesignMode(textBox)) return;
             var ownerWindow = Window.GetWindow(textBox);
             // ReSharper disable PossibleNullReferenceException
             // ReSharper disable InvocationIsSkipped
@@ -137,10 +137,10 @@ namespace NZazu.Fields.Libs
         private void Initialize()
         {
             _listBox = new ListBox();
-            var tempItem = new ListBoxItem { Content = "TEMP_ITEM_FOR_MEASUREMENT" };
+            var tempItem = new ListBoxItem {Content = "TEMP_ITEM_FOR_MEASUREMENT"};
             _listBox.Items.Add(tempItem);
             _listBox.Focusable = false;
-            _listBox.Style = (Style)Application.Current.Resources["AcTb_ListBoxStyle"];
+            _listBox.Style = (Style) Application.Current.Resources["AcTb_ListBoxStyle"];
 
             _chrome = new SystemDropShadowChrome
             {
@@ -173,8 +173,8 @@ namespace NZazu.Fields.Libs
 
         private void GetInnerElementReferences()
         {
-            var border = (Border)_listBox.Template.FindName("Border", _listBox);
-            _scrollViewer = (ScrollViewer)border.Child;
+            var border = (Border) _listBox.Template.FindName("Border", _listBox);
+            _scrollViewer = (ScrollViewer) border.Child;
             _resizeGrip = _scrollViewer.Template.FindName("ResizeGrip", _scrollViewer) as ResizeGrip;
             _scrollBar = _scrollViewer.Template.FindName("PART_VerticalScrollBar", _scrollViewer) as ScrollBar;
         }
@@ -182,14 +182,14 @@ namespace NZazu.Fields.Libs
         private void UpdateGripVisual()
         {
             var rectSize = SystemParameters.VerticalScrollBarWidth;
-            var triangle = (Path)_resizeGrip.Template.FindName("RG_TRIANGLE", _resizeGrip);
-            var pg = (PathGeometry)triangle.Data;
+            var triangle = (Path) _resizeGrip.Template.FindName("RG_TRIANGLE", _resizeGrip);
+            var pg = (PathGeometry) triangle.Data;
             pg = pg.CloneCurrentValue();
             var figure = pg.Figures[0];
             var p = figure.StartPoint;
             p.X = rectSize;
             figure.StartPoint = p;
-            var line = (PolyLineSegment)figure.Segments[0];
+            var line = (PolyLineSegment) figure.Segments[0];
             p = line.Points[0];
             p.Y = rectSize;
             line.Points[0] = p;
@@ -258,11 +258,12 @@ namespace NZazu.Fields.Libs
                 _asyncThread = new Thread(() =>
                 {
                     var dispatcher = _textBox.Dispatcher; // Application.Current.Dispatcher;
-                    var currentText = (String)dispatcher.Invoke((Func<TextBox, string>)(txtBox => txtBox.Text), _textBox);
+                    var currentText =
+                        (string) dispatcher.Invoke((Func<TextBox, string>) (txtBox => txtBox.Text), _textBox);
                     if (text != currentText)
                         return;
                     var items = GetSuggestions(text, DataConnection);
-                    dispatcher.Invoke((Action<IEnumerable<string>>)(PopulatePopupList), items);
+                    dispatcher.Invoke((Action<IEnumerable<string>>) PopulatePopupList, items);
                 });
                 _asyncThread.Start();
             }
@@ -319,18 +320,20 @@ namespace NZazu.Fields.Libs
                             index = -1;
                             break;
                         default:
-                            if (index == (int)_scrollBar.Value)
+                            if (index == (int) _scrollBar.Value)
                             {
-                                index -= (int)_scrollBar.ViewportSize;
+                                index -= (int) _scrollBar.ViewportSize;
                                 if (index < 0)
                                     index = 0;
                             }
                             else
                             {
-                                index = (int)_scrollBar.Value;
+                                index = (int) _scrollBar.Value;
                             }
+
                             break;
                     }
+
                     break;
                 case Key.PageDown:
                     if (index == -1)
@@ -341,28 +344,22 @@ namespace NZazu.Fields.Libs
                     {
                         index = -1;
                     }
-                    else if (index == (int)(_scrollBar.Value + _scrollBar.ViewportSize) - 1)
+                    else if (index == (int) (_scrollBar.Value + _scrollBar.ViewportSize) - 1)
                     {
-                        index += (int)_scrollBar.ViewportSize - 1;
-                        if (index > _listBox.Items.Count - 1)
-                        {
-                            index = _listBox.Items.Count - 1;
-                        }
+                        index += (int) _scrollBar.ViewportSize - 1;
+                        if (index > _listBox.Items.Count - 1) index = _listBox.Items.Count - 1;
                     }
                     else
                     {
-                        index = (int)(_scrollBar.Value + _scrollBar.ViewportSize - 1);
+                        index = (int) (_scrollBar.Value + _scrollBar.ViewportSize - 1);
                     }
+
                     break;
                 case Key.Up:
                     if (index == -1)
-                    {
                         index = _listBox.Items.Count - 1;
-                    }
                     else
-                    {
                         --index;
-                    }
                     break;
                 case Key.Down:
                     ++index;
@@ -383,6 +380,7 @@ namespace NZazu.Fields.Libs
                     _listBox.ScrollIntoView(_listBox.SelectedItem);
                     text = _listBox.SelectedItem as string;
                 }
+
                 UpdateText(text, false);
                 e.Handled = true;
             }
@@ -401,10 +399,7 @@ namespace NZazu.Fields.Libs
         {
             var pos = e.GetPosition(_listBox);
             var hitTestResult = VisualTreeHelper.HitTest(_listBox, pos);
-            if (hitTestResult == null)
-            {
-                return;
-            }
+            if (hitTestResult == null) return;
             var d = hitTestResult.VisualHit;
             while (d != null)
             {
@@ -413,32 +408,28 @@ namespace NZazu.Fields.Libs
                     e.Handled = true;
                     break;
                 }
+
                 d = VisualTreeHelper.GetParent(d);
             }
         }
 
         private void ListBoxPreviewMouseMove(object sender, MouseEventArgs e)
         {
-            if (Mouse.Captured != null)
-            {
-                return;
-            }
+            if (Mouse.Captured != null) return;
             var pos = e.GetPosition(_listBox);
             var hitTestResult = VisualTreeHelper.HitTest(_listBox, pos);
-            if (hitTestResult == null)
-            {
-                return;
-            }
+            if (hitTestResult == null) return;
             var d = hitTestResult.VisualHit;
             while (d != null)
             {
                 if (d is ListBoxItem)
                 {
-                    var item = (d as ListBoxItem);
+                    var item = d as ListBoxItem;
                     item.IsSelected = true;
                     //                    _listBox.ScrollIntoView(item);
                     break;
                 }
+
                 d = VisualTreeHelper.GetParent(d);
             }
         }
@@ -454,8 +445,10 @@ namespace NZazu.Fields.Libs
                     item = d as ListBoxItem;
                     break;
                 }
+
                 d = VisualTreeHelper.GetParent(d);
             }
+
             if (item != null)
             {
                 _popup.IsOpen = false;
@@ -483,37 +476,26 @@ namespace NZazu.Fields.Libs
 
         private void ResizeGripPreviewMouseMove(object sender, MouseEventArgs e)
         {
-            if (e.LeftButton != MouseButtonState.Pressed)
-            {
-                return;
-            }
+            if (e.LeftButton != MouseButtonState.Pressed) return;
             var ptMove = e.GetPosition(_resizeGrip);
             ptMove = _resizeGrip.PointToScreen(ptMove);
             var dx = ptMove.X - _ptDown.X;
             var dy = ptMove.Y - _ptDown.Y;
             var newWidth = _downWidth + dx;
 
-            if (Math.Abs(newWidth - _popup.Width) > Epsilon && newWidth > 0)
-            {
-                _popup.Width = newWidth;
-            }
+            if (Math.Abs(newWidth - _popup.Width) > Epsilon && newWidth > 0) _popup.Width = newWidth;
 
             if (PopupOnTop)
             {
                 var bottom = _downHeight;
                 var newTop = dy;
                 if (Math.Abs(newTop - _popup.VerticalOffset) > Epsilon && newTop < bottom - _popup.MinHeight)
-                {
                     _popup.Height = bottom - newTop;
-                }
             }
             else
             {
                 var newHeight = _downHeight + dy;
-                if (Math.Abs(newHeight - _popup.Height) > Epsilon && newHeight > 0)
-                {
-                    _popup.Height = newHeight;
-                }
+                if (Math.Abs(newHeight - _popup.Height) > Epsilon && newHeight > 0) _popup.Height = newHeight;
             }
         }
 
@@ -521,9 +503,7 @@ namespace NZazu.Fields.Libs
         {
             _resizeGrip.ReleaseMouseCapture();
             if (Math.Abs(_popup.Width - _downWidth) > Epsilon || Math.Abs(_popup.Height - _downHeight) > Epsilon)
-            {
                 _manualResized = true;
-            }
         }
 
         #endregion
@@ -543,7 +523,7 @@ namespace NZazu.Fields.Libs
 
         // ReSharper disable RedundantAssignment
         private IntPtr HookHandler(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
-        // ReSharper restore RedundantAssignment
+            // ReSharper restore RedundantAssignment
         {
             handled = false;
 
@@ -554,6 +534,7 @@ namespace NZazu.Fields.Libs
                     _popup.IsOpen = false;
                     break;
             }
+
             return IntPtr.Zero;
         }
 
@@ -572,7 +553,7 @@ namespace NZazu.Fields.Libs
                 return;
             }
 
-            var firstSuggestion = (string)_listBox.Items[0];
+            var firstSuggestion = (string) _listBox.Items[0];
             if (_listBox.Items.Count == 1 && text.Equals(firstSuggestion, StringComparison.OrdinalIgnoreCase))
             {
                 _popup.IsOpen = false;
@@ -606,13 +587,10 @@ namespace NZazu.Fields.Libs
 
         private bool PopupOnTop
         {
-            get { return _popupOnTop; }
+            get => _popupOnTop;
             set
             {
-                if (_popupOnTop == value)
-                {
-                    return;
-                }
+                if (_popupOnTop == value) return;
                 _popupOnTop = value;
                 if (_popupOnTop)
                 {
@@ -647,10 +625,7 @@ namespace NZazu.Fields.Libs
 
             var popupTop = tbBottom;
 
-            if (!_manualResized)
-            {
-                _popup.Width = _textBox.ActualWidth + PopupShadowDepth;
-            }
+            if (!_manualResized) _popup.Width = _textBox.ActualWidth + PopupShadowDepth;
 
             double popupHeight;
             if (_manualResized)
@@ -662,6 +637,7 @@ namespace NZazu.Fields.Libs
                 var visibleCount = Math.Min(16, _listBox.Items.Count + 1);
                 popupHeight = visibleCount * _itemHeight + PopupShadowDepth;
             }
+
             var screenHeight = SystemParameters.PrimaryScreenHeight;
             if (popupTop + popupHeight > screenHeight)
             {
@@ -673,12 +649,10 @@ namespace NZazu.Fields.Libs
                 {
                     popupOnTop = true;
                     popupTop = tbTop - popupHeight + 4;
-                    if (popupTop < 0)
-                    {
-                        popupHeight = tbTop + 4;
-                    }
+                    if (popupTop < 0) popupHeight = tbTop + 4;
                 }
             }
+
             PopupOnTop = popupOnTop;
             _popup.Height = popupHeight;
 
@@ -690,13 +664,9 @@ namespace NZazu.Fields.Libs
             _textChangedByCode = true;
             _textBox.Text = text;
             if (selectAll)
-            {
                 _textBox.SelectAll();
-            }
             else
-            {
                 _textBox.SelectionStart = text.Length;
-            }
             _textChangedByCode = false;
         }
 

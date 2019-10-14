@@ -1,12 +1,12 @@
-﻿using FluentAssertions;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Reflection;
+using FluentAssertions;
 using NEdifis;
 using NEdifis.Attributes;
 using NSubstitute;
 using NUnit.Framework;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Reflection;
 
 namespace NZazu.Contracts.Checks
 {
@@ -19,8 +19,8 @@ namespace NZazu.Contracts.Checks
         {
             var settings = new Dictionary<string, string>
             {
-                { "FieldToCompareWith", "stopTime" },
-                { "CompareOperator", "<"}
+                {"FieldToCompareWith", "stopTime"},
+                {"CompareOperator", "<"}
             } as IDictionary<string, string>;
             var formData = new FormData();
 
@@ -37,13 +37,13 @@ namespace NZazu.Contracts.Checks
         [Test]
         public void Registered_At_CheckFactory()
         {
-            var settings = new Dictionary<string, string> { { "Min", "2" }, { "Max", "6" } } as IDictionary<string, string>;
+            var settings = new Dictionary<string, string> {{"Min", "2"}, {"Max", "6"}} as IDictionary<string, string>;
             var checkType = typeof(RangeCheck);
 
             var sut = new CheckFactory();
 
-            var checkDefinition = new CheckDefinition { Type = "range", Settings = settings };
-            var check = sut.CreateCheck(checkDefinition, new FieldDefinition { Key = "key1" });
+            var checkDefinition = new CheckDefinition {Type = "range", Settings = settings};
+            var check = sut.CreateCheck(checkDefinition, new FieldDefinition {Key = "key1"});
 
             check.Should().NotBeNull();
             check.Should().BeOfType(checkType);
@@ -62,8 +62,8 @@ namespace NZazu.Contracts.Checks
 
             var settings = new Dictionary<string, string>
             {
-                { "FieldToCompareWith", "stopTime" },
-                { "CompareOperator", "<"}
+                {"FieldToCompareWith", "stopTime"},
+                {"CompareOperator", "<"}
             } as IDictionary<string, string>;
             var ctx = new ContextFor<DateTimeComparisonCheck>();
             ctx.Use(settings);
@@ -89,9 +89,9 @@ namespace NZazu.Contracts.Checks
 
             var settings = new Dictionary<string, string>
             {
-                { "FieldToCompareWith", "stopTime" },
-                { "CompareOperator", "<"},
-                { "SpecificDateTimeFormats", "d/M/yyyy" }
+                {"FieldToCompareWith", "stopTime"},
+                {"CompareOperator", "<"},
+                {"SpecificDateTimeFormats", "d/M/yyyy"}
             } as IDictionary<string, string>;
             var ctx = new ContextFor<DateTimeComparisonCheck>();
             ctx.Use(settings);
@@ -116,13 +116,13 @@ namespace NZazu.Contracts.Checks
             };
 
             var formData = new FormData(testDict);
-            var testFormats = new[] { "HHmm", "HHmmss", "HH:mm", "HH:mm:ss" };
+            var testFormats = new[] {"HHmm", "HHmmss", "HH:mm", "HH:mm:ss"};
 
             var settings = new Dictionary<string, string>
             {
-                { "FieldToCompareWith", "stopTime" },
-                { "CompareOperator", "<"},
-                { "SpecificDateTimeFormats", string.Join("|", testFormats) }
+                {"FieldToCompareWith", "stopTime"},
+                {"CompareOperator", "<"},
+                {"SpecificDateTimeFormats", string.Join("|", testFormats)}
             } as IDictionary<string, string>;
             var ctx = new ContextFor<DateTimeComparisonCheck>();
             ctx.Use(settings);
@@ -145,13 +145,13 @@ namespace NZazu.Contracts.Checks
             };
 
             var formData = new FormData(testDict);
-            var testFormats = new[] { "HHmm", "HHmmss", "HH:mm", "HH:mm:ss" };
+            var testFormats = new[] {"HHmm", "HHmmss", "HH:mm", "HH:mm:ss"};
 
             var settings = new Dictionary<string, string>
             {
-                { "FieldToCompareWith", "stopTime" },
-                { "CompareOperator", "<"},
-                { "SpecificDateTimeFormats", string.Join("|", testFormats) }
+                {"FieldToCompareWith", "stopTime"},
+                {"CompareOperator", "<"},
+                {"SpecificDateTimeFormats", string.Join("|", testFormats)}
             } as IDictionary<string, string>;
             var ctx = new ContextFor<DateTimeComparisonCheck>();
             ctx.Use(settings);
@@ -177,8 +177,8 @@ namespace NZazu.Contracts.Checks
 
             var settings = new Dictionary<string, string>
             {
-                { "FieldToCompareWith", "stopTime" },
-                { "CompareOperator", "<"},
+                {"FieldToCompareWith", "stopTime"},
+                {"CompareOperator", "<"}
             } as IDictionary<string, string>;
             var ctx = new ContextFor<DateTimeComparisonCheck>();
             ctx.Use(settings);
@@ -216,8 +216,8 @@ namespace NZazu.Contracts.Checks
 
             var settings = new Dictionary<string, string>
             {
-                { "FieldToCompareWith", "stopTime" },
-                { "CompareOperator", compare},
+                {"FieldToCompareWith", "stopTime"},
+                {"CompareOperator", compare}
             } as IDictionary<string, string>;
             var ctx = new ContextFor<DateTimeComparisonCheck>();
             ctx.Use(settings);
@@ -241,9 +241,9 @@ namespace NZazu.Contracts.Checks
             var formData = new FormData(testDict);
             var settings = new Dictionary<string, string>
             {
-                { "FieldToCompareWith", "stopTime" },
-                { "CompareOperator", "<"},
-                { "SpecificDateTimeFormats", "d/M/yyyy" }
+                {"FieldToCompareWith", "stopTime"},
+                {"CompareOperator", "<"},
+                {"SpecificDateTimeFormats", "d/M/yyyy"}
             } as IDictionary<string, string>;
             var ctx = new ContextFor<DateTimeComparisonCheck>();
             ctx.Use(settings);
@@ -262,17 +262,17 @@ namespace NZazu.Contracts.Checks
             var testDict = new Dictionary<string, string>
             {
                 {"startTime", "8/7/2018"},
-                {"theTable", "foobar"},
+                {"theTable", "foobar"}
             };
             var formData = new FormData(testDict);
             var serializer = Substitute.For<INZazuTableDataSerializer>();
-            serializer.Deserialize("foobar").Returns(new Dictionary<string, string> { { "stopTime__0", "9/7/2018" } });
+            serializer.Deserialize("foobar").Returns(new Dictionary<string, string> {{"stopTime__0", "9/7/2018"}});
             var settings = new Dictionary<string, string>
             {
-                { "FieldToCompareWith", "stopTime" },
-                { "CompareOperator", "<"},
-                { "SpecificDateTimeFormats", "d/M/yyyy" },
-                { "TableKey", "theTable" },
+                {"FieldToCompareWith", "stopTime"},
+                {"CompareOperator", "<"},
+                {"SpecificDateTimeFormats", "d/M/yyyy"},
+                {"TableKey", "theTable"}
             } as IDictionary<string, string>;
             var ctx = new ContextFor<DateTimeComparisonCheck>();
             ctx.Use(settings);
@@ -292,17 +292,17 @@ namespace NZazu.Contracts.Checks
             var testDict = new Dictionary<string, string>
             {
                 {"startTime", "8/7/2018"},
-                {"theTable", "foobar"},
+                {"theTable", "foobar"}
             };
             var formData = new FormData(testDict);
             var serializer = Substitute.For<INZazuTableDataSerializer>();
-            serializer.Deserialize("foobar").Returns(new Dictionary<string, string> { { "stopTime__0", "10/10/2018" } });
+            serializer.Deserialize("foobar").Returns(new Dictionary<string, string> {{"stopTime__0", "10/10/2018"}});
             var settings = new Dictionary<string, string>
             {
-                { "FieldToCompareWith", "stopTime" },
-                { "CompareOperator", ">"},
-                { "SpecificDateTimeFormats", "d/M/yyyy" },
-                { "TableKey", "theTable" },
+                {"FieldToCompareWith", "stopTime"},
+                {"CompareOperator", ">"},
+                {"SpecificDateTimeFormats", "d/M/yyyy"},
+                {"TableKey", "theTable"}
             } as IDictionary<string, string>;
             var ctx = new ContextFor<DateTimeComparisonCheck>();
             ctx.Use(settings);
@@ -327,9 +327,9 @@ namespace NZazu.Contracts.Checks
             var formData = new FormData(testDict);
             var settings = new Dictionary<string, string>
             {
-                { "FieldToCompareWith", "stopTime" },
-                { "CompareOperator", "<"},
-                { "SpecificDateTimeFormats", "d/M/yyyy" }
+                {"FieldToCompareWith", "stopTime"},
+                {"CompareOperator", "<"},
+                {"SpecificDateTimeFormats", "d/M/yyyy"}
             } as IDictionary<string, string>;
             var ctx = new ContextFor<DateTimeComparisonCheck>();
             ctx.Use(settings);
@@ -354,9 +354,9 @@ namespace NZazu.Contracts.Checks
             var formData = new FormData(testDict);
             var settings = new Dictionary<string, string>
             {
-                { "FieldToCompareWith", "stopTime" },
-                { "CompareOperator", "<"},
-                { "SpecificDateTimeFormats", "d/M/yyyy" }
+                {"FieldToCompareWith", "stopTime"},
+                {"CompareOperator", "<"},
+                {"SpecificDateTimeFormats", "d/M/yyyy"}
             } as IDictionary<string, string>;
             var ctx = new ContextFor<DateTimeComparisonCheck>();
             ctx.Use(settings);
@@ -380,13 +380,13 @@ namespace NZazu.Contracts.Checks
             };
 
             var formData = new FormData(testDict);
-            var testFormats = new[] { "HHmm", "HHmmss", "HH:mm", "HH:mm:ss" };
+            var testFormats = new[] {"HHmm", "HHmmss", "HH:mm", "HH:mm:ss"};
 
             var settings = new Dictionary<string, string>
             {
-                { "FieldToCompareWith", "stopTime" },
-                { "CompareOperator", "<"},
-                { "SpecificDateTimeFormats", string.Join("|", testFormats) }
+                {"FieldToCompareWith", "stopTime"},
+                {"CompareOperator", "<"},
+                {"SpecificDateTimeFormats", string.Join("|", testFormats)}
             } as IDictionary<string, string>;
             var ctx = new ContextFor<DateTimeComparisonCheck>();
             ctx.Use(settings);
@@ -409,13 +409,13 @@ namespace NZazu.Contracts.Checks
             };
 
             var formData = new FormData(testDict);
-            var testFormats = new[] { "HHmm", "HHmmss", "HH:mm", "HH:mm:ss" };
+            var testFormats = new[] {"HHmm", "HHmmss", "HH:mm", "HH:mm:ss"};
 
             var settings = new Dictionary<string, string>
             {
-                { "FieldToCompareWith", "stopTime" },
-                { "CompareOperator", "<"},
-                { "SpecificDateTimeFormats", string.Join("|", testFormats) }
+                {"FieldToCompareWith", "stopTime"},
+                {"CompareOperator", "<"},
+                {"SpecificDateTimeFormats", string.Join("|", testFormats)}
             } as IDictionary<string, string>;
             var ctx = new ContextFor<DateTimeComparisonCheck>();
             ctx.Use(settings);
@@ -447,13 +447,13 @@ namespace NZazu.Contracts.Checks
                     {"columnStopRow__1", "12:00"}
                 });
 
-            var testFormats = new[] { "HHmm", "HHmmss", "HH:mm", "HH:mm:ss" };
+            var testFormats = new[] {"HHmm", "HHmmss", "HH:mm", "HH:mm:ss"};
 
             var settings = new Dictionary<string, string>
             {
-                { "FieldToCompareWith", "stopTime" },
-                { "CompareOperator", "<"},
-                { "SpecificDateTimeFormats", string.Join("|", testFormats) }
+                {"FieldToCompareWith", "stopTime"},
+                {"CompareOperator", "<"},
+                {"SpecificDateTimeFormats", string.Join("|", testFormats)}
             } as IDictionary<string, string>;
             var ctx = new ContextFor<DateTimeComparisonCheck>();
             ctx.Use(settings);

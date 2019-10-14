@@ -5,7 +5,7 @@ using NZazuFiddle.Samples;
 
 namespace NZazuFiddle
 {
-    internal sealed class ShellViewModel : Screen,IShell
+    internal sealed class ShellViewModel : Screen, IShell
     {
         private readonly BindableCollection<ISample> _samples = new BindableCollection<ISample>();
         private ISample _selectedSample;
@@ -13,7 +13,7 @@ namespace NZazuFiddle
         public ShellViewModel(IEnumerable<IHaveSample> samples = null)
         {
             DisplayName = "NZazuFiddle";
-            if (samples != null) 
+            if (samples != null)
                 Samples = samples.OrderBy(s => s.Order).Select(s => s.Sample);
         }
 

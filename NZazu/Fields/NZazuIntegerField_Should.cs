@@ -28,7 +28,7 @@ namespace NZazu.Fields
         [Test]
         public void Be_Creatable()
         {
-            var sut = new NZazuIntegerField(new FieldDefinition { Key = "test" }, ServiceLocator);
+            var sut = new NZazuIntegerField(new FieldDefinition {Key = "test"}, ServiceLocator);
 
             sut.Should().NotBeNull();
             sut.Should().BeAssignableTo<INZazuWpfField>();
@@ -45,7 +45,7 @@ namespace NZazu.Fields
                 Description = "check this if you are a registered superhero"
             }, ServiceLocator);
 
-            var textBox = (TextBox)sut.ValueControl;
+            var textBox = (TextBox) sut.ValueControl;
             textBox.Should().NotBeNull();
             textBox.Text.Should().BeEmpty();
             textBox.ToolTip.Should().Be(sut.Definition.Description);
@@ -55,8 +55,8 @@ namespace NZazu.Fields
         [STAThread]
         public void Format_TextBox_From_Value()
         {
-            var sut = new NZazuIntegerField(new FieldDefinition { Key = "test" }, ServiceLocator);
-            var textBox = (TextBox)sut.ValueControl;
+            var sut = new NZazuIntegerField(new FieldDefinition {Key = "test"}, ServiceLocator);
+            var textBox = (TextBox) sut.ValueControl;
 
             sut.Value.Should().NotHaveValue();
             textBox.Text.Should().BeEmpty();
@@ -75,8 +75,8 @@ namespace NZazu.Fields
         [STAThread]
         public void Format_Value_From_TextBox()
         {
-            var sut = new NZazuIntegerField(new FieldDefinition { Key = "test" }, ServiceLocator);
-            var textBox = (TextBox)sut.ValueControl;
+            var sut = new NZazuIntegerField(new FieldDefinition {Key = "test"}, ServiceLocator);
+            var textBox = (TextBox) sut.ValueControl;
 
             sut.Value.Should().NotHaveValue();
             textBox.Text.Should().BeEmpty();
@@ -89,7 +89,7 @@ namespace NZazu.Fields
 
             textBox.Text = "foo bar";
             sut.IsValid().Should().BeFalse();
-            sut.Value.Should().Be(-12, because: "WPF binding cannot sync value");
+            sut.Value.Should().Be(-12, "WPF binding cannot sync value");
 
             textBox.Text = "";
             sut.IsValid().Should().BeTrue();
@@ -100,8 +100,8 @@ namespace NZazu.Fields
         [STAThread]
         public void Format_TextBox_From_StringValue()
         {
-            var sut = new NZazuIntegerField(new FieldDefinition { Key = "test" }, ServiceLocator);
-            var textBox = (TextBox)sut.ValueControl;
+            var sut = new NZazuIntegerField(new FieldDefinition {Key = "test"}, ServiceLocator);
+            var textBox = (TextBox) sut.ValueControl;
 
             sut.GetValue().Should().BeNullOrEmpty();
             textBox.Text.Should().BeEmpty();
@@ -120,8 +120,8 @@ namespace NZazu.Fields
         [STAThread]
         public void Format_StringValue_From_TextBox()
         {
-            var sut = new NZazuIntegerField(new FieldDefinition { Key = "test" }, ServiceLocator);
-            var textBox = (TextBox)sut.ValueControl;
+            var sut = new NZazuIntegerField(new FieldDefinition {Key = "test"}, ServiceLocator);
+            var textBox = (TextBox) sut.ValueControl;
 
             textBox.Text = "7";
             sut.GetValue().Should().Be("7");
@@ -131,7 +131,7 @@ namespace NZazu.Fields
 
             textBox.Text = "foo bar";
             sut.IsValid().Should().BeFalse();
-            sut.GetValue().Should().Be("-12", because: "WPF binding cannot sync value");
+            sut.GetValue().Should().Be("-12", "WPF binding cannot sync value");
 
             textBox.Text = "";
             sut.IsValid().Should().BeTrue();

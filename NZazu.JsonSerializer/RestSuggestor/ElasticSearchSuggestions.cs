@@ -1,18 +1,18 @@
-﻿using Newtonsoft.Json.Linq;
-using NZazu.Contracts.Suggest;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Newtonsoft.Json.Linq;
+using NZazu.Contracts.Suggest;
 
 namespace NZazu.JsonSerializer.RestSuggestor
 {
     public class ElasticSearchSuggestions : IProvideSuggestions
     {
         private const string ConnectionPrefix = "elasticsearch://";
-        private readonly string _connectionPrefix;
-        private readonly IDictionary<string, JProperty> _fieldsPropertyCache = new Dictionary<string, JProperty>();
         private readonly IDictionary<string, Uri> _baseAddressCache = new Dictionary<string, Uri>();
         private readonly IRestClient _client;
+        private readonly string _connectionPrefix;
+        private readonly IDictionary<string, JProperty> _fieldsPropertyCache = new Dictionary<string, JProperty>();
 
         public ElasticSearchSuggestions(IRestClient client = null, string connectionPrefix = "http://localhost:9200")
         {
@@ -38,10 +38,10 @@ namespace NZazu.JsonSerializer.RestSuggestor
             return new JObject(
                 fieldsProperty,
                 new JProperty("query", new JObject(
-                        new JProperty("multi_match", new JObject(
-                            fieldsProperty,
-                            new JProperty("type", "phrase_prefix"),
-                            new JProperty("query", prefix))))
+                    new JProperty("multi_match", new JObject(
+                        fieldsProperty,
+                        new JProperty("type", "phrase_prefix"),
+                        new JProperty("query", prefix))))
                 ));
         }
 

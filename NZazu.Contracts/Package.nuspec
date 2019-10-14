@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
-<package >
+
+<package>
   <metadata>
     <id>NZazu.Contracts</id>
     <version>$Version$</version>
@@ -9,11 +10,11 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Contracts for NZazu, a form templating engine.</description>
     <summary>Contracts for NZazu, a form templating engine.</summary>
-    <copyright/>
+    <copyright />
     <releaseNotes>Revision: $Revision$</releaseNotes>
     <projectUrl>https://github.com/awesome-inc/NZazu</projectUrl>
   </metadata>
   <files>
-    <file src="bin\Release\NZazu.Contracts.dll" target="lib\net45"/>
+    <file src="bin\Release\NZazu.Contracts.dll" target="lib\net45" />
   </files>
 </package>

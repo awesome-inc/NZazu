@@ -1,11 +1,11 @@
-﻿using FluentAssertions;
+﻿using System;
+using System.Threading;
+using System.Windows.Controls;
+using FluentAssertions;
 using NEdifis.Attributes;
 using NSubstitute;
 using NUnit.Framework;
 using NZazu.Contracts.Checks;
-using System;
-using System.Threading;
-using System.Windows.Controls;
 
 namespace NZazu.Extensions
 {

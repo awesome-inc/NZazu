@@ -25,7 +25,7 @@ namespace NZazu.Fields.Controls
             sut.GeoLocationSupport.Should().Be(formatter);
 
             sut.Value.Should().Be(null);
-            sut.Value = new NZazuCoordinate { Lat = 53.1, Lon = 7.2 };
+            sut.Value = new NZazuCoordinate {Lat = 53.1, Lon = 7.2};
             sut.Value.Lat.Should().Be(53.1);
             sut.Value.Lon.Should().Be(7.2);
 
@@ -46,4 +46,4 @@ namespace NZazu.Fields.Controls
             sut.SetToCurrentLocationClick(null, null);
         }
     }
-    }
+}

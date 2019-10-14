@@ -1,5 +1,3 @@
-using NZazu.Contracts;
-using NZazu.Contracts.Checks;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -8,61 +6,15 @@ using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using NZazu.Contracts;
+using NZazu.Contracts.Checks;
 
 namespace NZazu.Fields
 {
     public abstract class NZazuField
         : INZazuWpfField
-        , INotifyPropertyChanged
+            , INotifyPropertyChanged
     {
-        public bool IsEditable { get; protected set; } = true;
-        public string Key { get; }
-
-        public FieldDefinition Definition { get; }
-        protected internal IEnumerable<INZazuWpfFieldBehavior> Behaviors { get; set; } = new List<INZazuWpfFieldBehavior>();
-
-        protected internal IValueCheck Check
-        {
-            get => _check;
-            set
-            {
-                _check = value;
-                UpdateBindingValidation(_check, _binding);
-            }
-        }
-
-        #region private fields and wrapper
-
-        // lazy controls which should be loaded on first access
-        private readonly Lazy<Control> _labelControl;
-        private readonly Lazy<Control> _valueControl;
-        public Control LabelControl => _labelControl.Value;
-        public Control ValueControl => _valueControl.Value;
-
-        protected readonly IFormatProvider FormatProvider;
-        protected internal IValueConverter ValueConverter;
-        private IValueCheck _check;
-        private static Binding _binding;
-
-        #endregion
-
-        #region abstract methods
-
-        public abstract void SetValue(string value);
-        public abstract string GetValue();
-        public abstract DependencyProperty ContentProperty { get; }
-
-        // ReSharper disable once VirtualMemberNeverOverridden.Global
-        protected virtual Control CreateLabelControl()
-        {
-            return !string.IsNullOrWhiteSpace(Definition.Prompt)
-                ? new Label { Content = Definition.Prompt }
-                : null;
-        }
-        protected abstract Control CreateValueControl();
-
-        #endregion
-
         protected NZazuField(FieldDefinition definition, Func<Type, object> serviceLocatorFunc)
         {
             Definition = definition ?? throw new ArgumentNullException(nameof(definition));
@@ -79,25 +31,37 @@ namespace NZazu.Fields
                 return ctrl;
             });
             FormatProvider = serviceLocatorFunc(typeof(IFormatProvider)) as IFormatProvider
-                              ?? throw new ArgumentNullException(nameof(FormatProvider), "no IFormatProvider implementation in ServiceLocator from factory");
+                             ?? throw new ArgumentNullException(nameof(FormatProvider),
+                                 "no IFormatProvider implementation in ServiceLocator from factory");
             ValueConverter = serviceLocatorFunc(typeof(IValueConverter)) as IValueConverter
-                              ?? throw new ArgumentNullException(nameof(ValueConverter), "no IValueConverter implementation in ServiceLocator from factory");
+                             ?? throw new ArgumentNullException(nameof(ValueConverter),
+                                 "no IValueConverter implementation in ServiceLocator from factory");
 
 
             if (string.IsNullOrWhiteSpace(definition.Key)) throw new ArgumentException("key");
             Key = definition.Key;
         }
 
-        public abstract ValueCheckResult Validate();
+        protected internal IEnumerable<INZazuWpfFieldBehavior> Behaviors { get; set; } =
+            new List<INZazuWpfFieldBehavior>();
 
-        /// <summary>
-        /// binding needs to be changed by subclasses for example if the Nullable-binding should be set.
-        /// </summary>
-        /// <param name="binding"></param>
-        protected internal virtual Binding DecorateBinding(Binding binding)
+        protected internal IValueCheck Check
         {
-            return binding;
+            get => _check;
+            set
+            {
+                _check = value;
+                UpdateBindingValidation(_check, _binding);
+            }
         }
+
+        public event PropertyChangedEventHandler PropertyChanged = (sender, e) => { };
+        public bool IsEditable { get; protected set; } = true;
+        public string Key { get; }
+
+        public FieldDefinition Definition { get; }
+
+        public abstract ValueCheckResult Validate();
 
         public virtual IEnumerable<KeyValuePair<string, string>> GetState()
         {
@@ -110,7 +74,14 @@ namespace NZazu.Fields
             Behaviors = null;
         }
 
-        public event PropertyChangedEventHandler PropertyChanged = (sender, e) => { };
+        /// <summary>
+        ///     binding needs to be changed by subclasses for example if the Nullable-binding should be set.
+        /// </summary>
+        /// <param name="binding"></param>
+        protected internal virtual Binding DecorateBinding(Binding binding)
+        {
+            return binding;
+        }
 
         // ReSharper disable once MemberCanBePrivate.Global
         protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
@@ -154,8 +125,41 @@ namespace NZazu.Fields
 
             if (check == null || binding == null) return;
 
-            binding.ValidationRules.Add(new CheckValidationRule(check) { ValidatesOnTargetUpdated = true });
+            binding.ValidationRules.Add(new CheckValidationRule(check) {ValidatesOnTargetUpdated = true});
         }
+
+        #region private fields and wrapper
+
+        // lazy controls which should be loaded on first access
+        private readonly Lazy<Control> _labelControl;
+        private readonly Lazy<Control> _valueControl;
+        public Control LabelControl => _labelControl.Value;
+        public Control ValueControl => _valueControl.Value;
+
+        protected readonly IFormatProvider FormatProvider;
+        protected internal IValueConverter ValueConverter;
+        private IValueCheck _check;
+        private static Binding _binding;
+
+        #endregion
+
+        #region abstract methods
+
+        public abstract void SetValue(string value);
+        public abstract string GetValue();
+        public abstract DependencyProperty ContentProperty { get; }
+
+        // ReSharper disable once VirtualMemberNeverOverridden.Global
+        protected virtual Control CreateLabelControl()
+        {
+            return !string.IsNullOrWhiteSpace(Definition.Prompt)
+                ? new Label {Content = Definition.Prompt}
+                : null;
+        }
+
+        protected abstract Control CreateValueControl();
+
+        #endregion
     }
 
     public abstract class NZazuField<T> : NZazuField, INZazuWpfField<T>
@@ -163,7 +167,9 @@ namespace NZazu.Fields
         private T _value;
 
         protected NZazuField(FieldDefinition definition, Func<Type, object> serviceLocatorFunc)
-            : base(definition, serviceLocatorFunc) { }
+            : base(definition, serviceLocatorFunc)
+        {
+        }
 
         public T Value
         {
@@ -173,13 +179,6 @@ namespace NZazu.Fields
                 _value = value;
                 OnPropertyChanged();
             }
-        }
-
-        protected internal override Binding DecorateBinding(Binding binding)
-        {
-            if (Nullable.GetUnderlyingType(typeof(T)) == null) return binding;
-
-            return binding;
         }
 
         public override ValueCheckResult Validate()
@@ -195,6 +194,13 @@ namespace NZazu.Fields
             var result = Check.Validate(GetValue(), Value, FormatProvider);
 
             return result;
+        }
+
+        protected internal override Binding DecorateBinding(Binding binding)
+        {
+            if (Nullable.GetUnderlyingType(typeof(T)) == null) return binding;
+
+            return binding;
         }
     }
 }

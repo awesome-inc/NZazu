@@ -28,7 +28,7 @@ namespace NZazu.Contracts.Suggest
             mock.FileExists("cities.txt").Returns(true);
 
             var prefix = "Co";
-            var expected = new [] { "Cologne" };
+            var expected = new[] {"Cologne"};
             var sut = new ProvideFileSuggestions(mock);
 
             var actual = sut.For(prefix, dataConnection);
@@ -56,7 +56,7 @@ namespace NZazu.Contracts.Suggest
         {
             const string dataConnection = "file://cities.txt";
             const string prefix = "Be";
-            var expected = new[] { "Bern", "Berlin" };
+            var expected = new[] {"Bern", "Berlin"};
             var mock = Substitute.For<IFileSystem>();
             mock.ReadAllLines("cities.txt").Returns("Bonn|Cologne|Bern|Berlin".Split('|'));
             mock.FileExists("cities.txt").Returns(true);
@@ -67,7 +67,7 @@ namespace NZazu.Contracts.Suggest
             var actual = sut.For(prefix, dataConnection).ToArray();
 
             actual.Should().BeEquivalentTo(expected);
-            actual.Should().BeEquivalentTo(temp, because: "the results should be equal if you all it twice");
+            actual.Should().BeEquivalentTo(temp, "the results should be equal if you all it twice");
 
             mock.Received(1).ReadAllLines("cities.txt");
             mock.Received(1).FileExists("cities.txt");

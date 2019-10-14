@@ -1,18 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Threading;
-using System.Windows.Data;
 using FluentAssertions;
 using NEdifis.Attributes;
 using NUnit.Framework;
 using NZazu.Contracts;
-using NZazu.Extensions;
 using Xceed.Wpf.Toolkit;
 
 namespace NZazu.Xceed
 {
-    [TestFixtureFor(typeof (XceedFieldFactory))]
+    [TestFixtureFor(typeof(XceedFieldFactory))]
     [Apartment(ApartmentState.STA)]
     // ReSharper disable InconsistentNaming
     internal class XceedFieldFactory_Should
@@ -48,7 +45,7 @@ namespace NZazu.Xceed
                 Type = "date",
                 Prompt = "Date of Birth",
                 Hint = "Enter date of birth",
-                Description = "Your birthday",
+                Description = "Your birthday"
             };
             var field = sut.CreateField(fieldDefinition);
             field.Should().BeOfType<XceedDateTimeField>();
@@ -58,10 +55,10 @@ namespace NZazu.Xceed
             datePicker.FormatString.Should().BeNull();
 
             const string dateFormat = "yyyy_MM_dd";
-            fieldDefinition.Settings = new Dictionary<string, string> { { "Format", dateFormat } };
+            fieldDefinition.Settings = new Dictionary<string, string> {{"Format", dateFormat}};
 
             field = sut.CreateField(fieldDefinition);
-            datePicker = (DateTimePickerWithUpdate)field.ValueControl;
+            datePicker = (DateTimePickerWithUpdate) field.ValueControl;
             datePicker.FormatString.Should().Be(dateFormat);
         }
 
@@ -75,7 +72,7 @@ namespace NZazu.Xceed
                 Type = "double",
                 Prompt = "Weight",
                 Hint = "Enter weight",
-                Description = "Your weight",
+                Description = "Your weight"
             };
             var field = sut.CreateField(fieldDefinition);
             field.Should().BeOfType<XceedDoubleField>();
@@ -91,7 +88,7 @@ namespace NZazu.Xceed
                 Type = "int",
                 Prompt = "Age",
                 Hint = "Enter Age",
-                Description = "Your Age",
+                Description = "Your Age"
             };
             var field = sut.CreateField(fieldDefinition);
             field.Should().BeOfType<XceedIntegerField>();
@@ -108,13 +105,13 @@ namespace NZazu.Xceed
                 Type = "richtext",
                 Prompt = "Notes",
                 Hint = "Enter Notes",
-                Description = "Notes",
+                Description = "Notes"
             };
-            var field = (XceedRichTextField)sut.CreateField(fieldDefinition);
+            var field = (XceedRichTextField) sut.CreateField(fieldDefinition);
             field.Should().NotBeNull();
 
 
-            var textBox = (RichTextBox)field.ValueControl;
+            var textBox = (RichTextBox) field.ValueControl;
             textBox.Should().NotBeNull();
             textBox.ToolTip.Should().Be(field.Definition.Description);
         }

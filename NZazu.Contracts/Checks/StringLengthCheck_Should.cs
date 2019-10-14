@@ -1,12 +1,12 @@
-using FluentAssertions;
-using NEdifis;
-using NEdifis.Attributes;
-using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
+using FluentAssertions;
+using NEdifis;
+using NEdifis.Attributes;
+using NUnit.Framework;
 
 namespace NZazu.Contracts.Checks
 {
@@ -17,7 +17,7 @@ namespace NZazu.Contracts.Checks
         [Test]
         public void Be_Creatable()
         {
-            var settings = new Dictionary<string, string>() { { "Min", "2" }, { "Max", "6" } } as IDictionary<string, string>;
+            var settings = new Dictionary<string, string> {{"Min", "2"}, {"Max", "6"}} as IDictionary<string, string>;
             var ctx = new ContextFor<StringLengthCheck>();
             ctx.Use(settings);
             var sut = ctx.BuildSut();
@@ -29,13 +29,13 @@ namespace NZazu.Contracts.Checks
         [Test]
         public void Registered_At_CheckFactory()
         {
-            var settings = new Dictionary<string, string>() { { "Min", "2" }, { "Max", "6" } } as IDictionary<string, string>;
+            var settings = new Dictionary<string, string> {{"Min", "2"}, {"Max", "6"}} as IDictionary<string, string>;
             var checkType = typeof(StringLengthCheck);
 
             var sut = new CheckFactory();
 
-            var checkDefinition = new CheckDefinition { Type = "length", Settings = settings };
-            var check = sut.CreateCheck(checkDefinition, new FieldDefinition() { Key = "key1" });
+            var checkDefinition = new CheckDefinition {Type = "length", Settings = settings};
+            var check = sut.CreateCheck(checkDefinition, new FieldDefinition {Key = "key1"});
 
             check.Should().NotBeNull();
             check.Should().BeOfType(checkType);
@@ -44,25 +44,27 @@ namespace NZazu.Contracts.Checks
         [Test]
         public void Ctor_MaxLessOrEqualMin_Should_Throw()
         {
-            var settings = new Dictionary<string, string>() { { "Min", "6" }, { "Max", "2" } } as IDictionary<string, string>;
+            var settings = new Dictionary<string, string> {{"Min", "6"}, {"Max", "2"}} as IDictionary<string, string>;
 
             // ReSharper disable once ObjectCreationAsStatement
-            new Action(() => new StringLengthCheck(settings, null, null, 0, null)).Invoking(a => a()).Should().Throw<ArgumentOutOfRangeException>();
+            new Action(() => new StringLengthCheck(settings, null, null, 0, null)).Invoking(a => a()).Should()
+                .Throw<ArgumentOutOfRangeException>();
         }
 
         [Test]
         public void Ctor_NegativeLength_Should_Throw()
         {
-            var settings = new Dictionary<string, string>() { { "Min", "-2" } } as IDictionary<string, string>;
+            var settings = new Dictionary<string, string> {{"Min", "-2"}} as IDictionary<string, string>;
 
             // ReSharper disable once ObjectCreationAsStatement
-            new Action(() => new StringLengthCheck(settings, null, null, 0, null)).Invoking(a => a()).Should().Throw<ArgumentOutOfRangeException>();
+            new Action(() => new StringLengthCheck(settings, null, null, 0, null)).Invoking(a => a()).Should()
+                .Throw<ArgumentOutOfRangeException>();
         }
 
         [Test]
         public void IsValid_BelowMin_fails()
         {
-            var settings = new Dictionary<string, string>() { { "Min", "2" }, { "Max", "42" } } as IDictionary<string, string>;
+            var settings = new Dictionary<string, string> {{"Min", "2"}, {"Max", "42"}} as IDictionary<string, string>;
             var ctx = new ContextFor<StringLengthCheck>();
             ctx.Use(settings);
             var sut = ctx.BuildSut();
@@ -74,7 +76,7 @@ namespace NZazu.Contracts.Checks
         [Test]
         public void IsValid_AboveMax_fails()
         {
-            var settings = new Dictionary<string, string>() { { "Min", "2" }, { "Max", "42" } } as IDictionary<string, string>;
+            var settings = new Dictionary<string, string> {{"Min", "2"}, {"Max", "42"}} as IDictionary<string, string>;
             var ctx = new ContextFor<StringLengthCheck>();
             ctx.Use(settings);
             var sut = ctx.BuildSut();
@@ -86,7 +88,7 @@ namespace NZazu.Contracts.Checks
         [Test]
         public void IsValid_InsideMinMax_passes()
         {
-            var settings = new Dictionary<string, string>() { { "Min", "2" }, { "Max", "42" } } as IDictionary<string, string>;
+            var settings = new Dictionary<string, string> {{"Min", "2"}, {"Max", "42"}} as IDictionary<string, string>;
             var ctx = new ContextFor<StringLengthCheck>();
             ctx.Use(settings);
             var sut = ctx.BuildSut();
@@ -111,7 +113,7 @@ namespace NZazu.Contracts.Checks
         [Test]
         public void Ctor_with_min_only_should_set_max_to_int_maxvalue()
         {
-            var settings = new Dictionary<string, string>() { { "Min", "4" } } as IDictionary<string, string>;
+            var settings = new Dictionary<string, string> {{"Min", "4"}} as IDictionary<string, string>;
             var ctx = new ContextFor<StringLengthCheck>();
             ctx.Use(settings);
             var sut = ctx.BuildSut();

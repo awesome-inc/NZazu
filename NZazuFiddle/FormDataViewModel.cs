@@ -34,11 +34,19 @@ namespace NZazuFiddle
         {
             if (_inHandle) return;
             _inHandle = true;
-            try { Data = formData; }
-            finally { _inHandle = false; } 
+            try
+            {
+                Data = formData;
+            }
+            finally
+            {
+                _inHandle = false;
+            }
         }
 
-        public override FormData Model { get => Data;
+        public override FormData Model
+        {
+            get => Data;
             set => Data = value;
         }
     }

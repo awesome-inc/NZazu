@@ -17,7 +17,7 @@ namespace NZazuFiddle.Samples
         {
             var events = new EventAggregator();
             return new FiddleViewModel(
-                new FormDefinitionViewModel(events,formDefinition), 
+                new FormDefinitionViewModel(events, formDefinition),
                 new FormDataViewModel(events, formData),
                 new PreviewViewModel(events, formDefinition, formData));
         }

@@ -32,7 +32,8 @@ namespace NZazu.Fields
             }
             catch (ArgumentException exception)
             {
-                Trace.TraceError($"Following error occured while setting the properties for the field <{field.Key}>: {Environment.NewLine}{exception}");
+                Trace.TraceError(
+                    $"Following error occured while setting the properties for the field <{field.Key}>: {Environment.NewLine}{exception}");
             }
 
             return field;
@@ -68,7 +69,9 @@ namespace NZazu.Fields
         {
             if (checkDefinitions == null) return field;
 
-            var checks = checkDefinitions.Select(x => checkFactory.CreateCheck(x, field.Definition, formData, tableSerializer, rowIdx)).ToArray();
+            var checks = checkDefinitions
+                .Select(x => checkFactory.CreateCheck(x, field.Definition, formData, tableSerializer, rowIdx))
+                .ToArray();
             field.Check = checks.Length == 1
                 ? checks.First()
                 : new AggregateCheck(checks.ToArray());
@@ -93,10 +96,10 @@ namespace NZazu.Fields
                 behavior?.AttachTo(field, view);
                 behaviors.Add(behavior);
             }
+
             field.Behaviors = behaviors.ToArray();
 
             return field;
         }
     }
-
 }

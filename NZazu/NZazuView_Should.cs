@@ -44,8 +44,8 @@ namespace NZazu
             const string key = "key";
             const string value = "value";
 
-            var fieldDefinition = new FieldDefinition { Key = key, Type = "string" };
-            var formDefinition = new FormDefinition { Fields = new[] { fieldDefinition } };
+            var fieldDefinition = new FieldDefinition {Key = key, Type = "string"};
+            var formDefinition = new FormDefinition {Fields = new[] {fieldDefinition}};
             var factory = Substitute.For<INZazuWpfFieldFactory>();
             var field = Substitute.For<INZazuWpfField>();
             field.GetValue().Returns(value);
@@ -90,8 +90,8 @@ namespace NZazu
 
             var expected = new Dictionary<string, string>
             {
-                { "name", "John" },
-                { "group.name", "Jim" },
+                {"name", "John"},
+                {"group.name", "Jim"}
             };
 
             view.SetFieldValues(expected);
@@ -139,7 +139,7 @@ namespace NZazu
         [STAThread]
         public void Update_when_FormDefinition_changed()
         {
-            var formDefinition = new FormDefinition { Layout = "grid", Fields = new FieldDefinition[] { } };
+            var formDefinition = new FormDefinition {Layout = "grid", Fields = new FieldDefinition[] { }};
             VerifyUpdate(view =>
             {
                 view.FormDefinition = formDefinition;
@@ -173,7 +173,7 @@ namespace NZazu
 
         private static void VerifyUpdate(Action<INZazuWpfView> act)
         {
-            var formDefinition = new FormDefinition { Fields = new FieldDefinition[] { } };
+            var formDefinition = new FormDefinition {Fields = new FieldDefinition[] { }};
 
             var resolveLayout = Substitute.For<IResolveLayout>();
             var layout = Substitute.For<INZazuWpfLayoutStrategy>();
@@ -229,10 +229,10 @@ namespace NZazu
             const string key = "key";
             const string value = "value";
 
-            var formDefinition = new FormDefinition { Fields = new[] { new FieldDefinition { Key = key, Type = "string" } } };
+            var formDefinition = new FormDefinition {Fields = new[] {new FieldDefinition {Key = key, Type = "string"}}};
             view.FormDefinition = formDefinition;
 
-            view.FormData = new Dictionary<string, string> { { key, value } };
+            view.FormData = new Dictionary<string, string> {{key, value}};
 
             var actual = view.GetFieldValues();
             actual.Keys.Should().Contain(key);
@@ -248,9 +248,9 @@ namespace NZazu
             const string key = "key";
             const string value = "value";
 
-            var formDefinition = new FormDefinition { Fields = new[] { new FieldDefinition { Key = key, Type = "string" } } };
+            var formDefinition = new FormDefinition {Fields = new[] {new FieldDefinition {Key = key, Type = "string"}}};
             view.FormDefinition = formDefinition;
-            var values = new Dictionary<string, string> { { key, value } };
+            var values = new Dictionary<string, string> {{key, value}};
             view.FormData = values;
             view.FormData.Values.Should().BeEquivalentTo(values);
 
@@ -278,7 +278,7 @@ namespace NZazu
 
             var sut = new NZazuView
             {
-                FormDefinition = new FormDefinition { Fields = new[] { new FieldDefinition { Key = "test" } } },
+                FormDefinition = new FormDefinition {Fields = new[] {new FieldDefinition {Key = "test"}}},
                 FieldFactory = fieldFactory,
                 ResolveLayout = layout
             };
@@ -287,34 +287,42 @@ namespace NZazu
             field.ReceivedWithAnyArgs().Validate();
         }
 
-        [Test(Description = "In real-time scenarios try to preserve formdata when formdefinition changed only marginally")]
+        [Test(Description =
+            "In real-time scenarios try to preserve formdata when formdefinition changed only marginally")]
         [STAThread]
         public void Preserve_Formdata_if_FormDefinition_changed()
         {
             const string key = "name";
             const string value = "John";
 
-            var fieldDefinition = new FieldDefinition { Key = key, Type = "string", Prompt = "Name" };
-            var initialFormDefinition = new FormDefinition { Fields = new[] { fieldDefinition } };
-            var formData = new FormData(new Dictionary<string, string> { { key, value } });
+            var fieldDefinition = new FieldDefinition {Key = key, Type = "string", Prompt = "Name"};
+            var initialFormDefinition = new FormDefinition {Fields = new[] {fieldDefinition}};
+            var formData = new FormData(new Dictionary<string, string> {{key, value}});
 
-            var sut = new NZazuView { FormDefinition = initialFormDefinition, FormData = formData };
+            var sut = new NZazuView {FormDefinition = initialFormDefinition, FormData = formData};
 
             sut.FormData.Should().Be(formData);
             var actual = sut.GetFieldValues();
             actual.Should().Contain(formData.Values);
 
             fieldDefinition.Prompt = "Login";
-            var changedFormDefinition = new FormDefinition { Fields = new[] { fieldDefinition } };
+            var changedFormDefinition = new FormDefinition {Fields = new[] {fieldDefinition}};
 
             // it is ugly to attach to depProperty.changed. It goes like this
             // https://social.msdn.microsoft.com/Forums/vstudio/en-US/262df30c-8383-4d5c-8d76-7b8e2cea51de/how-do-you-attach-a-change-event-to-a-dependency-property?forum=wpf
-            var dpDescriptor = DependencyPropertyDescriptor.FromProperty(NZazuView.FormDefinitionProperty, typeof(NZazuView));
+            var dpDescriptor =
+                DependencyPropertyDescriptor.FromProperty(NZazuView.FormDefinitionProperty, typeof(NZazuView));
             var formDefinitionChanged = false;
             EventHandler handler = (sender, args) => { formDefinitionChanged = true; };
             dpDescriptor.AddValueChanged(sut, handler);
-            try { sut.FormDefinition = changedFormDefinition; }
-            finally { dpDescriptor.RemoveValueChanged(sut, handler); }
+            try
+            {
+                sut.FormDefinition = changedFormDefinition;
+            }
+            finally
+            {
+                dpDescriptor.RemoveValueChanged(sut, handler);
+            }
 
             formDefinitionChanged.Should().BeTrue();
 
@@ -323,24 +331,24 @@ namespace NZazu
         }
 
 
-        [Test(Description = "In real-time scenarios try to preserve formdat when formdefinition changed only marginally")]
+        [Test(Description =
+            "In real-time scenarios try to preserve formdat when formdefinition changed only marginally")]
         [STAThread]
         public void Throw_KeyNotFoundException_On_GetField_For_Wrong_Key()
         {
             const string key = "key";
             const string value = "value";
 
-            var fieldDefinition = new FieldDefinition { Key = key, Type = "string", Prompt = "Name" };
+            var fieldDefinition = new FieldDefinition {Key = key, Type = "string", Prompt = "Name"};
             var field = Substitute.For<INZazuWpfField>();
             field.Key.Returns(key);
-            var formDefinition = new FormDefinition { Fields = new[] { fieldDefinition } };
-            var formData = new FormData(new Dictionary<string, string> { { key, value } });
+            var formDefinition = new FormDefinition {Fields = new[] {fieldDefinition}};
+            var formData = new FormData(new Dictionary<string, string> {{key, value}});
             var factory = Substitute.For<INZazuWpfFieldFactory>();
             factory.CreateField(fieldDefinition).Returns(field);
 
-            var sut = new NZazuView { FormDefinition = formDefinition, FormData = formData, FieldFactory = factory };
+            var sut = new NZazuView {FormDefinition = formDefinition, FormData = formData, FieldFactory = factory};
             new Action(() => sut.GetField("I do not exist")).Invoking(a => a()).Should().Throw<KeyNotFoundException>();
-
         }
 
         [Test]
@@ -359,7 +367,7 @@ namespace NZazu
                 }
             };
 
-            var expected = new Dictionary<string, string> { { "name", "John" } };
+            var expected = new Dictionary<string, string> {{"name", "John"}};
 
             view.SetFieldValues(expected);
 
@@ -381,7 +389,7 @@ namespace NZazu
                         new FieldDefinition {Key = "focus", Type = "string"}
                     }
                 },
-                FormData = new FormData { Values = { { "__focusOn", "focus" } } }
+                FormData = new FormData {Values = {{"__focusOn", "focus"}}}
             };
 
             var otherCtrl = view.GetField("other").ValueControl;
@@ -429,7 +437,7 @@ namespace NZazu
                         new FieldDefinition {Key = "3", Type = "date"},
                         new FieldDefinition {Key = "4", Type = "bool"},
                         new FieldDefinition {Key = "5", Type = "double"},
-                        new FieldDefinition {Key = "6", Type = "int"},
+                        new FieldDefinition {Key = "6", Type = "int"}
                     }
                 }
             };

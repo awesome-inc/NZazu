@@ -3,7 +3,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using NZazu.Contracts;
-using NZazu.Contracts.Adapter;
 using NZazu.Contracts.Suggest;
 using NZazu.Fields.Libs;
 
@@ -21,10 +20,18 @@ namespace NZazu.Fields
             DataConnection = Definition.Settings.Get("dataconnection") ?? string.Empty;
         }
 
-        public override void SetValue(string value) { Value = value; }
-        public override string GetValue() { return Value; }
         public override DependencyProperty ContentProperty => TextBox.TextProperty;
         public string DataConnection { get; }
+
+        public override void SetValue(string value)
+        {
+            Value = value;
+        }
+
+        public override string GetValue()
+        {
+            return Value;
+        }
 
         protected internal override Binding DecorateBinding(Binding binding)
         {

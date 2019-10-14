@@ -13,16 +13,17 @@ namespace NZazu.Serializer
         {
             return new Dictionary<string, string>
             {
-                { "table01_field01__1", "hello" }, { "table01_field02__1", "world" },
-                { "table01_field01__2", "foo" }, { "table01_field02__2", "bar" },
+                {"table01_field01__1", "hello"}, {"table01_field02__1", "world"},
+                {"table01_field01__2", "foo"}, {"table01_field02__2", "bar"}
             };
         }
 
         [Test]
         public void Add_Row_To_Dictionary()
         {
-            var newRow = new Dictionary<string, string>() {
-                { "table01_field01", "jane" }, { "table01_field02", "doe" },
+            var newRow = new Dictionary<string, string>
+            {
+                {"table01_field01", "jane"}, {"table01_field02", "doe"}
             };
 
             var data = GetTableData();
@@ -39,8 +40,9 @@ namespace NZazu.Serializer
         [Test]
         public void Add_Row_To_Empty_Dictionary()
         {
-            var newRow = new Dictionary<string, string>() {
-                { "table01_field01", "jane" }, { "table01_field02", "doe" },
+            var newRow = new Dictionary<string, string>
+            {
+                {"table01_field01", "jane"}, {"table01_field02", "doe"}
             };
 
             var data = new Dictionary<string, string>();
@@ -71,13 +73,13 @@ namespace NZazu.Serializer
         [Test]
         public void Override_Empty_Row()
         {
-            var newRow = new Dictionary<string, string>()
+            var newRow = new Dictionary<string, string>
             {
                 {"table01_field01", "jane"},
-                {"table01_field02", "doe"},
+                {"table01_field02", "doe"}
             };
 
-            var data = new Dictionary<string, string>() {{"table01_field01__1", ""},  {"table01_field02__1", null}};
+            var data = new Dictionary<string, string> {{"table01_field01__1", ""}, {"table01_field02__1", null}};
             data.Count.Should().Be(2);
 
             var sut = new NZazuTableDataSerializerBase();

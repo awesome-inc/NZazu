@@ -26,7 +26,7 @@ namespace NZazu.FieldBehavior
         {
             var sut = new NZazuFieldBehaviorFactory();
 
-            new Action(() => sut.CreateFieldBehavior((BehaviorDefinition)null))
+            new Action(() => sut.CreateFieldBehavior(null))
                 .Invoking(a => a())
                 .Should().Throw<ArgumentNullException>();
 
@@ -34,18 +34,6 @@ namespace NZazu.FieldBehavior
                 .Invoking(a => a())
                 .Should().Throw<ArgumentException>();
         }
-
-        #region simple interface implementation
-
-        [ExcludeFromCodeCoverage]
-        // ReSharper disable once ClassNeverInstantiated.Local
-        private class SimpleInterfaceImplementation : INZazuWpfFieldBehavior
-        {
-            public void AttachTo(INZazuWpfField field, INZazuWpfView view) { }
-            public void Detach() { }
-        }
-
-        #endregion
 
         [Test]
         public void Handle_Interface_Implementations()
@@ -55,7 +43,7 @@ namespace NZazu.FieldBehavior
             try
             {
                 var sut = new NZazuFieldBehaviorFactory();
-                var behavior = sut.CreateFieldBehavior(new BehaviorDefinition { Name = behaviorName });
+                var behavior = sut.CreateFieldBehavior(new BehaviorDefinition {Name = behaviorName});
                 behavior.Should().BeAssignableTo<SimpleInterfaceImplementation>();
 
                 // just to get code coverage
@@ -73,7 +61,7 @@ namespace NZazu.FieldBehavior
         {
             var sut = new NZazuFieldBehaviorFactory();
 
-            var behavior = sut.CreateFieldBehavior(new BehaviorDefinition { Name = "i am not registered" });
+            var behavior = sut.CreateFieldBehavior(new BehaviorDefinition {Name = "i am not registered"});
             behavior.Should().BeNull();
         }
 
@@ -83,7 +71,7 @@ namespace NZazu.FieldBehavior
         {
             var sut = new NZazuFieldBehaviorFactory();
 
-            var field = sut.CreateFieldBehavior(new BehaviorDefinition { Name = fieldType });
+            var field = sut.CreateFieldBehavior(new BehaviorDefinition {Name = fieldType});
             field.Should().NotBeNull();
             field.GetType().Should().Be(controlType);
         }
@@ -101,13 +89,13 @@ namespace NZazu.FieldBehavior
                     Name = behaviorName,
                     Settings = new Dictionary<string, string>
                     {
-                        { "AnInt", "42"},
-                        { "AString", "AString"},
-                        { "ADouble", "42.42"},
-                        { "ABool", "True"}
+                        {"AnInt", "42"},
+                        {"AString", "AString"},
+                        {"ADouble", "42.42"},
+                        {"ABool", "True"}
                     }
                 };
-                var behavior = (BehaviorWithSettings)sut.CreateFieldBehavior(behaviorDefinition);
+                var behavior = (BehaviorWithSettings) sut.CreateFieldBehavior(behaviorDefinition);
 
                 behavior.AnInt.Should().Be(42);
                 behavior.AString.Should().Be("AString");
@@ -118,20 +106,42 @@ namespace NZazu.FieldBehavior
             {
                 BehaviorExtender.Unregister(behaviorName);
             }
-
         }
+
+        #region simple interface implementation
+
+        [ExcludeFromCodeCoverage]
+        // ReSharper disable once ClassNeverInstantiated.Local
+        private class SimpleInterfaceImplementation : INZazuWpfFieldBehavior
+        {
+            public void AttachTo(INZazuWpfField field, INZazuWpfView view)
+            {
+            }
+
+            public void Detach()
+            {
+            }
+        }
+
+        #endregion
 
         [ExcludeFromCodeCoverage]
         // ReSharper disable once ClassNeverInstantiated.Local
         private class BehaviorWithSettings : INZazuWpfFieldBehavior
         {
-            public void AttachTo(INZazuWpfField field, INZazuWpfView view) { }
-            public void Detach() { }
+            public void AttachTo(INZazuWpfField field, INZazuWpfView view)
+            {
+            }
+
+            public void Detach()
+            {
+            }
 
             // ReSharper disable UnusedAutoPropertyAccessor.Local
             public int AnInt { get; set; }
             public string AString { get; set; }
             public double ADouble { get; set; }
+
             public bool ABool { get; set; }
             // ReSharper restore UnusedAutoPropertyAccessor.Local
         }

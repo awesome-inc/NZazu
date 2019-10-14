@@ -14,7 +14,7 @@ namespace NZazu.Serializer
 
             var maxRow = data.Count == 0
                 ? 0
-                : data.Max(x => int.Parse(x.Key.Split(new[] { "__" }, StringSplitOptions.RemoveEmptyEntries)[1]));
+                : data.Max(x => int.Parse(x.Key.Split(new[] {"__"}, StringSplitOptions.RemoveEmptyEntries)[1]));
             maxRow++;
 
             foreach (var cell in newRow)

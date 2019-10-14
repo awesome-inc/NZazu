@@ -1,26 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using NUnit.Framework;
 using NZazu.Contracts.Checks;
 
 namespace NZazu.Contracts.FormChecks
 {
     public class GreaterThanFormCheck : IFormCheck
     {
-        internal class GreaterThanFormCheckSettings
+        public GreaterThanFormCheck(IDictionary<string, string> settings)
         {
-            public string Hint { get; set; }
-            public string LeftFieldName { get; set; }
-            public string RightFieldName { get; set; }
+            Settings = settings.ToDictionary(x => x.Key, x => (object) x.Value)
+                .ToObject<GreaterThanFormCheckSettings>();
         }
 
         private GreaterThanFormCheckSettings Settings { get; }
-
-        public GreaterThanFormCheck(IDictionary<string, string> settings)
-        {
-            Settings = settings.ToDictionary(x => x.Key, x => (object)x.Value).ToObject<GreaterThanFormCheckSettings>();
-        }
 
 
         public ValueCheckResult Validate(FormData formData, IFormatProvider formatProvider = null)
@@ -31,9 +24,16 @@ namespace NZazu.Contracts.FormChecks
             long.TryParse(leftFieldValue, out var leftNumber);
             long.TryParse(rightFieldValue, out var rightNumber);
 
-            return leftNumber < rightNumber ? 
-                new ValueCheckResult(false, new ArgumentException(Settings.Hint)) 
+            return leftNumber < rightNumber
+                ? new ValueCheckResult(false, new ArgumentException(Settings.Hint))
                 : ValueCheckResult.Success;
+        }
+
+        internal class GreaterThanFormCheckSettings
+        {
+            public string Hint { get; set; }
+            public string LeftFieldName { get; set; }
+            public string RightFieldName { get; set; }
         }
     }
 }

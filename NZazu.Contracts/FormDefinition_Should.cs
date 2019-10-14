@@ -4,7 +4,7 @@ using NUnit.Framework;
 
 namespace NZazu.Contracts
 {
-    [TestFixtureFor(typeof (FormDefinition))]
+    [TestFixtureFor(typeof(FormDefinition))]
     // ReSharper disable once InconsistentNaming
     internal class FormDefinition_Should
     {

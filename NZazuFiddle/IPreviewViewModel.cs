@@ -2,7 +2,7 @@
 
 namespace NZazuFiddle
 {
-    public interface IPreviewViewModel 
+    public interface IPreviewViewModel
         : IHaveFormDefinition, IHaveFormData
     {
         INZazuWpfFieldFactory FieldFactory { get; }

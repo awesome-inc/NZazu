@@ -12,8 +12,8 @@ namespace NZazu.LayoutStrategy
         }
 
         public override void DoLayout(
-            ContentControl contentControl, 
-            IEnumerable<INZazuWpfField> fields, 
+            ContentControl contentControl,
+            IEnumerable<INZazuWpfField> fields,
             IResolveLayout resolveLayout = null)
         {
             if (contentControl == null) throw new ArgumentNullException(nameof(contentControl));
@@ -48,6 +48,7 @@ namespace NZazu.LayoutStrategy
                     ProcessGroupField(resolveLayout, valueElement, field);
                 }
             }
+
             contentControl.Content = stackPanel;
         }
     }

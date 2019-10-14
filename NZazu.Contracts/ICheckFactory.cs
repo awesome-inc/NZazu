@@ -1,12 +1,14 @@
-﻿using NZazu.Contracts.Checks;
-using NZazu.Contracts.FormChecks;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using NZazu.Contracts.Checks;
+using NZazu.Contracts.FormChecks;
 
 namespace NZazu.Contracts
 {
     public interface ICheckFactory
     {
+        IEnumerable<string> AvailableTypes { get; }
+
         IValueCheck CreateCheck(
             CheckDefinition checkDefinition,
             FieldDefinition fieldDefinition,
@@ -15,6 +17,5 @@ namespace NZazu.Contracts
             int rowIdx = -1);
 
         IFormCheck CreateFormCheck(CheckDefinition checkDefinition);
-        IEnumerable<string> AvailableTypes { get; }
     }
 }

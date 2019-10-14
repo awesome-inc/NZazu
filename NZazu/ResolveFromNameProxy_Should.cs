@@ -6,7 +6,7 @@ using NUnit.Framework;
 
 namespace NZazu
 {
-    [TestFixtureFor(typeof (ResolveFromNameProxy<>))]
+    [TestFixtureFor(typeof(ResolveFromNameProxy<>))]
     // ReSharper disable once InconsistentNaming
     internal class ResolveFromNameProxy_Should
     {
@@ -19,6 +19,7 @@ namespace NZazu
             sut.Should().NotBeNull();
             sut.Resolve("foo").Should().NotBeNull();
         }
+
         [Test]
         public void Resolve_Using_Function()
         {

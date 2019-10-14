@@ -5,11 +5,13 @@ using Xceed.Wpf.Toolkit;
 namespace NZazu.Xceed
 {
     /// <summary>
-    /// Interaction logic for DateTimePickerWithUpdate.xaml
+    ///     Interaction logic for DateTimePickerWithUpdate.xaml
     /// </summary>
     public partial class DateTimePickerWithUpdate
     {
         private readonly DateTimePicker _valuePicker;
+
+        private bool _isInValueChanges;
 
         public DateTimePickerWithUpdate()
         {
@@ -21,8 +23,8 @@ namespace NZazu.Xceed
             LayoutGrid.Children.Add(_valuePicker);
         }
 
-        private bool _isInValueChanges;
-        private void ValuePickerOnValueChanged(object sender, RoutedPropertyChangedEventArgs<object> routedPropertyChangedEventArgs)
+        private void ValuePickerOnValueChanged(object sender,
+            RoutedPropertyChangedEventArgs<object> routedPropertyChangedEventArgs)
         {
             if (_isInValueChanges) return;
 
@@ -35,33 +37,39 @@ namespace NZazu.Xceed
             {
                 _isInValueChanges = false;
             }
+        }
 
+        internal void UpdateToToday_OnClick(object sender, RoutedEventArgs e)
+        {
+            Value = ActualDateTimeProvider.Now();
         }
 
         #region dependency properties
 
         public static readonly DependencyProperty ValueProperty = DependencyProperty.Register(
-            "Value", typeof(DateTime?), typeof(DateTimePickerWithUpdate), new PropertyMetadata(default(DateTime?), ValuePropertyChangedCallback));
+            "Value", typeof(DateTime?), typeof(DateTimePickerWithUpdate),
+            new PropertyMetadata(default(DateTime?), ValuePropertyChangedCallback));
 
         private static void ValuePropertyChangedCallback(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            var ctrl = (DateTimePickerWithUpdate)d;
-            ctrl._valuePicker.Value = (DateTime?)e.NewValue;
+            var ctrl = (DateTimePickerWithUpdate) d;
+            ctrl._valuePicker.Value = (DateTime?) e.NewValue;
         }
 
         public DateTime? Value
         {
-            get => (DateTime?)GetValue(ValueProperty);
+            get => (DateTime?) GetValue(ValueProperty);
             set => SetValue(ValueProperty, value);
         }
 
         public static readonly DependencyProperty ActualDateTimeProviderProperty = DependencyProperty.Register(
-            "ActualDateTimeProvider", typeof(IActualDateTimeProvider), typeof(DateTimePickerWithUpdate), new PropertyMetadata(new NowDateTimeProvider()));
+            "ActualDateTimeProvider", typeof(IActualDateTimeProvider), typeof(DateTimePickerWithUpdate),
+            new PropertyMetadata(new NowDateTimeProvider()));
 
         // ReSharper disable once MemberCanBePrivate.Global
         public IActualDateTimeProvider ActualDateTimeProvider
         {
-            get => (IActualDateTimeProvider)GetValue(ActualDateTimeProviderProperty);
+            get => (IActualDateTimeProvider) GetValue(ActualDateTimeProviderProperty);
             set => SetValue(ActualDateTimeProviderProperty, value);
         }
 
@@ -102,10 +110,5 @@ namespace NZazu.Xceed
         }
 
         #endregion
-
-        internal void UpdateToToday_OnClick(object sender, RoutedEventArgs e)
-        {
-            Value = ActualDateTimeProvider.Now();
-        }
     }
 }

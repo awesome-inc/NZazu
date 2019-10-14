@@ -33,13 +33,10 @@ namespace NZazu.Extensions
         {
             var frameWorkElement = uiElement as FrameworkElement;
             if (frameWorkElement == null) return;
-            
+
             // Move to a parent that can take focus
             var parent = frameWorkElement.Parent as FrameworkElement;
-            while (parent != null && !parent.Focusable)
-            {
-                parent = parent.Parent as FrameworkElement;
-            }
+            while (parent != null && !parent.Focusable) parent = parent.Parent as FrameworkElement;
 
             var scope = FocusManager.GetFocusScope(uiElement);
             FocusManager.SetFocusedElement(scope, parent);

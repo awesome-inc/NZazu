@@ -21,6 +21,8 @@ namespace NZazu.LayoutStrategy
     // ReSharper disable InconsistentNaming
     internal class GridLayout_Should
     {
+        private Application application;
+
         private object ServiceLocator(Type type)
         {
             if (type == typeof(IValueConverter)) return NoExceptionsConverter.Instance;
@@ -28,8 +30,6 @@ namespace NZazu.LayoutStrategy
             if (type == typeof(INZazuWpfFieldFactory)) return new NZazuFieldFactory();
             throw new NotSupportedException($"Cannot lookup {type.Name}");
         }
-
-        private Application application;
 
         [SetUp]
         [ExcludeFromCodeCoverage]
@@ -59,13 +59,19 @@ namespace NZazu.LayoutStrategy
             var container = new ContentControl();
             var fields = new NZazuField[]
             {
-                new NZazuLabelField(new FieldDefinition {Key = "label01",Prompt="label prompt", Description = "label text"}, ServiceLocator),
-                new NZazuTextField(new FieldDefinition {Key = "text01", Prompt="text prompt", Description = "text tooltip"}, ServiceLocator),
-                new NZazuBoolField(new FieldDefinition {Key = "bool01",Prompt="bool prompt", Description = "checkbox tooltip"}, ServiceLocator)
+                new NZazuLabelField(
+                    new FieldDefinition {Key = "label01", Prompt = "label prompt", Description = "label text"},
+                    ServiceLocator),
+                new NZazuTextField(
+                    new FieldDefinition {Key = "text01", Prompt = "text prompt", Description = "text tooltip"},
+                    ServiceLocator),
+                new NZazuBoolField(
+                    new FieldDefinition {Key = "bool01", Prompt = "bool prompt", Description = "checkbox tooltip"},
+                    ServiceLocator)
             };
             sut.DoLayout(container, fields);
 
-            var grid = (Grid)container.Content;
+            var grid = (Grid) container.Content;
             grid.Should().NotBeNull();
 
             var colDefs = grid.ColumnDefinitions;
@@ -78,7 +84,7 @@ namespace NZazu.LayoutStrategy
             rowDefs.All(r => r.Height == GridLength.Auto).Should().BeTrue();
 
             grid.Children.Should().HaveCount(2 * fields.Length);
-            for (int i = 0; i < fields.Length; i++)
+            for (var i = 0; i < fields.Length; i++)
             {
                 grid.Children[2 * i].Should().Be(fields[i].LabelControl);
                 grid.Children[2 * i + 1].Should().Be(fields[i].ValueControl);
@@ -101,7 +107,7 @@ namespace NZazu.LayoutStrategy
 
             sut.DoLayout(container, fields);
 
-            var grid = (Grid)container.Content;
+            var grid = (Grid) container.Content;
             grid.Should().NotBeNull();
 
             grid.Children.Should().HaveCount(2);
@@ -147,34 +153,40 @@ namespace NZazu.LayoutStrategy
             var container = new ContentControl();
             var fields1 = new NZazuField[]
             {
-                new NZazuLabelField(new FieldDefinition {Key = "label01",Prompt = "Hello",Description = "Hello"}, ServiceLocator),
-                new NZazuTextField(new FieldDefinition {Key = "text01",Prompt = "Hello",Description = "Hello"}, ServiceLocator),
-                new NZazuBoolField(new FieldDefinition {Key = "bool01",Prompt = "Hello",Description = "Hello"}, ServiceLocator)
+                new NZazuLabelField(new FieldDefinition {Key = "label01", Prompt = "Hello", Description = "Hello"},
+                    ServiceLocator),
+                new NZazuTextField(new FieldDefinition {Key = "text01", Prompt = "Hello", Description = "Hello"},
+                    ServiceLocator),
+                new NZazuBoolField(new FieldDefinition {Key = "bool01", Prompt = "Hello", Description = "Hello"},
+                    ServiceLocator)
             };
             var fields2 = new NZazuField[]
             {
-                new NZazuLabelField(new FieldDefinition {Key = "label02",Prompt = "Hello",Description = "Hello"}, ServiceLocator),
-                new NZazuTextField(new FieldDefinition {Key = "text02",Prompt = "Hello",Description = "Hello"}, ServiceLocator),
-                new NZazuBoolField(new FieldDefinition {Key = "bool02",Prompt = "Hello",Description = "Hello"}, ServiceLocator)
+                new NZazuLabelField(new FieldDefinition {Key = "label02", Prompt = "Hello", Description = "Hello"},
+                    ServiceLocator),
+                new NZazuTextField(new FieldDefinition {Key = "text02", Prompt = "Hello", Description = "Hello"},
+                    ServiceLocator),
+                new NZazuBoolField(new FieldDefinition {Key = "bool02", Prompt = "Hello", Description = "Hello"},
+                    ServiceLocator)
             };
             var groups = new[]
             {
-                new NZazuGroupField(new FieldDefinition {Key = "stack01"}, ServiceLocator) {  Fields = fields1 },
-                new NZazuGroupField(new FieldDefinition {Key = "group01"}, ServiceLocator) { Fields = fields2 }
+                new NZazuGroupField(new FieldDefinition {Key = "stack01"}, ServiceLocator) {Fields = fields1},
+                new NZazuGroupField(new FieldDefinition {Key = "group01"}, ServiceLocator) {Fields = fields2}
             };
 
             sut.DoLayout(container, groups);
 
-            var grid = (Grid)container.Content;
+            var grid = (Grid) container.Content;
             grid.Should().NotBeNull();
 
             grid.Children.Should().HaveCount(2);
-            var content1 = (ContentControl)groups[0].ValueControl;
-            var content2 = (ContentControl)groups[1].ValueControl;
+            var content1 = (ContentControl) groups[0].ValueControl;
+            var content2 = (ContentControl) groups[1].ValueControl;
             grid.Children[0].Should().Be(content1);
             grid.Children[1].Should().Be(content2);
 
-            var grid1 = (Grid)content1.Content;
+            var grid1 = (Grid) content1.Content;
             grid1.Children.Should().HaveCount(fields1.Length * 2); // because we have label and value
             foreach (var field in fields1)
             {
@@ -182,7 +194,7 @@ namespace NZazu.LayoutStrategy
                 grid1.Children.Should().Contain(field.ValueControl);
             }
 
-            var grid2 = (Grid)content2.Content;
+            var grid2 = (Grid) content2.Content;
             grid2.Children.Should().HaveCount(fields2.Length * 2); // because we have label and value
             foreach (var t in fields2)
             {
@@ -208,18 +220,20 @@ namespace NZazu.LayoutStrategy
             {
                 new NZazuLabelField(new FieldDefinition {Key = "label01"}, ServiceLocator),
                 new NZazuTextField(new FieldDefinition {Key = "text01"}, ServiceLocator),
-                new NZazuBoolField(new FieldDefinition {Key="bool01"}, ServiceLocator)
+                new NZazuBoolField(new FieldDefinition {Key = "bool01"}, ServiceLocator)
             };
             var fields2 = new NZazuField[]
             {
-                new NZazuLabelField(new FieldDefinition {Key="label01", Description = "label2"}, ServiceLocator),
-                new NZazuTextField(new FieldDefinition {Key="text01"}, ServiceLocator),
-                new NZazuBoolField(new FieldDefinition {Key="bool01"}, ServiceLocator)
+                new NZazuLabelField(new FieldDefinition {Key = "label01", Description = "label2"}, ServiceLocator),
+                new NZazuTextField(new FieldDefinition {Key = "text01"}, ServiceLocator),
+                new NZazuBoolField(new FieldDefinition {Key = "bool01"}, ServiceLocator)
             };
             var groups = new[]
             {
-                new NZazuGroupField(new FieldDefinition {Key="stack01"}, ServiceLocator) { Fields = fields1, Layout = "stack"},
-                new NZazuGroupField(new FieldDefinition {Key="grid01"}, ServiceLocator) { Fields = fields2, Layout = "grid"}
+                new NZazuGroupField(new FieldDefinition {Key = "stack01"}, ServiceLocator)
+                    {Fields = fields1, Layout = "stack"},
+                new NZazuGroupField(new FieldDefinition {Key = "grid01"}, ServiceLocator)
+                    {Fields = fields2, Layout = "grid"}
             };
 
             sut.DoLayout(container, groups, resolveLayout);

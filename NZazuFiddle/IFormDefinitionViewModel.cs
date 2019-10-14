@@ -2,9 +2,9 @@
 
 namespace NZazuFiddle
 {
-    public interface IFormDefinitionViewModel 
+    public interface IFormDefinitionViewModel
         : IHaveFormDefinition
-        , IHaveJsonFor<FormDefinition>
+            , IHaveJsonFor<FormDefinition>
     {
     }
 }

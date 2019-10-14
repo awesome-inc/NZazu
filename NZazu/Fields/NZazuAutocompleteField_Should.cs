@@ -33,7 +33,7 @@ namespace NZazu.Fields
         {
             var sug = Substitute.For<IProvideSuggestions>();
             var sut = new NZazuAutocompleteField(
-                new FieldDefinition { Key = "test", Settings = { { "dataconnection", "datakey" } } },
+                new FieldDefinition {Key = "test", Settings = {{"dataconnection", "datakey"}}},
                 x => ServiceLocator(x, sug));
 
             sut.Should().NotBeNull();

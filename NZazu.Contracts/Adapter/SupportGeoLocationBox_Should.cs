@@ -14,7 +14,7 @@ namespace NZazu.Contracts.Adapter
             var sut = new SupportGeoLocationBox();
             sut.Should().NotBeNull();
 
-            var data = new NZazuCoordinate() { Lat = 23.4, Lon = 56.7 };
+            var data = new NZazuCoordinate {Lat = 23.4, Lon = 56.7};
             data.Should().BeEquivalentTo(sut.Parse(sut.ToString(data)));
         }
     }

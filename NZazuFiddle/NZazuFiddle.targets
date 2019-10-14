@@ -1,18 +1,19 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8"?>
+
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 
   <Target Name="Deploy" DependsOnTargets="Publish" />
 
-  <Target Name="NZazu_SetSetClickOnceVersion" 
-    Condition="'$(ApplicationVersion)'==''"
-    AfterTargets="UpdateAssemblyInfo" 
-    BeforeTargets="_DeploymentComputeClickOnceManifestInfo">
+  <Target Name="NZazu_SetSetClickOnceVersion"
+          Condition="'$(ApplicationVersion)'==''"
+          AfterTargets="UpdateAssemblyInfo"
+          BeforeTargets="_DeploymentComputeClickOnceManifestInfo">
     <CreateProperty Value="$(GitVersion_MajorMinorPatch).$(Build)">
-      <Output TaskParameter="Value" PropertyName="ApplicationVersion"/>
+      <Output TaskParameter="Value" PropertyName="ApplicationVersion" />
     </CreateProperty>
-    <Message Text="ApplicationVersion: $(ApplicationVersion)"/>
+    <Message Text="ApplicationVersion: $(ApplicationVersion)" />
   </Target>
-  
+
   <PropertyGroup>
     <!-- <Build>42</Build> -->
     <CoverageFailOnTargetFail>false</CoverageFailOnTargetFail>
@@ -38,16 +39,16 @@
     <UpdateIntervalUnits>Days</UpdateIntervalUnits>
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>true</UpdateRequired>
-    
+
     <MapFileExtensions>false</MapFileExtensions>
 
     <InstallUrl>$(PublishUrl)</InstallUrl>
     <UpdateUrl>$(PublishUrl)</UpdateUrl>
     <SupportUrl>https://github.com/awesome-inc/NZazu</SupportUrl>
-    
+
     <ProductName>$(ProjectName)</ProductName>
     <PublisherName>NZazu</PublisherName>
-<!--     <SuiteName>NZazu</SuiteName> -->    
+    <!--     <SuiteName>NZazu</SuiteName> -->
 
     <MinimumRequiredVersion>0.1.0.0</MinimumRequiredVersion>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
@@ -61,7 +62,7 @@
     <BootstrapperEnabled>false</BootstrapperEnabled>
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <BootstrapperComponentsLocation>Relative</BootstrapperComponentsLocation>
-   
+
     <!-- 
     FileAssociations
     DisallowUrlActivation
@@ -75,12 +76,12 @@
       <Visible>False</Visible>
       <ProductName>Microsoft .NET Framework 4.5.2 %28x86 and x64%29</ProductName>
       <Install>true</Install>
-    </BootstrapperPackage>    
+    </BootstrapperPackage>
     <BootstrapperPackage Include="Microsoft.Windows.Installer.4.5">
       <Visible>False</Visible>
       <ProductName>Windows Installer 4.5</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  
+
 </Project>

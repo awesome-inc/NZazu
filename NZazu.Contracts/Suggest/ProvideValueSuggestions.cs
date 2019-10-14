@@ -6,8 +6,8 @@ using System.Linq;
 namespace NZazu.Contracts.Suggest
 {
     /// <summary>
-    /// provider for native values retrieved from nzazu form definition file.
-    /// settings: "dataConnection" -> "v:anton|adam|abraham|anna|annika|astrid"
+    ///     provider for native values retrieved from nzazu form definition file.
+    ///     settings: "dataConnection" -> "v:anton|adam|abraham|anna|annika|astrid"
     /// </summary>
     public class ProvideValueSuggestions : IProvideSuggestions
     {

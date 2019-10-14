@@ -10,8 +10,11 @@ namespace NZazu.Extensions
     public class NoExceptionsConverter : IValueConverter
     {
         public static readonly NoExceptionsConverter Instance = new NoExceptionsConverter();
+
         // ReSharper disable once MemberCanBePrivate.Global
-        internal NoExceptionsConverter() { }
+        internal NoExceptionsConverter()
+        {
+        }
 
         #region IValueConverter Members
 

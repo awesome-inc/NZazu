@@ -36,7 +36,7 @@ namespace NZazu.Contracts.Suggest
         public bool IsBlackListed(TKey key, int maxFails)
         {
             _cache.TryGetValue(key, out var count);
-            return (count >= maxFails); // NOTE: count = 0, if not contained in the black list.
+            return count >= maxFails; // NOTE: count = 0, if not contained in the black list.
         }
 
         public void Clear()

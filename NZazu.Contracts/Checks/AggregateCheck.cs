@@ -7,13 +7,14 @@ namespace NZazu.Contracts.Checks
     public class AggregateCheck : IValueCheck
     {
         private readonly List<IValueCheck> _checks;
-        public IEnumerable<IValueCheck> Checks => _checks;
 
 
         public AggregateCheck(IEnumerable<IValueCheck> checks)
         {
             _checks = (checks ?? Enumerable.Empty<IValueCheck>()).ToList();
         }
+
+        public IEnumerable<IValueCheck> Checks => _checks;
 
         public ValueCheckResult Validate(string value, object parsedValue, IFormatProvider formatProvider)
         {

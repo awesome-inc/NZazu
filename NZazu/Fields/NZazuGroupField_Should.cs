@@ -46,7 +46,7 @@ namespace NZazu.Fields
         [Test]
         public void Not_support_direct_binding_or_validation()
         {
-            var sut = new NZazuGroupField(new FieldDefinition { Key = "key" }, ServiceLocator);
+            var sut = new NZazuGroupField(new FieldDefinition {Key = "key"}, ServiceLocator);
             sut.ContentProperty.Should().Be(null);
         }
 
@@ -54,8 +54,8 @@ namespace NZazu.Fields
         [STAThread]
         public void Create_ContentControl()
         {
-            var sut = new NZazuGroupField(new FieldDefinition { Key = "key" }, ServiceLocator);
-            var contentControl = (ContentControl)sut.ValueControl;
+            var sut = new NZazuGroupField(new FieldDefinition {Key = "key"}, ServiceLocator);
+            var contentControl = (ContentControl) sut.ValueControl;
 
             contentControl.Should().NotBeNull();
 
@@ -66,8 +66,8 @@ namespace NZazu.Fields
         [STAThread]
         public void Create_Groupbox()
         {
-            var sut = new NZazuGroupField(new FieldDefinition { Key = "key", Description = "Header" }, ServiceLocator);
-            var contentControl = (GroupBox)sut.ValueControl;
+            var sut = new NZazuGroupField(new FieldDefinition {Key = "key", Description = "Header"}, ServiceLocator);
+            var contentControl = (GroupBox) sut.ValueControl;
 
             contentControl.Should().NotBeNull();
 
@@ -77,7 +77,7 @@ namespace NZazu.Fields
         [Test]
         public void Not_be_Editable()
         {
-            var sut = new NZazuGroupField(new FieldDefinition { Key = "test" }, ServiceLocator);
+            var sut = new NZazuGroupField(new FieldDefinition {Key = "test"}, ServiceLocator);
             sut.IsEditable.Should().BeFalse();
         }
     }

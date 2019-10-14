@@ -9,14 +9,15 @@ namespace NZazu.Contracts.Checks
     [DisplayName("regex")]
     public class StringRegExCheck : IValueCheck
     {
+        private readonly ValueCheckResult _noMatch;
+
+        internal readonly StringRegExCheckSettings Settings;
+
         internal class StringRegExCheckSettings
         {
             public string Hint { get; set; }
             public string RegEx { get; set; }
         }
-
-        internal readonly StringRegExCheckSettings Settings;
-        private readonly ValueCheckResult _noMatch;
 
         // ReSharper disable UnusedParameter.Local
         public StringRegExCheck(
@@ -24,7 +25,7 @@ namespace NZazu.Contracts.Checks
             INZazuTableDataSerializer tableSerializer, int rowIdx,
             FieldDefinition fieldDefinition)
         {
-            Settings = settings.ToDictionary(x => x.Key, x => (object)x.Value).ToObject<StringRegExCheckSettings>();
+            Settings = settings.ToDictionary(x => x.Key, x => (object) x.Value).ToObject<StringRegExCheckSettings>();
 
             if (string.IsNullOrWhiteSpace(Settings.Hint)) throw new ArgumentNullException(nameof(Settings.Hint));
             if (string.IsNullOrWhiteSpace(Settings.RegEx)) throw new ArgumentNullException(nameof(Settings.RegEx));

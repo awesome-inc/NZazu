@@ -15,7 +15,7 @@ namespace NZazu.Contracts
             var sut = new BehaviorDefinition
             {
                 Name = "name",
-                Settings = new Dictionary<string, string> { {"key1", "value1"},{"key2", "value2"}}
+                Settings = new Dictionary<string, string> {{"key1", "value1"}, {"key2", "value2"}}
             };
 
             sut.Name.Should().Be("name");

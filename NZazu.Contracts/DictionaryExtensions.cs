@@ -65,18 +65,18 @@ namespace NZazu.Contracts
                     }
                 }
             }
+
             return equal;
         }
 
-        public static Dictionary<string, string> MergedWith(this IDictionary<string, string> source, IDictionary<string, string> toMerge)
+        public static Dictionary<string, string> MergedWith(this IDictionary<string, string> source,
+            IDictionary<string, string> toMerge)
         {
             var toBeMerged = source ?? new Dictionary<string, string>();
             var result = toBeMerged.ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
             if (toMerge != null)
-            {
                 foreach (var key in toMerge.Keys)
                     result[key] = toMerge[key];
-            }
             return result;
         }
 
@@ -84,13 +84,12 @@ namespace NZazu.Contracts
         {
             var anyChanges = false;
             foreach (var field in toMerge)
-            {
                 if (!mergeTo.ContainsKey(field.Key) || mergeTo[field.Key] != field.Value)
                 {
                     mergeTo[field.Key] = field.Value;
                     anyChanges = true;
                 }
-            }
+
             return anyChanges;
         }
 
@@ -100,7 +99,7 @@ namespace NZazu.Contracts
             return value ?? defaultValue;
         }
 
-        public static T? Get<T>(this Dictionary<string, string> settings, string key) 
+        public static T? Get<T>(this Dictionary<string, string> settings, string key)
             where T : struct
         {
             var str = settings.Get(key);
@@ -108,11 +107,12 @@ namespace NZazu.Contracts
             try
             {
                 if (str == null) return null;
-                return (T)Convert.ChangeType(str, typeof(T), CultureInfo.InvariantCulture);
+                return (T) Convert.ChangeType(str, typeof(T), CultureInfo.InvariantCulture);
             }
             catch (Exception)
             {
-                Trace.TraceWarning($"Setting {key} with value '{str ?? "<null>"}' has the wrong type. A {typeof(T).Name} is expected.");
+                Trace.TraceWarning(
+                    $"Setting {key} with value '{str ?? "<null>"}' has the wrong type. A {typeof(T).Name} is expected.");
                 return null;
             }
         }
@@ -124,23 +124,21 @@ namespace NZazu.Contracts
             var someObjectType = someObject.GetType();
 
             foreach (var item in source)
-            {
                 someObjectType
                     .GetProperty(item.Key)
                     ?.SetValue(someObject, item.Value, null);
-            }
 
             return someObject;
         }
 
-        public static IDictionary<string, object> AsDictionary(this object source, BindingFlags bindingAttr = BindingFlags.DeclaredOnly | BindingFlags.Public | BindingFlags.Instance)
+        public static IDictionary<string, object> AsDictionary(this object source,
+            BindingFlags bindingAttr = BindingFlags.DeclaredOnly | BindingFlags.Public | BindingFlags.Instance)
         {
             return source.GetType().GetProperties(bindingAttr).ToDictionary
             (
                 propInfo => propInfo.Name,
                 propInfo => propInfo.GetValue(source, null)
             );
-
         }
     }
 }

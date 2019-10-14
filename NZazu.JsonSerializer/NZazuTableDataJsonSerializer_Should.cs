@@ -25,7 +25,7 @@ namespace NZazu.JsonSerializer
             var data = new Dictionary<string, string>
             {
                 {"Jane", "Doe"},
-                {"John", "Smith"},
+                {"John", "Smith"}
             };
 
             var sut = new NZazuTableDataJsonSerializer();

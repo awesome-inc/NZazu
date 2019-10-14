@@ -8,7 +8,11 @@ namespace NZazu.Fields
     public class NZazuTextField : NZazuField<string>
     {
         public NZazuTextField(FieldDefinition definition, Func<Type, object> serviceLocatorFunc)
-            : base(definition, serviceLocatorFunc) { }
+            : base(definition, serviceLocatorFunc)
+        {
+        }
+
+        public override DependencyProperty ContentProperty => TextBox.TextProperty;
 
         public override void SetValue(string value)
         {
@@ -21,11 +25,9 @@ namespace NZazu.Fields
             return Value;
         }
 
-        public override DependencyProperty ContentProperty => TextBox.TextProperty;
-
         protected override Control CreateValueControl()
         {
-            var control = new TextBox { ToolTip = Definition.Description };
+            var control = new TextBox {ToolTip = Definition.Description};
             return control;
         }
     }

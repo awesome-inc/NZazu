@@ -1,7 +1,7 @@
-﻿using FluentAssertions;
+﻿using System;
+using FluentAssertions;
 using NEdifis.Attributes;
 using NUnit.Framework;
-using System;
 
 namespace NZazu.Contracts.Checks
 {

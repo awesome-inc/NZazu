@@ -29,7 +29,7 @@ namespace NZazu.Fields
             }
 
             var propertyInfo = type.GetProperty(propName, BindingFlags.Public | BindingFlags.Instance);
-            return (propertyInfo != null) && HasPublicGetterAndSetter(propertyInfo);
+            return propertyInfo != null && HasPublicGetterAndSetter(propertyInfo);
         }
 
         public static void SetProperty(this object item, string propertyName, string propValue)
@@ -70,6 +70,7 @@ namespace NZazu.Fields
                     if (outVal != null)
                         propInfo.SetValue(item, outVal, null);
                 }
+
                 break;
             }
         }
@@ -85,14 +86,15 @@ namespace NZazu.Fields
             try
             {
                 var converter = TypeDescriptor.GetConverter(propInfo.PropertyType);
-                return converter.CanConvertFrom(typeof(string)) 
+                return converter.CanConvertFrom(typeof(string))
                     // ReSharper disable once AssignNullToNotNullAttribute
-                    ? converter.ConvertFrom(null, CultureInfo.InvariantCulture, propValue) 
+                    ? converter.ConvertFrom(null, CultureInfo.InvariantCulture, propValue)
                     : Convert.ChangeType(propValue, propInfo.PropertyType);
             }
             catch (Exception ex)
             {
-                var message = $"Could not convert the value \"{propValue}\" for property type \"{propInfo?.PropertyType.Name}\" of prop \"{propInfo?.Name}\"";
+                var message =
+                    $"Could not convert the value \"{propValue}\" for property type \"{propInfo?.PropertyType.Name}\" of prop \"{propInfo?.Name}\"";
                 throw new ArgumentException(message, ex);
             }
         }

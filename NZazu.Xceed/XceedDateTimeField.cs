@@ -10,13 +10,15 @@ namespace NZazu.Xceed
     public class XceedDateTimeField : NZazuDateField
     {
         public XceedDateTimeField(FieldDefinition definition, Func<Type, object> serviceLocatorFunc)
-            : base(definition, serviceLocatorFunc) { }
+            : base(definition, serviceLocatorFunc)
+        {
+        }
 
         public override DependencyProperty ContentProperty => DateTimePickerWithUpdate.ValueProperty;
 
         protected override Control CreateValueControl()
         {
-            var control = new DateTimePickerWithUpdate { ToolTip = Definition.Description, Watermark = Definition.Hint };
+            var control = new DateTimePickerWithUpdate {ToolTip = Definition.Description, Watermark = Definition.Hint};
 
             // set date time format
             DateFormat = Definition.Settings.Get(nameof(control.Format));
@@ -27,9 +29,8 @@ namespace NZazu.Xceed
                 control.FormatString = DateFormat;
 
                 if (Definition.Settings.ContainsKey(nameof(control.Format)))
-                {
-                    Definition.Settings[nameof(control.Format)] = Enum.GetName(typeof(DateTimeFormat), DateTimeFormat.Custom);
-                }
+                    Definition.Settings[nameof(control.Format)] =
+                        Enum.GetName(typeof(DateTimeFormat), DateTimeFormat.Custom);
             }
 
             return control;

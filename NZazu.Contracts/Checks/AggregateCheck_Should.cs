@@ -1,9 +1,9 @@
+using System;
+using System.Linq;
 using FluentAssertions;
 using NEdifis.Attributes;
 using NSubstitute;
 using NUnit.Framework;
-using System;
-using System.Linq;
 
 namespace NZazu.Contracts.Checks
 {
@@ -25,10 +25,10 @@ namespace NZazu.Contracts.Checks
         {
             var check1 = Substitute.For<IValueCheck>();
             var check2 = Substitute.For<IValueCheck>();
-            check1.Validate(null, null, null).Returns((ValueCheckResult)null);
-            check2.Validate(null, null, null).Returns((ValueCheckResult)null);
+            check1.Validate(null, null, null).Returns((ValueCheckResult) null);
+            check2.Validate(null, null, null).Returns((ValueCheckResult) null);
 
-            var sut = new AggregateCheck(new[] { check1, check2 });
+            var sut = new AggregateCheck(new[] {check1, check2});
             var result = sut.Validate(null, null, null);
 
             result.Should().NotBeNull();
@@ -41,10 +41,10 @@ namespace NZazu.Contracts.Checks
         {
             var check1 = Substitute.For<IValueCheck>();
             var check2 = Substitute.For<IValueCheck>();
-            check1.Validate(null, null, null).Returns((ValueCheckResult)null);
-            check2.Validate(null, null, null).Returns((ValueCheckResult)null);
+            check1.Validate(null, null, null).Returns((ValueCheckResult) null);
+            check2.Validate(null, null, null).Returns((ValueCheckResult) null);
 
-            var sut = new AggregateCheck(new[] { check1, check2 });
+            var sut = new AggregateCheck(new[] {check1, check2});
             var result = sut.Validate(null, null, null);
 
             result.Should().NotBeNull();
@@ -66,11 +66,11 @@ namespace NZazu.Contracts.Checks
             check1.Validate(null, null, null).Returns(checkResult1);
             check2.Validate(null, null, null).Returns(checkResult2);
 
-            var sut = new AggregateCheck(new[] { check1, check2 });
+            var sut = new AggregateCheck(new[] {check1, check2});
             var result = sut.Validate(null, null, null);
 
             result.Should().NotBeNull();
-            result.Should().Be(checkResult1, because: "we return the one and only error");
+            result.Should().Be(checkResult1, "we return the one and only error");
             result.IsValid.Should().BeFalse();
             result.Exception.Should().Be(exception);
         }
@@ -85,11 +85,11 @@ namespace NZazu.Contracts.Checks
             check1.Validate(null, null, null).Returns(new ValueCheckResult(exception1));
             check2.Validate(null, null, null).Returns(new ValueCheckResult(exception2));
 
-            var sut = new AggregateCheck(new[] { check1, check2 });
+            var sut = new AggregateCheck(new[] {check1, check2});
             var result = sut.Validate(null, null, null);
 
             result.Should().NotBeNull();
-            result.Should().BeOfType<AggregateValueCheckResult>(because: "we return an aggregation of all errors");
+            result.Should().BeOfType<AggregateValueCheckResult>("we return an aggregation of all errors");
             result.IsValid.Should().BeFalse();
             result.Exception.Should().BeOfType<AggregateException>();
         }

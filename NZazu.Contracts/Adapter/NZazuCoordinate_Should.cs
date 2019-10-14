@@ -11,7 +11,7 @@ namespace NZazu.Contracts.Adapter
         [Test]
         public void Be_Creatable()
         {
-            var sut = new NZazuCoordinate() { Lat = 23, Lon = -10 };
+            var sut = new NZazuCoordinate {Lat = 23, Lon = -10};
 
             sut.Should().NotBeNull();
             sut.Lat.Should().Be(23);

@@ -3,19 +3,20 @@
     <ControlTemplate x:Key="NZazuErrorTemplate">
         <Grid>
             <Border x:Name="errorBorder" BorderThickness="1" BorderBrush="Red">
-                <AdornedElementPlaceholder x:Name="placeholder"/>
+                <AdornedElementPlaceholder x:Name="placeholder" />
             </Border>
             <Image Source="../Images/error.png" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="4"
                    ToolTip="{Binding ElementName=placeholder, Path=AdornedElement.(Validation.Errors)[0].ErrorContent}" />
 
-            <Popup AllowsTransparency="True" HorizontalAlignment="Right" 
-                PopupAnimation="Fade" 
-                PlacementTarget="{Binding ElementName=errorBorder}" 
-                Placement="Bottom" VerticalOffset="6" HorizontalOffset="0"
-                IsOpen="{Binding ElementName=placeholder, Path=AdornedElement.IsFocused, Mode=OneWay}">
+            <Popup AllowsTransparency="True" HorizontalAlignment="Right"
+                   PopupAnimation="Fade"
+                   PlacementTarget="{Binding ElementName=errorBorder}"
+                   Placement="Bottom" VerticalOffset="6" HorizontalOffset="0"
+                   IsOpen="{Binding ElementName=placeholder, Path=AdornedElement.IsFocused, Mode=OneWay}">
                 <Border Background="#E0FF6655" CornerRadius="4" Padding="4">
-                    <TextBlock Text="{Binding ElementName=placeholder, Path=AdornedElement.(Validation.Errors)[0].ErrorContent}"
-                        VerticalAlignment="Center"/>
+                    <TextBlock
+                        Text="{Binding ElementName=placeholder, Path=AdornedElement.(Validation.Errors)[0].ErrorContent}"
+                        VerticalAlignment="Center" />
                 </Border>
             </Popup>
         </Grid>

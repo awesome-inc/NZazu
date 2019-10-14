@@ -10,36 +10,14 @@ namespace NZazu.Fields
     public class NZazuKeyedOptionsField
         : NZazuField<string>
     {
-        private static event EventHandler<ValueChangedEventArgs<string>> ValueAdded = (sender, e) => { };
         private static readonly List<NZazuKeyedOptionsField> AvailableFields = new List<NZazuKeyedOptionsField>();
+        private readonly bool _isPublisherOnly;
+        private readonly Dictionary<Guid, string> _optionsCache = new Dictionary<Guid, string>();
 
         private readonly string _storeKey;
-        private readonly bool _isPublisherOnly;
-        private string _currentValue = string.Empty;
         private readonly ComboBox _valueControl;
-        private readonly Dictionary<Guid, string> _optionsCache = new Dictionary<Guid, string>();
+        private string _currentValue = string.Empty;
         private string[] _options;
-
-        public string[] Options
-        {
-            get => _options;
-            internal set
-            {
-                if (value == null) throw new ArgumentNullException(nameof(value));
-                if (value.Length == 0)
-                    throw new ArgumentException("Value cannot be an empty collection.", nameof(value));
-                SetOptionValues(value);
-            }
-        }
-
-        protected internal void SetOptionValues(string[] optionValues)
-        {
-            if (optionValues == null || _valueControl == null) return;
-            _options = optionValues;
-            foreach (var option in _options)
-                _valueControl.Items.Add(option);
-            _valueControl.SelectedItem = _options.FirstOrDefault();
-        }
 
         public NZazuKeyedOptionsField(FieldDefinition definition, Func<Type, object> serviceLocatorFunc)
             : base(definition, serviceLocatorFunc)
@@ -60,9 +38,35 @@ namespace NZazu.Fields
             });
         }
 
+        public string[] Options
+        {
+            get => _options;
+            internal set
+            {
+                if (value == null) throw new ArgumentNullException(nameof(value));
+                if (value.Length == 0)
+                    throw new ArgumentException("Value cannot be an empty collection.", nameof(value));
+                SetOptionValues(value);
+            }
+        }
+
+        // unique id for each control so we dont need to store a reference for it
+        private Guid Id { get; }
+
+        public override DependencyProperty ContentProperty => ComboBox.TextProperty;
+        private static event EventHandler<ValueChangedEventArgs<string>> ValueAdded = (sender, e) => { };
+
+        protected internal void SetOptionValues(string[] optionValues)
+        {
+            if (optionValues == null || _valueControl == null) return;
+            _options = optionValues;
+            foreach (var option in _options)
+                _valueControl.Items.Add(option);
+            _valueControl.SelectedItem = _options.FirstOrDefault();
+        }
+
         public override void Dispose()
         {
-
             ValueAdded.Invoke(this, new ValueChangedEventArgs<string>(_storeKey, Id, _currentValue, null));
             _valueControl.Items.Clear();
             ValueAdded -= OnValueAdded;
@@ -70,9 +74,6 @@ namespace NZazu.Fields
 
             base.Dispose();
         }
-
-        // unique id for each control so we dont need to store a reference for it
-        private Guid Id { get; }
 
         private void OnValueAdded(object sender, ValueChangedEventArgs<string> e)
         {
@@ -101,8 +102,6 @@ namespace NZazu.Fields
                 .ForEach(x => _valueControl.Items.Remove(x));
         }
 
-        public override DependencyProperty ContentProperty => ComboBox.TextProperty;
-
         private ComboBox CreateValueControlInternal()
         {
             var control = new ComboBox
@@ -125,7 +124,8 @@ namespace NZazu.Fields
             if (_currentValue == (_valueControl.Text ?? string.Empty))
                 return;
 
-            ValueAdded.Invoke(this, new ValueChangedEventArgs<string>(_storeKey, Id, _currentValue, _valueControl.Text));
+            ValueAdded.Invoke(this,
+                new ValueChangedEventArgs<string>(_storeKey, Id, _currentValue, _valueControl.Text));
             _currentValue = _valueControl.Text ?? string.Empty;
         }
 
@@ -135,6 +135,9 @@ namespace NZazu.Fields
             StoreAndPublishValue(this, new RoutedEventArgs());
         }
 
-        public override string GetValue() { return Value; }
+        public override string GetValue()
+        {
+            return Value;
+        }
     }
 }

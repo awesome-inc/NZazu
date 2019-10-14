@@ -7,44 +7,12 @@ using System.Threading;
 namespace NZazu.Contracts.Suggest
 {
     /// <summary>
-    /// A generic thread-safe lru-cache.
+    ///     A generic thread-safe lru-cache.
     /// </summary>
     /// <typeparam name="TKey">The type of the keys to use for lookup.</typeparam>
     /// <typeparam name="TValue">The type of the values to keep in the cache.</typeparam>
     public sealed class Cache<TKey, TValue> : ICache<TKey, TValue> where TKey : IEquatable<TKey>
     {
-        /// <summary>
-        /// Cache node class, doubly linked list item.
-        /// </summary>
-        private class Node
-        {
-            /// <summary>
-            /// The key.
-            /// </summary>
-            public TKey Key;
-
-            /// <summary>
-            /// Reference to the next node in the doubly linked list.
-            /// </summary>
-            public Node Next;
-
-            /// <summary>
-            /// Reference to the previous node in the doubly linked list.
-            /// </summary>
-            public Node Previous;
-
-            /// <summary>
-            /// The value.
-            /// </summary>
-            public TValue Value;
-
-            public Node(TKey key, TValue value)
-            {
-                Key = key;
-                Value = value;
-            }
-        }
-
         private const int DefaultInitialCapacity = 1024;
         private const int DefaultMaxSize = 4096;
         private const float DefaultKeepfree = 0f;
@@ -52,35 +20,69 @@ namespace NZazu.Contracts.Suggest
         private readonly ReaderWriterLockSlim _cacheLock = new ReaderWriterLockSlim();
         private readonly IDictionary<TKey, Node> _hashMap;
 
-        /// <summary>
-        /// Number of cache hits, since the last update.
-        /// </summary>
-        public int CacheHits;
-
-        /// <summary>
-        /// Number of cache misses since the last update.
-        /// </summary>
-        public int CacheMisses;
-
         private int _capacity;
         private Node _head;
         private float _keepFree = DefaultKeepfree; // keep some [0,1]-fraction of the cache free
         private Node _tail;
 
         /// <summary>
-        /// Gets the <i>cache state</i> in values between 0 and 100, which
-        /// is a measure of how well the cache currently performs in hiding latency.
-        /// When using the cache in combination with transmitting schemes this
-        /// property may be used to indicate the percentage of data arrived.
+        ///     Number of cache hits, since the last update.
         /// </summary>
-        /// <value>The state.</value>
-        public int State => Math.Max(0, 100 - (100*CacheMisses)/Math.Max(1, CacheHits));
+        public int CacheHits;
 
         /// <summary>
-        /// Gets or sets the keep free percentage value, i.e. a value between 0 and 0.5
-        /// specifiying the relative space in the cache to keep free. This is used
-        /// to avoid stuttering on alternating Add, Remove when the cache capacity
-        /// is reached.
+        ///     Number of cache misses since the last update.
+        /// </summary>
+        public int CacheMisses;
+
+        /// <summary>
+        ///     Initializes a new instance of Cache&lt;K, V&gt; with the default maximum size (1024).
+        /// </summary>
+        public Cache()
+            : this(DefaultMaxSize, DefaultInitialCapacity)
+        {
+        }
+
+        /// <summary>
+        ///     Initializes a new instance of Cache&lt;K, V&gt;.
+        /// </summary>
+        /// <param name="maxSize">
+        ///     The maximum number of elements allowed in the cache. The minimum
+        ///     allowed value is 1.
+        /// </param>
+        public Cache(int maxSize)
+            : this(maxSize, maxSize < DefaultInitialCapacity ? maxSize : DefaultInitialCapacity)
+        {
+        }
+
+        /// <summary>
+        ///     Initializes a new instance of Cache&lt;K, V&gt;.
+        /// </summary>
+        /// <param name="maxSize">
+        ///     The maximum number of elements allowed in the cache. The minimum
+        ///     allowed value is 1.
+        /// </param>
+        /// <param name="initialCapacity">The initial capacity.</param>
+        public Cache(int maxSize, int initialCapacity)
+        {
+            Capacity = maxSize;
+            _hashMap = new Dictionary<TKey, Node>(initialCapacity);
+        }
+
+        /// <summary>
+        ///     Gets the <i>cache state</i> in values between 0 and 100, which
+        ///     is a measure of how well the cache currently performs in hiding latency.
+        ///     When using the cache in combination with transmitting schemes this
+        ///     property may be used to indicate the percentage of data arrived.
+        /// </summary>
+        /// <value>The state.</value>
+        public int State => Math.Max(0, 100 - 100 * CacheMisses / Math.Max(1, CacheHits));
+
+        /// <summary>
+        ///     Gets or sets the keep free percentage value, i.e. a value between 0 and 0.5
+        ///     specifiying the relative space in the cache to keep free. This is used
+        ///     to avoid stuttering on alternating Add, Remove when the cache capacity
+        ///     is reached.
         /// </summary>
         /// <remarks>Reasonable values lie between 0.1 and 0.4</remarks>
         /// <value>The keep free percentage.</value>
@@ -89,27 +91,27 @@ namespace NZazu.Contracts.Suggest
             get => _keepFree;
             set
             {
-                if ((value < 0f) || (value > 0.5f))
+                if (value < 0f || value > 0.5f)
                     throw new ArgumentOutOfRangeException(nameof(value),
-                                                          "Invalid keep free fraction specified (negative or greater than 0.5).");
+                        "Invalid keep free fraction specified (negative or greater than 0.5).");
                 _keepFree = value;
             }
         }
 
         /// <summary>
-        /// Gets the desired count, i.e. maximum size minus the keep-free fraction, which is
-        /// employed to minimize tail removing frequency.
+        ///     Gets the desired count, i.e. maximum size minus the keep-free fraction, which is
+        ///     employed to minimize tail removing frequency.
         /// </summary>
         /// <value>The desired count.</value>
-        public int DesiredCount => (int) ((1.0f - KeepFree)*(Capacity - 1));
+        public int DesiredCount => (int) ((1.0f - KeepFree) * (Capacity - 1));
 
         /// <summary>
-        /// Occurs when a node is to be removed.
+        ///     Occurs when a node is to be removed.
         /// </summary>
         public event CacheEventHandler<TKey, TValue> NodeRemoved;
 
         /// <summary>
-        /// Gets or sets the maximum size of the cache. Minimum size is 1.
+        ///     Gets or sets the maximum size of the cache. Minimum size is 1.
         /// </summary>
         public int Capacity
         {
@@ -117,18 +119,19 @@ namespace NZazu.Contracts.Suggest
             set
             {
                 if (value <= 0)
-                    throw new ArgumentOutOfRangeException(nameof(value), "Invalid cache size specified (zero or negative).");
+                    throw new ArgumentOutOfRangeException(nameof(value),
+                        "Invalid cache size specified (zero or negative).");
                 _capacity = value;
             }
         }
 
         /// <summary>
-        /// Gets the number of elements contained in the cache.
+        ///     Gets the number of elements contained in the cache.
         /// </summary>
         public int Count { get; private set; }
 
         /// <summary>
-        /// Gets the value associated with the specified key.
+        ///     Gets the value associated with the specified key.
         /// </summary>
         /// <exception cref="KeyNotFoundException">Thrown if the specified key does not exist.</exception>
         /// <param name="key">The key of the element to get or set.</param>
@@ -155,6 +158,7 @@ namespace NZazu.Contracts.Suggest
                                 _cacheLock.ExitWriteLock();
                             }
                         }
+
                         return node.Value;
                     }
                 }
@@ -163,7 +167,7 @@ namespace NZazu.Contracts.Suggest
                     _cacheLock.ExitUpgradeableReadLock();
                 }
 
-                return default(TValue);
+                return default;
             }
             set
             {
@@ -193,37 +197,7 @@ namespace NZazu.Contracts.Suggest
         }
 
         /// <summary>
-        /// Initializes a new instance of Cache&lt;K, V&gt; with the default maximum size (1024).
-        /// </summary>
-        public Cache()
-            : this(DefaultMaxSize, DefaultInitialCapacity)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of Cache&lt;K, V&gt;.
-        /// </summary>
-        /// <param name="maxSize">The maximum number of elements allowed in the cache. The minimum
-        /// allowed value is 1.</param>
-        public Cache(int maxSize)
-            : this(maxSize, maxSize < DefaultInitialCapacity ? maxSize : DefaultInitialCapacity)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of Cache&lt;K, V&gt;.
-        /// </summary>
-        /// <param name="maxSize">The maximum number of elements allowed in the cache. The minimum
-        /// allowed value is 1.</param>
-        /// <param name="initialCapacity">The initial capacity.</param>
-        public Cache(int maxSize, int initialCapacity)
-        {
-            Capacity = maxSize;
-            _hashMap = new Dictionary<TKey, Node>(initialCapacity);
-        }
-
-        /// <summary>
-        /// Removes the item at the specified key.
+        ///     Removes the item at the specified key.
         /// </summary>
         /// <param name="key">The key.</param>
         /// <returns>troe on success, false otherwise.</returns>
@@ -256,7 +230,7 @@ namespace NZazu.Contracts.Suggest
         }
 
         /// <summary>
-        /// Removes all items matching a given key predicate.
+        ///     Removes all items matching a given key predicate.
         /// </summary>
         /// <param name="predicate">The predicate.</param>
         /// <returns>The number of items removed.</returns>
@@ -269,10 +243,8 @@ namespace NZazu.Contracts.Suggest
             {
                 var nodes = _hashMap.Values.ToArray();
                 foreach (var node in nodes)
-                {
                     if (predicate(node.Key))
                         InternalRemove(node);
-                }
             }
             finally
             {
@@ -284,7 +256,7 @@ namespace NZazu.Contracts.Suggest
         }
 
         /// <summary>
-        /// Removes all items matching a given value predicate.
+        ///     Removes all items matching a given value predicate.
         /// </summary>
         /// <param name="predicate">The predicate.</param>
         /// <returns>The number of items removed.</returns>
@@ -297,10 +269,8 @@ namespace NZazu.Contracts.Suggest
             {
                 var nodes = _hashMap.Values.ToArray();
                 foreach (var node in nodes)
-                {
                     if (predicate(node.Value))
                         InternalRemove(node);
-                }
             }
             finally
             {
@@ -312,7 +282,7 @@ namespace NZazu.Contracts.Suggest
         }
 
         /// <summary>
-        /// Flushes the cache.
+        ///     Flushes the cache.
         /// </summary>
         public void Clear()
         {
@@ -334,7 +304,7 @@ namespace NZazu.Contracts.Suggest
         }
 
         /// <summary>
-        /// Adds an element with the provided key and value to the cache.
+        ///     Adds an element with the provided key and value to the cache.
         /// </summary>
         /// <param name="key">The object to use as the key of the element.</param>
         /// <param name="value">The object to use as the element.</param>
@@ -368,11 +338,13 @@ namespace NZazu.Contracts.Suggest
         }
 
         /// <summary>
-        /// Gets the value associated with the specified key.
+        ///     Gets the value associated with the specified key.
         /// </summary>
         /// <param name="key">The key whose value to get.</param>
-        /// <param name="value">When this method returns, the value associated with the specified key,
-        /// </param>if the key is found; otherwise the default value of for the type of the value
+        /// <param name="value">
+        ///     When this method returns, the value associated with the specified key,
+        /// </param>
+        /// if the key is found; otherwise the default value of for the type of the value
         /// parameter. This parameter is passed uninitialized.
         /// <returns>true on success, false otherwise.</returns>
         public bool TryGetValue(TKey key, out TValue value)
@@ -403,7 +375,7 @@ namespace NZazu.Contracts.Suggest
                 }
                 else
                 {
-                    value = default(TValue);
+                    value = default;
                     CacheMisses++;
                     return false;
                 }
@@ -415,7 +387,7 @@ namespace NZazu.Contracts.Suggest
         }
 
         /// <summary>
-        /// Determines whether the Cache contains an element with the specified key.
+        ///     Determines whether the Cache contains an element with the specified key.
         /// </summary>
         /// <param name="key">The key to locate.</param>
         /// <returns>true if containing an item with specified key, false otherwise.</returns>
@@ -442,7 +414,7 @@ namespace NZazu.Contracts.Suggest
         }
 
         /// <summary>
-        /// Called when a nodes is removed.
+        ///     Called when a nodes is removed.
         /// </summary>
         /// <param name="node">The node.</param>
         private void OnRemoveNode(Node node)
@@ -463,7 +435,9 @@ namespace NZazu.Contracts.Suggest
                     _head.Previous = null;
             }
             else
+            {
                 node.Previous.Next = node.Next;
+            }
 
             if (node.Next == null) // tail
             {
@@ -472,7 +446,9 @@ namespace NZazu.Contracts.Suggest
                     _tail.Next = null;
             }
             else
+            {
                 node.Next.Previous = node.Previous;
+            }
 
             Count--;
 
@@ -496,27 +472,24 @@ namespace NZazu.Contracts.Suggest
         }
 
         /// <summary>
-        /// Tidies up by removing tail until reaching the desired count.
+        ///     Tidies up by removing tail until reaching the desired count.
         /// </summary>
         private void TidyUp()
         {
-            int desiredCount = DesiredCount;
+            var desiredCount = DesiredCount;
             while (Count >= desiredCount)
                 RemoveTail();
         }
 
         /// <summary>
-        /// Promotes or inserts node by moving it to the head.
+        ///     Promotes or inserts node by moving it to the head.
         /// </summary>
         /// <param name="node">The node.</param>
         private void PromoteOrInsertNode(Node node)
         {
             Debug.Assert(_cacheLock.IsWriteLockHeld);
 
-            if (node == null)
-            {
-                throw new ArgumentNullException(nameof(node), "Internal Cache Error.");
-            }
+            if (node == null) throw new ArgumentNullException(nameof(node), "Internal Cache Error.");
 
             // first entry
             if (_head == null)
@@ -557,7 +530,7 @@ namespace NZazu.Contracts.Suggest
         }
 
         /// <summary>
-        /// Resets the hit/miss statistics.
+        ///     Resets the hit/miss statistics.
         /// </summary>
         public void ResetStatistics()
         {
@@ -565,15 +538,47 @@ namespace NZazu.Contracts.Suggest
         }
 
         /// <summary>
-        /// Returns a <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
+        ///     Returns a <see cref="T:System.String" /> that represents the current <see cref="T:System.Object" />.
         /// </summary>
         /// <returns>
-        /// A <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
+        ///     A <see cref="T:System.String" /> that represents the current <see cref="T:System.Object" />.
         /// </returns>
         public override string ToString()
         {
             //return base.ToString();
             return $"Cur/Max = {Count}/{Capacity}, Hit/Miss = {CacheHits}/{CacheMisses} ({State}%)";
+        }
+
+        /// <summary>
+        ///     Cache node class, doubly linked list item.
+        /// </summary>
+        private class Node
+        {
+            /// <summary>
+            ///     The key.
+            /// </summary>
+            public TKey Key;
+
+            /// <summary>
+            ///     Reference to the next node in the doubly linked list.
+            /// </summary>
+            public Node Next;
+
+            /// <summary>
+            ///     Reference to the previous node in the doubly linked list.
+            /// </summary>
+            public Node Previous;
+
+            /// <summary>
+            ///     The value.
+            /// </summary>
+            public TValue Value;
+
+            public Node(TKey key, TValue value)
+            {
+                Key = key;
+                Value = value;
+            }
         }
     }
 }

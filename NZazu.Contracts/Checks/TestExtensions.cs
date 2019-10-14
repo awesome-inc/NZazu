@@ -8,12 +8,13 @@ namespace NZazu.Contracts.Checks
     [ExcludeFromConventions("testing helper")]
     internal static class TestExtensions
     {
-        public static void ShouldFailWith<TError>(this IValueCheck check, string value, object parsedValue, Predicate<TError> matchError = null)
-            where TError: Exception
+        public static void ShouldFailWith<TError>(this IValueCheck check, string value, object parsedValue,
+            Predicate<TError> matchError = null)
+            where TError : Exception
         {
             var vr = check.Validate(value, parsedValue, CultureInfo.CurrentCulture);
             vr.IsValid.Should().BeFalse();
-            var error = (TError)vr.Exception;
+            var error = (TError) vr.Exception;
             error.Should().NotBeNull();
             matchError?.Invoke(error).Should().BeTrue();
         }

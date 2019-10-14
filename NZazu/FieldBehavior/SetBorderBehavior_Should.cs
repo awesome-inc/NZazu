@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Drawing;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
@@ -8,7 +7,7 @@ using FluentAssertions;
 using NEdifis.Attributes;
 using NSubstitute;
 using NUnit.Framework;
-using SystemColors = System.Windows.SystemColors;
+
 // ReSharper disable PossibleNullReferenceException
 
 namespace NZazu.FieldBehavior

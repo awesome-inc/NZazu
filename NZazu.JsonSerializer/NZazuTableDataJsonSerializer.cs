@@ -7,7 +7,7 @@ namespace NZazu.JsonSerializer
 {
     public class NZazuTableDataJsonSerializer
         : NZazuTableDataSerializerBase
-        , INZazuTableDataSerializer
+            , INZazuTableDataSerializer
     {
         public string Serialize(Dictionary<string, string> data)
         {

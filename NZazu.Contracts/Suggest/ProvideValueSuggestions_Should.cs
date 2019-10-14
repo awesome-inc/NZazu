@@ -22,14 +22,14 @@ namespace NZazu.Contracts.Suggest
         {
             const string dataConnection = "value://anton|adam|abraham|anna|annika|astrid";
             var prefix = "an";
-            var expected = new[] { "anton", "anna", "annika" };
+            var expected = new[] {"anton", "anna", "annika"};
             var sut = new ProvideValueSuggestions();
 
             var actual = sut.For(prefix, dataConnection);
             actual.Should().BeEquivalentTo(expected);
 
             prefix = "ann";
-            expected = new[] { "anna", "annika" };
+            expected = new[] {"anna", "annika"};
             actual = sut.For(prefix, dataConnection);
             actual.Should().BeEquivalentTo(expected);
         }

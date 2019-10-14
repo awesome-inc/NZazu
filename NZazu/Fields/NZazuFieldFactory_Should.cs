@@ -1,3 +1,8 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Windows.Controls;
 using FluentAssertions;
 using NEdifis.Attributes;
 using NSubstitute;
@@ -5,11 +10,6 @@ using NUnit.Framework;
 using NZazu.Contracts;
 using NZazu.Contracts.Checks;
 using NZazu.Fields.Controls;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Windows.Controls;
 
 namespace NZazu.Fields
 {
@@ -41,7 +41,7 @@ namespace NZazu.Fields
         {
             var sut = new NZazuFieldFactory();
 
-            var field = sut.CreateField(new FieldDefinition { Key = "test", Type = fieldType, Description = "test" });
+            var field = sut.CreateField(new FieldDefinition {Key = "test", Type = fieldType, Description = "test"});
 
             field.Should().NotBeNull();
 
@@ -55,10 +55,10 @@ namespace NZazu.Fields
         {
             var sut = new NZazuFieldFactory();
 
-            var fld = sut.CreateField(new FieldDefinition { Key = "test", Type = "location" });
+            var fld = sut.CreateField(new FieldDefinition {Key = "test", Type = "location"});
             fld.ValueControl.Should().BeOfType<GeoLocationBox>();
 
-            ((GeoLocationBox)fld.ValueControl).GeoLocationSupport.Should().NotBeNull();
+            ((GeoLocationBox) fld.ValueControl).GeoLocationSupport.Should().NotBeNull();
         }
 
         [Test]
@@ -69,7 +69,8 @@ namespace NZazu.Fields
         {
             var sut = new NZazuFieldFactory();
 
-            var field = sut.CreateField(new FieldDefinition { Key = "test", Type = fieldType, Description = description });
+            var field = sut.CreateField(new FieldDefinition
+                {Key = "test", Type = fieldType, Description = description});
 
             field.Should().NotBeNull();
 
@@ -105,19 +106,21 @@ namespace NZazu.Fields
             var serializer = Substitute.For<INZazuTableDataSerializer>();
             var checkFactory = Substitute.For<ICheckFactory>();
 
-            var checkDefinition = new CheckDefinition { Type = "required" };
-            var fieldDefinition = new FieldDefinition { Key = "test", Type = "string", Checks = new[] { checkDefinition } };
+            var checkDefinition = new CheckDefinition {Type = "required"};
+            var fieldDefinition = new FieldDefinition {Key = "test", Type = "string", Checks = new[] {checkDefinition}};
             var check = new RequiredCheck(checkDefinition.Settings, null, null, 0, fieldDefinition);
-            checkFactory.CreateCheck(checkDefinition, fieldDefinition, Arg.Any<Func<FormData>>(), Arg.Any<INZazuTableDataSerializer>(), Arg.Any<int>()).Returns(check);
+            checkFactory.CreateCheck(checkDefinition, fieldDefinition, Arg.Any<Func<FormData>>(),
+                Arg.Any<INZazuTableDataSerializer>(), Arg.Any<int>()).Returns(check);
 
             var sut = new NZazuFieldFactory();
             sut.Use(behaviorFactory);
             sut.Use(checkFactory);
             sut.Use(serializer);
 
-            var field = (NZazuField)sut.CreateField(fieldDefinition);
+            var field = (NZazuField) sut.CreateField(fieldDefinition);
 
-            checkFactory.Received(1).CreateCheck(checkDefinition, fieldDefinition, Arg.Any<Func<FormData>>(), Arg.Any<INZazuTableDataSerializer>(), Arg.Any<int>());
+            checkFactory.Received(1).CreateCheck(checkDefinition, fieldDefinition, Arg.Any<Func<FormData>>(),
+                Arg.Any<INZazuTableDataSerializer>(), Arg.Any<int>());
 
             field.Should().NotBeNull();
             field.Check.Should().Be(check);
@@ -130,31 +133,36 @@ namespace NZazu.Fields
             var serializer = Substitute.For<INZazuTableDataSerializer>();
             var checkFactory = Substitute.For<ICheckFactory>();
 
-            var checkDefinition1 = new CheckDefinition { Type = "required" };
-            var checkDefinition2 = new CheckDefinition { Type = "length", Settings = new Dictionary<string, string>() { { "Min", "4" }, { "Max", "6" } } };
+            var checkDefinition1 = new CheckDefinition {Type = "required"};
+            var checkDefinition2 = new CheckDefinition
+                {Type = "length", Settings = new Dictionary<string, string> {{"Min", "4"}, {"Max", "6"}}};
             var fieldDefinition = new FieldDefinition
             {
                 Key = "test",
                 Type = "string",
-                Checks = new[] { checkDefinition1, checkDefinition2 }
+                Checks = new[] {checkDefinition1, checkDefinition2}
             };
             var check1 = new RequiredCheck(checkDefinition1.Settings, null, null, 0, fieldDefinition);
             var check2 = new StringLengthCheck(checkDefinition2.Settings, null, null, 0, fieldDefinition);
 
-            checkFactory.CreateCheck(checkDefinition1, fieldDefinition, Arg.Any<Func<FormData>>(), Arg.Any<INZazuTableDataSerializer>(), Arg.Any<int>()).Returns(check1);
-            checkFactory.CreateCheck(checkDefinition2, fieldDefinition, Arg.Any<Func<FormData>>(), Arg.Any<INZazuTableDataSerializer>(), Arg.Any<int>()).Returns(check2);
+            checkFactory.CreateCheck(checkDefinition1, fieldDefinition, Arg.Any<Func<FormData>>(),
+                Arg.Any<INZazuTableDataSerializer>(), Arg.Any<int>()).Returns(check1);
+            checkFactory.CreateCheck(checkDefinition2, fieldDefinition, Arg.Any<Func<FormData>>(),
+                Arg.Any<INZazuTableDataSerializer>(), Arg.Any<int>()).Returns(check2);
 
             var sut = new NZazuFieldFactory();
             sut.Use(behaviorFactory);
             sut.Use(checkFactory);
             sut.Use(serializer);
 
-            var field = (NZazuField)sut.CreateField(fieldDefinition);
+            var field = (NZazuField) sut.CreateField(fieldDefinition);
 
-            checkFactory.Received(1).CreateCheck(checkDefinition1, fieldDefinition, Arg.Any<Func<FormData>>(), Arg.Any<INZazuTableDataSerializer>(), Arg.Any<int>());
-            checkFactory.Received(1).CreateCheck(checkDefinition2, fieldDefinition, Arg.Any<Func<FormData>>(), Arg.Any<INZazuTableDataSerializer>(), Arg.Any<int>());
+            checkFactory.Received(1).CreateCheck(checkDefinition1, fieldDefinition, Arg.Any<Func<FormData>>(),
+                Arg.Any<INZazuTableDataSerializer>(), Arg.Any<int>());
+            checkFactory.Received(1).CreateCheck(checkDefinition2, fieldDefinition, Arg.Any<Func<FormData>>(),
+                Arg.Any<INZazuTableDataSerializer>(), Arg.Any<int>());
 
-            var aggregateCheck = (AggregateCheck)field.Check;
+            var aggregateCheck = (AggregateCheck) field.Check;
             aggregateCheck.Should().NotBeNull();
             aggregateCheck.Checks.Should().BeEquivalentTo(check1, check2);
         }
@@ -163,15 +171,15 @@ namespace NZazu.Fields
         public void Copy_Settings_from_FieldDefinition()
         {
             var sut = new NZazuFieldFactory();
-            var fieldDefinition = new FieldDefinition { Key = "test", Type = "string" };
-            var field = (NZazuField)sut.CreateField(fieldDefinition);
+            var fieldDefinition = new FieldDefinition {Key = "test", Type = "string"};
+            var field = (NZazuField) sut.CreateField(fieldDefinition);
             field.Definition.Settings.Should().NotBeNull();
             field.Definition.Settings.Should().BeEmpty();
 
-            var settings = new Dictionary<string, string> { { "key", "value" } };
+            var settings = new Dictionary<string, string> {{"key", "value"}};
             fieldDefinition.Settings = settings;
 
-            field = (NZazuField)sut.CreateField(fieldDefinition);
+            field = (NZazuField) sut.CreateField(fieldDefinition);
             field.Definition.Settings.Should().BeEquivalentTo(settings);
         }
 
@@ -181,12 +189,12 @@ namespace NZazu.Fields
             // because view has the resolver and attaches the behavior
             var sut = new NZazuFieldFactory();
 #pragma warning disable 618
-            var field = (NZazuField)sut.CreateField(
+            var field = (NZazuField) sut.CreateField(
                 new FieldDefinition
                 {
                     Key = "test",
                     Type = "string",
-                    Behaviors = new[] { new BehaviorDefinition { Name = "Empty" } }
+                    Behaviors = new[] {new BehaviorDefinition {Name = "Empty"}}
                 });
             field.Should().NotBeNull();
 #pragma warning restore 618
@@ -202,15 +210,15 @@ namespace NZazu.Fields
             {
                 Key = "test",
                 Type = "string",
-                Behaviors = new List<BehaviorDefinition>()
+                Behaviors = new List<BehaviorDefinition>
                 {
-                    new BehaviorDefinition { Name = "behaviorDefinition1" },
-                    new BehaviorDefinition { Name = "behaviorDefinition2" },
-                    new BehaviorDefinition { Name = "behaviorDefinition3" }
+                    new BehaviorDefinition {Name = "behaviorDefinition1"},
+                    new BehaviorDefinition {Name = "behaviorDefinition2"},
+                    new BehaviorDefinition {Name = "behaviorDefinition3"}
                 }
             };
 
-            var field = (NZazuField)sut.CreateField(fieldDef);
+            var field = (NZazuField) sut.CreateField(fieldDef);
             field.Should().NotBeNull();
             field.Behaviors.Should().NotBeNull();
             field.Behaviors.Count().Should().Be(3);
@@ -226,15 +234,15 @@ namespace NZazu.Fields
             {
                 Key = "test",
                 Type = "string",
-                Behaviors = new List<BehaviorDefinition>()
+                Behaviors = new List<BehaviorDefinition>
                 {
-                    new BehaviorDefinition { Name = "behaviorDefinition1" },
-                    new BehaviorDefinition { Name = "behaviorDefinition2" },
-                    new BehaviorDefinition { Name = "behaviorDefinition3" }
+                    new BehaviorDefinition {Name = "behaviorDefinition1"},
+                    new BehaviorDefinition {Name = "behaviorDefinition2"},
+                    new BehaviorDefinition {Name = "behaviorDefinition3"}
                 }
             };
 
-            var field = (NZazuField)sut.CreateField(fieldDef);
+            var field = (NZazuField) sut.CreateField(fieldDef);
             field.Should().NotBeNull();
             field.Behaviors.Should().NotBeNull();
             field.Behaviors.Count().Should().Be(3);
@@ -250,12 +258,12 @@ namespace NZazu.Fields
                 new FieldDefinition
                 {
                     Key = "first",
-                    Type = "string",
+                    Type = "string"
                 },
                 new FieldDefinition
                 {
                     Key = "second",
-                    Type = "string",
+                    Type = "string"
                 }
             };
 
@@ -265,7 +273,7 @@ namespace NZazu.Fields
                 Type = "group",
                 Fields = fields
             };
-            var field = (INZazuWpfFieldContainer)sut.CreateField(fieldDefinition);
+            var field = (INZazuWpfFieldContainer) sut.CreateField(fieldDefinition);
 
             field.Should().NotBeNull();
 
@@ -283,7 +291,7 @@ namespace NZazu.Fields
                 Type = "group",
                 Layout = "grid"
             };
-            var field = (INZazuWpfFieldContainer)sut.CreateField(fieldDefinition);
+            var field = (INZazuWpfFieldContainer) sut.CreateField(fieldDefinition);
 
             field.Layout.Should().Be(fieldDefinition.Layout);
         }
@@ -297,10 +305,10 @@ namespace NZazu.Fields
             {
                 Key = "test",
                 Type = "option",
-                Values = new[] { "1", "2", "3" }
+                Values = new[] {"1", "2", "3"}
             };
 
-            var field = (NZazuOptionsField)sut.CreateField(fieldDefinition);
+            var field = (NZazuOptionsField) sut.CreateField(fieldDefinition);
 
             field.Options.Should().BeEquivalentTo(fieldDefinition.Values);
         }
@@ -314,10 +322,10 @@ namespace NZazu.Fields
             {
                 Key = "test",
                 Type = "keyedoption",
-                Values = new[] { "1", "2", "3" }
+                Values = new[] {"1", "2", "3"}
             };
 
-            var field = (NZazuKeyedOptionsField)sut.CreateField(fieldDefinition);
+            var field = (NZazuKeyedOptionsField) sut.CreateField(fieldDefinition);
 
             field.Options.Should().BeEquivalentTo(fieldDefinition.Values);
         }
@@ -326,15 +334,15 @@ namespace NZazu.Fields
         [STAThread]
         public void Attach_And_Detach_Behavior_To_Fields()
         {
-
             // lets mock the behavior and all the other stuff
             var behavior = Substitute.For<INZazuWpfFieldBehavior>();
             var behaviorFactory = Substitute.For<INZazuWpfFieldBehaviorFactory>();
             var checkFactory = Substitute.For<ICheckFactory>();
             var serializer = Substitute.For<INZazuTableDataSerializer>();
 
-            var behaviorDefinition = new BehaviorDefinition { Name = "Empty" };
-            var fieldDefinition = new FieldDefinition { Key = "a", Type = "string", Behaviors = new[] { behaviorDefinition } };
+            var behaviorDefinition = new BehaviorDefinition {Name = "Empty"};
+            var fieldDefinition = new FieldDefinition
+                {Key = "a", Type = "string", Behaviors = new[] {behaviorDefinition}};
             behaviorFactory.CreateFieldBehavior(behaviorDefinition).Returns(behavior);
 
 
@@ -371,27 +379,36 @@ namespace NZazu.Fields
 
             // Append value to "StringValue" prop on each behaviour to simulate execution of behaviors
             behavior1.When(x => x.AttachTo(Arg.Any<INZazuWpfField>(), Arg.Any<INZazuWpfView>()))
-                .Do(x => ((INZazuWpfField)x.Args()[0]).SetValue(((INZazuWpfField)x.Args()[0]).GetValue() + "behavior 1 executed!"));
+                .Do(x => ((INZazuWpfField) x.Args()[0]).SetValue(
+                    ((INZazuWpfField) x.Args()[0]).GetValue() + "behavior 1 executed!"));
             behavior2.When(x => x.AttachTo(Arg.Any<INZazuWpfField>(), Arg.Any<INZazuWpfView>()))
-                .Do(x => ((INZazuWpfField)x.Args()[0]).SetValue(((INZazuWpfField)x.Args()[0]).GetValue() + "|behavior 2 executed!"));
+                .Do(x => ((INZazuWpfField) x.Args()[0]).SetValue(
+                    ((INZazuWpfField) x.Args()[0]).GetValue() + "|behavior 2 executed!"));
             behavior3.When(x => x.AttachTo(Arg.Any<INZazuWpfField>(), Arg.Any<INZazuWpfView>()))
-                .Do(x => ((INZazuWpfField)x.Args()[0]).SetValue(((INZazuWpfField)x.Args()[0]).GetValue() + "|behavior 3 executed!"));
+                .Do(x => ((INZazuWpfField) x.Args()[0]).SetValue(
+                    ((INZazuWpfField) x.Args()[0]).GetValue() + "|behavior 3 executed!"));
 
             var fieldDefinition = new FieldDefinition
             {
                 Key = "a",
                 Type = "string",
-                Behaviors = new List<BehaviorDefinition>()
+                Behaviors = new List<BehaviorDefinition>
                 {
-                    new BehaviorDefinition { Name = "behaviorDefinition1" },
-                    new BehaviorDefinition { Name = "behaviorDefinition2" },
-                    new BehaviorDefinition { Name = "behaviorDefinition3" }
+                    new BehaviorDefinition {Name = "behaviorDefinition1"},
+                    new BehaviorDefinition {Name = "behaviorDefinition2"},
+                    new BehaviorDefinition {Name = "behaviorDefinition3"}
                 }
             };
 
-            behaviorFactory.CreateFieldBehavior(fieldDefinition.Behaviors.FirstOrDefault(b => b.Name == "behaviorDefinition1")).Returns(behavior1);
-            behaviorFactory.CreateFieldBehavior(fieldDefinition.Behaviors.FirstOrDefault(b => b.Name == "behaviorDefinition2")).Returns(behavior2);
-            behaviorFactory.CreateFieldBehavior(fieldDefinition.Behaviors.FirstOrDefault(b => b.Name == "behaviorDefinition3")).Returns(behavior3);
+            behaviorFactory
+                .CreateFieldBehavior(fieldDefinition.Behaviors.FirstOrDefault(b => b.Name == "behaviorDefinition1"))
+                .Returns(behavior1);
+            behaviorFactory
+                .CreateFieldBehavior(fieldDefinition.Behaviors.FirstOrDefault(b => b.Name == "behaviorDefinition2"))
+                .Returns(behavior2);
+            behaviorFactory
+                .CreateFieldBehavior(fieldDefinition.Behaviors.FirstOrDefault(b => b.Name == "behaviorDefinition3"))
+                .Returns(behavior3);
 
             // make sure an attach happens
             var sut = new NZazuFieldFactory();
@@ -422,6 +439,5 @@ namespace NZazu.Fields
             behavior2.ReceivedWithAnyArgs(1).Detach();
             behavior3.ReceivedWithAnyArgs(1).Detach();
         }
-
     }
 }

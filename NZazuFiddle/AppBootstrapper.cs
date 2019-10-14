@@ -16,11 +16,11 @@ namespace NZazuFiddle
         protected override void ConfigureContainer(ContainerBuilder builder)
         {
             builder.RegisterType<ShellViewModel>().As<IShell>().SingleInstance();
-            
+
             // register all samples
             builder.RegisterAssemblyTypes(Assembly.GetExecutingAssembly())
-               .Where(t => typeof(IHaveSample).IsAssignableFrom(t))
-               .AsImplementedInterfaces();
+                .Where(t => typeof(IHaveSample).IsAssignableFrom(t))
+                .AsImplementedInterfaces();
         }
 
         protected override void ConfigureBootstrapper()
@@ -28,6 +28,7 @@ namespace NZazuFiddle
             base.ConfigureBootstrapper();
             EnforceNamespaceConvention = false;
         }
+
         protected override void OnStartup(object sender, StartupEventArgs e)
         {
             DisplayRootViewFor<IShell>();

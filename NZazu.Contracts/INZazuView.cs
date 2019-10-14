@@ -8,7 +8,7 @@ namespace NZazu.Contracts
         FormDefinition FormDefinition { get; set; }
         FormData FormData { get; set; }
         bool IsReadOnly { get; set; }
-        bool TrySetFocusOn(string key = null, bool force = false);
+        bool TrySetFocusOn(string focusOn = null, bool force = false);
         Dictionary<string, string> GetFieldValues();
         void ApplyChanges();
         ValueCheckResult Validate();

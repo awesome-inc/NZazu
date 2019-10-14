@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using NZazu.Contracts;
 
 namespace NZazu

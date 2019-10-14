@@ -19,8 +19,9 @@ namespace NZazuFiddle
             {
                 if (e.Key != Key.Tab) return;
                 e.Handled = true;
-                textEditor.Dispatcher.BeginInvoke(DispatcherPriority.Input, new Action(() => // input priority is always needed when changing focus
-                    textEditor.TextArea.MoveFocus(new TraversalRequest(FocusNavigationDirection.Next))));
+                textEditor.Dispatcher.BeginInvoke(DispatcherPriority.Input, new Action(
+                    () => // input priority is always needed when changing focus
+                        textEditor.TextArea.MoveFocus(new TraversalRequest(FocusNavigationDirection.Next))));
             };
         }
 
@@ -33,19 +34,19 @@ namespace NZazuFiddle
         {
             if (editor == null)
                 throw new ArgumentNullException(nameof(editor));
-            int endOffset = editor.CaretOffset;
-            int startOffset = FindPrevWordStart(editor.Document, endOffset, words);
+            var endOffset = editor.CaretOffset;
+            var startOffset = FindPrevWordStart(editor.Document, endOffset, words);
             if (startOffset < 0)
                 return string.Empty;
-            else
-                return editor.Document.GetText(startOffset, endOffset - startOffset);
+            return editor.Document.GetText(startOffset, endOffset - startOffset);
         }
 
         private static int FindPrevWordStart(this ITextSource textSource, int offset, int words = 1)
         {
             var position = offset;
-            for (int word = 0; word < words; word++)
-                position = TextUtilities.GetNextCaretPosition(textSource, position, LogicalDirection.Backward, CaretPositioningMode.WordStart);
+            for (var word = 0; word < words; word++)
+                position = TextUtilities.GetNextCaretPosition(textSource, position, LogicalDirection.Backward,
+                    CaretPositioningMode.WordStart);
             return position;
         }
 
@@ -55,9 +56,10 @@ namespace NZazuFiddle
             {
                 if (stream == null) throw new ArgumentException("Resource not found", resourceName);
                 using (var reader = new XmlTextReader(stream))
+                {
                     return HighlightingLoader.Load(reader, HighlightingManager.Instance);
+                }
             }
         }
-
     }
 }

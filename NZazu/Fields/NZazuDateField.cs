@@ -8,17 +8,19 @@ namespace NZazu.Fields
 {
     public class NZazuDateField : NZazuField<DateTime?>
     {
-        public string DateFormat { get; protected internal set; }
-
         public NZazuDateField(FieldDefinition definition, Func<Type, object> serviceLocatorFunc)
-            : base(definition, serviceLocatorFunc) { }
+            : base(definition, serviceLocatorFunc)
+        {
+        }
+
+        public string DateFormat { get; protected internal set; }
 
         public override DependencyProperty ContentProperty => DatePicker.SelectedDateProperty;
 
         protected override Control CreateValueControl()
         {
             DateFormat = Definition.Settings.Get("Format");
-            return new DatePicker { ToolTip = Definition.Description };
+            return new DatePicker {ToolTip = Definition.Description};
         }
 
         public override void SetValue(string value)
@@ -33,6 +35,7 @@ namespace NZazu.Fields
                     ? DateTime.TryParse(value, FormatProvider, dateTimeStyles, out result)
                     : DateTime.TryParseExact(value, DateFormat, FormatProvider, dateTimeStyles, out result);
             }
+
             if (parsed)
                 Value = result;
             else

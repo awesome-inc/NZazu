@@ -1,4 +1,5 @@
 using System;
+using System.Text;
 using System.Windows;
 using ICSharpCode.AvalonEdit;
 
@@ -8,18 +9,19 @@ namespace NZazuFiddle
     {
         public static readonly DependencyProperty GiveMeTheTextProperty =
             DependencyProperty.Register("GiveMeTheText", typeof(string), typeof(SimpleEditor),
-                new FrameworkPropertyMetadata(default(string), FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, PropertyChangedCallback));
-
-        public string GiveMeTheText
-        {
-            get => (string)GetValue(GiveMeTheTextProperty);
-            set => SetValue(GiveMeTheTextProperty, value);
-        }
+                new FrameworkPropertyMetadata(default(string), FrameworkPropertyMetadataOptions.BindsTwoWayByDefault,
+                    PropertyChangedCallback));
 
         public SimpleEditor()
         {
-            Encoding = System.Text.Encoding.UTF8;
+            Encoding = Encoding.UTF8;
             LostFocus += UpdateText;
+        }
+
+        public string GiveMeTheText
+        {
+            get => (string) GetValue(GiveMeTheTextProperty);
+            set => SetValue(GiveMeTheTextProperty, value);
         }
 
         private void UpdateText(object sender, EventArgs eventArgs)
@@ -34,7 +36,7 @@ namespace NZazuFiddle
             DependencyObject dependencyObject,
             DependencyPropertyChangedEventArgs dependencyPropertyChangedEventArgs)
         {
-            var editor = (SimpleEditor)dependencyObject;
+            var editor = (SimpleEditor) dependencyObject;
             if (editor == null) return;
             if (editor.Document == null) return;
 
@@ -42,10 +44,13 @@ namespace NZazuFiddle
 
             editor.Document.Text = dependencyPropertyChangedEventArgs.NewValue.ToString();
 
-            try { editor.CaretOffset = caretOffset; }
-            catch (ArgumentOutOfRangeException) { }
+            try
+            {
+                editor.CaretOffset = caretOffset;
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+            }
         }
-
-        
     }
 }

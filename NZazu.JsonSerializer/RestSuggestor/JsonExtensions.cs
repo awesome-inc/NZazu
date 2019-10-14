@@ -1,8 +1,8 @@
-using NEdifis.Attributes;
-using Newtonsoft.Json.Linq;
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using NEdifis.Attributes;
+using Newtonsoft.Json.Linq;
 
 namespace NZazu.JsonSerializer.RestSuggestor
 {
@@ -12,12 +12,13 @@ namespace NZazu.JsonSerializer.RestSuggestor
     {
         public static bool IsNullOrEmpty(this JToken token)
         {
-            return (token == null) ||
-                   (token.Type == JTokenType.Array && !token.HasValues) ||
-                   (token.Type == JTokenType.Object && !token.HasValues) ||
-                   (token.Type == JTokenType.String && token.ToString() == string.Empty) ||
-                   (token.Type == JTokenType.Null);
+            return token == null ||
+                   token.Type == JTokenType.Array && !token.HasValues ||
+                   token.Type == JTokenType.Object && !token.HasValues ||
+                   token.Type == JTokenType.String && token.ToString() == string.Empty ||
+                   token.Type == JTokenType.Null;
         }
+
         public static void ThrowOnErrors(this JToken response)
         {
             var errors = response.SelectToken("errors", false) as JArray;
@@ -26,6 +27,7 @@ namespace NZazu.JsonSerializer.RestSuggestor
             if (!exceptions.Any()) return;
             throw new AggregateException(exceptions);
         }
+
         private static Exception ToException(this JToken error)
         {
             var message = error.SelectToken("message", false)?.ToString();

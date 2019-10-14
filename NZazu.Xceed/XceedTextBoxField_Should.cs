@@ -26,7 +26,7 @@ namespace NZazu.Xceed
         [Test]
         public void Be_Creatable()
         {
-            var sut = new XceedTextBoxField(new FieldDefinition { Key = "test" }, ServiceLocator);
+            var sut = new XceedTextBoxField(new FieldDefinition {Key = "test"}, ServiceLocator);
             sut.Should().NotBeNull();
             sut.Should().BeAssignableTo<INZazuWpfField>();
         }
@@ -45,7 +45,7 @@ namespace NZazu.Xceed
             sut.Definition.Description.Should().Be("description");
             sut.Definition.Hint.Should().Be("hint");
 
-            var textBox = (WatermarkTextBox)sut.ValueControl;
+            var textBox = (WatermarkTextBox) sut.ValueControl;
             textBox.Should().NotBeNull();
             textBox.Text.Should().BeEmpty();
             textBox.ToolTip.Should().Be(sut.Definition.Description);

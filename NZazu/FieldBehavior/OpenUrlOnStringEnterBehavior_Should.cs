@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using NEdifis.Attributes;
 using NUnit.Framework;
+
 // ReSharper disable StringLiteralTypo
 
 namespace NZazu.FieldBehavior

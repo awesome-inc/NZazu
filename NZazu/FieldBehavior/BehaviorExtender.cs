@@ -7,6 +7,40 @@ namespace NZazu.FieldBehavior
 {
     public class BehaviorExtender
     {
+        private readonly Dictionary<string, Type> _fieldTypes = new Dictionary<string, Type>();
+
+        internal BehaviorExtender()
+        {
+            // over here you can add new default behaviors
+            _fieldTypes.Add("Empty", typeof(EmptyNZazuFieldBehavior));
+            _fieldTypes.Add("OpenUrlOnStringEnter", typeof(OpenUrlOnStringEnterBehavior));
+            _fieldTypes.Add("SetBorder", typeof(SetBorderBehavior));
+        }
+
+        internal IEnumerable<KeyValuePair<string, Type>> Behaviors => _fieldTypes.ToArray();
+
+        internal void RegisterType(string name, Type type)
+        {
+            if (_fieldTypes.ContainsKey(name))
+            {
+                Trace.TraceInformation("A registration for '{0}' already exists for {1}. Replacing with {2}", name,
+                    _fieldTypes[name].Name, type.Name);
+                _fieldTypes[name] = type;
+            }
+            else
+            {
+                _fieldTypes.Add(name, type);
+            }
+        }
+
+        internal void UnregisterType(string name)
+        {
+            if (_fieldTypes.ContainsKey(name))
+                _fieldTypes.Remove(name);
+            else
+                Trace.TraceInformation("A registration for '{0}' does not exist. Nothing removed", name);
+        }
+
         #region lazy static singleton
 
         // ReSharper disable once InconsistentNaming
@@ -44,37 +78,5 @@ namespace NZazu.FieldBehavior
         }
 
         #endregion
-
-        private readonly Dictionary<string, Type> _fieldTypes = new Dictionary<string, Type>();
-
-        internal BehaviorExtender()
-        {
-            // over here you can add new default behaviors
-            _fieldTypes.Add("Empty", typeof(EmptyNZazuFieldBehavior));
-            _fieldTypes.Add("OpenUrlOnStringEnter", typeof(OpenUrlOnStringEnterBehavior));
-            _fieldTypes.Add("SetBorder", typeof(SetBorderBehavior));
-        }
-
-        internal IEnumerable<KeyValuePair<string, Type>> Behaviors => _fieldTypes.ToArray();
-
-        internal void RegisterType(string name, Type type)
-        {
-            if (_fieldTypes.ContainsKey(name))
-            {
-                Trace.TraceInformation("A registration for '{0}' already exists for {1}. Replacing with {2}", name,
-                    _fieldTypes[name].Name, type.Name);
-                _fieldTypes[name] = type;
-            }
-            else
-                _fieldTypes.Add(name, type);
-        }
-
-        internal void UnregisterType(string name)
-        {
-            if (_fieldTypes.ContainsKey(name))
-                _fieldTypes.Remove(name);
-            else
-                Trace.TraceInformation("A registration for '{0}' does not exist. Nothing removed", name);
-        }
     }
 }

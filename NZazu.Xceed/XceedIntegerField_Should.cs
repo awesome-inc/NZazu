@@ -26,7 +26,7 @@ namespace NZazu.Xceed
         [Test]
         public void Be_Creatable()
         {
-            var sut = new XceedIntegerField(new FieldDefinition { Key = "key" }, ServiceLocator);
+            var sut = new XceedIntegerField(new FieldDefinition {Key = "key"}, ServiceLocator);
 
             sut.Should().NotBeNull();
             sut.Should().BeAssignableTo<INZazuWpfField>();
@@ -36,14 +36,16 @@ namespace NZazu.Xceed
         [STAThread]
         public void Use_IntegerUpdown()
         {
-            var sut = new XceedIntegerField(new FieldDefinition { Key = "key" }, ServiceLocator);
+            var sut = new XceedIntegerField(new FieldDefinition {Key = "key"}, ServiceLocator);
             sut.ContentProperty.Should().Be(IntegerUpDown.ValueProperty);
 
-            var control = (IntegerUpDown)sut.ValueControl;
+            var control = (IntegerUpDown) sut.ValueControl;
             control.Should().NotBeNull();
         }
 
-        [Test, Description("FormatString is limited on IntegerUpDown, unsupported format strings results in conversion errors")]
+        [Test]
+        [Description(
+            "FormatString is limited on IntegerUpDown, unsupported format strings results in conversion errors")]
         // cf.: http://wpftoolkit.codeplex.com/wikipage?title=IntegerUpDown&referringTitle=NumericUpDown-derived%20controls#formatstring
         [TestCase("C0", "C0")]
         [TestCase("F2", "F2")]
@@ -54,11 +56,10 @@ namespace NZazu.Xceed
         [STAThread]
         public void Only_use_supported_FormatStrings(string formatString, string expected)
         {
-
-            var sut = new XceedIntegerField(new FieldDefinition { Key = "key" }, ServiceLocator);
+            var sut = new XceedIntegerField(new FieldDefinition {Key = "key"}, ServiceLocator);
             sut.Definition.Settings.Add("Format", formatString);
 
-            var control = (IntegerUpDown)sut.ValueControl;
+            var control = (IntegerUpDown) sut.ValueControl;
             control.FormatString.Should().Be(expected);
         }
     }

@@ -5,7 +5,7 @@ using NZazu.LayoutStrategy;
 
 namespace NZazu
 {
-    [TestFixtureFor(typeof (ResolveLayout))]
+    [TestFixtureFor(typeof(ResolveLayout))]
     // ReSharper disable once InconsistentNaming
     internal class ResolveLayout_Should
     {

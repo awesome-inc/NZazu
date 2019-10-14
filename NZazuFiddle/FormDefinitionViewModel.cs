@@ -12,7 +12,7 @@ namespace NZazuFiddle
         private FormDefinition _definition;
         private bool _inHandle;
 
-        public FormDefinitionViewModel(IEventAggregator events, 
+        public FormDefinitionViewModel(IEventAggregator events,
             FormDefinition definition)
         {
             _events = events ?? throw new ArgumentNullException(nameof(events));
@@ -38,18 +38,32 @@ namespace NZazuFiddle
         {
             if (_inHandle) return;
             _inHandle = true;
-            try { Definition = definition; }
-            finally { _inHandle = false; }
+            try
+            {
+                Definition = definition;
+            }
+            finally
+            {
+                _inHandle = false;
+            }
+        }
+
+        public override FormDefinition Model
+        {
+            get => Definition;
+            set => Definition = value;
         }
 
         private static void Safe(Action action, string couldNot)
         {
-            try { action(); }
-            catch (Exception ex) { Trace.TraceWarning("{0}: {1}", couldNot, ex.Message); }
-        }
-
-        public override FormDefinition Model { get => Definition;
-            set => Definition = value;
+            try
+            {
+                action();
+            }
+            catch (Exception ex)
+            {
+                Trace.TraceWarning("{0}: {1}", couldNot, ex.Message);
+            }
         }
     }
 }

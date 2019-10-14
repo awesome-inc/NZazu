@@ -9,11 +9,12 @@ namespace NZazuFiddle
     {
         public static readonly DependencyProperty GiveMeTheTextProperty =
             DependencyProperty.Register("GiveMeTheText", typeof(string), typeof(AvalonEditBehaviour),
-                new FrameworkPropertyMetadata(default(string), FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, PropertyChangedCallback));
+                new FrameworkPropertyMetadata(default(string), FrameworkPropertyMetadataOptions.BindsTwoWayByDefault,
+                    PropertyChangedCallback));
 
         public string GiveMeTheText
         {
-            get => (string)GetValue(GiveMeTheTextProperty);
+            get => (string) GetValue(GiveMeTheTextProperty);
             set => SetValue(GiveMeTheTextProperty, value);
         }
 
@@ -45,16 +46,22 @@ namespace NZazuFiddle
             DependencyObject dependencyObject,
             DependencyPropertyChangedEventArgs dependencyPropertyChangedEventArgs)
         {
-            var behavior = (AvalonEditBehaviour)dependencyObject;
+            var behavior = (AvalonEditBehaviour) dependencyObject;
             if (behavior.AssociatedObject == null) return;
             var editor = behavior.AssociatedObject;
             if (editor.Document == null) return;
-            
+
             var caretOffset = editor.CaretOffset;
 
             editor.Document.Text = dependencyPropertyChangedEventArgs.NewValue.ToString();
 
-            try { editor.CaretOffset = caretOffset; } catch (ArgumentOutOfRangeException) { }
+            try
+            {
+                editor.CaretOffset = caretOffset;
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+            }
         }
     }
 }

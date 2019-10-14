@@ -13,7 +13,7 @@ using NZazu.Extensions;
 
 namespace NZazu.Fields
 {
-    [TestFixtureFor(typeof (NZazuOptionsField))]
+    [TestFixtureFor(typeof(NZazuOptionsField))]
     [Apartment(ApartmentState.STA)]
     // ReSharper disable InconsistentNaming
     internal class NZazuOptionsField_Should
@@ -29,7 +29,7 @@ namespace NZazu.Fields
         [Test]
         public void Be_Creatable()
         {
-            var sut = new NZazuOptionsField(new FieldDefinition { Key = "key" },ServiceLocator);
+            var sut = new NZazuOptionsField(new FieldDefinition {Key = "key"}, ServiceLocator);
 
             sut.Should().NotBeNull();
             sut.Should().BeAssignableTo<INZazuWpfField>();
@@ -39,10 +39,11 @@ namespace NZazu.Fields
         [STAThread]
         public void Create_ComboBox()
         {
-            var sut = new NZazuOptionsField(new FieldDefinition { Key = "key" ,Description = "description"},ServiceLocator);
+            var sut = new NZazuOptionsField(new FieldDefinition {Key = "key", Description = "description"},
+                ServiceLocator);
 
             sut.ContentProperty.Should().Be(ComboBox.TextProperty);
-            var control = (ComboBox)sut.ValueControl;
+            var control = (ComboBox) sut.ValueControl;
             control.Should().NotBeNull();
 
             control.ToolTip.Should().Be(sut.Definition.Description);
@@ -52,12 +53,12 @@ namespace NZazu.Fields
         [STAThread]
         public void Reflect_changing_Value_in_TextProperty()
         {
-            var sut = new NZazuOptionsField(new FieldDefinition { Key = "key" },ServiceLocator)
+            var sut = new NZazuOptionsField(new FieldDefinition {Key = "key"}, ServiceLocator)
             {
-                Options = new[] { "1", "2", "3", "4", "5"}
+                Options = new[] {"1", "2", "3", "4", "5"}
             };
 
-            var control = (ComboBox)sut.ValueControl;
+            var control = (ComboBox) sut.ValueControl;
             control.Items.Should().BeEquivalentTo(sut.Options);
             control.IsEditable.Should().BeFalse();
 
@@ -87,7 +88,7 @@ namespace NZazu.Fields
         [Test]
         public void Identify_Value_with_StringValue()
         {
-            var sut = new NZazuOptionsField(new FieldDefinition { Key = "key" },ServiceLocator);
+            var sut = new NZazuOptionsField(new FieldDefinition {Key = "key"}, ServiceLocator);
 
             sut.Value.Should().BeNull();
             sut.GetValue().Should().Be(sut.Value);

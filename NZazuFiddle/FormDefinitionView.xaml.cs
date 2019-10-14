@@ -33,10 +33,7 @@ namespace NZazuFiddle
             if (!data.Any()) return;
 
             _completionWindow.Show();
-            _completionWindow.Closed += delegate
-            {
-                _completionWindow = null;
-            };
+            _completionWindow.Closed += delegate { _completionWindow = null; };
         }
 
         private void OnTextEntering(object sender, TextCompositionEventArgs e)
@@ -44,11 +41,9 @@ namespace NZazuFiddle
             if (e.Text.Length <= 0 || _completionWindow == null) return;
 
             if (!char.IsLetterOrDigit(e.Text[0]))
-            {
                 // Whenever a non-letter is typed while the completion window is open,
                 // insert the currently selected element.
                 _completionWindow.CompletionList.RequestInsertion(e);
-            }
 
             // Do not set e.Handled=true.
             // We still want to insert the character that was typed.        

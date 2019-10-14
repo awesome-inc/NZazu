@@ -1,6 +1,5 @@
 using System;
 using System.Threading;
-using System.Windows.Controls;
 using FluentAssertions;
 using NEdifis.Attributes;
 using NUnit.Framework;

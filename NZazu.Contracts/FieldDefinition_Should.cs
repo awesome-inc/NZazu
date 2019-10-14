@@ -41,7 +41,7 @@ namespace NZazu.Contracts
             var sut = new FieldDefinition();
             var behavior1 = Substitute.For<BehaviorDefinition>();
 
-            sut.Behaviors = new[] { behavior1 };
+            sut.Behaviors = new[] {behavior1};
             sut.Behaviors.Should().NotBeNull();
         }
 
@@ -53,7 +53,7 @@ namespace NZazu.Contracts
             var behavior2 = Substitute.For<BehaviorDefinition>();
             var behavior3 = Substitute.For<BehaviorDefinition>();
 
-            sut.Behaviors = new List<BehaviorDefinition>() { behavior1, behavior2, behavior3 };
+            sut.Behaviors = new List<BehaviorDefinition> {behavior1, behavior2, behavior3};
 
             sut.Behaviors.Should().NotBeNullOrEmpty();
             sut.Behaviors.Count().Should().Be(3);
@@ -67,9 +67,8 @@ namespace NZazu.Contracts
             var behavior3 = Substitute.For<BehaviorDefinition>();
             var behavior4 = Substitute.For<BehaviorDefinition>();
 
-            sut.Behaviors = new List<BehaviorDefinition>() { behavior2, behavior3, behavior4 };
+            sut.Behaviors = new List<BehaviorDefinition> {behavior2, behavior3, behavior4};
             sut.Behaviors.Count().Should().Be(3);
         }
-
     }
 }

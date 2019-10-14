@@ -5,10 +5,9 @@ using System.Linq;
 namespace NZazu.Contracts.Checks
 {
     /// <summary>
-    /// Implements an aggregation of <see cref="ValueCheckResult"/>.
-    /// 
-    /// The errors are merged to an <see cref="AggregateException"/>.
-    /// The messages are joins to one single message.
+    ///     Implements an aggregation of <see cref="ValueCheckResult" />.
+    ///     The errors are merged to an <see cref="AggregateException" />.
+    ///     The messages are joins to one single message.
     /// </summary>
     public class AggregateValueCheckResult : ValueCheckResult
     {
@@ -27,6 +26,5 @@ namespace NZazu.Contracts.Checks
                 .Where(x => !x.IsValid)
                 .Select(x => x.Exception));
         }
-
     }
 }

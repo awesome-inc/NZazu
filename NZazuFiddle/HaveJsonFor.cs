@@ -12,7 +12,7 @@ namespace NZazuFiddle
         public string Json
         {
             get => JsonConvert.SerializeObject(Model, Formatting.Indented
-                , new JsonSerializerSettings { DefaultValueHandling = DefaultValueHandling.Ignore }
+                , new JsonSerializerSettings {DefaultValueHandling = DefaultValueHandling.Ignore}
             );
             set
             {
@@ -21,7 +21,10 @@ namespace NZazuFiddle
                     Model = JsonConvert.DeserializeObject<T>(value);
                     JsonError = null;
                 }
-                catch (JsonException ex) { JsonError = ex.Message; }
+                catch (JsonException ex)
+                {
+                    JsonError = ex.Message;
+                }
             }
         }
 

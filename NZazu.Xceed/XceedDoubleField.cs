@@ -11,13 +11,15 @@ namespace NZazu.Xceed
     public class XceedDoubleField : NZazuField<double?>
     {
         public XceedDoubleField(FieldDefinition definition, Func<Type, object> serviceLocatorFunc)
-            : base(definition, serviceLocatorFunc) { }
+            : base(definition, serviceLocatorFunc)
+        {
+        }
 
         public override DependencyProperty ContentProperty => DoubleUpDown.ValueProperty;
 
         protected override Control CreateValueControl()
         {
-            var control = new DoubleUpDown { ToolTip = Definition.Description, Watermark = Definition.Hint };
+            var control = new DoubleUpDown {ToolTip = Definition.Description, Watermark = Definition.Hint};
             var formatString = Definition.Settings.Get("Format");
             if (!string.IsNullOrWhiteSpace(formatString))
                 control.FormatString = formatString;

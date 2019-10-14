@@ -31,59 +31,23 @@ namespace NZazu.Fields
             throw new NotSupportedException($"Cannot lookup {type.Name}");
         }
 
-        #region Test fields to verify base class
-
-        [ExcludeFromCodeCoverage]
-        private class NZazuDummyField : NZazuField<string>
-        {
-            public NZazuDummyField(FieldDefinition definition, Func<Type, object> serviceLocatorFunc)
-                : base(definition, serviceLocatorFunc) { }
-
-            private string _stringValue;
-            public override void SetValue(string value) { _stringValue = value; }
-            public override string GetValue() { return _stringValue; }
-
-            public override DependencyProperty ContentProperty => null;
-            protected override Control CreateValueControl() { return null; }
-        }
-
-        [ExcludeFromCodeCoverage]
-        private class NZazuField_With_Description_As_Content_Property : NZazuDummyField
-        {
-            public NZazuField_With_Description_As_Content_Property(FieldDefinition definition, Func<Type, object> serviceLocatorFunc)
-                : base(definition, serviceLocatorFunc) { }
-
-            public override DependencyProperty ContentProperty => ContentControl.ContentProperty;
-            protected override Control CreateValueControl() { return new ContentControl(); }
-        }
-
-
-        [ExcludeFromCodeCoverage]
-        private class GenericDummyField : NZazuField<int>
-        {
-            public GenericDummyField(FieldDefinition definition, Func<Type, object> serviceLocatorFunc)
-                : base(definition, serviceLocatorFunc) { }
-            public override DependencyProperty ContentProperty => throw new NotImplementedException();
-            protected override Control CreateValueControl() { throw new NotImplementedException(); }
-            public override void SetValue(string value) { throw new NotImplementedException(); }
-            public override string GetValue() { throw new NotImplementedException(); }
-        }
-        #endregion
-
         [Test]
         public void Validate_ctor_parameters()
         {
             // ReSharper disable ObjectCreationAsStatement
-            0.Invoking(x => new NZazuDummyField(new FieldDefinition { Key = "" }, ServiceLocator)).Should().Throw<ArgumentException>();
-            1.Invoking(x => new NZazuDummyField(new FieldDefinition(), ServiceLocator)).Should().Throw<ArgumentException>();
-            2.Invoking(x => new NZazuDummyField(new FieldDefinition { Key = "\t\r\n " }, ServiceLocator)).Should().Throw<ArgumentException>();
+            0.Invoking(x => new NZazuDummyField(new FieldDefinition {Key = ""}, ServiceLocator)).Should()
+                .Throw<ArgumentException>();
+            1.Invoking(x => new NZazuDummyField(new FieldDefinition(), ServiceLocator)).Should()
+                .Throw<ArgumentException>();
+            2.Invoking(x => new NZazuDummyField(new FieldDefinition {Key = "\t\r\n "}, ServiceLocator)).Should()
+                .Throw<ArgumentException>();
             // ReSharper restore ObjectCreationAsStatement
         }
 
         [Test]
         public void Not_Create_Label_if_no_prompt()
         {
-            var sut = new NZazuDummyField(new FieldDefinition { Key = "test" }, ServiceLocator);
+            var sut = new NZazuDummyField(new FieldDefinition {Key = "test"}, ServiceLocator);
             sut.Definition.Prompt.Should().BeNullOrWhiteSpace();
             sut.LabelControl.Should().BeNull();
         }
@@ -92,9 +56,9 @@ namespace NZazu.Fields
         [STAThread]
         public void Create_Label_Matching_Prompt()
         {
-            var sut = new NZazuDummyField(new FieldDefinition { Key = "test", Prompt = "superhero" }, ServiceLocator);
+            var sut = new NZazuDummyField(new FieldDefinition {Key = "test", Prompt = "superhero"}, ServiceLocator);
 
-            var label = (Label)sut.LabelControl;
+            var label = (Label) sut.LabelControl;
             label.Should().NotBeNull();
             label.Content.Should().Be(sut.Definition.Prompt);
         }
@@ -102,7 +66,7 @@ namespace NZazu.Fields
         [Test]
         public void Set_And_Get_Value()
         {
-            var sut = new NZazuDummyField(new FieldDefinition { Key = "test" }, ServiceLocator);
+            var sut = new NZazuDummyField(new FieldDefinition {Key = "test"}, ServiceLocator);
             sut.GetValue().Should().BeNull();
 
             sut.SetValue("test");
@@ -113,7 +77,8 @@ namespace NZazu.Fields
         public void Pass_Validation_To_Checks()
         {
             var check = Substitute.For<IValueCheck>();
-            var sut = new NZazuDummyField(new FieldDefinition { Key = "test", Description = "description" }, ServiceLocator) { Check = check };
+            var sut = new NZazuDummyField(new FieldDefinition {Key = "test", Description = "description"},
+                ServiceLocator) {Check = check};
             var result = sut.Validate();
 
             check.ReceivedWithAnyArgs().Validate(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<IFormatProvider>());
@@ -123,9 +88,11 @@ namespace NZazu.Fields
         public void Pass_Validation_To_Checks_and_returns_first_error_if_any()
         {
             var check = Substitute.For<IValueCheck>();
-            check.Validate(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<IFormatProvider>()).Returns(new ValueCheckResult(false, new Exception("test")));
+            check.Validate(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<IFormatProvider>())
+                .Returns(new ValueCheckResult(false, new Exception("test")));
 
-            var sut = new NZazuDummyField(new FieldDefinition { Key = "test", Description = "description" }, ServiceLocator) { Check = check };
+            var sut = new NZazuDummyField(new FieldDefinition {Key = "test", Description = "description"},
+                ServiceLocator) {Check = check};
             sut.Validate().IsValid.Should().BeFalse();
             check.ReceivedWithAnyArgs().Validate(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<IFormatProvider>());
         }
@@ -135,13 +102,13 @@ namespace NZazu.Fields
         public void Respect_Height_Setting()
         {
             const double expected = 65.5;
-            var definition = new FieldDefinition { Key = "key" };
+            var definition = new FieldDefinition {Key = "key"};
             definition.Settings.Add("Height", expected.ToString(CultureInfo.InvariantCulture));
 
             var field = new NZazuField_With_Description_As_Content_Property(definition, ServiceLocator);
             field.ApplySettings(definition);
 
-            var control = (ContentControl)field.ValueControl;
+            var control = (ContentControl) field.ValueControl;
             control.MinHeight.Should().Be(expected);
             control.MaxHeight.Should().Be(expected);
         }
@@ -151,13 +118,13 @@ namespace NZazu.Fields
         public void Respect_Width_Setting()
         {
             const double expected = 65.5;
-            var definition = new FieldDefinition { Key = "key" };
+            var definition = new FieldDefinition {Key = "key"};
             definition.Settings.Add("Width", expected.ToString(CultureInfo.InvariantCulture));
 
             var field = new NZazuField_With_Description_As_Content_Property(definition, ServiceLocator);
             field.ApplySettings(definition);
 
-            var control = (ContentControl)field.ValueControl;
+            var control = (ContentControl) field.ValueControl;
             control.MinWidth.Should().Be(expected);
             control.MaxWidth.Should().Be(expected);
         }
@@ -166,7 +133,7 @@ namespace NZazu.Fields
         [SetCulture("fr")]
         public void Use_InvariantCulture_in_GetSettingT()
         {
-            var field = new NZazuDummyField(new FieldDefinition { Key = "key" }, ServiceLocator);
+            var field = new NZazuDummyField(new FieldDefinition {Key = "key"}, ServiceLocator);
             const double expectedHeight = 65.5;
             field.Definition.Settings.Add("Height", expectedHeight.ToString(CultureInfo.InvariantCulture));
 
@@ -184,8 +151,9 @@ namespace NZazu.Fields
             check.Validate(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<CultureInfo>())
                 .Returns(new ValueCheckResult(false, new Exception("test")));
 
-            var sut = new NZazuField_With_Description_As_Content_Property(new FieldDefinition { Key = "test", Description = "description" }, ServiceLocator)
-            { Check = check };
+            var sut = new NZazuField_With_Description_As_Content_Property(
+                    new FieldDefinition {Key = "test", Description = "description"}, ServiceLocator)
+                {Check = check};
 
             var expectedRule = new CheckValidationRule(check)
             {
@@ -200,10 +168,10 @@ namespace NZazu.Fields
             // ReSharper disable once PossibleNullReferenceException
             var binding = expression.ParentBinding;
             binding.Should().NotBeNull();
-            binding.Source.Should().Be(sut, because: "we need a source for data binding");
-            binding.Mode.Should().Be(BindingMode.TwoWay, because: "we update databinding in two directions");
+            binding.Source.Should().Be(sut, "we need a source for data binding");
+            binding.Mode.Should().Be(BindingMode.TwoWay, "we update databinding in two directions");
             binding.UpdateSourceTrigger
-                .Should().Be(UpdateSourceTrigger.PropertyChanged, because: "we want validation during edit");
+                .Should().Be(UpdateSourceTrigger.PropertyChanged, "we want validation during edit");
 
             binding.ValidationRules.Single().Should().BeEquivalentTo(expectedRule);
         }
@@ -213,7 +181,7 @@ namespace NZazu.Fields
         [Test]
         public void Be_Editable()
         {
-            var sut = new GenericDummyField(new FieldDefinition { Key = "test" }, ServiceLocator);
+            var sut = new GenericDummyField(new FieldDefinition {Key = "test"}, ServiceLocator);
             sut.IsEditable.Should().BeTrue();
         }
 
@@ -221,7 +189,7 @@ namespace NZazu.Fields
         [STAThread]
         public void Respect_generic_settings()
         {
-            var definition = new FieldDefinition { Key = "test" };
+            var definition = new FieldDefinition {Key = "test"};
             definition.Settings.Add("ContentStringFormat", "dddd – d - MMMM");
             definition.Settings.Add("FontFamily", "Century Gothic");
             definition.Settings.Add("FontWeight", "UltraBold");
@@ -239,13 +207,13 @@ namespace NZazu.Fields
 
             var sut = new NZazuField_With_Description_As_Content_Property(definition, ServiceLocator);
             sut.ApplySettings(definition);
-            var control = (ContentControl)sut.ValueControl;
+            var control = (ContentControl) sut.ValueControl;
 
             control.FontFamily.ToString().Should().Be("Century Gothic");
             control.FontWeight.Should().Be(FontWeights.UltraBold);
             control.FontSize.Should().Be(24);
 
-            var brush = (SolidColorBrush)control.Foreground;
+            var brush = (SolidColorBrush) control.Foreground;
             brush.Color.Should().Be(Colors.BlueViolet);
 
             control.Margin.Should().Be(new Thickness(1, 2, 3, 4));
@@ -264,12 +232,12 @@ namespace NZazu.Fields
         [Test]
         public void Define_Multiple_NullReference_Behaviours()
         {
-            var fieldDefinition = new FieldDefinition { Key = "test" };
+            var fieldDefinition = new FieldDefinition {Key = "test"};
             BehaviorDefinition behavior1 = null;
             BehaviorDefinition behavior2 = null;
             BehaviorDefinition behavior3 = null;
 
-            fieldDefinition.Behaviors = new List<BehaviorDefinition>() { behavior1, behavior2, behavior3 };
+            fieldDefinition.Behaviors = new List<BehaviorDefinition> {behavior1, behavior2, behavior3};
             var sut = new GenericDummyField(fieldDefinition, ServiceLocator);
 
             Assert.DoesNotThrow(() => sut.Dispose());
@@ -281,12 +249,88 @@ namespace NZazu.Fields
         [TestCase("Format")]
         public void Handle_Empty_Property_Values(string propertyName)
         {
-            var fieldDefinition = new FieldDefinition { Key = "test" };
+            var fieldDefinition = new FieldDefinition {Key = "test"};
 
             fieldDefinition.Settings.Add(propertyName, "");
             var field = new NZazuField_With_Description_As_Content_Property(fieldDefinition, ServiceLocator);
 
             Assert.DoesNotThrow(() => field.ApplySettings(fieldDefinition));
         }
+
+        #region Test fields to verify base class
+
+        [ExcludeFromCodeCoverage]
+        private class NZazuDummyField : NZazuField<string>
+        {
+            private string _stringValue;
+
+            public NZazuDummyField(FieldDefinition definition, Func<Type, object> serviceLocatorFunc)
+                : base(definition, serviceLocatorFunc)
+            {
+            }
+
+            public override DependencyProperty ContentProperty => null;
+
+            public override void SetValue(string value)
+            {
+                _stringValue = value;
+            }
+
+            public override string GetValue()
+            {
+                return _stringValue;
+            }
+
+            protected override Control CreateValueControl()
+            {
+                return null;
+            }
+        }
+
+        [ExcludeFromCodeCoverage]
+        private class NZazuField_With_Description_As_Content_Property : NZazuDummyField
+        {
+            public NZazuField_With_Description_As_Content_Property(FieldDefinition definition,
+                Func<Type, object> serviceLocatorFunc)
+                : base(definition, serviceLocatorFunc)
+            {
+            }
+
+            public override DependencyProperty ContentProperty => ContentControl.ContentProperty;
+
+            protected override Control CreateValueControl()
+            {
+                return new ContentControl();
+            }
+        }
+
+
+        [ExcludeFromCodeCoverage]
+        private class GenericDummyField : NZazuField<int>
+        {
+            public GenericDummyField(FieldDefinition definition, Func<Type, object> serviceLocatorFunc)
+                : base(definition, serviceLocatorFunc)
+            {
+            }
+
+            public override DependencyProperty ContentProperty => throw new NotImplementedException();
+
+            protected override Control CreateValueControl()
+            {
+                throw new NotImplementedException();
+            }
+
+            public override void SetValue(string value)
+            {
+                throw new NotImplementedException();
+            }
+
+            public override string GetValue()
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        #endregion
     }
 }

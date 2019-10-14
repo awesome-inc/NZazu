@@ -4,6 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using NZazu.Contracts;
@@ -13,16 +14,18 @@ namespace NZazu.Fields
 {
     public class NZazuImageViewerField : NZazuField
     {
-        private Control _clientControl;
-        private string _stringValue;
-        private string _customValue;
         private readonly IEnumerable<string> _values;
+        private Control _clientControl;
+        private string _customValue;
+        private string _stringValue;
 
         public NZazuImageViewerField(FieldDefinition definition, Func<Type, object> serviceLocatorFunc)
             : base(definition, serviceLocatorFunc)
         {
             _values = Definition.Values ?? Enumerable.Empty<string>();
         }
+
+        public override DependencyProperty ContentProperty => Image.SourceProperty;
 
         public override void SetValue(string value)
         {
@@ -54,7 +57,8 @@ namespace NZazu.Fields
             var image = ((_clientControl as ContentControl)?.Content as Border)?.Child as Image;
             if (image == null) return;
             image.Source = string.IsNullOrEmpty(_stringValue)
-                ? BitmapSource.Create(2, 2, 96, 96, PixelFormats.Indexed1, new BitmapPalette(new List<Color> { Colors.Transparent }), new byte[] { 0, 0, 0, 0 }, 1)
+                ? BitmapSource.Create(2, 2, 96, 96, PixelFormats.Indexed1,
+                    new BitmapPalette(new List<Color> {Colors.Transparent}), new byte[] {0, 0, 0, 0}, 1)
                 // ReSharper disable once AssignNullToNotNullAttribute
                 : new BitmapImage(new Uri(value));
         }
@@ -69,8 +73,6 @@ namespace NZazu.Fields
             return ValueCheckResult.Success;
         }
 
-        public override DependencyProperty ContentProperty => Image.SourceProperty;
-
         protected override Control CreateValueControl()
         {
             if (_clientControl != null) return _clientControl;
@@ -84,8 +86,7 @@ namespace NZazu.Fields
                     Child = new Image
                     {
                         ToolTip = Definition.Description,
-                        Focusable = true,
-
+                        Focusable = true
                     }
                 }
             };
@@ -99,13 +100,13 @@ namespace NZazu.Fields
         }
 
         [ExcludeFromCodeCoverage]
-        private void ClientControl_MouseWheel(object sender, System.Windows.Input.MouseWheelEventArgs e)
+        private void ClientControl_MouseWheel(object sender, MouseWheelEventArgs e)
         {
             ToggleValues(e.Delta < 0);
         }
 
         [ExcludeFromCodeCoverage]
-        private void ClientControl_MouseLeftButtonUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        private void ClientControl_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             (sender as Control)?.Focus();
 
@@ -113,7 +114,7 @@ namespace NZazu.Fields
         }
 
         [ExcludeFromCodeCoverage]
-        private void ClientControl_PreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        private void ClientControl_PreviewKeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key != System.Windows.Input.Key.Space) return;
 
@@ -127,7 +128,7 @@ namespace NZazu.Fields
 
             var options = _values.ToArray();
             if (allowCustomValues != null && allowCustomValues.Value && !string.IsNullOrEmpty(_customValue))
-                options = options.Concat(new[] { _customValue }).ToArray();
+                options = options.Concat(new[] {_customValue}).ToArray();
 
             var currentValueIsAt = -1;
             for (var i = 0; i < options.Length; i++)
@@ -145,15 +146,14 @@ namespace NZazu.Fields
             }
 
             if (toggleBack)
-                if (allowNullValues != null && allowNullValues.Value && (currentValueIsAt == 0))
+                if (allowNullValues != null && allowNullValues.Value && currentValueIsAt == 0)
                     SetValue(null);
                 else
-                    SetValue(options[(Math.Max(currentValueIsAt, 0) + options.Length - 1) % (options.Length)]);
-            else
-                if (allowNullValues != null && allowNullValues.Value && (currentValueIsAt == options.Length - 1))
+                    SetValue(options[(Math.Max(currentValueIsAt, 0) + options.Length - 1) % options.Length]);
+            else if (allowNullValues != null && allowNullValues.Value && currentValueIsAt == options.Length - 1)
                 SetValue(null);
             else
-                SetValue(options[(currentValueIsAt + 1) % (options.Length)]);
+                SetValue(options[(currentValueIsAt + 1) % options.Length]);
         }
     }
 }

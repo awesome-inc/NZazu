@@ -1,11 +1,11 @@
-﻿using FluentAssertions;
-using NEdifis.Attributes;
-using NUnit.Framework;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Reflection;
+using FluentAssertions;
 using NEdifis;
+using NEdifis.Attributes;
+using NUnit.Framework;
 
 namespace NZazu.Contracts.Checks
 {
@@ -32,9 +32,9 @@ namespace NZazu.Contracts.Checks
 
             var sut = new CheckFactory();
 
-            var checkDefinition = new CheckDefinition { Type = "required", Settings = settings };
+            var checkDefinition = new CheckDefinition {Type = "required", Settings = settings};
 
-            var check = sut.CreateCheck(checkDefinition, new FieldDefinition() { Key = "key1" });
+            var check = sut.CreateCheck(checkDefinition, new FieldDefinition {Key = "key1"});
 
             check.Should().NotBeNull();
             check.Should().BeOfType(checkType);

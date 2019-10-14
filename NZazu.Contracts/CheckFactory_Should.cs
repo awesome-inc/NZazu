@@ -1,13 +1,13 @@
-﻿using FluentAssertions;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
+using FluentAssertions;
 using NEdifis;
 using NEdifis.Attributes;
 using NSubstitute;
 using NUnit.Framework;
 using NZazu.Contracts.Checks;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
 
 namespace NZazu.Contracts
 {
@@ -20,8 +20,10 @@ namespace NZazu.Contracts
         {
             var sut = new CheckFactory();
             sut.Invoking(x => x.CreateCheck(null, null)).Should().Throw<ArgumentNullException>();
-            sut.Invoking(x => x.CreateCheck(new CheckDefinition(), null)).Should().Throw<ArgumentException>().WithMessage("check type not specified");
-            sut.Invoking(x => x.CreateCheck(new CheckDefinition { Type = "foobar" }, null)).Should().Throw<NotSupportedException>().WithMessage("The specified check 'foobar' is not supported");
+            sut.Invoking(x => x.CreateCheck(new CheckDefinition(), null)).Should().Throw<ArgumentException>()
+                .WithMessage("check type not specified");
+            sut.Invoking(x => x.CreateCheck(new CheckDefinition {Type = "foobar"}, null)).Should()
+                .Throw<NotSupportedException>().WithMessage("The specified check 'foobar' is not supported");
         }
 
         [Test]
@@ -41,9 +43,7 @@ namespace NZazu.Contracts
             var sut = ctx.BuildSut();
 
             foreach (var type in sut.AvailableTypes)
-            {
                 Console.WriteLine($"factory '{typeof(CheckFactory).Name}' supports type:\t{type}");
-            }
 
             Assert.Pass();
         }
@@ -64,15 +64,17 @@ namespace NZazu.Contracts
             var ctx = new ContextFor<CheckFactory>();
             var sut = ctx.BuildSut();
 
-            var settings = new Dictionary<string, string>()
+            var settings = new Dictionary<string, string>
             {
-                { "Hint", "This is a hint for the error message" },
-                { "RegEx", "true|false" },
+                {"Hint", "This is a hint for the error message"},
+                {"RegEx", "true|false"}
             };
 
-            var checkDefinition = new CheckDefinition() { Type = type, Settings = settings };
-            var definition = new FieldDefinition() { Key = $"test_string", Type = "string", Checks = new[] { checkDefinition } };
-            var field = sut.CreateCheck(definition.Checks.Single(), definition, () => new FormData(), Substitute.For<INZazuTableDataSerializer>());
+            var checkDefinition = new CheckDefinition {Type = type, Settings = settings};
+            var definition = new FieldDefinition
+                {Key = "test_string", Type = "string", Checks = new[] {checkDefinition}};
+            var field = sut.CreateCheck(definition.Checks.Single(), definition, () => new FormData(),
+                Substitute.For<INZazuTableDataSerializer>());
 
             field.Should().NotBeNull();
         }

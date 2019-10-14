@@ -25,7 +25,7 @@ namespace NZazu.Serializer
             var data = new Dictionary<string, string>
             {
                 {"Jane", "Doe"},
-                {"John", "Smith"},
+                {"John", "Smith"}
             };
 
             var sut = new NZazuTableDataXmlSerializer();
@@ -63,6 +63,5 @@ namespace NZazu.Serializer
             expected.Should().NotBeNull();
             expected.Count.Should().Be(0);
         }
-
     }
 }

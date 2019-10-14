@@ -7,7 +7,7 @@ using NUnit.Framework;
 
 namespace NZazu.Extensions
 {
-    [TestFixtureFor(typeof (FocusExtensions))]
+    [TestFixtureFor(typeof(FocusExtensions))]
     [Apartment(ApartmentState.STA)]
     // ReSharper disable InconsistentNaming
     internal class FocusExtensions_Should

@@ -20,7 +20,7 @@ namespace NZazu.Contracts.Suggest
                 sut.ContainsKey(i).Should().BeTrue();
             });
 
-            sut.Add(maxSize,maxSize);
+            sut.Add(maxSize, maxSize);
             sut.ContainsKey(0).Should().BeFalse("lru item should be bumped from cache");
         }
     }
