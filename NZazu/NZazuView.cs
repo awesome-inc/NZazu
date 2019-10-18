@@ -116,11 +116,10 @@ namespace NZazu
                 if (Equals(e.NewFocus, Layout))
                     TrySetFocusOn();
 
-                if (!(newFocusedElement is NZazuDataTableField))
-                {
-                    _lastFocusedElement = newFocusedElement;
-                    OnFieldFocusChanged(new FieldFocusChangedEventArgs(newFocusedElement, oldFocusedElement));
-                }
+                if (newFocusedElement is NZazuDataTableField) return;
+
+                _lastFocusedElement = newFocusedElement;
+                OnFieldFocusChanged(new FieldFocusChangedEventArgs(newFocusedElement, oldFocusedElement));
             };
 
             FieldFactory = new NZazuFieldFactory();
