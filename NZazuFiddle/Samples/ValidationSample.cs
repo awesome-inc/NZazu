@@ -13,18 +13,24 @@ namespace NZazuFiddle.Samples
                 Name = "Validation",
                 Description = "",
                 Fiddle = ToFiddle(new FormDefinition
+                {
+                    Fields = new[]
                     {
-                        Fields = new[]
-                        {
-                            new FieldDefinition
+                        new FieldDefinition
                             {
-                                Key = "name",
-                                Type = "string",
-                                Prompt = "Name",
-                                Hint = "Enter name",
-                                Description =
+                                Key = "errorOverview",
+                                Type = "error",
+                                Prompt = "Validate Now!"
+                            },
+                        new FieldDefinition
+                        {
+                            Key = "name",
+                            Type = "string",
+                            Prompt = "Name",
+                            Hint = "Enter name",
+                            Description =
                                     "Validation: required field (required) and at least 6 characters (length)",
-                                Checks = new[]
+                            Checks = new[]
                                 {
                                     new CheckDefinition {Type = "required"},
                                     new CheckDefinition
@@ -33,15 +39,15 @@ namespace NZazuFiddle.Samples
                                         Settings = new Dictionary<string, string> {{"Min", "6"}}
                                     }
                                 }
-                            },
-                            new FieldDefinition
-                            {
-                                Key = "email",
-                                Type = "string",
-                                Prompt = "Email",
-                                Hint = "Enter valid e-mail address",
-                                Description = "Validation: regular expression (regex) [^.+@.+\\..+$]",
-                                Checks = new[]
+                        },
+                        new FieldDefinition
+                        {
+                            Key = "email",
+                            Type = "string",
+                            Prompt = "Email",
+                            Hint = "Enter valid e-mail address",
+                            Description = "Validation: regular expression (regex) [^.+@.+\\..+$]",
+                            Checks = new[]
                                 {
                                     new CheckDefinition
                                     {
@@ -50,14 +56,14 @@ namespace NZazuFiddle.Samples
                                             {{"Hint", "Must be a valid e-mail address"}, {"RegEx", @"^.+@.+\..+$"}}
                                     }
                                 }
-                            },
-                            new FieldDefinition
-                            {
-                                Key = "isAdmin",
-                                Type = "bool",
-                                Hint = "Is Admin",
-                                Description = "Validation: regular expression (regex) [True|False]",
-                                Checks = new[]
+                        },
+                        new FieldDefinition
+                        {
+                            Key = "isAdmin",
+                            Type = "bool",
+                            Hint = "Is Admin",
+                            Description = "Validation: regular expression (regex) [True|False]",
+                            Checks = new[]
                                 {
                                     new CheckDefinition {Type = "required"},
                                     new CheckDefinition
@@ -67,19 +73,19 @@ namespace NZazuFiddle.Samples
                                             {{"Hint", "Must be Checked or Unchecked"}, {"RegEx", "True|False"}}
                                     }
                                 },
-                                Settings = new Dictionary<string, string>
+                            Settings = new Dictionary<string, string>
                                 {
                                     {"IsThreeState", "True"}
                                 }
-                            },
-                            new FieldDefinition
-                            {
-                                Key = "int",
-                                Type = "int",
-                                Prompt = "int",
-                                Hint = "Enter a number",
-                                Description = "Validation: Value must be between 10 and 100 (range)",
-                                Checks = new[]
+                        },
+                        new FieldDefinition
+                        {
+                            Key = "int",
+                            Type = "int",
+                            Prompt = "int",
+                            Hint = "Enter a number",
+                            Description = "Validation: Value must be between 10 and 100 (range)",
+                            Checks = new[]
                                 {
                                     new CheckDefinition
                                     {
@@ -91,21 +97,21 @@ namespace NZazuFiddle.Samples
                                         }
                                     }
                                 }
-                            },
-                            new FieldDefinition
-                            {
-                                Key = "startTime",
-                                Type = "string",
-                                Prompt = "Start time",
-                                Hint = "Set start time"
-                            },
-                            new FieldDefinition
-                            {
-                                Key = "endTime",
-                                Type = "string",
-                                Prompt = "End time",
-                                Hint = "Set end time",
-                                Checks = new[]
+                        },
+                        new FieldDefinition
+                        {
+                            Key = "startTime",
+                            Type = "string",
+                            Prompt = "Start time",
+                            Hint = "Set start time"
+                        },
+                        new FieldDefinition
+                        {
+                            Key = "endTime",
+                            Type = "string",
+                            Prompt = "End time",
+                            Hint = "Set end time",
+                            Checks = new[]
                                 {
                                     new CheckDefinition
                                     {
@@ -118,22 +124,22 @@ namespace NZazuFiddle.Samples
                                         }
                                     }
                                 }
-                            },
-                            new FieldDefinition
-                            {
-                                Key = "startTimeWithFormats",
-                                Type = "string",
-                                Prompt = "Another start time",
-                                Hint = "Set start time"
-                            },
-                            new FieldDefinition
-                            {
-                                Key = "endTimeWithFormats",
-                                Type = "string",
-                                Prompt = "Another end time",
-                                Hint = "Set end time with specific format to compare with another start time format",
-                                Description = "Validation: Value must be between 10 and 100 (range)",
-                                Checks = new[]
+                        },
+                        new FieldDefinition
+                        {
+                            Key = "startTimeWithFormats",
+                            Type = "string",
+                            Prompt = "Another start time",
+                            Hint = "Set start time"
+                        },
+                        new FieldDefinition
+                        {
+                            Key = "endTimeWithFormats",
+                            Type = "string",
+                            Prompt = "Another end time",
+                            Hint = "Set end time with specific format to compare with another start time format",
+                            Description = "Validation: Value must be between 10 and 100 (range)",
+                            Checks = new[]
                                 {
                                     new CheckDefinition
                                     {
@@ -147,12 +153,12 @@ namespace NZazuFiddle.Samples
                                         }
                                     }
                                 }
-                            },
-                            new FieldDefinition
-                            {
-                                Type = "datatable",
-                                Key = "interTableComparison",
-                                Fields = new[]
+                        },
+                        new FieldDefinition
+                        {
+                            Type = "datatable",
+                            Key = "interTableComparison",
+                            Fields = new[]
                                 {
                                     new FieldDefinition
                                     {
@@ -182,9 +188,9 @@ namespace NZazuFiddle.Samples
                                         }
                                     }
                                 }
-                            }
                         }
-                    },
+                    }
+                },
                     new Dictionary<string, string>
                     {
                         {"name", "John"},

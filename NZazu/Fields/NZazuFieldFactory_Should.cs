@@ -36,10 +36,12 @@ namespace NZazu.Fields
         [TestCase("date", typeof(DatePicker))]
         [TestCase("double", typeof(TextBox))]
         [TestCase("option", typeof(ComboBox))]
+        [TestCase("errorList", typeof(ErrorPanel))]
         [STAThread]
         public void Support(string fieldType, Type controlType)
         {
             var sut = new NZazuFieldFactory();
+            sut.Use(Substitute.For<INZazuWpfView>());
 
             var field = sut.CreateField(new FieldDefinition {Key = "test", Type = fieldType, Description = "test"});
 

@@ -38,6 +38,7 @@ namespace NZazu.Fields
 
             // lets add all NZazu core fields and types
             FieldTypes.Add(DefaultType, typeof(NZazuLabelField)); // we add label twice to have it as default type
+            FieldTypes.Add("error", typeof(NZazuErrorListField));
             FieldTypes.Add("label", typeof(NZazuLabelField));
             FieldTypes.Add("string", typeof(NZazuTextField));
             FieldTypes.Add("bool", typeof(NZazuBoolField));

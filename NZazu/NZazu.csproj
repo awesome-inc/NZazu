@@ -103,6 +103,9 @@
       <DependentUpon>DynamicDataTable.xaml</DependentUpon>
     </Compile>
     <Compile Include="Fields\Controls\DynamicDataTable_Should.cs" />
+    <Compile Include="Fields\Controls\ErrorPanel.xaml.cs">
+      <DependentUpon>ErrorPanel.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Fields\Controls\GeoLocationBox.xaml.cs">
       <DependentUpon>GeoLocationBox.xaml</DependentUpon>
     </Compile>
@@ -111,6 +114,8 @@
     <Compile Include="Fields\Libs\AutoCompleteManager_Should.cs" />
     <Compile Include="Fields\NZazuAutocompleteField.cs" />
     <Compile Include="Fields\NZazuAutocompleteField_Should.cs" />
+    <Compile Include="Fields\NZazuErrorListField.cs" />
+    <Compile Include="Fields\NZazuErrorListField_Should.cs" />
     <Compile Include="Fields\NZazuLocationField.cs" />
     <Compile Include="Fields\NZazuLocationField_Should.cs" />
     <Compile Include="Fields\FieldFactoryExtensions.cs" />
@@ -178,6 +183,10 @@
     <Compile Include="Serializer\NZazuTableDataXmlSerializer.cs" />
     <Compile Include="Serializer\NZazuTableDataXmlSerializer_Should.cs" />
     <Page Include="Fields\Controls\DynamicDataTable.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Fields\Controls\ErrorPanel.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

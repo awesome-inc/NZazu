@@ -30,7 +30,7 @@ namespace NZazu.LayoutStrategy
                 var valueElement = field.ValueControl;
                 if (labelElement == null && valueElement == null) continue;
 
-                grid.RowDefinitions.Add(new RowDefinition {Height = GridLength.Auto});
+                grid.RowDefinitions.Add(new RowDefinition {Height =new GridLength(1, GridUnitType.Auto)});
 
                 if (labelElement != null)
                 {

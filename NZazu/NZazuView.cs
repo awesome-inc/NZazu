@@ -11,6 +11,7 @@ using NZazu.Contracts.FormChecks;
 using NZazu.EventArgs;
 using NZazu.Extensions;
 using NZazu.Fields;
+using NZazu.Fields.Controls;
 
 namespace NZazu
 {
@@ -65,15 +66,20 @@ namespace NZazu
                     .Where(f => !string.IsNullOrEmpty(f.Value.GetValue()))
                     .SelectMany(x => x.Value.GetState()))
                 // and don't forget the focus
-                .Concat(new[] {new KeyValuePair<string, string>("__focusOn", _lastFocusedElement?.Key)})
+                .Concat(new[] { new KeyValuePair<string, string>("__focusOn", _lastFocusedElement?.Key) })
                 .ToDictionary(x => x.Key, x => x.Value);
         }
 
         public ValueCheckResult Validate()
         {
-            return _fields.Values.Select(f => f.Validate()).FirstOrDefault(vr => !vr.IsValid) ??
-                   _checks.Select(f => f.Validate(FormData)).FirstOrDefault(vr => !vr.IsValid) ??
-                   ValueCheckResult.Success;
+            var result = _fields.Values.Select(f => f.Validate()).Where(vr => !vr.IsValid) ??
+                   _checks.Select(f => f.Validate(FormData)).Where(vr => !vr.IsValid) ??
+                   new [] {ValueCheckResult.Success};
+
+            foreach (var errorField in _fields.Where(x => x.Value.ValueControl is ErrorPanel))
+                ((ErrorPanel)errorField.Value.ValueControl).Errors = result.Select(x => x.Exception.Message);
+
+            return result.FirstOrDefault();
         }
 
         public bool TrySetFocusOn(string focusOn = null, bool force = false)
@@ -262,14 +268,14 @@ namespace NZazu
 
         public FormDefinition FormDefinition
         {
-            get => (FormDefinition) GetValue(FormDefinitionProperty);
+            get => (FormDefinition)GetValue(FormDefinitionProperty);
             set => SetValue(FormDefinitionProperty, value);
         }
 
         private static void FormDefinitionChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            var view = (NZazuView) d;
-            var formDefinition = (FormDefinition) e.NewValue;
+            var view = (NZazuView)d;
+            var formDefinition = (FormDefinition)e.NewValue;
             view.UpdateFields(formDefinition, view.FieldFactory, view.ResolveLayout);
         }
 
@@ -281,7 +287,7 @@ namespace NZazu
 
         public INZazuWpfFieldFactory FieldFactory
         {
-            get => (INZazuWpfFieldFactory) GetValue(FieldFactoryProperty);
+            get => (INZazuWpfFieldFactory)GetValue(FieldFactoryProperty);
             set
             {
                 if (value == null)
@@ -293,20 +299,18 @@ namespace NZazu
 
         private static void FieldFactoryChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            var view = (NZazuView) d;
-            var fieldFactory = (INZazuWpfFieldFactory) e.NewValue;
+            var view = (NZazuView)d;
+            var fieldFactory = (INZazuWpfFieldFactory)e.NewValue;
             fieldFactory.Use<INZazuWpfView>(view);
             view.UpdateFields(view.FormDefinition, fieldFactory, view.ResolveLayout);
         }
 
-        private static object FieldFactoryCoerceCallback(DependencyObject d, object basevalue)
+        private static object FieldFactoryCoerceCallback(DependencyObject d, object baseValue)
         {
-            var view = (NZazuView) d;
-            var fieldFactory = (INZazuWpfFieldFactory) basevalue;
+            var view = (NZazuView)d;
+            var fieldFactory = (INZazuWpfFieldFactory)baseValue;
             return fieldFactory ?? view.FieldFactory;
         }
-
-        // ############# ResolveLayout
 
         public static readonly DependencyProperty ResolveLayoutProperty = DependencyProperty.Register(
             "ResolveLayout", typeof(IResolveLayout), typeof(NZazuView),
@@ -314,25 +318,23 @@ namespace NZazu
 
         public IResolveLayout ResolveLayout
         {
-            get => (IResolveLayout) GetValue(ResolveLayoutProperty);
+            get => (IResolveLayout)GetValue(ResolveLayoutProperty);
             set => SetValue(ResolveLayoutProperty, value);
         }
 
         private static void ResolveLayoutChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            var view = (NZazuView) d;
-            var layoutStrategy = (IResolveLayout) e.NewValue;
+            var view = (NZazuView)d;
+            var layoutStrategy = (IResolveLayout)e.NewValue;
             view.UpdateFields(view.FormDefinition, view.FieldFactory, layoutStrategy);
         }
 
-        private static object ResolveLayoutCoerceCallback(DependencyObject d, object basevalue)
+        private static object ResolveLayoutCoerceCallback(DependencyObject d, object baseValue)
         {
-            var view = (NZazuView) d;
-            var layout = (IResolveLayout) basevalue;
+            var view = (NZazuView)d;
+            var layout = (IResolveLayout)baseValue;
             return layout ?? view.ResolveLayout;
         }
-
-        // ############# FormData
 
         public static readonly DependencyProperty FormDataProperty = DependencyProperty.Register(
             "FormData", typeof(FormData), typeof(NZazuView),
@@ -340,40 +342,30 @@ namespace NZazu
 
         private static void FormDataChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            var view = (INZazuWpfView) d;
-            var fieldValues = (FormData) e.NewValue;
+            var view = (INZazuWpfView)d;
+            var fieldValues = (FormData)e.NewValue;
             view.SetFieldValues(fieldValues.Values);
-
-            //if (((Control)view).IsKeyboardFocusWithin == false)
-            //    view.TrySetFocusOn();
-
-            //if (e.OldValue != e.NewValue &&fieldValues.Values.ContainsKey("__focusOn"))
-            //    view.TrySetFocusOn(fieldValues.Values["__focusOn"]);
         }
-
 
         public FormData FormData
         {
-            get => (FormData) GetValue(FormDataProperty);
+            get => (FormData)GetValue(FormDataProperty);
             set => SetValue(FormDataProperty, value);
         }
-
-
-        // ############# IsReadOnly
 
         public static readonly DependencyProperty IsReadOnlyProperty = DependencyProperty.Register(
             "IsReadOnly", typeof(bool), typeof(NZazuView), new PropertyMetadata(default(bool), IsReadOnlyChanged));
 
         private static void IsReadOnlyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            var view = (NZazuView) d;
-            var isReadOnly = (bool) e.NewValue;
+            var view = (NZazuView)d;
+            var isReadOnly = (bool)e.NewValue;
             view.SetReadOnly(isReadOnly);
         }
 
         public bool IsReadOnly
         {
-            get => (bool) GetValue(IsReadOnlyProperty);
+            get => (bool)GetValue(IsReadOnlyProperty);
             set => SetValue(IsReadOnlyProperty, value);
         }
 
