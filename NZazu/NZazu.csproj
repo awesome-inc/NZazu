@@ -133,6 +133,8 @@
     <Compile Include="Fields\NZazuImageViewerField_Should.cs" />
     <Compile Include="Fields\NZazuKeyedOptionsField.cs" />
     <Compile Include="Fields\NZazuKeyedOptionsField_Should.cs" />
+    <Compile Include="Fields\NZazuMultilineField.cs" />
+    <Compile Include="Fields\NZazuMultilineField_Should.cs" />
     <Compile Include="Fields\NZazuOptionsField.cs" />
     <Compile Include="Fields\NZazuOptionsField_Should.cs" />
     <Compile Include="Fields\PropertyExtensions.cs" />

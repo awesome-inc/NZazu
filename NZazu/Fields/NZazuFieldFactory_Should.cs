@@ -31,6 +31,7 @@ namespace NZazu.Fields
         [TestCase(null, typeof(Label))]
         [TestCase("label", typeof(Label))]
         [TestCase("string", typeof(TextBox))]
+        [TestCase("multiline", typeof(TextBox))]
         [TestCase("bool", typeof(CheckBox))]
         [TestCase("int", typeof(TextBox))]
         [TestCase("date", typeof(DatePicker))]

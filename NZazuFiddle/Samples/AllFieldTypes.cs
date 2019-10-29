@@ -96,6 +96,14 @@ namespace NZazuFiddle.Samples
                             },
                             new FieldDefinition
                             {
+                                Key = "multiline",
+                                Type = "multiline",
+                                Prompt = "multiline",
+                                Hint = "Enter a multi line string",
+                                Description = "Multi line string with whatever you want to"
+                            },
+                            new FieldDefinition
+                            {
                                 Key = "location",
                                 Type = "location",
                                 Prompt = "location",

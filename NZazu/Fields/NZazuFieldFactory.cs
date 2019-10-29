@@ -41,6 +41,7 @@ namespace NZazu.Fields
             FieldTypes.Add("error", typeof(NZazuErrorListField));
             FieldTypes.Add("label", typeof(NZazuLabelField));
             FieldTypes.Add("string", typeof(NZazuTextField));
+            FieldTypes.Add("multiline", typeof(NZazuMultilineField));
             FieldTypes.Add("bool", typeof(NZazuBoolField));
             FieldTypes.Add("int", typeof(NZazuIntegerField));
             FieldTypes.Add("date", typeof(NZazuDateField));
