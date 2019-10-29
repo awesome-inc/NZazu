@@ -17,7 +17,7 @@ namespace NZazu.Fields.Controls
             if (!(d is ErrorPanel panel)) return;
             if (!(e.NewValue is IEnumerable<string> errorList)) return;
 
-            panel.ErrorList.Text = string.Join("\r\n", errorList);
+            panel.ErrorList.Content = string.Join("\r\n", errorList);
         }
 
         public IEnumerable<string> Errors

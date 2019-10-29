@@ -106,6 +106,7 @@
     <Compile Include="Fields\Controls\ErrorPanel.xaml.cs">
       <DependentUpon>ErrorPanel.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Fields\Controls\ErrorPanel_Should.cs" />
     <Compile Include="Fields\Controls\GeoLocationBox.xaml.cs">
       <DependentUpon>GeoLocationBox.xaml</DependentUpon>
     </Compile>
