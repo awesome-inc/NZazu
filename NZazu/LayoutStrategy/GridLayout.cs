@@ -18,10 +18,10 @@ namespace NZazu.LayoutStrategy
             if (contentControl == null) throw new ArgumentNullException(nameof(contentControl));
             if (fields == null) throw new ArgumentNullException(nameof(fields));
 
-            var grid = new Grid {Margin = new Thickness(5)};
+            var grid = new Grid { Margin = new Thickness(5) };
 
-            grid.ColumnDefinitions.Add(new ColumnDefinition {Width = GridLength.Auto});
-            grid.ColumnDefinitions.Add(new ColumnDefinition {Width = new GridLength(1, GridUnitType.Star)});
+            grid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
+            grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
 
             var row = 0;
             foreach (var field in fields)
@@ -30,7 +30,7 @@ namespace NZazu.LayoutStrategy
                 var valueElement = field.ValueControl;
                 if (labelElement == null && valueElement == null) continue;
 
-                grid.RowDefinitions.Add(new RowDefinition {Height =new GridLength(1, GridUnitType.Auto)});
+                grid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
 
                 if (labelElement != null)
                 {

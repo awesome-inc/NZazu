@@ -37,7 +37,7 @@ namespace NZazu.Fields
         [TestCase("date", typeof(DatePicker))]
         [TestCase("double", typeof(TextBox))]
         [TestCase("option", typeof(ComboBox))]
-        [TestCase("errorList", typeof(ErrorPanel))]
+        [TestCase("error", typeof(ErrorPanel))]
         [STAThread]
         public void Support(string fieldType, Type controlType)
         {

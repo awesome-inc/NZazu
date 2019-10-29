@@ -16,6 +16,8 @@ namespace NZazu.Extensions
                     continue;
                 field.SetValue(kvp.Value);
             }
+
+            view.Validate();
         }
 
         public static bool IsValid(this INZazuWpfView view)
