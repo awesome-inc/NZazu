@@ -169,7 +169,7 @@ namespace NZazu.Fields
             var binding = expression.ParentBinding;
             binding.Should().NotBeNull();
             binding.Source.Should().Be(sut, "we need a source for data binding");
-            binding.Mode.Should().Be(BindingMode.TwoWay, "we update databinding in two directions");
+            binding.Mode.Should().Be(BindingMode.TwoWay, "we update data binding in two directions");
             binding.UpdateSourceTrigger
                 .Should().Be(UpdateSourceTrigger.PropertyChanged, "we want validation during edit");
 

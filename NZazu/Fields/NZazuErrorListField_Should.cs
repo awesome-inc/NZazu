@@ -42,12 +42,12 @@ namespace NZazu.Fields
         }
 
         [Test]
-        public void Not_Create_ValueControl_On_Empty_Description()
+        public void Create_ValueControl_On_Empty_Description()
         {
             var sut = new NZazuErrorListField(new FieldDefinition {Key = "key"}, ServiceLocator);
             sut.Definition.Description.Should().BeNullOrWhiteSpace();
             var label = (ErrorPanel) sut.ValueControl;
-            label.Should().BeNull();
+            label.Should().NotBeNull();
 
             sut.Dispose();
         }

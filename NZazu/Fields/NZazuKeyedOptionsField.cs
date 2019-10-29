@@ -65,14 +65,15 @@ namespace NZazu.Fields
             _valueControl.SelectedItem = _options.FirstOrDefault();
         }
 
-        public override void Dispose()
+        protected override void Dispose(bool disposing)
         {
             ValueAdded.Invoke(this, new ValueChangedEventArgs<string>(_storeKey, Id, _currentValue, null));
+
             _valueControl.Items.Clear();
             ValueAdded -= OnValueAdded;
             AvailableFields.Remove(this);
 
-            base.Dispose();
+            base.Dispose(disposing);
         }
 
         private void OnValueAdded(object sender, ValueChangedEventArgs<string> e)

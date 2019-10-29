@@ -53,11 +53,9 @@ namespace NZazu
             field.Key.Returns(key);
             factory.CreateField(fieldDefinition).Returns(field);
 
-            var view = new NZazuView
-            {
-                FieldFactory = factory,
-                FormDefinition = formDefinition
-            };
+            var view = new NZazuView();
+            view.FormDefinition = formDefinition;
+            view.FieldFactory = factory;
 
             var actual = view.GetFieldValues();
             actual.Keys.Should().Contain(key);

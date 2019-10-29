@@ -13,7 +13,7 @@ namespace NZazu.Fields
 {
     public abstract class NZazuField
         : INZazuWpfField
-            , INotifyPropertyChanged
+        , INotifyPropertyChanged
     {
         protected NZazuField(FieldDefinition definition, Func<Type, object> serviceLocatorFunc)
         {
@@ -24,8 +24,9 @@ namespace NZazu.Fields
             _valueControl = new Lazy<Control>(() =>
             {
                 var ctrl = CreateValueControl();
-                if (ctrl != null)
-                    ctrl.LostFocus += (sender, e) => { Validate(); };
+                if (ctrl == null) return null;
+
+                ctrl.LostFocus += (sender, e) => { Validate(); };
                 AddValuePropertyBinding(this, ctrl);
 
                 return ctrl;
@@ -68,11 +69,6 @@ namespace NZazu.Fields
             return Enumerable.Empty<KeyValuePair<string, string>>();
         }
 
-        public virtual void Dispose()
-        {
-            Behaviors?.ToList().ForEach(x => { x?.Detach(); });
-            Behaviors = null;
-        }
 
         /// <summary>
         ///     binding needs to be changed by subclasses for example if the Nullable-binding should be set.
@@ -106,6 +102,7 @@ namespace NZazu.Fields
                 NotifyOnTargetUpdated = true,
                 NotifyOnSourceUpdated = true,
                 IsAsync = false,
+                BindsDirectlyToSource = true,
                 UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged
             };
 
@@ -124,8 +121,7 @@ namespace NZazu.Fields
             binding?.ValidationRules.Clear();
 
             if (check == null || binding == null) return;
-
-            binding.ValidationRules.Add(new CheckValidationRule(check) {ValidatesOnTargetUpdated = true});
+            binding.ValidationRules.Add(new CheckValidationRule(check) { ValidatesOnTargetUpdated = true });
         }
 
         #region private fields and wrapper
@@ -153,13 +149,27 @@ namespace NZazu.Fields
         protected virtual Control CreateLabelControl()
         {
             return !string.IsNullOrWhiteSpace(Definition.Prompt)
-                ? new Label {Content = Definition.Prompt}
+                ? new Label { Content = Definition.Prompt }
                 : null;
         }
 
         protected abstract Control CreateValueControl();
 
         #endregion
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposing) return;
+
+            Behaviors?.ToList().ForEach(x => { x?.Detach(); });
+            Behaviors = null;
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
     }
 
     public abstract class NZazuField<T> : NZazuField, INZazuWpfField<T>
@@ -187,7 +197,7 @@ namespace NZazu.Fields
                 ? ValueControl.GetBindingExpression(ContentProperty)
                 : null;
             if (bindingExpression != null && bindingExpression.HasError)
-                return new ValueCheckResult(new Exception("UI has errors. Value could not be converted"));
+                return new ValueCheckResult(new Exception($"{Definition.Prompt}: {bindingExpression.ValidationError?.ErrorContent as string ?? "UI has errors. Value could not be converted"}"));
 
             if (Check == null) return ValueCheckResult.Success;
 
@@ -198,8 +208,6 @@ namespace NZazu.Fields
 
         protected internal override Binding DecorateBinding(Binding binding)
         {
-            if (Nullable.GetUnderlyingType(typeof(T)) == null) return binding;
-
             return binding;
         }
     }

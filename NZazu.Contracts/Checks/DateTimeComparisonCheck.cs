@@ -23,7 +23,7 @@ namespace NZazu.Contracts.Checks
 
         {
             if (settings == null) throw new ArgumentNullException(nameof(settings));
-            Settings = settings.ToDictionary(x => x.Key, x => (object) x.Value)
+            Settings = settings.ToDictionary(x => x.Key, x => (object)x.Value)
                 .ToObject<DateTimeComparisonCheckSettings>();
 
             _rowIdx = rowIdx;
@@ -60,7 +60,7 @@ namespace NZazu.Contracts.Checks
             var result = compareOperation(dateTimeResults.ValueAsDateTime.Value,
                 dateTimeResults.ValueToCompareWithAsDateTime.Value)
                 ? ValueCheckResult.Success
-                : new ValueCheckResult(false, new ArgumentException(Settings.Hint));
+                : new ValueCheckResult(false, new ArgumentException((_fieldDefinition.Prompt ?? _fieldDefinition.Key) + ": " + Settings.Hint));
 
             return result;
         }
@@ -102,8 +102,8 @@ namespace NZazu.Contracts.Checks
                 DateTimeStyles.None,
                 out var valueToCompareWithDateTime);
             return new DataToCompare(
-                canParseValue ? valueDateTime : (DateTime?) null,
-                canParseValueToCompare ? valueToCompareWithDateTime : (DateTime?) null);
+                canParseValue ? valueDateTime : (DateTime?)null,
+                canParseValueToCompare ? valueToCompareWithDateTime : (DateTime?)null);
         }
 
         private Compare GetCompareOperation()

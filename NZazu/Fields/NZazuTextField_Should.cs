@@ -28,7 +28,7 @@ namespace NZazu.Fields
         [Test]
         public void Be_Creatable()
         {
-            var sut = new NZazuTextField(new FieldDefinition {Key = "test"}, ServiceLocator);
+            var sut = new NZazuTextField(new FieldDefinition { Key = "test" }, ServiceLocator);
 
             sut.Should().NotBeNull();
             sut.Should().BeAssignableTo<INZazuWpfField>();
@@ -45,7 +45,7 @@ namespace NZazu.Fields
                 Description = "check this if you are a registered superhero"
             }, ServiceLocator);
 
-            var textBox = (TextBox) sut.ValueControl;
+            var textBox = (TextBox)sut.ValueControl;
             textBox.Should().NotBeNull();
             textBox.Text.Should().BeEmpty();
             textBox.ToolTip.Should().Be(sut.Definition.Description);
@@ -55,9 +55,9 @@ namespace NZazu.Fields
         [STAThread]
         public void Create_ValueControl_Even_If_Empty_Hint()
         {
-            var sut = new NZazuTextField(new FieldDefinition {Key = "test"}, ServiceLocator);
+            var sut = new NZazuTextField(new FieldDefinition { Key = "test" }, ServiceLocator);
 
-            var textBox = (TextBox) sut.ValueControl;
+            var textBox = (TextBox)sut.ValueControl;
             textBox.Should().NotBeNull();
             textBox.Text.Should().BeEmpty();
         }
@@ -66,8 +66,8 @@ namespace NZazu.Fields
         [STAThread]
         public void Get_Set_Value_should_propagate_to_ValueControl_Without_LostFocus()
         {
-            var sut = new NZazuTextField(new FieldDefinition {Key = "test"}, ServiceLocator);
-            var textBox = (TextBox) sut.ValueControl;
+            var sut = new NZazuTextField(new FieldDefinition { Key = "test" }, ServiceLocator);
+            var textBox = (TextBox)sut.ValueControl;
             textBox.Should().NotBeNull();
 
             sut.GetValue().Should().BeNull();

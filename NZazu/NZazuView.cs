@@ -72,14 +72,21 @@ namespace NZazu
 
         public ValueCheckResult Validate()
         {
-            var result = _fields.Values.Select(f => f.Validate()).Where(vr => !vr.IsValid) ??
-                   _checks.Select(f => f.Validate(FormData)).Where(vr => !vr.IsValid) ??
-                   new [] {ValueCheckResult.Success};
+            if (_fields?.Values == null) return ValueCheckResult.Success;
+
+            var results = _fields.Values.Select(f => f.Validate())
+                .Concat(_checks.Select(f => f.Validate(FormData)))
+                .Where(x => x!= null && !x.IsValid)
+                .ToArray();
+
+            if (results.Length == 0) return ValueCheckResult.Success;
 
             foreach (var errorField in _fields.Where(x => x.Value.ValueControl is ErrorPanel))
-                ((ErrorPanel)errorField.Value.ValueControl).Errors = result.Select(x => x.Exception.Message);
+                ((ErrorPanel)errorField.Value.ValueControl).Errors = results.Select(x => x.Exception.Message);
 
-            return result.FirstOrDefault();
+            return results.Length == 1
+                ? results.First()
+                : new AggregateValueCheckResult(results);
         }
 
         public bool TrySetFocusOn(string focusOn = null, bool force = false)

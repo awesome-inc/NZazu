@@ -206,7 +206,7 @@ namespace NZazu.Fields
             }
         }
 
-        public override void Dispose()
+        protected override void Dispose(bool disposing)
         {
             foreach (var field in _fields.Values)
             {
@@ -216,7 +216,7 @@ namespace NZazu.Fields
                 field.Dispose();
             }
 
-            base.Dispose();
+            base.Dispose(disposing);
         }
 
         protected virtual void OnTableFieldFocusChanged(FieldFocusChangedEventArgs e)
