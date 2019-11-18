@@ -14,10 +14,10 @@ environment:
 before_build:
   - ps: gitversion /l console /output buildserver
   - nuget setapikey %apiKey% -Verbosity quiet
-cache:
-  - packages -> **\packages.config
-  - C:\ProgramData\chocolatey\bin -> appveyor.yml
-  - C:\ProgramData\chocolatey\lib -> appveyor.yml
+#cache:
+#  - packages -> **\packages.config
+#  - C:\ProgramData\chocolatey\bin -> appveyor.yml
+#  - C:\ProgramData\chocolatey\lib -> appveyor.yml
 
 build_script:
   - cmd: set BUILD_TARGET=Package
