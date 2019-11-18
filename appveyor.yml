@@ -1,5 +1,5 @@
 # common configuration for ALL branches
-image: Visual Studio 2019
+image: Visual Studio 2017
 install:
 #  - choco install gitversion.portable -pre -y
   - choco install gitversion.portable -y
@@ -23,3 +23,4 @@ build_script:
   - cmd: set BUILD_TARGET=Package
   - cmd: if "%APPVEYOR_REPO_TAG%" == "true" set BUILD_TARGET=Deploy
   - cmd: build.bat /t:CoverageUpload;%BUILD_TARGET% /v:m
+	

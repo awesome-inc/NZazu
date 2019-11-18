@@ -167,7 +167,7 @@ namespace NZazu.Contracts.Suggest
                     _cacheLock.ExitUpgradeableReadLock();
                 }
 
-                return default;
+                return default(TValue);
             }
             set
             {
@@ -375,7 +375,7 @@ namespace NZazu.Contracts.Suggest
                 }
                 else
                 {
-                    value = default;
+                    value = default(TValue);
                     CacheMisses++;
                     return false;
                 }
