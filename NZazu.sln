@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27703.2018
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29411.138
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NZazu.Contracts", "NZazu.Contracts\NZazu.Contracts.csproj", "{4D469864-C26E-483E-99DB-DE7305EAAA4F}"
 EndProject
@@ -10,7 +10,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		appveyor.yml = appveyor.yml
 		before.NZazu.sln.targets = before.NZazu.sln.targets
 		empty.targets = empty.targets
-		GitVersionConfig.yaml = GitVersionConfig.yaml
+		GitVersion.yaml = GitVersion.yaml
 		NZazuFiddle.png = NZazuFiddle.png
 		README.md = README.md
 		solution.targets = solution.targets
