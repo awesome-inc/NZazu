@@ -1,7 +1,8 @@
 # common configuration for ALL branches
 image: Visual Studio 2019
 install:
-  - choco install gitversion.portable -pre -y
+#  - choco install gitversion.portable -pre -y
+  - choco install gitversion.portable -y
 test: off
 assembly_info:
   patch: false
