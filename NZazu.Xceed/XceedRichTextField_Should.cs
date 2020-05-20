@@ -142,4 +142,115 @@ namespace NZazu.Xceed
             gistField.GetValue().Should().BeNullOrWhiteSpace("neither from or to has value that could be toggled");
         }
     }
+
+    #region converter tests
+
+    [TestFixtureFor(typeof(RtfSpecialCharactersConverter))]
+    internal class RtfSpecialCharactersConverter_Should
+    {
+        [Test]
+        public void Be_Creatable()
+        {
+            var sut = new RtfSpecialCharactersConverter();
+            sut.Should().NotBeNull();
+        }
+
+        [Test]
+        public void Not_Convert_When_Invalid_Parameters()
+        {
+            var sut = new RtfSpecialCharactersConverter();
+
+            object result = null;
+
+            Assert.DoesNotThrow(() => result = sut.Convert(null, typeof(string), null, CultureInfo.CurrentCulture));
+            result.Should().Be(Binding.DoNothing);
+
+            Assert.DoesNotThrow(() => result = sut.Convert(new object(), typeof(string), null, CultureInfo.CurrentCulture));
+            result.Should().Be(Binding.DoNothing);
+
+            Assert.DoesNotThrow(() => result = sut.Convert("some string", null, null, CultureInfo.CurrentCulture));
+            result.Should().Be(Binding.DoNothing);
+
+            Assert.DoesNotThrow(() => result = sut.Convert("some string", typeof(object), null, CultureInfo.CurrentCulture));
+            result.Should().Be(Binding.DoNothing);
+        }
+
+        [Test]
+        public void Not_Convert_Back_When_Invalid_Parameters()
+        {
+            var sut = new RtfSpecialCharactersConverter();
+
+            object result = null;
+
+            Assert.DoesNotThrow(() => result = sut.ConvertBack(null, typeof(string), null, CultureInfo.CurrentCulture));
+            result.Should().Be(Binding.DoNothing);
+            
+            Assert.DoesNotThrow(() => result = sut.ConvertBack(new object(), typeof(string), null, CultureInfo.CurrentCulture));
+            result.Should().Be(Binding.DoNothing);
+            
+            Assert.DoesNotThrow(() => result = sut.ConvertBack("some string", null, null, CultureInfo.CurrentCulture));
+            result.Should().Be(Binding.DoNothing);
+            
+            Assert.DoesNotThrow(() => result = sut.ConvertBack("some string", typeof(object), null, CultureInfo.CurrentCulture));
+            result.Should().Be(Binding.DoNothing);
+        }
+
+        [Test]
+        public void Convert_When_No_Special_Character()
+        {
+            var sut = new RtfSpecialCharactersConverter();
+
+            const string input = "some input string";
+            const string expected = "some input string";
+
+            var result = sut.Convert(input, typeof(string), null, CultureInfo.CurrentCulture) as string;
+
+            result.Should().NotBeNull();
+            result.Should().Be(expected);
+        }
+
+        [Test]
+        public void Convert_When_Special_Character()
+        {
+            var sut = new RtfSpecialCharactersConverter();
+
+            const string input = "some weird input string: äöü ß";
+            const string expected = "some weird input string: \\'e4\\'f6\\'fc \\'df";
+
+            var result = sut.Convert(input, typeof(string), null, CultureInfo.CurrentCulture) as string;
+
+            result.Should().NotBeNull();
+            result.Should().Be(expected);
+        }
+
+        [Test]
+        public void Convert_Back_When_No_Special_Character()
+        {
+            var sut = new RtfSpecialCharactersConverter();
+
+            const string input = "some input string";
+            const string expected = "some input string";
+
+            var result = sut.ConvertBack(input, typeof(string), null, CultureInfo.CurrentCulture) as string;
+
+            result.Should().NotBeNull();
+            result.Should().Be(expected);
+        }
+
+        [Test]
+        public void Convert_Back_When_Special_Character()
+        {
+            var sut = new RtfSpecialCharactersConverter();
+
+            const string input = "some weird input string: \\'e4\\'f6\\'fc \\'df";
+            const string expected = "some weird input string: äöü ß";
+
+            var result = sut.ConvertBack(input, typeof(string), null, CultureInfo.CurrentCulture) as string;
+
+            result.Should().NotBeNull();
+            result.Should().Be(expected);
+        }
+    }
+
+    #endregion
 }
