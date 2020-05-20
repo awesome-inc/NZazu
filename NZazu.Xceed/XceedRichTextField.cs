@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using System.Windows.Documents;
 using NZazu.Contracts;
 using NZazu.Fields;
 using Xceed.Wpf.Toolkit;
@@ -16,11 +14,12 @@ namespace NZazu.Xceed
     public class XceedRichTextField : NZazuTextField
     {
         public const double DefaultHeight = 80.0d;
+        private readonly ITextFormatter _formatter;
 
         public XceedRichTextField(FieldDefinition definition, Func<Type, object> serviceLocatorFunc)
             : base(definition, serviceLocatorFunc)
         {
-            ValueConverter = new RtfSpecialCharactersConverter();
+            _formatter = GetFormatter(Definition.Settings.Get("Format"));
         }
 
         public override DependencyProperty ContentProperty => RichTextBox.TextProperty;
@@ -33,7 +32,7 @@ namespace NZazu.Xceed
                 VerticalScrollBarVisibility = ScrollBarVisibility.Auto,
                 MinHeight = DefaultHeight,
                 MaxHeight = DefaultHeight,
-                TextFormatter = GetFormatter(Definition.Settings.Get("Format"))
+                TextFormatter = _formatter
             };
 
             var showFormatBar = Definition.Settings.Get<bool>("ShowFormatBar");
@@ -41,6 +40,13 @@ namespace NZazu.Xceed
                 RichTextBoxFormatBarManager.SetFormatBar(control, new RichTextBoxFormatBar());
 
             return control;
+        }
+
+        protected override Binding DecorateBinding(Binding binding)
+        {
+            var decorated = base.DecorateBinding(binding);
+            decorated.Converter = new RtfSpecialCharactersConverter(_formatter);
+            return decorated;
         }
 
         private static ITextFormatter GetFormatter(string format)
@@ -60,6 +66,16 @@ namespace NZazu.Xceed
 
     internal class RtfSpecialCharactersConverter : IValueConverter
     {
+        private readonly RichTextBox _richTextBox;
+
+        public RtfSpecialCharactersConverter(ITextFormatter formatter = null)
+        {
+            _richTextBox = new RichTextBox
+            {
+                TextFormatter = formatter ?? new RtfFormatter()
+            };
+        }
+
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             if (!(value is string valueString)) return Binding.DoNothing;
@@ -76,50 +92,41 @@ namespace NZazu.Xceed
             return FromRtfToPlain(valueString);
         }
 
-        private static string FromPlainToRtf(string input)
+        // HACK:
+        // using an instance of a RichTextBox here to convert from and to RTF
+        // this is done, because the conversion is rather complex
+        // and I don't wanna do all of this by hand
+        // additionally there are different ITextFormatters that are also to be considered
+        // so the easiest way to do this is to use the RichTextBox itself
+        // because it knows it's conversion-stuff best!
+
+        private string FromPlainToRtf(string input)
         {
-            var unicodeCharacterRegex = new Regex(@"[\p{L}-[A-Za-z]]");
-            var convertedValues = new List<char>();
-
-            foreach (Match match in unicodeCharacterRegex.Matches(input))
+            var result = string.Empty;
+            _richTextBox.Dispatcher.Invoke(() =>
             {
-                if (!match.Success) continue;
+                _richTextBox.Clear();
+                _richTextBox.AppendText(input);
 
-                // we can safely convert to char here, because this regex only catches one char at a time
-                var matchValue = match.Value.FirstOrDefault();
-                if (convertedValues.Contains(matchValue)) continue; 
-
-                var converted = $"\\'{System.Convert.ToInt32(matchValue):X}".ToLower();
-
-                input = input.Replace(matchValue.ToString(), converted);
-                convertedValues.Add(matchValue);
-            }
-
-            return input;
+                result = _richTextBox.Text;
+            });
+            
+            return result;
         }
 
-        private static string FromRtfToPlain(string input)
+        private string FromRtfToPlain(string input)
         {
-            var rtfSpecialCharactersRegex = new Regex(@"(?<specialChar>\\{1,2}'[1-9,a-f]{2})");
-            var convertedValues = new List<string>();
-
-            foreach (Match match in rtfSpecialCharactersRegex.Matches(input))
+            var result = string.Empty;
+            _richTextBox.Dispatcher.Invoke(() =>
             {
-                if (!match.Success) continue;
+                _richTextBox.Clear();
+                _richTextBox.Text = input;
 
-                var matchValue = match.Groups["specialChar"].Value;
-                if (convertedValues.Contains(matchValue)) continue;
+                var textRange = new TextRange(_richTextBox.Document.ContentStart, _richTextBox.Document.ContentEnd);
+                result = textRange.Text.Trim(' ', '\r', '\n', '\t', '}', '{');
+            });
 
-                // get only the part behind the ' , this indicates the hex-value for the char
-                var hexValue = matchValue.Substring(matchValue.IndexOf("'", StringComparison.InvariantCulture) + 1);
-                var @char = (char) short.Parse(hexValue, NumberStyles.AllowHexSpecifier);
-
-                // adjust the input string
-                input = input.Replace(matchValue, @char.ToString());
-                convertedValues.Add(matchValue);
-            }
-
-            return input;
+            return result;
         }
     }
 
